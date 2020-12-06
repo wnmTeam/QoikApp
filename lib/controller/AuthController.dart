@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'dart:developer';
+import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/User.dart';
+import 'package:stumeapp/controller/StorageController.dart';
 
 import '../api/auth.dart';
 
@@ -11,20 +14,36 @@ class AuthController {
   Stream<int> get _in => _streamController.stream;
 
   Auth api = Auth();
+  StorageController _storage = StorageController();
 
   get authStream => api.userChangesStream;
 
   get getUser => api.getUser;
 
   Future<String> createAccount(email, password, user) {
-    return api.signUp(
+    return api
+        .signUp(
       email,
       password,
-    ).whenComplete(() => api.recordUserInfo(user));
+    )
+        .whenComplete(() {
+      api.recordUserInfo(user);
+      _storage.setUser(user);
+
+    });
+  }
+
+  login(String email, String password) async {
+    await api.signIn(email, password);
+    User user = User();
+    user.fromMap(await api.getUserInfo());
+
+    _storage.setUser(user);
   }
 
   void logOut() {
     api.logOut();
+    _storage.deleteUser();
   }
 
   bool isUserVerified() => api.isUserVerified();
@@ -32,14 +51,6 @@ class AuthController {
   sendEmailVerification() => api.sendEmailVerification();
 
   Future<void> reloadUser() => api.reloadUser();
-
-  login(String email, String password) async{
-    await api.signIn(email, password);
-    User user = User();
-    user.fromMap(api.getUserInfo());
-  }
-
-
 
   resetPassword(email) => api.sendPasswordResetMail(email);
 }

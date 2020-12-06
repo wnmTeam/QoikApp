@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:stumeapp/controller/AuthController.dart';
+import 'package:stumeapp/controller/StorageController.dart';
 import 'package:stumeapp/pages/Home/tabs/FriendsTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/GroupsChatsTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/HomeTabView.dart';
@@ -14,6 +16,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex;
   List tabViews = [];
+
+  AuthController _authController = AuthController();
+  StorageController _storageController = StorageController();
 
   @override
   void initState() {
@@ -100,7 +105,20 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      drawer: Drawer(),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            DrawerHeader(child: Container(),),
+            ListTile(
+              title: Text('Log out'),
+              leading: Icon(Icons.logout),
+              onTap: (){
+                _authController.logOut();
+              },
+            )
+          ],
+        ),
+      ),
       drawerScrimColor: Colors.indigo,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: tabViews[_currentIndex],

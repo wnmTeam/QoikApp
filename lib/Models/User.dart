@@ -1,4 +1,12 @@
 class User {
+
+  static final String FIRST_NAME  = 'firstName';
+  static final String SECOND_NAME  = 'secondName';
+  static final String GENDER  = 'gender';
+  static final String DEGREE  = 'degree';
+  static final String UNIVERSITY  = 'university';
+  static final String COLLEGE  = 'college';
+
   String firstName;
   String secondName;
   String gender;

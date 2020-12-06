@@ -62,6 +62,7 @@ class Auth {
 
   getUserInfo() async{
     DocumentSnapshot d = await _firestore.collection('users').doc(getUser.uid).get();
+    print('userrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr');
     print(d.data());
     return d.data();
   }
