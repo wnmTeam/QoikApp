@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/User.dart';
+import 'package:stumeapp/controller/GroupsController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 
 import '../api/auth.dart';
@@ -15,6 +16,7 @@ class AuthController {
 
   Auth api = Auth();
   StorageController _storage = StorageController();
+  GroupsController _groupsController = GroupsController();
 
   get authStream => api.userChangesStream;
 
@@ -30,6 +32,10 @@ class AuthController {
       api.recordUserInfo(user);
       _storage.setUser(user);
 
+    }).whenComplete(() {
+      _groupsController.addMemberToUniversity(uid: getUser.uid, university: user.university, user: user);
+    }).whenComplete(() {
+      _groupsController.addMemberToCollege(uid: getUser.uid, college: user.college);
     });
   }
 

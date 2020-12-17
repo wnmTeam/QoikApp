@@ -3,9 +3,9 @@ class Group {
   String img;
   String type;
 
-  static final String TYPE_UNIVERSITY = 'university';
-  static final String TYPE_COLLEGE = 'college';
-  static final String TYPE_CHAT = 'chat';
+  static const String TYPE_UNIVERSITY = 'university';
+  static const String TYPE_COLLEGE = 'college';
+  static const String TYPE_CHAT = 'chat';
 
   Group({this.name, this.type, this.img = ''});
 }

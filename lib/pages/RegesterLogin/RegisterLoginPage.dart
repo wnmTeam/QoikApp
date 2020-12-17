@@ -64,10 +64,10 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
           children: [
             MyDropdownButton(
                 items: [
-                  'Univercity1',
-                  'Univercity2',
-                  'Univercity3',
-                  'Univercity4',
+                  'University1',
+                  'University2',
+                  'University3',
+                  'University4',
                 ],
                 onSelected: (_selected) {
                   setState(() {

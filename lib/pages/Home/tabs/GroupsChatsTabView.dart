@@ -31,13 +31,21 @@ class _GroupsChatsTabState extends State<GroupsChatsTab> {
 }
 
 Widget _groupBuilder(BuildContext context, Group group) {
+  print(group.name);
   return ListTile(
     title: group.type == Group.TYPE_UNIVERSITY
         ? Text('My University')
         : group.type == Group.TYPE_COLLEGE
             ? Text('My College')
             : Text(group.name),
-    onTap: () {},
+    onTap: () {
+      Navigator.of(context).pushNamed(
+        '/GroupPage',
+        arguments: {
+          'group': group,
+        },
+      );
+    },
     leading: Container(
       width: 38,
       height: 38,
