@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
-import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/GroupsController.dart';
 import 'package:stumeapp/controller/StorageController.dart';

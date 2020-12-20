@@ -8,7 +8,7 @@ import 'package:stumeapp/Models/Post.dart';
 class PostsApi {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Stream<QuerySnapshot> getPosts({
+  Future getPosts({
     int limit,
     DocumentSnapshot last,
     Group group,
@@ -31,9 +31,22 @@ class PostsApi {
 
     if (last == null) {
       log(reference.path, name: 'reference');
-      return reference.snapshots();
+      return reference
+          .orderBy(
+            'date',
+            descending: true,
+          )
+          .limit(limit)
+          .get();
     } else {
-      return reference.startAfterDocument(last).limit(limit).snapshots();
+      return reference
+          .orderBy(
+            'date',
+            descending: true,
+          )
+          .startAfterDocument(last)
+          .limit(limit)
+          .get();
     }
   }
 
@@ -70,14 +83,19 @@ class PostsApi {
         type = 'chatGroups';
         break;
     }
-
     reference = _firestore
         .collection(type)
         .doc(group.name)
         .collection('posts')
         .doc(post_id)
         .collection('comments');
-    return reference.add(comment.toMap());
+
+    return _firestore
+        .collection(type)
+        .doc(group.name)
+        .collection('posts')
+        .doc(post_id)
+        .update({'commentsCount': FieldValue.increment(1)});
   }
 
   Future<QuerySnapshot> getComments({
@@ -152,5 +170,26 @@ class PostsApi {
           Comment.DATE,
         )
         .startAfter([DateTime.now()]).snapshots();
+  }
+
+  getPostChanges({String id_post, Group group}) {
+    String type;
+    switch (group.type) {
+      case Group.TYPE_UNIVERSITY:
+        type = 'universityGroups';
+        break;
+      case Group.TYPE_COLLEGE:
+        type = 'collegeGroups';
+        break;
+      case Group.TYPE_CHAT:
+        type = 'chatGroups';
+        break;
+    }
+    return _firestore
+        .collection(type)
+        .doc(group.name)
+        .collection('posts')
+        .doc(id_post)
+        .snapshots();
   }
 }

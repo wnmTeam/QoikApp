@@ -10,7 +10,7 @@ class PostsController {
   PostsApi api = PostsApi();
   Auth auth = Auth();
 
-  getPosts({int limit, DocumentSnapshot last, Group group}) {
+  Future getPosts({int limit, DocumentSnapshot last, Group group}) {
     return api.getPosts(
       limit: limit,
       last: last,
@@ -31,17 +31,18 @@ class PostsController {
     );
   }
 
-  Future<void> createComment({String text, String post_id, Group group}) =>
-      api.createComment(
-        comment: Comment(
-          text: text,
-          idOwner: auth.getUser.uid,
-          likeCount: 0,
-          date: DateTime.now(),
-        ),
-        post_id: post_id,
-        group: group,
-      );
+  Future<void> createComment({String text, String post_id, Group group}) {
+    api.createComment(
+      comment: Comment(
+        text: text,
+        idOwner: auth.getUser.uid,
+        likeCount: 0,
+        date: DateTime.now(),
+      ),
+      post_id: post_id,
+      group: group,
+    );
+  }
 
   Future<QuerySnapshot> getComments(
       {int limit, DocumentSnapshot last, Group group, String id_post}) {
@@ -53,8 +54,16 @@ class PostsController {
     );
   }
 
-  Stream getNewComments({String id_post, Group group,}) =>
+  Stream getNewComments({
+    String id_post,
+    Group group,
+  }) =>
       api.getNewComments(
+        id_post: id_post,
+        group: group,
+      );
+
+  getPostChanges({String id_post, Group group}) => api.getPostChanges(
         id_post: id_post,
         group: group,
       );
