@@ -1,4 +1,4 @@
-class Comment{
+class Comment {
   static const String ID_OWNER = 'id_owner';
   static const String TEXT = 'text';
   static const String DATE = 'date';
@@ -9,6 +9,10 @@ class Comment{
   String text;
   int likeCount;
   DateTime date;
+
+  String id;
+
+  bool isLiked = false;
 
   Comment({
     this.idOwner,
@@ -26,11 +30,11 @@ class Comment{
   }
 
   Map<String, dynamic> toMap() => {
-    ID_OWNER: idOwner,
-    TEXT: text,
-    DATE: date,
-    LIKE_COUNT: likeCount,
-  };
+        ID_OWNER: idOwner,
+        TEXT: text,
+        DATE: date,
+        LIKE_COUNT: likeCount,
+      };
 
   Comment fromMap(map) {
     this.idOwner = map[ID_OWNER];
@@ -38,5 +42,9 @@ class Comment{
     this.date = map[DATE].toDate();
     this.likeCount = map[LIKE_COUNT];
     return this;
+  }
+
+  setId(String id) {
+    this.id = id;
   }
 }

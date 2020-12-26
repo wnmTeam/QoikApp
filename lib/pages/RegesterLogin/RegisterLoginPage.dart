@@ -168,6 +168,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                   if (_formKey.currentState.validate()) {
                     await _authController.login(
                         _emailController.text, _passwordController.text);
+                    print('login done');
                   }
                 },
                 child: const Text('Login'),

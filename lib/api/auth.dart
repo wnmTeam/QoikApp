@@ -60,10 +60,21 @@ class Auth {
     return _firestore.collection("users").doc(getUser.uid).set(user.toMap());
   }
 
-  getUserInfo() async{
-    DocumentSnapshot d = await _firestore.collection('users').doc(getUser.uid).get();
-    print('userrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr');
-    print(d.data());
-    return d.data();
+  getUserInfo(String id) {
+    return _firestore.collection('users').doc(id).get();
+  }
+
+  getUsers({List<String> cases, int limit, DocumentSnapshot last}) {
+    if (last != null)
+      return _firestore
+          .collection('users')
+          .where('firstName', whereIn: cases)
+          .startAfterDocument(last)
+          .limit(limit).get();
+
+    return _firestore
+        .collection('users')
+        .where('firstName', whereIn: cases)
+        .limit(limit).get();
   }
 }

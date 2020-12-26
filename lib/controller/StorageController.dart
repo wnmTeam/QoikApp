@@ -24,24 +24,15 @@ class StorageController {
     return prefs.setString(name, value);
   }
 
-  void setUser(User user) async {
-//    _user = User(
-//      firstName: user.firstName,
-//      secondName: user.secondName,
-//      gender: user.gender,
-//      degree: user.degree,
-//      university: user.university,
-//      college: user.college,
-//    );
+  Future setUser(User user) async {
 
     await setString('user.' + User.FIRST_NAME, user.firstName);
     await setString('user.' + User.SECOND_NAME, user.secondName);
     await setString('user.' + User.GENDER, user.gender);
     await setString('user.' + User.DEGREE, user.degree);
     await setString('user.' + User.UNIVERSITY, user.university);
-    await setString('user.' + User.COLLEGE, user.college);
-    log('done', name: 'storage', level: 1);
-    log(getUser().toMap().toString(), name: 'get user');
+    return setString('user.' + User.COLLEGE, user.college);
+
   }
 
   User getUser() {

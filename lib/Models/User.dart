@@ -14,6 +14,8 @@ class User {
   String university;
   String college;
 
+  String id;
+
   User({
     this.firstName,
     this.secondName,
@@ -32,12 +34,19 @@ class User {
         'college': college,
       };
 
-  void fromMap(map) {
+  User fromMap(map) {
     this.firstName = map['firstName'];
     this.secondName = map['secondName'];
     this.gender = map['gender'];
     this.degree = map['degree'];
     this.university = map['university'];
     this.college = map['college'];
+
+    return this;
   }
+
+  void setId(String id){
+    this.id = id;
+  }
+
 }

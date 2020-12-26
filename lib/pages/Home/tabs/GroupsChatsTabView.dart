@@ -16,6 +16,8 @@ class _GroupsChatsTabState extends State<GroupsChatsTab> {
   @override
   void initState() {
     _groups = _groupsController.getMyGroups();
+    print('groups');
+    print(_groups[0].name);
     super.initState();
   }
 

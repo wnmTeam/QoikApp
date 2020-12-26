@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/GroupsController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
@@ -29,20 +30,21 @@ class AuthController {
         .whenComplete(() {
       api.recordUserInfo(user);
       _storage.setUser(user);
-
     }).whenComplete(() {
-      _groupsController.addMemberToUniversity(uid: getUser.uid, university: user.university, user: user);
+      _groupsController.addMemberToUniversity(
+          uid: getUser.uid, university: user.university, user: user);
     }).whenComplete(() {
-      _groupsController.addMemberToCollege(uid: getUser.uid, college: user.college);
+      _groupsController.addMemberToCollege(
+          uid: getUser.uid, college: user.college);
     });
   }
 
   login(String email, String password) async {
     await api.signIn(email, password);
     User user = User();
-    user.fromMap(await api.getUserInfo());
+    user.fromMap(await api.getUserInfo(api.getUser.uid));
 
-    _storage.setUser(user);
+    return _storage.setUser(user);
   }
 
   void logOut() {
@@ -57,4 +59,13 @@ class AuthController {
   Future<void> reloadUser() => api.reloadUser();
 
   resetPassword(email) => api.sendPasswordResetMail(email);
+
+  getUserInfo(String id) => api.getUserInfo(id);
+
+  getUsers({List<String> cases, int limit, DocumentSnapshot last}) =>
+      api.getUsers(
+        cases: cases,
+        limit: limit,
+        last: last,
+      );
 }

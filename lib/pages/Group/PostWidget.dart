@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Comment.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/Post.dart';
+import 'package:stumeapp/Models/User.dart';
+import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/PostsController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'CommentWidget.dart';
 
 class PostWidget extends StatefulWidget {
-  DocumentSnapshot post;
+  Post post;
   Group group;
 
   PostWidget({this.post, this.group});
@@ -18,7 +20,8 @@ class PostWidget extends StatefulWidget {
   _PostWidgetState createState() => _PostWidgetState();
 }
 
-class _PostWidgetState extends State<PostWidget> {
+class _PostWidgetState extends State<PostWidget>
+    with AutomaticKeepAliveClientMixin {
   bool commentsShow = false;
   List<DocumentSnapshot> comments = [];
   List<DocumentSnapshot> newComments = [];
@@ -26,46 +29,48 @@ class _PostWidgetState extends State<PostWidget> {
   int commentsLimit = 5;
   bool hasMoreComments = true;
   bool isLoading = false;
-  Post _post;
 
   TextEditingController _commentController = TextEditingController();
 
   PostsController _postsController = PostsController();
+  AuthController _authController = AuthController();
 
   Size size;
+
+  User user;
+
+  Future _getUser;
+
+  bool tag = true;
 
   @override
   void initState() {
 //    _setStream();
+    _getUser = _authController.getUserInfo(widget.post.idOwner);
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) {
-    size = MediaQuery.of(context).size;
-    return StreamBuilder(
-        initialData: widget.post,
-        stream: _postsController.getPostChanges(
-          id_post: widget.post.id,
-          group: widget.group,
-        ),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            print('f g g g g g');
-            print(snapshot.data);
-            _post = Post().fromMap(snapshot.data);
-            return _postBuilder(_post);
-          }
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        });
-  }
+  bool get wantKeepAlive => true;
 
   @override
-  void dispose() {
-    print('post ${_post.text} closed');
-    super.dispose();
+  Widget build(BuildContext context) {
+    size = MediaQuery.of(context).size;
+    return FutureBuilder(
+        future: _getUser,
+        builder: (context, snapshot) {
+          if (user != null) {
+            comments.insertAll(0, newComments);
+            print('without build' + widget.post.text);
+            return _postBuilder(widget.post);
+          }
+          if (snapshot.hasData) {
+            print('puild post' + widget.post.text);
+            user = User().fromMap(snapshot.data);
+            return _postBuilder(widget.post);
+          }
+          return Container();
+        });
   }
 
   void _loadComments() async {
@@ -83,11 +88,12 @@ class _PostWidgetState extends State<PostWidget> {
         .getComments(
       group: widget.group,
       id_post: widget.post.id,
-      last: comments.length == 0 ? null : comments[comments.length - 1],
+      last: comments.length == 0 ? null : comments.last,
       limit: commentsLimit,
     )
         .then((value) {
       setState(() {
+        print('comments');
         print(value.docs.length.toString());
         comments.addAll(value.docs);
         isLoading = false;
@@ -125,7 +131,7 @@ class _PostWidgetState extends State<PostWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Omar alkadi',
+                        user.firstName + ' ' + user.secondName,
                       ),
                       InkWell(
                         child: Padding(
@@ -169,27 +175,62 @@ class _PostWidgetState extends State<PostWidget> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    RaisedButton(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      elevation: 0,
-                      onPressed: () {},
-                      color: Colors.grey[200],
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25)),
-                      child: Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Icon(
-                              Icons.arrow_upward,
+                    StreamBuilder(
+                      stream: _postsController.isLikePost(
+                          id_user: _authController.getUser.uid,
+                          group: widget.group,
+                          id_post: widget.post.id),
+                      builder: (context, snapshot) {
+                        print(snapshot.data);
+
+                        if (snapshot.hasData) {
+                          if (snapshot.data.data() != null &&
+                              snapshot.data.data()['exists'] == 1)
+                            widget.post.setIsLiked = true;
+                          else
+                            widget.post.setIsLiked = false;
+                        }
+                        return RaisedButton(
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                          elevation: 0,
+                          onPressed: () async {
+                            await _postsController.setLike(
+                                id_user: _authController.getUser.uid,
+                                group: widget.group,
+                                id_post: widget.post.id);
+
+                            DocumentSnapshot d =
+                                await _postsController.getPostChanges(
+                              id_post: widget.post.id,
+                              group: widget.group,
+                            );
+                            if (d.data() != null)
+                              setState(() {
+                                widget.post = Post().fromMap(d.data())
+                                  ..setId(widget.post.id);
+                              });
+                          },
+                          color: widget.post.getIsLiked
+                              ? Color.fromARGB(100, 100, 100, 255)
+                              : Colors.grey[200],
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25)),
+                          child: Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Icon(
+                                  Icons.arrow_upward,
+                                ),
+                                SizedBox(
+                                  width: 6,
+                                ),
+                                Text(post.likeCount.toString()),
+                              ],
                             ),
-                            SizedBox(
-                              width: 6,
-                            ),
-                            Text(post.likeCount.toString()),
-                          ],
-                        ),
-                      ),
+                          ),
+                        );
+                      },
                     ),
                     RaisedButton(
                       padding: EdgeInsets.symmetric(vertical: 10),
@@ -218,28 +259,64 @@ class _PostWidgetState extends State<PostWidget> {
                         ),
                       ),
                     ),
-                    RaisedButton(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      elevation: 0,
-                      onPressed: () {},
-                      color: Colors.grey[200],
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25)),
-                      child: Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Icon(
-                              Icons.add_box,
-                              color: Colors.grey[600],
+                    StreamBuilder(
+                      stream: _postsController.isFollowPost(
+                          id_user: _authController.getUser.uid,
+                          group: widget.group,
+                          id_post: widget.post.id),
+                      builder: (context, snapshot) {
+                        print(snapshot.data);
+
+                        if (snapshot.hasData) {
+                          if (snapshot.data.data() != null &&
+                              snapshot.data.data()['exists'] == 1)
+                            widget.post.setIsFollowed = true;
+                          else
+                            widget.post.setIsFollowed = false;
+                        }
+                        return RaisedButton(
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                          elevation: 0,
+                          onPressed: () async {
+                            await _postsController.followPost(
+                              id_user: _authController.getUser.uid,
+                              group: widget.group,
+                              id_post: widget.post.id,
+                            );
+
+                            DocumentSnapshot d =
+                                await _postsController.getPostChanges(
+                              id_post: widget.post.id,
+                              group: widget.group,
+                            );
+                            if (d.data() != null)
+                              setState(() {
+                                widget.post = Post().fromMap(d.data())
+                                  ..setId(widget.post.id);
+                              });
+                          },
+                          color: widget.post.getIsFollowed
+                              ? Color.fromARGB(100, 100, 100, 255)
+                              : Colors.grey[200],
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25)),
+                          child: Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Icon(
+                                  Icons.add_box,
+                                  color: Colors.grey[600],
+                                ),
+                                SizedBox(
+                                  width: 6,
+                                ),
+                                Text(post.followCount.toString()),
+                              ],
                             ),
-                            SizedBox(
-                              width: 6,
-                            ),
-                            Text(post.commentCount.toString()),
-                          ],
-                        ),
-                      ),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -252,7 +329,12 @@ class _PostWidgetState extends State<PostWidget> {
                   ),
                 if (commentsShow)
                   for (int i = comments.length - 1; i >= 0; i--)
-                    CommentWidget(Comment().fromMap(comments[i].data())),
+                    CommentWidget(
+                      comment: Comment().fromMap(comments[i].data())
+                        ..setId(comments[i].id),
+                      post: widget.post,
+                      group: widget.group,
+                    ),
                 if (commentsShow)
                   StreamBuilder(
                     stream: _postsController.getNewComments(
@@ -269,8 +351,12 @@ class _PostWidgetState extends State<PostWidget> {
                               child: Column(
                                 children: [
                                   for (int i = 0; i < newComments.length; i++)
-                                    CommentWidget(Comment()
-                                        .fromMap(newComments[i].data())),
+                                    CommentWidget(
+                                      comment: Comment()
+                                          .fromMap(newComments[i].data()),
+                                      post: widget.post,
+                                      group: widget.group,
+                                    ),
                                 ],
                               ),
                             )

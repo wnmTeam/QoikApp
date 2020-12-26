@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class Post {
   static const String ID_OWNER = 'id_owner';
   static const String TEXT = 'text';
@@ -7,19 +5,26 @@ class Post {
   static const String IMAGES = 'images';
   static const String LIKE_COUNT = 'likeCount';
   static const String COMMENT_COUNT = 'commentCount';
+  static const String FOLLOW_COUNT = 'followCount';
 
   String id;
   String idOwner;
   String text;
   int likeCount;
   int commentCount;
+  int followCount;
   DateTime date;
+
+  bool isLiked = false;
+
+  bool isFollowed = false;
 
   Post({
     this.idOwner,
     this.text,
     this.likeCount,
     this.commentCount,
+    this.followCount,
     this.date,
   });
 
@@ -31,12 +36,25 @@ class Post {
         date.year.toString();
   }
 
+  get getIsFollowed => isFollowed;
+
+  set setIsFollowed(bool b) {
+    isFollowed = b;
+  }
+
+  set setIsLiked(bool isLiked) {
+    this.isLiked = isLiked;
+  }
+
+  get getIsLiked => isLiked;
+
   Map<String, dynamic> toMap() => {
         ID_OWNER: idOwner,
         TEXT: text,
         DATE: date,
         LIKE_COUNT: likeCount,
         COMMENT_COUNT: commentCount,
+        FOLLOW_COUNT: followCount,
       };
 
   Post fromMap(map) {
@@ -45,6 +63,7 @@ class Post {
     this.date = map[DATE].toDate();
     this.likeCount = map[LIKE_COUNT];
     this.commentCount = map[COMMENT_COUNT];
+    this.followCount = map[FOLLOW_COUNT];
     return this;
   }
 

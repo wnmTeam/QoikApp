@@ -69,7 +69,7 @@ class PostsApi {
     return reference.add(post.toMap());
   }
 
-  Future createComment({Comment comment, String post_id, Group group}) {
+  Future createComment({Comment comment, String post_id, Group group}) async {
     CollectionReference reference;
     String type;
     switch (group.type) {
@@ -83,19 +83,20 @@ class PostsApi {
         type = 'chatGroups';
         break;
     }
-    reference = _firestore
+    await _firestore
         .collection(type)
         .doc(group.name)
         .collection('posts')
         .doc(post_id)
-        .collection('comments');
+        .collection('comments')
+        .add(comment.toMap());
 
     return _firestore
         .collection(type)
         .doc(group.name)
         .collection('posts')
         .doc(post_id)
-        .update({'commentsCount': FieldValue.increment(1)});
+        .update({'commentCount': FieldValue.increment(1)});
   }
 
   Future<QuerySnapshot> getComments({
@@ -190,6 +191,274 @@ class PostsApi {
         .doc(group.name)
         .collection('posts')
         .doc(id_post)
+        .get();
+  }
+
+  Stream ifILikePost({String id_post, Group group, String id_user}) {
+    String type;
+    switch (group.type) {
+      case Group.TYPE_UNIVERSITY:
+        type = 'universityGroups';
+        break;
+      case Group.TYPE_COLLEGE:
+        type = 'collegeGroups';
+        break;
+      case Group.TYPE_CHAT:
+        type = 'chatGroups';
+        break;
+    }
+    return _firestore
+        .collection(type)
+        .doc(group.name)
+        .collection('posts')
+        .doc(id_post)
+        .collection('likers')
+        .doc(id_user)
+        .snapshots();
+  }
+
+  setLike({String id_user, String id_post, Group group}) async {
+    String type;
+    switch (group.type) {
+      case Group.TYPE_UNIVERSITY:
+        type = 'universityGroups';
+        break;
+      case Group.TYPE_COLLEGE:
+        type = 'collegeGroups';
+        break;
+      case Group.TYPE_CHAT:
+        type = 'chatGroups';
+        break;
+    }
+    print('check like');
+    DocumentSnapshot r = await _firestore
+        .collection(type)
+        .doc(group.name)
+        .collection('posts')
+        .doc(id_post)
+        .collection('likers')
+        .doc(id_user)
+        .get();
+    print(r.data());
+    print('there like');
+    if (r.data() != null) {
+      await _firestore
+          .collection(type)
+          .doc(group.name)
+          .collection('posts')
+          .doc(id_post)
+          .collection('likers')
+          .doc(id_user)
+          .delete();
+
+      print('start del like');
+      return _firestore
+          .collection(type)
+          .doc(group.name)
+          .collection('posts')
+          .doc(id_post)
+          .set(
+              {'likeCount': FieldValue.increment(-1)}, SetOptions(merge: true));
+    }
+
+    print('no like');
+    await _firestore
+        .collection(type)
+        .doc(group.name)
+        .collection('posts')
+        .doc(id_post)
+        .collection('likers')
+        .doc(id_user)
+        .set({
+      'exists': 1,
+    });
+    print(id_post);
+    print('start add like');
+
+    return _firestore
+        .collection(type)
+        .doc(group.name)
+        .collection('posts')
+        .doc(id_post)
+        .set({'likeCount': FieldValue.increment(1)}, SetOptions(merge: true));
+  }
+
+  followPost({id_user, String id_post, Group group}) async {
+    String type;
+    switch (group.type) {
+      case Group.TYPE_UNIVERSITY:
+        type = 'universityGroups';
+        break;
+      case Group.TYPE_COLLEGE:
+        type = 'collegeGroups';
+        break;
+      case Group.TYPE_CHAT:
+        type = 'chatGroups';
+        break;
+    }
+    DocumentSnapshot r = await _firestore
+        .collection(type)
+        .doc(group.name)
+        .collection('posts')
+        .doc(id_post)
+        .collection('followers')
+        .doc(id_user)
+        .get();
+    if (r.data() != null) {
+      await _firestore
+          .collection(type)
+          .doc(group.name)
+          .collection('posts')
+          .doc(id_post)
+          .collection('followers')
+          .doc(id_user)
+          .delete();
+
+      return _firestore
+          .collection(type)
+          .doc(group.name)
+          .collection('posts')
+          .doc(id_post)
+          .set({'followCount': FieldValue.increment(-1)},
+              SetOptions(merge: true));
+    }
+
+    await _firestore
+        .collection(type)
+        .doc(group.name)
+        .collection('posts')
+        .doc(id_post)
+        .collection('followers')
+        .doc(id_user)
+        .set({
+      'exists': 1,
+    });
+    print(id_post);
+
+    return _firestore
+        .collection(type)
+        .doc(group.name)
+        .collection('posts')
+        .doc(id_post)
+        .set({'followCount': FieldValue.increment(1)}, SetOptions(merge: true));
+  }
+
+  isFollowPost({Group group, String id_post, id_user}) {
+    String type;
+    switch (group.type) {
+      case Group.TYPE_UNIVERSITY:
+        type = 'universityGroups';
+        break;
+      case Group.TYPE_COLLEGE:
+        type = 'collegeGroups';
+        break;
+      case Group.TYPE_CHAT:
+        type = 'chatGroups';
+        break;
+    }
+    return _firestore
+        .collection(type)
+        .doc(group.name)
+        .collection('posts')
+        .doc(id_post)
+        .collection('followers')
+        .doc(id_user)
+        .snapshots();
+  }
+
+  setLikeToComment(
+      {String id_post, id_user, String id_comment, Group group}) async {
+    String type;
+    switch (group.type) {
+      case Group.TYPE_UNIVERSITY:
+        type = 'universityGroups';
+        break;
+      case Group.TYPE_COLLEGE:
+        type = 'collegeGroups';
+        break;
+      case Group.TYPE_CHAT:
+        type = 'chatGroups';
+        break;
+    }
+    DocumentSnapshot r = await _firestore
+        .collection(type)
+        .doc(group.name)
+        .collection('posts')
+        .doc(id_post)
+        .collection('comments')
+        .doc(id_comment)
+        .collection('likers')
+        .doc(id_user)
+        .get();
+    if (r.data() != null) {
+      await _firestore
+          .collection(type)
+          .doc(group.name)
+          .collection('posts')
+          .doc(id_post)
+          .collection('comments')
+          .doc(id_comment)
+          .collection('likers')
+          .doc(id_user)
+          .delete();
+
+      return _firestore
+          .collection(type)
+          .doc(group.name)
+          .collection('posts')
+          .doc(id_post)
+          .collection('comments')
+          .doc(id_comment)
+          .set(
+              {'likeCount': FieldValue.increment(-1)}, SetOptions(merge: true));
+    }
+
+    await _firestore
+        .collection(type)
+        .doc(group.name)
+        .collection('posts')
+        .doc(id_post)
+        .collection('comments')
+        .doc(id_comment)
+        .collection('likers')
+        .doc(id_user)
+        .set({
+      'exists': 1,
+    });
+
+    return _firestore
+        .collection(type)
+        .doc(group.name)
+        .collection('posts')
+        .doc(id_post)
+        .collection('comments')
+        .doc(id_comment)
+        .set({'likeCount': FieldValue.increment(1)}, SetOptions(merge: true));
+  }
+
+  isLikeComment(
+      {Group group, String id_post, String id_user, String id_comment}) {
+    String type;
+    switch (group.type) {
+      case Group.TYPE_UNIVERSITY:
+        type = 'universityGroups';
+        break;
+      case Group.TYPE_COLLEGE:
+        type = 'collegeGroups';
+        break;
+      case Group.TYPE_CHAT:
+        type = 'chatGroups';
+        break;
+    }
+    return _firestore
+        .collection(type)
+        .doc(group.name)
+        .collection('posts')
+        .doc(id_post)
+        .collection('comments')
+        .doc(id_comment)
+        .collection('likers')
+        .doc(id_user)
         .snapshots();
   }
 }

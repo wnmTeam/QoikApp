@@ -88,7 +88,7 @@ class _HomePageState extends State<HomePage> {
           ),
           FABBottomAppBarItem(
             iconData: Icons.group,
-            text: 'Griends',
+            text: 'Friends',
           ),
           FABBottomAppBarItem(
             iconData: Icons.library_books,
@@ -98,9 +98,12 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: SafeArea(
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            if (_currentIndex == 2)
+              Navigator.of(context).pushNamed('/SearchFriendsPage');
+          },
           child: Icon(
-            Icons.person,
+            _currentIndex == 2 ? Icons.add : Icons.person,
             color: Colors.white,
           ),
         ),
@@ -108,11 +111,13 @@ class _HomePageState extends State<HomePage> {
       drawer: Drawer(
         child: Column(
           children: [
-            DrawerHeader(child: Container(),),
+            DrawerHeader(
+              child: Container(),
+            ),
             ListTile(
               title: Text('Log out'),
               leading: Icon(Icons.logout),
-              onTap: (){
+              onTap: () {
                 _authController.logOut();
               },
             )

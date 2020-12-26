@@ -25,6 +25,7 @@ class PostsController {
         idOwner: auth.getUser.uid,
         likeCount: 0,
         commentCount: 0,
+        followCount: 0,
         date: DateTime.now(),
       ),
       group,
@@ -66,5 +67,38 @@ class PostsController {
   getPostChanges({String id_post, Group group}) => api.getPostChanges(
         id_post: id_post,
         group: group,
+      );
+
+  Future getMorePostInfo({Post post, Group group}) async {
+    DocumentSnapshot d = await auth.getUserInfo(post.idOwner);
+  }
+
+  isLikePost({id_user, Group group, String id_post}) =>
+      api.ifILikePost(group: group, id_post: id_post, id_user: id_user);
+
+  Future setLike({id_user, Group group, String id_post}) =>
+      api.setLike(id_user: id_user, id_post: id_post, group: group);
+
+  followPost({id_user, Group group, String id_post}) =>
+      api.followPost(id_user: id_user, id_post: id_post, group: group);
+
+  isFollowPost({id_user, Group group, String id_post}) =>
+      api.isFollowPost(group: group, id_post: id_post, id_user: id_user);
+
+  setLikeToComment({id_user, Group group, String id_post, String id_comment}) =>
+      api.setLikeToComment(
+        id_post: id_post,
+        id_user: id_user,
+        id_comment: id_comment,
+        group: group,
+      );
+
+  isLikeComment(
+          {String id_user, Group group, String id_post, String id_comment}) =>
+      api.isLikeComment(
+        group: group,
+        id_post: id_post,
+        id_user: id_user,
+        id_comment: id_comment,
       );
 }
