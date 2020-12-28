@@ -18,8 +18,8 @@ class FriendsController {
         id_receiver: id_receiver,
       );
 
-  getMyFriends({int limit, DocumentSnapshot last}) => api.getMyFriends(
-        id: auth.getUser.uid,
+  getFriends({String id, int limit, DocumentSnapshot last}) => api.getFriends(
+        id: id,
         limit: limit,
         last: last,
       );

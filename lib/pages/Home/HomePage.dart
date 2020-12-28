@@ -47,7 +47,12 @@ class _HomePageState extends State<HomePage> {
         actions: [
           FlatButton(
             padding: EdgeInsets.zero,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed('/ProfilePage', arguments: {
+                'user': _storageController.getUser(),
+                'id_user': _authController.getUser.uid,
+              });
+            },
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 6),
               child: Row(
@@ -63,7 +68,9 @@ class _HomePageState extends State<HomePage> {
                     width: 6,
                   ),
                   Text(
-                    'Omar alkadi',
+                    _storageController.getUser().firstName +
+                        ' ' +
+                        _storageController.getUser().secondName,
                     style: TextStyle(
                         color: Colors.grey[700], fontWeight: FontWeight.bold),
                   )
@@ -101,6 +108,10 @@ class _HomePageState extends State<HomePage> {
           onPressed: () {
             if (_currentIndex == 2)
               Navigator.of(context).pushNamed('/SearchFriendsPage');
+            Navigator.of(context).pushNamed('/ProfilePage', arguments: {
+              'user': _storageController.getUser(),
+              'id_user': _authController.getUser.uid,
+            });
           },
           child: Icon(
             _currentIndex == 2 ? Icons.add : Icons.person,

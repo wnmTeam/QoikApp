@@ -6,6 +6,11 @@ import 'package:stumeapp/controller/FriendsController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MyFriendsPage extends StatefulWidget {
+
+  String id_user;
+
+  MyFriendsPage({this.id_user});
+
   @override
   _MyFriendsPageState createState() => _MyFriendsPageState();
 }
@@ -17,6 +22,7 @@ class _MyFriendsPageState extends State<MyFriendsPage> {
   DocumentSnapshot lastDocument = null;
 
   FriendsController _friendsController = FriendsController();
+  AuthController _authController = AuthController();
 
   List<DocumentSnapshot> friends = [];
 
@@ -60,7 +66,8 @@ class _MyFriendsPageState extends State<MyFriendsPage> {
 //      posts.add(null);
     });
     _friendsController
-        .getMyFriends(
+        .getFriends(
+      id: widget.id_user,
       limit: documentLimit,
       last: lastDocument,
     )

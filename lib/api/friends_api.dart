@@ -34,7 +34,7 @@ class FriendsApi {
     });
   }
 
-  getMyFriends({String id, int limit, DocumentSnapshot last}) {
+  getFriends({String id, int limit, DocumentSnapshot last}) {
     if (last != null)
       return _firestore
           .collection('users')

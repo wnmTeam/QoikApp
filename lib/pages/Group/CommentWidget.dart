@@ -51,7 +51,13 @@ class _CommentWidgetState extends State<CommentWidget> {
   Widget _postBuilder() {
     return Container(
       child: ListTile(
-        onTap: () {},
+        onTap: () {
+          Navigator.pushNamed(
+            context,
+            '/ProfilePage',
+              arguments:{'id_user': widget.comment.idOwner, 'user': user},
+          );
+        },
         contentPadding: EdgeInsets.zero,
         leading: Padding(
           padding: const EdgeInsets.only(left: 8.0),
@@ -127,16 +133,6 @@ class _CommentWidgetState extends State<CommentWidget> {
                               id_comment: widget.comment.id,
                             );
 
-                            DocumentSnapshot d =
-                                await _postsController.getPostChanges(
-                              id_post: widget.post.id,
-                              group: widget.group,
-                            );
-                            if (d.data() != null)
-                              setState(() {
-                                widget.comment = Comment().fromMap(d.data())
-                                  ..setId(widget.comment.id);
-                              });
                           },
                         );
                       }),

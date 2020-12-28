@@ -61,6 +61,7 @@ class _PostWidgetState extends State<PostWidget>
         builder: (context, snapshot) {
           if (user != null) {
             comments.insertAll(0, newComments);
+            newComments = [];
             print('without build' + widget.post.text);
             return _postBuilder(widget.post);
           }
@@ -118,7 +119,13 @@ class _PostWidgetState extends State<PostWidget>
             child: Column(
               children: [
                 ListTile(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      '/ProfilePage',
+                      arguments: {'id_user': widget.post.idOwner, 'user': user},
+                    );
+                  },
                   contentPadding: EdgeInsets.zero,
                   leading: Container(
                     width: 42,
@@ -353,7 +360,8 @@ class _PostWidgetState extends State<PostWidget>
                                   for (int i = 0; i < newComments.length; i++)
                                     CommentWidget(
                                       comment: Comment()
-                                          .fromMap(newComments[i].data()),
+                                          .fromMap(newComments[i].data())
+                                          ..setId(newComments[i].id),
                                       post: widget.post,
                                       group: widget.group,
                                     ),
