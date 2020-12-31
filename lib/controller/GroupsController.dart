@@ -7,19 +7,26 @@ class GroupsController {
   GroupsApi api = GroupsApi();
   StorageController storage = StorageController();
 
-  List<Group> getMyGroups() {
-    return [
-      Group(name: storage.getUser().university, type: Group.TYPE_UNIVERSITY),
-      Group(name: storage.getUser().college, type: Group.TYPE_COLLEGE),
-    ];
+  getMyGroups({String id_user}) {
+    return api.getMyGroups(id_user:id_user);
   }
 
-  getMembers({int limit, DocumentSnapshot last, Group group}) =>
-      api.getMembers(limit: limit, last: last, group: group,);
+  getMembers({int limit, DocumentSnapshot last, Group group}) => api.getMembers(
+        limit: limit,
+        last: last,
+        group: group,
+      );
 
   void addMemberToUniversity({uid, university, user}) {
     api.addMemberToUniversity(uid: uid, university: university, user: user);
   }
 
   void addMemberToCollege({uid, college}) {}
+
+   addMemberToGroup({uid, String id_group}) {
+    return api.addMemberToGroup(
+      uid: uid,
+      id_group: id_group,
+    );
+  }
 }

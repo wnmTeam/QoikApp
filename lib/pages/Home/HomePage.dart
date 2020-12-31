@@ -108,13 +108,16 @@ class _HomePageState extends State<HomePage> {
           onPressed: () {
             if (_currentIndex == 2)
               Navigator.of(context).pushNamed('/SearchFriendsPage');
-            Navigator.of(context).pushNamed('/ProfilePage', arguments: {
-              'user': _storageController.getUser(),
-              'id_user': _authController.getUser.uid,
-            });
+            else if (_currentIndex == 1)
+              Navigator.of(context).pushNamed('/CreateGroupPage');
+            else
+              Navigator.of(context).pushNamed('/ProfilePage', arguments: {
+                'user': _storageController.getUser(),
+                'id_user': _authController.getUser.uid,
+              });
           },
           child: Icon(
-            _currentIndex == 2 ? Icons.add : Icons.person,
+            _currentIndex == 1 || _currentIndex == 2 ? Icons.add : Icons.person,
             color: Colors.white,
           ),
         ),

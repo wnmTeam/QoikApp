@@ -10,8 +10,11 @@ class GroupsApi {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final Auth auth = Auth();
 
-  Stream getMyGroups() {
-    return _firestore.collection('groups').snapshots();
+  getMyGroups({String id_user}) {
+    return _firestore
+        .collection('groups')
+        .where('members', arrayContains: id_user)
+        .get();
   }
 
   Future<QuerySnapshot> getMembers({
@@ -45,7 +48,7 @@ class GroupsApi {
     }
   }
 
-  void addMemberToUniversity({uid, User user, university}) async{
+  void addMemberToUniversity({uid, User user, university}) async {
     CollectionReference reference = _firestore
         .collection('universityGroups')
         .doc(university)
@@ -72,4 +75,12 @@ class GroupsApi {
     });
   }
 
+  addMemberToGroup({uid, String id_group}) {
+    return _firestore.collection('groups').doc(id_group).set(
+      {
+        'members': [uid]
+      },
+      SetOptions(merge: true),
+    );
+  }
 }

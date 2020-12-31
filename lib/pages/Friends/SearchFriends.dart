@@ -42,7 +42,7 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
           controller: _searchController,
           decoration: InputDecoration(
             border: InputBorder.none,
-            hintText: 'Searche...',
+            hintText: 'Search...',
           ),
           onSubmitted: (value) {
             if (value.isNotEmpty) {

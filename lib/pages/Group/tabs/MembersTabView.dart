@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:stumeapp/Models/User.dart';
+import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/GroupsController.dart';
 
 class MembersTab extends StatefulWidget {
@@ -15,7 +17,8 @@ class MembersTab extends StatefulWidget {
   _MembersTabState createState() => _MembersTabState();
 }
 
-class _MembersTabState extends State<MembersTab> with AutomaticKeepAliveClientMixin{
+class _MembersTabState extends State<MembersTab>
+    with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController = ScrollController();
 
   bool isLoading = false;
@@ -25,19 +28,12 @@ class _MembersTabState extends State<MembersTab> with AutomaticKeepAliveClientMi
 
   GroupsController _groupsController = GroupsController();
 
+  AuthController _authController = AuthController();
+
   List<DocumentSnapshot> members = [];
 
   @override
   void initState() {
-    _scrollController.addListener(() {
-      double maxScroll = _scrollController.position.maxScrollExtent;
-      double currentScroll = _scrollController.position.pixels;
-      double delta = MediaQuery.of(context).size.height * 0.20;
-      if (maxScroll - currentScroll <= delta) {
-        getMembers();
-      }
-    });
-    getMembers();
     super.initState();
   }
 
@@ -50,48 +46,44 @@ class _MembersTabState extends State<MembersTab> with AutomaticKeepAliveClientMi
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Column(children: [
-      Expanded(
-        child: members.length == 0
-            ? Center(
-          child: Text('No Data...'),
-        )
-            : ListView.builder(
-          controller: _scrollController,
-          itemCount: members.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              onTap: (){
-
-              },
-              title: Text(members[index].data()['name']),
-              subtitle: Text(members[index].data()['activeState']),
-              leading: Container(
-                width: 38,
-                height: 38,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                    color: Colors.indigo[200]),
-              ),
-            );
-          },
-        )
-      ),
-      isLoading
-          ? Container(
-        width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.all(5),
-        color: Colors.yellowAccent,
-        child: Text(
-          'Loading',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      )
-          : Container()
-    ]);
+    return ListView.builder(
+      itemCount: widget.group.members.length,
+      itemBuilder: (_, index) {
+        return FutureBuilder(
+            future: _authController.getUserInfo(widget.group.members[index]),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                print(snapshot.data);
+                User user = User()
+                    .fromMap(snapshot.data.data())
+                    .setId(snapshot.data.id);
+                print(user.id);
+                return ListTile(
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      '/ProfilePage',
+                      arguments: {
+                        'id_user': user.id,
+                        'user': user,
+                      },
+                    );
+                  },
+                  title: Text(user.firstName + ' ' + user.secondName),
+                  subtitle: Text('New User'),
+                  leading: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(25)),
+                        color: Colors.indigo[200]),
+                  ),
+                );
+              }
+              return Container();
+            });
+      },
+    );
   }
 
   getMembers() async {

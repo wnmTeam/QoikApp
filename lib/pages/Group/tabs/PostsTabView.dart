@@ -109,7 +109,7 @@ class _PostsTabState extends State<PostsTab>
         .getPosts(
       limit: documentLimit,
       last: lastDocument,
-      group: widget.group,
+      id_group: widget.group.id,
     )
         .then((value) {
       setState(() {

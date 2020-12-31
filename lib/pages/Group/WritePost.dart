@@ -59,7 +59,7 @@ class _WritePostPageState extends State<WritePostPage> {
   }
 
   void _sendPost(String text) async {
-    await _postsController.createPost(text, widget.group);
+    await _postsController.createPost(text, widget.group.id);
     Navigator.of(context).pop();
   }
 }

@@ -68,13 +68,19 @@ class Auth {
     if (last != null)
       return _firestore
           .collection('users')
-          .where('firstName', whereIn: cases)
+          .orderBy('firstName', descending: true)
+          .startAt([cases.last])
+          .endAt([cases.first])
           .startAfterDocument(last)
-          .limit(limit).get();
+          .limit(limit)
+          .get();
 
     return _firestore
         .collection('users')
-        .where('firstName', whereIn: cases)
-        .limit(limit).get();
+        .orderBy('firstName', descending: true)
+        .startAt([cases.last])
+        .endAt([cases.first])
+        .limit(limit)
+        .get();
   }
 }

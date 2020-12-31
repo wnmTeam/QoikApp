@@ -4,30 +4,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/Models/Comment.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/Post.dart';
+import 'package:stumeapp/api/auth.dart';
 
 class PostsApi {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  Auth auth = Auth();
+
   Future getPosts({
     int limit,
     DocumentSnapshot last,
-    Group group,
+    String id_group,
   }) {
     CollectionReference reference;
-    String type;
-    switch (group.type) {
-      case Group.TYPE_UNIVERSITY:
-        type = 'universityGroups';
-        break;
-      case Group.TYPE_COLLEGE:
-        type = 'collegeGroups';
-        break;
-      case Group.TYPE_CHAT:
-        type = 'chatGroups';
-        break;
-    }
 
-    reference = _firestore.collection(type).doc(group.name).collection('posts');
+    reference =
+        _firestore.collection('groups').doc(id_group).collection('posts');
 
     if (last == null) {
       log(reference.path, name: 'reference');
@@ -50,50 +42,31 @@ class PostsApi {
     }
   }
 
-  Future createPost(Post post, Group group) {
+  Future createPost(String text, String id_group) {
     CollectionReference reference;
-    String type;
-    switch (group.type) {
-      case Group.TYPE_UNIVERSITY:
-        type = 'universityGroups';
-        break;
-      case Group.TYPE_COLLEGE:
-        type = 'collegeGroups';
-        break;
-      case Group.TYPE_CHAT:
-        type = 'chatGroups';
-        break;
-    }
 
-    reference = _firestore.collection(type).doc(group.name).collection('posts');
-    return reference.add(post.toMap());
+    reference =
+        _firestore.collection('groups').doc(id_group).collection('posts');
+    return reference.add({
+      Post.TEXT: text,
+      Post.ID_OWNER: auth.getUser.uid,
+      Post.LIKE_COUNT: 0,
+      Post.COMMENT_COUNT: 0,
+      Post.FOLLOW_COUNT: 0,
+      Post.DATE: FieldValue.serverTimestamp(),
+    });
   }
 
-  Future createComment({Comment comment, String post_id, Group group}) async {
+  Future createComment({Comment comment, String post_id, String id_group}) async {
     CollectionReference reference;
-    String type;
-    switch (group.type) {
-      case Group.TYPE_UNIVERSITY:
-        type = 'universityGroups';
-        break;
-      case Group.TYPE_COLLEGE:
-        type = 'collegeGroups';
-        break;
-      case Group.TYPE_CHAT:
-        type = 'chatGroups';
-        break;
-    }
-    await _firestore
-        .collection(type)
-        .doc(group.name)
-        .collection('posts')
-        .doc(post_id)
-        .collection('comments')
+    reference =
+        _firestore.collection('groups').doc(id_group).collection('posts').doc(post_id).collection('comments');
+    await reference
         .add(comment.toMap());
 
     return _firestore
-        .collection(type)
-        .doc(group.name)
+        .collection('groups')
+        .doc(id_group)
         .collection('posts')
         .doc(post_id)
         .update({'commentCount': FieldValue.increment(1)});
@@ -102,26 +75,14 @@ class PostsApi {
   Future<QuerySnapshot> getComments({
     int limit,
     DocumentSnapshot last,
-    Group group,
+    String id_group,
     String id_post,
   }) {
     CollectionReference reference;
-    String type;
-    switch (group.type) {
-      case Group.TYPE_UNIVERSITY:
-        type = 'universityGroups';
-        break;
-      case Group.TYPE_COLLEGE:
-        type = 'collegeGroups';
-        break;
-      case Group.TYPE_CHAT:
-        type = 'chatGroups';
-        break;
-    }
 
     reference = _firestore
-        .collection(type)
-        .doc(group.name)
+        .collection('groups')
+        .doc(id_group)
         .collection('posts')
         .doc(id_post)
         .collection('comments');
@@ -148,22 +109,10 @@ class PostsApi {
   }
 
   getNewComments({String id_post, Group group, DocumentSnapshot last}) {
-    String type;
-    switch (group.type) {
-      case Group.TYPE_UNIVERSITY:
-        type = 'universityGroups';
-        break;
-      case Group.TYPE_COLLEGE:
-        type = 'collegeGroups';
-        break;
-      case Group.TYPE_CHAT:
-        type = 'chatGroups';
-        break;
-    }
 
     return _firestore
-        .collection(type)
-        .doc(group.name)
+        .collection('groups')
+        .doc(group.id)
         .collection('posts')
         .doc(id_post)
         .collection('comments')
@@ -174,42 +123,20 @@ class PostsApi {
   }
 
   getPostChanges({String id_post, Group group}) {
-    String type;
-    switch (group.type) {
-      case Group.TYPE_UNIVERSITY:
-        type = 'universityGroups';
-        break;
-      case Group.TYPE_COLLEGE:
-        type = 'collegeGroups';
-        break;
-      case Group.TYPE_CHAT:
-        type = 'chatGroups';
-        break;
-    }
+
     return _firestore
-        .collection(type)
-        .doc(group.name)
+        .collection('groups')
+        .doc(group.id)
         .collection('posts')
         .doc(id_post)
         .get();
   }
 
   Stream ifILikePost({String id_post, Group group, String id_user}) {
-    String type;
-    switch (group.type) {
-      case Group.TYPE_UNIVERSITY:
-        type = 'universityGroups';
-        break;
-      case Group.TYPE_COLLEGE:
-        type = 'collegeGroups';
-        break;
-      case Group.TYPE_CHAT:
-        type = 'chatGroups';
-        break;
-    }
+
     return _firestore
-        .collection(type)
-        .doc(group.name)
+        .collection('groups')
+        .doc(group.id)
         .collection('posts')
         .doc(id_post)
         .collection('likers')
@@ -218,22 +145,11 @@ class PostsApi {
   }
 
   setLike({String id_user, String id_post, Group group}) async {
-    String type;
-    switch (group.type) {
-      case Group.TYPE_UNIVERSITY:
-        type = 'universityGroups';
-        break;
-      case Group.TYPE_COLLEGE:
-        type = 'collegeGroups';
-        break;
-      case Group.TYPE_CHAT:
-        type = 'chatGroups';
-        break;
-    }
+
     print('check like');
     DocumentSnapshot r = await _firestore
-        .collection(type)
-        .doc(group.name)
+        .collection('groups')
+        .doc(group.id)
         .collection('posts')
         .doc(id_post)
         .collection('likers')
@@ -243,8 +159,8 @@ class PostsApi {
     print('there like');
     if (r.data() != null) {
       await _firestore
-          .collection(type)
-          .doc(group.name)
+          .collection('groups')
+          .doc(group.id)
           .collection('posts')
           .doc(id_post)
           .collection('likers')
@@ -253,8 +169,8 @@ class PostsApi {
 
       print('start del like');
       return _firestore
-          .collection(type)
-          .doc(group.name)
+          .collection('groups')
+          .doc(group.id)
           .collection('posts')
           .doc(id_post)
           .set(
@@ -263,8 +179,8 @@ class PostsApi {
 
     print('no like');
     await _firestore
-        .collection(type)
-        .doc(group.name)
+        .collection('groups')
+        .doc(group.id)
         .collection('posts')
         .doc(id_post)
         .collection('likers')
@@ -276,29 +192,18 @@ class PostsApi {
     print('start add like');
 
     return _firestore
-        .collection(type)
-        .doc(group.name)
+        .collection('groups')
+        .doc(group.id)
         .collection('posts')
         .doc(id_post)
         .set({'likeCount': FieldValue.increment(1)}, SetOptions(merge: true));
   }
 
   followPost({id_user, String id_post, Group group}) async {
-    String type;
-    switch (group.type) {
-      case Group.TYPE_UNIVERSITY:
-        type = 'universityGroups';
-        break;
-      case Group.TYPE_COLLEGE:
-        type = 'collegeGroups';
-        break;
-      case Group.TYPE_CHAT:
-        type = 'chatGroups';
-        break;
-    }
+
     DocumentSnapshot r = await _firestore
-        .collection(type)
-        .doc(group.name)
+        .collection('groups')
+        .doc(group.id)
         .collection('posts')
         .doc(id_post)
         .collection('followers')
@@ -306,8 +211,8 @@ class PostsApi {
         .get();
     if (r.data() != null) {
       await _firestore
-          .collection(type)
-          .doc(group.name)
+          .collection('groups')
+          .doc(group.id)
           .collection('posts')
           .doc(id_post)
           .collection('followers')
@@ -315,8 +220,8 @@ class PostsApi {
           .delete();
 
       return _firestore
-          .collection(type)
-          .doc(group.name)
+          .collection('groups')
+          .doc(group.id)
           .collection('posts')
           .doc(id_post)
           .set({'followCount': FieldValue.increment(-1)},
@@ -324,8 +229,8 @@ class PostsApi {
     }
 
     await _firestore
-        .collection(type)
-        .doc(group.name)
+        .collection('groups')
+        .doc(group.id)
         .collection('posts')
         .doc(id_post)
         .collection('followers')
@@ -336,29 +241,18 @@ class PostsApi {
     print(id_post);
 
     return _firestore
-        .collection(type)
-        .doc(group.name)
+        .collection('groups')
+        .doc(group.id)
         .collection('posts')
         .doc(id_post)
         .set({'followCount': FieldValue.increment(1)}, SetOptions(merge: true));
   }
 
   isFollowPost({Group group, String id_post, id_user}) {
-    String type;
-    switch (group.type) {
-      case Group.TYPE_UNIVERSITY:
-        type = 'universityGroups';
-        break;
-      case Group.TYPE_COLLEGE:
-        type = 'collegeGroups';
-        break;
-      case Group.TYPE_CHAT:
-        type = 'chatGroups';
-        break;
-    }
+
     return _firestore
-        .collection(type)
-        .doc(group.name)
+        .collection('groups')
+        .doc(group.id)
         .collection('posts')
         .doc(id_post)
         .collection('followers')
@@ -368,21 +262,10 @@ class PostsApi {
 
   setLikeToComment(
       {String id_post, id_user, String id_comment, Group group}) async {
-    String type;
-    switch (group.type) {
-      case Group.TYPE_UNIVERSITY:
-        type = 'universityGroups';
-        break;
-      case Group.TYPE_COLLEGE:
-        type = 'collegeGroups';
-        break;
-      case Group.TYPE_CHAT:
-        type = 'chatGroups';
-        break;
-    }
+
     DocumentSnapshot r = await _firestore
-        .collection(type)
-        .doc(group.name)
+        .collection('groups')
+        .doc(group.id)
         .collection('posts')
         .doc(id_post)
         .collection('comments')
@@ -392,8 +275,8 @@ class PostsApi {
         .get();
     if (r.data() != null) {
       await _firestore
-          .collection(type)
-          .doc(group.name)
+          .collection('groups')
+          .doc(group.id)
           .collection('posts')
           .doc(id_post)
           .collection('comments')
@@ -403,8 +286,8 @@ class PostsApi {
           .delete();
 
       return _firestore
-          .collection(type)
-          .doc(group.name)
+          .collection('groups')
+          .doc(group.id)
           .collection('posts')
           .doc(id_post)
           .collection('comments')
@@ -414,8 +297,8 @@ class PostsApi {
     }
 
     await _firestore
-        .collection(type)
-        .doc(group.name)
+        .collection('groups')
+        .doc(group.id)
         .collection('posts')
         .doc(id_post)
         .collection('comments')
@@ -427,8 +310,8 @@ class PostsApi {
     });
 
     return _firestore
-        .collection(type)
-        .doc(group.name)
+        .collection('groups')
+        .doc(group.id)
         .collection('posts')
         .doc(id_post)
         .collection('comments')
@@ -438,21 +321,10 @@ class PostsApi {
 
   isLikeComment(
       {Group group, String id_post, String id_user, String id_comment}) {
-    String type;
-    switch (group.type) {
-      case Group.TYPE_UNIVERSITY:
-        type = 'universityGroups';
-        break;
-      case Group.TYPE_COLLEGE:
-        type = 'collegeGroups';
-        break;
-      case Group.TYPE_CHAT:
-        type = 'chatGroups';
-        break;
-    }
+
     return _firestore
-        .collection(type)
-        .doc(group.name)
+        .collection('groups')
+        .doc(group.id)
         .collection('posts')
         .doc(id_post)
         .collection('comments')

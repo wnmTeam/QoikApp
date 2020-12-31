@@ -10,25 +10,18 @@ class PostsController {
   PostsApi api = PostsApi();
   Auth auth = Auth();
 
-  Future getPosts({int limit, DocumentSnapshot last, Group group}) {
+  Future getPosts({int limit, DocumentSnapshot last, String id_group}) {
     return api.getPosts(
       limit: limit,
       last: last,
-      group: group,
+      id_group: id_group,
     );
   }
 
-  Future createPost(String text, Group group) {
+  Future createPost(String text, String id_group) {
     return api.createPost(
-      Post(
-        text: text,
-        idOwner: auth.getUser.uid,
-        likeCount: 0,
-        commentCount: 0,
-        followCount: 0,
-        date: DateTime.now(),
-      ),
-      group,
+      text,
+      id_group,
     );
   }
 
@@ -41,7 +34,7 @@ class PostsController {
         date: DateTime.now(),
       ),
       post_id: post_id,
-      group: group,
+      id_group: group.id,
     );
   }
 
@@ -50,7 +43,7 @@ class PostsController {
     return api.getComments(
       limit: limit,
       last: last,
-      group: group,
+      id_group: group.id,
       id_post: id_post,
     );
   }

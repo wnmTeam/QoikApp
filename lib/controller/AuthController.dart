@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/GroupsController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
@@ -21,7 +22,7 @@ class AuthController {
 
   get getUser => api.getUser;
 
-  Future<String> createAccount(email, password, user) {
+  Future<String> createAccount(email, password, User user) {
     return api
         .signUp(
       email,
@@ -30,12 +31,19 @@ class AuthController {
         .whenComplete(() {
       api.recordUserInfo(user);
       _storage.setUser(user);
-    }).whenComplete(() {
-      _groupsController.addMemberToUniversity(
-          uid: getUser.uid, university: user.university, user: user);
-    }).whenComplete(() {
-      _groupsController.addMemberToCollege(
-          uid: getUser.uid, college: user.college);
+    }).whenComplete(() async {
+      await _groupsController.addMemberToGroup(
+        uid: getUser.uid,
+        id_group: user.university,
+      );
+      print('un');
+    }).whenComplete(()async {
+      await _groupsController.addMemberToGroup(
+        uid: getUser.uid,
+        id_group: user.college,
+      );
+      print('coll');
+
     });
   }
 

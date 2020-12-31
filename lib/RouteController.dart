@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:stumeapp/pages/Friends/MyFriendsPage.dart';
+import 'package:stumeapp/pages/Group/CreatGroupPage.dart';
 import 'package:stumeapp/pages/Group/GroupPage.dart';
 import 'package:stumeapp/pages/ProfilePage.dart';
 import 'package:stumeapp/pages/RegesterLogin/RegisterLoginPage.dart';
 import 'file:///C:/flutterApps/stume_app/lib/pages/Friends/SearchFriends.dart';
-import 'package:stumeapp/pages/WritePost.dart';
+import 'file:///C:/flutterApps/stume_app/lib/pages/Group/WritePost.dart';
 import 'StartingPage.dart';
 
 class RouteController {
@@ -23,7 +24,12 @@ class RouteController {
       case '/SearchFriendsPage':
         return MaterialPageRoute(builder: (_) => SearchFriendsPage());
       case '/MyFriendsPage':
-        return MaterialPageRoute(builder: (_) => MyFriendsPage(id_user: args['id_user'],));
+        return MaterialPageRoute(
+            builder: (_) => MyFriendsPage(
+                  id_user: args['id_user'],
+                ));
+      case '/CreateGroupPage':
+        return MaterialPageRoute(builder: (_) => CreateGroupPage());
       case '/ProfilePage':
         return MaterialPageRoute(
             builder: (_) => ProfilePage(

@@ -162,7 +162,7 @@ class MapScreenState extends State<ProfilePage> {
                                         Icon(
                                           Icons.person,
                                           color: Colors.indigo,
-                                          size: 45,
+                                          size: 50,
                                         ),
                                         Text('New User'),
                                       ],

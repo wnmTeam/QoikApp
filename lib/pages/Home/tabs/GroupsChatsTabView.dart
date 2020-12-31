@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
+import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/GroupsController.dart';
 
 class GroupsChatsTab extends StatefulWidget {
@@ -11,24 +12,41 @@ class GroupsChatsTab extends StatefulWidget {
 class _GroupsChatsTabState extends State<GroupsChatsTab> {
   GroupsController _groupsController = GroupsController();
 
-  List<Group> _groups = [];
+  AuthController _authController = AuthController();
+
+  List _groups = [];
 
   @override
   void initState() {
-    _groups = _groupsController.getMyGroups();
-    print('groups');
-    print(_groups[0].name);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: _groups.length,
-      itemBuilder: (context, index) {
-        return _groupBuilder(context, _groups[index]);
-      },
-    );
+    return FutureBuilder(
+        future: _groupsController.getMyGroups(
+          id_user: _authController.getUser.uid,
+        ),
+        builder: (context, snapshot) {
+          print(_authController.getUser.uid);
+          if (snapshot.hasData) {
+            _groups = snapshot.data.docs;
+            print(_groups);
+            return ListView.builder(
+              itemCount: _groups.length,
+              itemBuilder: (context, index) {
+                return _groupBuilder(
+                    context,
+                    Group()
+                        .fromMap(_groups[index].data())
+                        .setId(_groups[index].id));
+              },
+            );
+          }
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        });
   }
 }
 
