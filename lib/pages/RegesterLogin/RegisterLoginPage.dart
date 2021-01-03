@@ -360,6 +360,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                         gender: _gender,
                         university: _univercity,
                         college: _college,
+                        groups: [_univercity, _college],
                       ),
                     );
                   }

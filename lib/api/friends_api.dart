@@ -74,6 +74,20 @@ class FriendsApi {
         });
 
     batch.set(
+        _firestore.collection('users').doc(id_requestSender),
+        {
+          'groups': FieldValue.arrayUnion([getChatID(id, id_requestSender)])
+        },
+        SetOptions(merge: true));
+
+    batch.set(
+        _firestore.collection('users').doc(id),
+        {
+          'groups': FieldValue.arrayUnion([getChatID(id, id_requestSender)])
+        },
+        SetOptions(merge: true));
+
+    batch.set(
         _firestore
             .collection('users')
             .doc(id_requestSender)
@@ -85,4 +99,12 @@ class FriendsApi {
 
     return batch.commit();
   }
+
+  String getChatID(id1, id2) {
+    List l = [id1, id2];
+    l.sort();
+
+    return l[0] + l[1];
+  }
+
 }

@@ -34,6 +34,7 @@ class _MembersTabState extends State<MembersTab>
 
   @override
   void initState() {
+    getMembers();
     super.initState();
   }
 
@@ -47,10 +48,10 @@ class _MembersTabState extends State<MembersTab>
   Widget build(BuildContext context) {
     super.build(context);
     return ListView.builder(
-      itemCount: widget.group.members.length,
+      itemCount: members.length,
       itemBuilder: (_, index) {
         return FutureBuilder(
-            future: _authController.getUserInfo(widget.group.members[index]),
+            future: _authController.getUserInfo(members[index].id),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 print(snapshot.data);

@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/FriendsController.dart';
+import 'package:stumeapp/controller/GroupsController.dart';
 
 class FriendsTab extends StatefulWidget {
   @override
@@ -17,6 +19,7 @@ class _FriendsTabState extends State<FriendsTab> {
   DocumentSnapshot lastDocument = null;
 
   FriendsController _friendsController = FriendsController();
+  AuthController _authController = AuthController();
 
   List<DocumentSnapshot> friendRequests = [null];
 
@@ -40,7 +43,8 @@ class _FriendsTabState extends State<FriendsTab> {
                 child: RaisedButton(
                   elevation: 0,
                   onPressed: () {
-                    Navigator.of(context).pushNamed('/MyFriendsPage');
+                    Navigator.of(context).pushNamed('/MyFriendsPage',
+                        arguments: {'id_user': _authController.getUser.uid});
                   },
                   color: Colors.grey[300],
                   child: Text('My Friends'),
@@ -102,6 +106,7 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
   User user;
 
   FriendsController _friendsController = FriendsController();
+  GroupsController _groupsController = GroupsController();
 
   @override
   Widget build(BuildContext context) {
@@ -144,6 +149,16 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
                 await _friendsController.acceptRequestFriend(
                     id_requestSender: user.id);
                 print('send done');
+                await _groupsController.createChat(
+                  group: Group(
+                    members: [
+                      user.id,
+                      _authController.getUser.uid,
+                    ],
+                    type: Group.TYPE_CHAT,
+                    name: '',
+                  ).setId(getChatID()),
+                );
               },
             ),
           );
@@ -151,5 +166,12 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
         return Container();
       },
     );
+  }
+
+  String getChatID() {
+    List l = [user.id, _authController.getUser.uid];
+    l.sort();
+
+    return l[0] + l[1];
   }
 }

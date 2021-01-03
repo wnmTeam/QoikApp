@@ -8,7 +8,7 @@ class GroupsController {
   StorageController storage = StorageController();
 
   getMyGroups({String id_user}) {
-    return api.getMyGroups(id_user:id_user);
+    return api.getMyGroups(id_user: id_user);
   }
 
   getMembers({int limit, DocumentSnapshot last, Group group}) => api.getMembers(
@@ -23,10 +23,20 @@ class GroupsController {
 
   void addMemberToCollege({uid, college}) {}
 
-   addMemberToGroup({uid, String id_group}) {
+  addMemberToGroup({uids, String id_group}) {
     return api.addMemberToGroup(
-      uid: uid,
+      uids: uids,
       id_group: id_group,
     );
   }
+
+  Future createGroup({Group group, uids}) {
+    return api.createGroup(group: group, uids: uids);
+  }
+
+  createChat({Group group}) {
+    return api.createChat(group: group);
+  }
+
+  Future getGroupInfo({id_group}) => api.getGroupInfo(id_group: id_group);
 }

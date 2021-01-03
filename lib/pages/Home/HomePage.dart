@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    _currentIndex = 0;
+    _currentIndex = 1;
     tabViews = [
       HomeTab(),
       GroupsChatsTab(),
@@ -109,7 +109,7 @@ class _HomePageState extends State<HomePage> {
             if (_currentIndex == 2)
               Navigator.of(context).pushNamed('/SearchFriendsPage');
             else if (_currentIndex == 1)
-              Navigator.of(context).pushNamed('/CreateGroupPage');
+              Navigator.of(context).pushNamed('/StartChatPage');
             else
               Navigator.of(context).pushNamed('/ProfilePage', arguments: {
                 'user': _storageController.getUser(),

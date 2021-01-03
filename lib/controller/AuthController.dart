@@ -22,29 +22,26 @@ class AuthController {
 
   get getUser => api.getUser;
 
-  Future<String> createAccount(email, password, User user) {
-    return api
-        .signUp(
+  Future createAccount(email, password, User user) async {
+    await  api.signUp(
       email,
       password,
-    )
-        .whenComplete(() {
-      api.recordUserInfo(user);
-      _storage.setUser(user);
-    }).whenComplete(() async {
+    );
+      print(user.toMap());
+      await api.recordUserInfo(user);
+      await _storage.setUser(user);
+
       await _groupsController.addMemberToGroup(
-        uid: getUser.uid,
+        uids: [getUser.uid],
         id_group: user.university,
       );
       print('un');
-    }).whenComplete(()async {
       await _groupsController.addMemberToGroup(
-        uid: getUser.uid,
+        uids: [getUser.uid],
         id_group: user.college,
       );
-      print('coll');
 
-    });
+
   }
 
   login(String email, String password) async {

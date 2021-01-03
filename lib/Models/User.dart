@@ -5,6 +5,7 @@ class User {
   static final String DEGREE = 'degree';
   static final String UNIVERSITY = 'university';
   static final String COLLEGE = 'college';
+  static final String GROUPS = 'groups';
 
   String firstName;
   String secondName;
@@ -12,17 +13,18 @@ class User {
   String degree;
   String university;
   String college;
+  List groups;
 
   String id;
 
-  User({
-    this.firstName,
-    this.secondName,
-    this.gender,
-    this.degree,
-    this.university,
-    this.college,
-  });
+  User(
+      {this.firstName,
+      this.secondName,
+      this.gender,
+      this.degree,
+      this.university,
+      this.college,
+      this.groups});
 
   Map<String, dynamic> toMap() => {
         'firstName': firstName,
@@ -31,6 +33,7 @@ class User {
         'degree': degree,
         'university': university,
         'college': college,
+        GROUPS: groups,
       };
 
   User fromMap(map) {
@@ -40,6 +43,7 @@ class User {
     this.degree = map['degree'];
     this.university = map['university'];
     this.college = map['college'];
+    this.groups = map[GROUPS];
 
     return this;
   }

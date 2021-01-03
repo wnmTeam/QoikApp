@@ -76,20 +76,7 @@ class _PostsTabState extends State<PostsTab>
           );
         },
       ),
-      floatingActionButton: tt
-          ? FloatingActionButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed('/WritePostPage', arguments: {
-                  'group': widget.group,
-                });
-              },
-              backgroundColor: Colors.indigo,
-              child: Icon(
-                Icons.edit,
-                color: Colors.white,
-              ),
-            )
-          : Container(),
+
     );
   }
 

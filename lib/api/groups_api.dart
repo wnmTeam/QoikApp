@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/User.dart';
 
@@ -23,21 +24,9 @@ class GroupsApi {
     Group group,
   }) {
     CollectionReference reference;
-    String type;
-    switch (group.type) {
-      case Group.TYPE_UNIVERSITY:
-        type = 'universityGroups';
-        break;
-      case Group.TYPE_COLLEGE:
-        type = 'collegeGroups';
-        break;
-      case Group.TYPE_CHAT:
-        type = 'chatGroups';
-        break;
-    }
 
     reference =
-        _firestore.collection(type).doc(group.name).collection('members');
+        _firestore.collection('groups').doc(group.id).collection('members');
 
     if (last == null) {
       log(reference.path, name: 'reference');
@@ -75,12 +64,56 @@ class GroupsApi {
     });
   }
 
-  addMemberToGroup({uid, String id_group}) {
-    return _firestore.collection('groups').doc(id_group).set(
-      {
-        'members': [uid]
-      },
-      SetOptions(merge: true),
-    );
+  addMemberToGroup({uids, String id_group}) async {
+    WriteBatch b = _firestore.batch();
+
+    for (String uid in uids) {
+      DocumentReference r = _firestore
+          .collection('groups')
+          .doc(id_group)
+          .collection('members')
+          .doc(uid);
+      b.set(r, {'ex': true});
+      r = _firestore.collection('users').doc(uid);
+      b.set(
+          r,
+          {
+            'groups': FieldValue.arrayUnion([id_group])
+          },
+          SetOptions(merge: true));
+    }
+    return b.commit();
+  }
+
+  Future createGroup({Group group, List uids}) async {
+    var d = await _firestore.collection('groups').add(group.toMap());
+    WriteBatch b = _firestore.batch();
+
+    for (String uid in uids) {
+      DocumentReference r = _firestore
+          .collection('groups')
+          .doc(d.id)
+          .collection('members')
+          .doc(uid);
+      b.set(r, {'ex': true});
+      r = _firestore.collection('users').doc(uid);
+      b.set(
+          r,
+          {
+            'groups': FieldValue.arrayUnion([d.id])
+          },
+          SetOptions(merge: true));
+    }
+    return b.commit();
+  }
+
+  Future createChat({Group group}) {
+    Map m = group.toMap();
+    m[Group.LAST_ACTIVE] = FieldValue.serverTimestamp();
+    return _firestore.collection('groups').doc(group.id).set(m);
+  }
+
+  Future getGroupInfo({id_group}) {
+    return _firestore.collection('groups').doc(id_group).get();
   }
 }

@@ -57,6 +57,8 @@ class Auth {
   }
 
   Future<void> recordUserInfo(user) {
+    print(getUser.uid);
+    print(user.toMap());
     return _firestore.collection("users").doc(getUser.uid).set(user.toMap());
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/FriendsController.dart';
@@ -21,6 +22,8 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
 
   List<DocumentSnapshot> friends = [];
 
+  TextEditingController _nameController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,10 +40,26 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
             imagePath: 'dfghjk',
             myProfile: true,
           ),
-          TextField(),
-          Text('Members'),
+          TextField(
+            controller: _nameController,
+          ),
           RaisedButton(
-            onPressed: () {},
+            onPressed: () {
+              if (_nameController.text.trim().isEmpty) return;
+              Navigator.pushNamed(
+                context,
+                '/SelectMembers',
+                arguments: {
+                  'group': Group(
+                    name: _nameController.text,
+                    type: Group.TYPE_GROUP,
+                    img: 'bfvdddfbgnhm,',
+                    admins: [_authController.getUser.uid],
+                  ),
+                  'type': 'create',
+                },
+              );
+            },
             child: Text('Next'),
           )
         ],

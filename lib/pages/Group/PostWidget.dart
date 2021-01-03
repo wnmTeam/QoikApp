@@ -128,10 +128,10 @@ class _PostWidgetState extends State<PostWidget>
                   },
                   contentPadding: EdgeInsets.zero,
                   leading: Container(
-                    width: 42,
-                    height: 42,
+                    width: 55,
+                    height: 55,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(22)),
+                        borderRadius: BorderRadius.all(Radius.circular(30)),
                         color: Colors.indigo[200]),
                   ),
                   title: Row(
@@ -165,11 +165,14 @@ class _PostWidgetState extends State<PostWidget>
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),
                   child: InkWell(
-                    child: Text(
-                      post.text,
-                      style: TextStyle(
-                        color: Colors.grey[700],
-                        fontSize: 16,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal:8.0, vertical: 10,),
+                      child: Text(
+                        post.text,
+                        style: TextStyle(
+                          color: Colors.grey[700],
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                     onTap: () {},
