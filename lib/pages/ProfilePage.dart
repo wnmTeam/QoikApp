@@ -4,6 +4,7 @@ import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/FriendsController.dart';
 
+
 class ProfilePage extends StatefulWidget {
   String id_user;
   User user;
@@ -32,6 +33,7 @@ class MapScreenState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.user.toMap());
     size = MediaQuery.of(context).size;
     if (_authController.getUser.uid == widget.id_user) {
       isMyProfile = true;
@@ -102,7 +104,12 @@ class MapScreenState extends State<ProfilePage> {
                                         color: Colors.blueGrey,
                                       ),
                                       label: Text('Add Friend'),
-                                      onPressed: () {},
+                                      onPressed: () async {
+                                        await _friendsController.sendRequestFriend(
+                                          id_sender: _authController.getUser.uid,
+                                          id_receiver: widget.user.id,
+                                        );
+                                      },
                                     ),
                                     FlatButton.icon(
                                       icon: Icon(
@@ -147,7 +154,7 @@ class MapScreenState extends State<ProfilePage> {
                                     Column(
                                       children: [
                                         Text(
-                                          '120',
+                                          widget.user.points.toString(),
                                           style: TextStyle(
                                             color: Colors.indigo,
                                             fontWeight: FontWeight.bold,
@@ -164,7 +171,7 @@ class MapScreenState extends State<ProfilePage> {
                                           color: Colors.indigo,
                                           size: 50,
                                         ),
-                                        Text('New User'),
+                                        Text(widget.user.tag),
                                       ],
                                     ),
                                   ],
@@ -189,7 +196,8 @@ class MapScreenState extends State<ProfilePage> {
                                           ),
                                     title: Text('Bio'),
                                     subtitle: Text(
-                                        'When the violence causes silence.. we must be mistaken'),
+                                      widget.user.bio,
+                                    ),
                                   )),
                               SizedBox(
                                   width: size.width - 24,

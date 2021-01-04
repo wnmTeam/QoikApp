@@ -56,7 +56,7 @@ class Auth {
     await _firestore.collection("users").doc(getUser.uid).set(user.toMap());
   }
 
-  Future<void> recordUserInfo(user) {
+  Future<void> recordUserInfo(User user) {
     print(getUser.uid);
     print(user.toMap());
     return _firestore.collection("users").doc(getUser.uid).set(user.toMap());
@@ -84,5 +84,19 @@ class Auth {
         .endAt([cases.first])
         .limit(limit)
         .get();
+  }
+
+  addPoint({String id_user}) {
+    return _firestore.collection('users').doc(id_user).set(
+      {'points': FieldValue.increment(1)},
+      SetOptions(merge: true),
+    );
+  }
+
+  Future updateUserTag({User user, String tag}) {
+    return _firestore
+        .collection('users')
+        .doc(user.id)
+        .set({'tag': tag}, SetOptions(merge: true));
   }
 }

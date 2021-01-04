@@ -31,7 +31,8 @@ class StorageController {
     await setString('user.' + User.GENDER, user.gender);
     await setString('user.' + User.DEGREE, user.degree);
     await setString('user.' + User.UNIVERSITY, user.university);
-    return setString('user.' + User.COLLEGE, user.college);
+    await setString('user.' + User.COLLEGE, user.college);
+    return prefs.setInt('user.' + User.POINTS, user.points);
 
   }
 
@@ -44,6 +45,7 @@ class StorageController {
       degree: prefs.getString('user.' + User.DEGREE),
       university: prefs.getString('user.' + User.UNIVERSITY),
       college: prefs.getString('user.' + User.COLLEGE),
+      points: prefs.getInt('user.' + User.POINTS),
     );
     return _user;
   }
@@ -61,6 +63,7 @@ class StorageController {
     await prefs.remove('user.' + User.DEGREE);
     await prefs.remove('user.' + User.UNIVERSITY);
     await prefs.remove('user.' + User.COLLEGE);
+    await prefs.remove('user.' + User.POINTS);
   }
 
 //  void setGroup(Group group) {

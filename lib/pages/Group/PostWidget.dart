@@ -45,7 +45,6 @@ class _PostWidgetState extends State<PostWidget>
 
   @override
   void initState() {
-//    _setStream();
     _getUser = _authController.getUserInfo(widget.post.idOwner);
     super.initState();
   }
@@ -66,7 +65,7 @@ class _PostWidgetState extends State<PostWidget>
             return _postBuilder(widget.post);
           }
           if (snapshot.hasData) {
-            print('puild post' + widget.post.text);
+            print(widget.post.toMap());
             user = User().fromMap(snapshot.data);
             return _postBuilder(widget.post);
           }
@@ -166,7 +165,10 @@ class _PostWidgetState extends State<PostWidget>
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),
                   child: InkWell(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal:8.0, vertical: 10,),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0,
+                        vertical: 10,
+                      ),
                       child: Text(
                         post.text,
                         style: TextStyle(
@@ -344,6 +346,11 @@ class _PostWidgetState extends State<PostWidget>
                         ..setId(comments[i].id),
                       post: widget.post,
                       group: widget.group,
+                      addPoint: (id) {
+                        setState(() {
+                          widget.post.commentPointed = id;
+                        });
+                      },
                     ),
                 if (commentsShow)
                   StreamBuilder(
@@ -364,9 +371,14 @@ class _PostWidgetState extends State<PostWidget>
                                     CommentWidget(
                                       comment: Comment()
                                           .fromMap(newComments[i].data())
-                                          ..setId(newComments[i].id),
+                                            ..setId(newComments[i].id),
                                       post: widget.post,
                                       group: widget.group,
+                                      addPoint: (id){
+                                        setState(() {
+                                          widget.post.commentPointed = id;
+                                        });
+                                      },
                                     ),
                                 ],
                               ),

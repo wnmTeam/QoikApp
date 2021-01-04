@@ -53,16 +53,21 @@ class PostsApi {
       Post.LIKE_COUNT: 0,
       Post.COMMENT_COUNT: 0,
       Post.FOLLOW_COUNT: 0,
+      Post.COMMENT_POINTED: null,
       Post.DATE: FieldValue.serverTimestamp(),
     });
   }
 
-  Future createComment({Comment comment, String post_id, String id_group}) async {
+  Future createComment(
+      {Comment comment, String post_id, String id_group}) async {
     CollectionReference reference;
-    reference =
-        _firestore.collection('groups').doc(id_group).collection('posts').doc(post_id).collection('comments');
-    await reference
-        .add(comment.toMap());
+    reference = _firestore
+        .collection('groups')
+        .doc(id_group)
+        .collection('posts')
+        .doc(post_id)
+        .collection('comments');
+    await reference.add(comment.toMap());
 
     return _firestore
         .collection('groups')
@@ -109,7 +114,6 @@ class PostsApi {
   }
 
   getNewComments({String id_post, Group group, DocumentSnapshot last}) {
-
     return _firestore
         .collection('groups')
         .doc(group.id)
@@ -123,7 +127,6 @@ class PostsApi {
   }
 
   getPostChanges({String id_post, Group group}) {
-
     return _firestore
         .collection('groups')
         .doc(group.id)
@@ -133,7 +136,6 @@ class PostsApi {
   }
 
   Stream ifILikePost({String id_post, Group group, String id_user}) {
-
     return _firestore
         .collection('groups')
         .doc(group.id)
@@ -145,7 +147,6 @@ class PostsApi {
   }
 
   setLike({String id_user, String id_post, Group group}) async {
-
     print('check like');
     DocumentSnapshot r = await _firestore
         .collection('groups')
@@ -200,7 +201,6 @@ class PostsApi {
   }
 
   followPost({id_user, String id_post, Group group}) async {
-
     DocumentSnapshot r = await _firestore
         .collection('groups')
         .doc(group.id)
@@ -249,7 +249,6 @@ class PostsApi {
   }
 
   isFollowPost({Group group, String id_post, id_user}) {
-
     return _firestore
         .collection('groups')
         .doc(group.id)
@@ -262,7 +261,6 @@ class PostsApi {
 
   setLikeToComment(
       {String id_post, id_user, String id_comment, Group group}) async {
-
     DocumentSnapshot r = await _firestore
         .collection('groups')
         .doc(group.id)
@@ -321,7 +319,6 @@ class PostsApi {
 
   isLikeComment(
       {Group group, String id_post, String id_user, String id_comment}) {
-
     return _firestore
         .collection('groups')
         .doc(group.id)
@@ -332,5 +329,19 @@ class PostsApi {
         .collection('likers')
         .doc(id_user)
         .snapshots();
+  }
+
+  Future addPoint({String id_group, Comment comment, Post post}) {
+    print(post.id);
+    print(comment.id);
+    return _firestore
+        .collection('groups')
+        .doc(id_group)
+        .collection('posts')
+        .doc(post.id)
+        .set(
+      {'commentPointed': comment.id},
+      SetOptions(merge: true),
+    );
   }
 }

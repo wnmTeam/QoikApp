@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:stumeapp/Models/MyUser.dart';
+import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 import 'package:stumeapp/pages/Home/tabs/FriendsTabView.dart';
@@ -45,39 +47,43 @@ class _HomePageState extends State<HomePage> {
         centerTitle: false,
         titleSpacing: 20,
         actions: [
-          FlatButton(
-            padding: EdgeInsets.zero,
-            onPressed: () {
-              Navigator.of(context).pushNamed('/ProfilePage', arguments: {
-                'user': _storageController.getUser(),
-                'id_user': _authController.getUser.uid,
-              });
-            },
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 6),
-              child: Row(
-                children: [
-                  Container(
-                    width: 38,
-                    height: 38,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        color: Colors.indigo[200]),
+          MyUser.myUser != null
+              ? FlatButton(
+                  padding: EdgeInsets.zero,
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/ProfilePage', arguments: {
+                      'user': MyUser.myUser,
+                      'id_user': _authController.getUser.uid,
+                    });
+                  },
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 6),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 38,
+                          height: 38,
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                              color: Colors.indigo[200]),
+                        ),
+                        SizedBox(
+                          width: 6,
+                        ),
+                        Text(
+                          MyUser.myUser.firstName +
+                              ' ' +
+                              MyUser.myUser.secondName,
+                          style: TextStyle(
+                              color: Colors.grey[700],
+                              fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    ),
                   ),
-                  SizedBox(
-                    width: 6,
-                  ),
-                  Text(
-                    _storageController.getUser().firstName +
-                        ' ' +
-                        _storageController.getUser().secondName,
-                    style: TextStyle(
-                        color: Colors.grey[700], fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
-            ),
-          )
+                )
+              : Container(),
         ],
       ),
       bottomNavigationBar: FABBottomAppBar(
@@ -112,7 +118,7 @@ class _HomePageState extends State<HomePage> {
               Navigator.of(context).pushNamed('/StartChatPage');
             else
               Navigator.of(context).pushNamed('/ProfilePage', arguments: {
-                'user': _storageController.getUser(),
+                'user': MyUser.myUser,
                 'id_user': _authController.getUser.uid,
               });
           },
@@ -140,7 +146,22 @@ class _HomePageState extends State<HomePage> {
       ),
       drawerScrimColor: Colors.indigo,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: tabViews[_currentIndex],
+      body: FutureBuilder(
+        future: _authController.getUserInfo(_authController.getUser.uid),
+        builder: (_, snapshot) {
+          if (snapshot.hasData) {
+            print(snapshot.data.data());
+            User user = User().fromMap(snapshot.data.data());
+            MyUser.myUser = user;
+            _authController.updateUserTag(user);
+//            _storageController.setUser(user);
+            return tabViews[_currentIndex];
+          }
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      ),
     );
   }
 

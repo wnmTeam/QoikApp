@@ -94,4 +94,12 @@ class PostsController {
         id_user: id_user,
         id_comment: id_comment,
       );
+
+  Future addPoint({String id_group, Comment comment, Post post}) {
+    return api.addPoint(
+      id_group: id_group,
+      comment: comment,
+      post: post,
+    );
+  }
 }

@@ -23,31 +23,27 @@ class AuthController {
   get getUser => api.getUser;
 
   Future createAccount(email, password, User user) async {
-    await  api.signUp(
+    await api.signUp(
       email,
       password,
     );
-      print(user.toMap());
-      await api.recordUserInfo(user);
-      await _storage.setUser(user);
+    print(user.toMap());
+    await api.recordUserInfo(user);
 
-      await _groupsController.addMemberToGroup(
-        uids: [getUser.uid],
-        id_group: user.university,
-      );
-      print('un');
-      await _groupsController.addMemberToGroup(
-        uids: [getUser.uid],
-        id_group: user.college,
-      );
-
-
+    await _groupsController.addMemberToGroup(
+      uids: [getUser.uid],
+      id_group: user.university,
+    );
+    print('un');
+    await _groupsController.addMemberToGroup(
+      uids: [getUser.uid],
+      id_group: user.college,
+    );
   }
 
   login(String email, String password) async {
     await api.signIn(email, password);
     User user = User();
-    user.fromMap(await api.getUserInfo(api.getUser.uid));
 
     return _storage.setUser(user);
   }
@@ -73,4 +69,36 @@ class AuthController {
         limit: limit,
         last: last,
       );
+
+  Future addPoint({String id_user}) => api.addPoint(id_user: id_user);
+
+  Future updateUserTag(User user) {
+    DateTime _temp = DateTime(
+        user.recordDate.year,
+        user.recordDate.month,
+        user.recordDate.day,
+        user.recordDate.hour,
+        user.recordDate.minute,
+        user.recordDate.second);
+    switch (user.tag) {
+      case User.TAG_NEW_USER:
+        if (DateTime.now().difference(user.recordDate).inDays > 6)
+          return api.updateUserTag(user: user, tag: User.TAG_NORMAL_USER);
+        break;
+
+      case User.TAG_NORMAL_USER:
+        if (DateTime.now().difference(user.recordDate).inDays > 89 &&
+            DateTime.now().difference(user.recordDate).inDays /
+                    user.enterCount >
+                90 / 60)
+          return api.updateUserTag(user: user, tag: User.TAG_ACTIVE_USER);
+        break;
+      case User.TAG_ACTIVE_USER:
+        if (user.points > 100)
+          return api.updateUserTag(user: user, tag: User.TAG_EX_USER);
+        break;
+      case User.TAG_EX_USER:
+        break;
+    }
+  }
 }

@@ -6,10 +6,12 @@ class Post {
   static const String LIKE_COUNT = 'likeCount';
   static const String COMMENT_COUNT = 'commentCount';
   static const String FOLLOW_COUNT = 'followCount';
+  static const String COMMENT_POINTED = 'commentPointed';
 
   String id;
   String idOwner;
   String text;
+  String commentPointed;
   int likeCount;
   int commentCount;
   int followCount;
@@ -25,6 +27,7 @@ class Post {
     this.likeCount,
     this.commentCount,
     this.followCount,
+    this.commentPointed,
     this.date,
   });
 
@@ -55,6 +58,7 @@ class Post {
         LIKE_COUNT: likeCount,
         COMMENT_COUNT: commentCount,
         FOLLOW_COUNT: followCount,
+        COMMENT_POINTED: commentPointed,
       };
 
   Post fromMap(map) {
@@ -64,6 +68,7 @@ class Post {
     this.likeCount = map[LIKE_COUNT];
     this.commentCount = map[COMMENT_COUNT];
     this.followCount = map[FOLLOW_COUNT];
+    this.commentPointed = map[COMMENT_POINTED];
     return this;
   }
 

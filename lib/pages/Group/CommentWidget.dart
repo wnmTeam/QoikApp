@@ -13,7 +13,9 @@ class CommentWidget extends StatefulWidget {
   Group group;
   Post post;
 
-  CommentWidget({this.comment, this.post, this.group});
+  Function addPoint;
+
+  CommentWidget({this.comment, this.post, this.group, this.addPoint});
 
   @override
   _CommentWidgetState createState() => _CommentWidgetState();
@@ -55,7 +57,7 @@ class _CommentWidgetState extends State<CommentWidget> {
           Navigator.pushNamed(
             context,
             '/ProfilePage',
-              arguments:{'id_user': widget.comment.idOwner, 'user': user},
+            arguments: {'id_user': widget.comment.idOwner, 'user': user},
           );
         },
         contentPadding: EdgeInsets.zero,
@@ -80,11 +82,28 @@ class _CommentWidgetState extends State<CommentWidget> {
               SizedBox(
                 height: 3,
               ),
-              Text(
-                widget.comment.text,
-                style: TextStyle(
-                  color: Colors.grey[700],
-                ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      widget.comment.text,
+                      style: TextStyle(
+                        color: Colors.grey[700],
+                      ),
+                    ),
+                  ),
+                  widget.comment.id == widget.post.commentPointed
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 0, horizontal: 15),
+                          child: Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                            size: 30,
+                          ),
+                        )
+                      : Container(),
+                ],
               ),
               SizedBox(
                 height: 4,
@@ -132,14 +151,16 @@ class _CommentWidgetState extends State<CommentWidget> {
                               id_post: widget.post.id,
                               id_comment: widget.comment.id,
                             );
-
                           },
                         );
                       }),
                   SizedBox(
                     width: 6,
                   ),
-                  _authController.getUser.uid == widget.post.idOwner
+                  _authController.getUser.uid == widget.post.idOwner &&
+                          _authController.getUser.uid !=
+                              widget.comment.idOwner &&
+                          widget.post.commentPointed == null
                       ? InkWell(
                           child: Container(
                             child: Padding(
@@ -155,7 +176,17 @@ class _CommentWidgetState extends State<CommentWidget> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ),
-                          onTap: () {},
+                          onTap: () async {
+                            await _postsController.addPoint(
+                              id_group: widget.group.id,
+                              comment: widget.comment,
+                              post: widget.post,
+                            );
+                            print('add point');
+                            await _authController.addPoint(
+                                id_user: widget.comment.idOwner);
+                            widget.addPoint(widget.comment.id);
+                          },
                         )
                       : Container(),
                 ],

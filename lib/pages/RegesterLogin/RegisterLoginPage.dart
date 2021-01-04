@@ -361,6 +361,10 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                         university: _univercity,
                         college: _college,
                         groups: [_univercity, _college],
+                        points: 10,
+                        enterCount: 0,
+                        bio: 'Hey There.. I am New User.',
+                        recordDate: DateTime.now(),
                       ),
                     );
                   }
