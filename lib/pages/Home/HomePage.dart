@@ -151,7 +151,7 @@ class _HomePageState extends State<HomePage> {
         builder: (_, snapshot) {
           if (snapshot.hasData) {
             print(snapshot.data.data());
-            User user = User().fromMap(snapshot.data.data());
+            User user = User().fromMap(snapshot.data.data()).setId(snapshot.data.id);
             MyUser.myUser = user;
             _authController.updateUserTag(user);
 //            _storageController.setUser(user);

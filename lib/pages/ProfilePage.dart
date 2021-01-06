@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/FriendsController.dart';
-
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as str;
+import 'package:stumeapp/controller/StorageController.dart';
 
 class ProfilePage extends StatefulWidget {
   String id_user;
@@ -21,8 +25,11 @@ class MapScreenState extends State<ProfilePage> {
   bool isMyProfile = false;
   String imagePath = "";
 
+  var _image;
+
   AuthController _authController = AuthController();
   FriendsController _friendsController = FriendsController();
+  StorageController _storageController = StorageController();
 
   @override
   void initState() {
@@ -61,8 +68,14 @@ class MapScreenState extends State<ProfilePage> {
                       height: 40,
                     ),
                     Avatar(
-                      imagePath: imagePath,
+                      imagePath: widget.user.img,
                       myProfile: isMyProfile,
+                      ubdateImagerofile: (img) async {
+                        await uploadPic(context, img);
+
+                        await _authController.setImageUrl(
+                            id_user: widget.user.id);
+                      },
                     ),
                     SizedBox(
                       height: 12,
@@ -105,8 +118,10 @@ class MapScreenState extends State<ProfilePage> {
                                       ),
                                       label: Text('Add Friend'),
                                       onPressed: () async {
-                                        await _friendsController.sendRequestFriend(
-                                          id_sender: _authController.getUser.uid,
+                                        await _friendsController
+                                            .sendRequestFriend(
+                                          id_sender:
+                                              _authController.getUser.uid,
                                           id_receiver: widget.user.id,
                                         );
                                       },
@@ -309,6 +324,19 @@ class MapScreenState extends State<ProfilePage> {
       ),
     ));
   }
+
+  Future uploadPic(BuildContext context, img) async {
+    print(widget.user.id);
+    str.Reference firebaseStorageRef = str.FirebaseStorage.instance
+        .ref()
+        .child('profileImages')
+        .child(widget.user.id);
+    str.UploadTask uploadTask = firebaseStorageRef.putFile(img);
+    str.TaskSnapshot taskSnapshot = await uploadTask.then((res) async {
+      String url = await res.ref.getDownloadURL();
+      return _authController.setImageUrl(id_user: widget.user.id, url: url);
+    });
+  }
 }
 
 class FriendWidget extends StatefulWidget {
@@ -417,39 +445,58 @@ class _FriendWidgetState extends State<FriendWidget> {
   }
 }
 
-class Avatar extends StatelessWidget {
-  const Avatar({
-    Key key,
-    this.myProfile,
-    @required this.imagePath,
-  }) : super(key: key);
-  final String imagePath;
-  final bool myProfile;
+class Avatar extends StatefulWidget {
+  String imagePath;
+  bool myProfile;
+  Function ubdateImagerofile;
+
+  Avatar({this.imagePath, this.myProfile, this.ubdateImagerofile});
+
+  @override
+  _AvatarState createState() => _AvatarState();
+}
+
+class _AvatarState extends State<Avatar> {
+  File _image;
 
   @override
   Widget build(BuildContext context) {
+    print(widget.imagePath);
     return Stack(
       children: <Widget>[
         Center(
-          child: Container(
-            width: 100.0,
-            height: 100.0,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
-              image: DecorationImage(
-                image: ExactAssetImage(imagePath),
-                fit: BoxFit.cover,
-              ),
-            ),
+            child: CircleAvatar(
+          backgroundColor: Colors.white,
+          radius: 78,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(100),
+            child: widget.imagePath != ''
+                ? Image.network(
+                    widget.imagePath,
+                    fit: BoxFit.cover,
+                    width: 150,
+                    height: 150,
+                  )
+                : _image != null
+                    ? Image.file(
+                        _image,
+                        fit: BoxFit.cover,
+                        width: 150,
+                        height: 150,
+                      )
+                    : Container(
+                        color: Colors.white,
+                      ),
           ),
-        ),
-        myProfile
+        )),
+        widget.myProfile
             ? Center(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 75, right: 40),
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      _getImage();
+                    },
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.grey[400],
@@ -469,5 +516,20 @@ class Avatar extends StatelessWidget {
             : Container(),
       ],
     );
+  }
+
+  Future _getImage() async {
+    final pickedFile =
+        await ImagePicker().getImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      {
+        setState(() {
+          _image = File(pickedFile.path);
+        });
+        print('ghjkhgdefghjkl,nbvcdfghjk');
+        print(_image.path);
+        widget.ubdateImagerofile(_image);
+      }
+    }
   }
 }

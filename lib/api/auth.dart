@@ -99,4 +99,11 @@ class Auth {
         .doc(user.id)
         .set({'tag': tag}, SetOptions(merge: true));
   }
+
+  setImageUrl({String id_user, String url}) {
+    return _firestore
+        .collection('users')
+        .doc(id_user)
+        .set({'img': url}, SetOptions(merge: true));
+  }
 }

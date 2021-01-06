@@ -101,4 +101,8 @@ class AuthController {
         break;
     }
   }
+
+  setImageUrl({String id_user, String url}) {
+    return api.setImageUrl(id_user: id_user, url: url);
+  }
 }
