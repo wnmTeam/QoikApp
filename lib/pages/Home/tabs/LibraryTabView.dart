@@ -18,7 +18,7 @@ class LibraryTab extends StatefulWidget {
 class _LibraryTabState extends State<LibraryTab> {
   LibraryController _libraryController = LibraryController();
 
-  List<DocumentSnapshot> books = [];
+  List<DocumentSnapshot> categories = [];
 
   @override
   void initState() {
@@ -33,14 +33,16 @@ class _LibraryTabState extends State<LibraryTab> {
           future: _libraryController.getCategories(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              books = snapshot.data.docs;
+              categories = snapshot.data.docs;
               return ListView.builder(
-                itemCount: books.length,
+                itemCount: categories.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(books[index].id),
+                    title: Text(categories[index].id),
                     leading: Icon(Icons.category),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, '/BooksPage', arguments: {'category': categories[index].id});
+                    },
                   );
                 },
               );

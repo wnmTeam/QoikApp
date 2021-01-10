@@ -5,6 +5,8 @@ import 'package:stumeapp/pages/Group/CreatGroupPage.dart';
 import 'package:stumeapp/pages/Group/GroupPage.dart';
 import 'package:stumeapp/pages/Group/SelectMembersPage.dart';
 import 'package:stumeapp/pages/Group/StartChatPage.dart';
+import 'package:stumeapp/pages/Library/BookViewerPage.dart';
+import 'package:stumeapp/pages/Library/BooksLibraryPage.dart';
 import 'package:stumeapp/pages/ProfilePage.dart';
 import 'package:stumeapp/pages/RegesterLogin/RegisterLoginPage.dart';
 import 'file:///C:/flutterApps/stume_app/lib/pages/Friends/SearchFriends.dart';
@@ -45,6 +47,17 @@ class RouteController {
                   user: args['user'],
                   group: args['group'],
                 ));
+
+      case '/BookViewerPage':
+        return MaterialPageRoute(
+            builder: (_) => BookViewerPage(
+              id: args['id'],
+            ));
+      case '/BooksPage':
+        return MaterialPageRoute(
+            builder: (_) => BooksPage(
+              category: args['category'],
+            ));
       case '/ProfilePage':
         return MaterialPageRoute(
             builder: (_) => ProfilePage(

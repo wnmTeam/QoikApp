@@ -5,7 +5,7 @@ class Book {
 
   String url;
   String name;
-  int img;
+  String img;
 
   String id;
 
