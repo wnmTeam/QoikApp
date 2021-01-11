@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
+import 'package:stumeapp/api/notification_api.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 import 'package:stumeapp/pages/Home/tabs/FriendsTabView.dart';
@@ -21,9 +22,12 @@ class _HomePageState extends State<HomePage> {
 
   AuthController _authController = AuthController();
   StorageController _storageController = StorageController();
+  NotificationApi _notificationApi = NotificationApi();
 
   @override
-  void initState() {
+  void initState()  {
+    _notificationApi.requestNotificationPermissions();
+    print('done ');
     _currentIndex = 1;
     tabViews = [
       HomeTab(),
@@ -150,8 +154,8 @@ class _HomePageState extends State<HomePage> {
         future: _authController.getUserInfo(_authController.getUser.uid),
         builder: (_, snapshot) {
           if (snapshot.hasData) {
-            print(snapshot.data.data());
-            User user = User().fromMap(snapshot.data.data()).setId(snapshot.data.id);
+            User user =
+                User().fromMap(snapshot.data.data()).setId(snapshot.data.id);
             MyUser.myUser = user;
             _authController.updateUserTag(user);
 //            _storageController.setUser(user);
