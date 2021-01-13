@@ -31,12 +31,11 @@ class GroupsController {
   }
 
   Future createGroup({Group group, uids}) {
+    group.members = uids;
     return api.createGroup(group: group, uids: uids);
   }
 
-  createChat({Group group}) {
-    return api.createChat(group: group);
-  }
+
 
   Future getGroupInfo({id_group}) => api.getGroupInfo(id_group: id_group);
 }

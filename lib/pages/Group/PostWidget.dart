@@ -126,12 +126,14 @@ class _PostWidgetState extends State<PostWidget>
                     );
                   },
                   contentPadding: EdgeInsets.zero,
-                  leading: Container(
-                    width: 55,
-                    height: 55,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(30)),
-                        color: Colors.indigo[200]),
+                  leading:  ClipRRect(
+                    borderRadius: BorderRadius.circular(57),
+                    child:  Image.network(
+                      user.img,
+                      fit: BoxFit.cover,
+                      width: 55,
+                      height: 55,
+                    ),
                   ),
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -393,12 +395,14 @@ class _PostWidgetState extends State<PostWidget>
                 if (commentsShow)
                   Row(
                     children: [
-                      Container(
-                        width: 34,
-                        height: 34,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(22)),
-                            color: Colors.indigo[200]),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(57),
+                        child:  Image.network(
+                          user.img,
+                          fit: BoxFit.cover,
+                          width: 40,
+                          height: 40,
+                        ),
                       ),
                       SizedBox(
                         width: 8,

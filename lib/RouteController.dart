@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stumeapp/pages/ChatRoom/ChatRoomPage.dart';
+import 'package:stumeapp/pages/ChatRoom/ChatsPage.dart';
 import 'package:stumeapp/pages/Friends/MyFriendsPage.dart';
 import 'package:stumeapp/pages/Friends/SearchFriends.dart';
 import 'package:stumeapp/pages/Group/CreatGroupPage.dart';
@@ -36,7 +37,10 @@ class RouteController {
                 ));
       case '/SelectMembers':
         return MaterialPageRoute(
-            builder: (_) => SelectFriendsPage(group: args['group'], type: args['type'],));
+            builder: (_) => SelectFriendsPage(
+                  group: args['group'],
+                  type: args['type'],
+                ));
       case '/CreateGroupPage':
         return MaterialPageRoute(builder: (_) => CreateGroupPage());
       case '/StartChatPage':
@@ -52,19 +56,21 @@ class RouteController {
       case '/BookViewerPage':
         return MaterialPageRoute(
             builder: (_) => BookViewerPage(
-              id: args['id'],
-            ));
+                  id: args['id'],
+                ));
       case '/BooksPage':
         return MaterialPageRoute(
             builder: (_) => BooksPage(
-              category: args['category'],
-            ));
+                  category: args['category'],
+                ));
       case '/ProfilePage':
         return MaterialPageRoute(
             builder: (_) => ProfilePage(
                   id_user: args['id_user'],
                   user: args['user'],
                 ));
+      case '/ChatsPage':
+        return MaterialPageRoute(builder: (_) => ChatsPage());
     }
   }
 }

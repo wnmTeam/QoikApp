@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/Message.dart';
 
 class ChatsApi {
@@ -53,4 +54,44 @@ class ChatsApi {
         .orderBy('date')
         .startAfter([DateTime.now()]).snapshots();
   }
+
+  getChats({String id_user, int limit, DocumentSnapshot last}) {
+    if (last != null)
+      return _firestore
+          .collection('chats')
+          .where(Group.MEMBERS, arrayContains: id_user)
+          .startAfterDocument(last)
+          .limit(limit)
+          .get();
+
+    return _firestore
+        .collection('chats')
+        .where(Group.MEMBERS, arrayContains: id_user)
+        .limit(limit)
+        .get();
+  }
+
+  Future createChat({Group group}) {
+    Map m = group.toMap();
+    m[Group.LAST_ACTIVE] = FieldValue.serverTimestamp();
+    return _firestore.collection('chats').doc(group.id).set(m);
+  }
+
+  getRooms({id, DocumentSnapshot last, int limit}) {
+    if (last != null)
+      return _firestore
+          .collection('rooms')
+          .where(Group.MEMBERS, arrayContains: id)
+          .startAfterDocument(last)
+          .limit(limit)
+          .get();
+
+    return _firestore
+        .collection('rooms')
+        .where(Group.MEMBERS, arrayContains: id)
+        .limit(limit)
+        .get();
+  }
+
+
 }

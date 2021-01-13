@@ -85,31 +85,26 @@ class GroupsApi {
   }
 
   Future createGroup({Group group, List uids}) async {
-    var d = await _firestore.collection('groups').add(group.toMap());
-    WriteBatch b = _firestore.batch();
-
-    for (String uid in uids) {
-      DocumentReference r = _firestore
-          .collection('groups')
-          .doc(d.id)
-          .collection('members')
-          .doc(uid);
-      b.set(r, {'ex': true});
-      r = _firestore.collection('users').doc(uid);
-      b.set(
-          r,
-          {
-            'groups': FieldValue.arrayUnion([d.id])
-          },
-          SetOptions(merge: true));
-    }
-    return b.commit();
-  }
-
-  Future createChat({Group group}) {
-    Map m = group.toMap();
-    m[Group.LAST_ACTIVE] = FieldValue.serverTimestamp();
-    return _firestore.collection('groups').doc(group.id).set(m);
+    var d = _firestore.collection('rooms').add(group.toMap());
+    return d;
+//    WriteBatch b = _firestore.batch();
+//
+//    for (String uid in uids) {
+//      DocumentReference r = _firestore
+//          .collection('groups')
+//          .doc(d.id)
+//          .collection('members')
+//          .doc(uid);
+//      b.set(r, {'ex': true});
+//      r = _firestore.collection('users').doc(uid);
+//      b.set(
+//          r,
+//          {
+//            'groups': FieldValue.arrayUnion([d.id])
+//          },
+//          SetOptions(merge: true));
+//    }
+//    return b.commit();
   }
 
   Future getGroupInfo({id_group}) {

@@ -109,12 +109,14 @@ class _UserWidgetState extends State<UserWidget> {
             return ListTile(
               contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
               onTap: () {},
-              leading: Container(
-                width: 57,
-                height: 57,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(30)),
-                    color: Colors.indigo[200]),
+              leading: ClipRRect(
+                borderRadius: BorderRadius.circular(57),
+                child:  Image.network(
+                  user.img,
+                  fit: BoxFit.cover,
+                  width: 57,
+                  height: 57,
+                ),
               ),
               title: Text(user.firstName + ' ' + user.secondName),
               subtitle: Text(

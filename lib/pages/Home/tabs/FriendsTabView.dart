@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
+import 'package:stumeapp/controller/ChatController.dart';
 import 'package:stumeapp/controller/FriendsController.dart';
 import 'package:stumeapp/controller/GroupsController.dart';
 
@@ -106,7 +107,7 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
   User user;
 
   FriendsController _friendsController = FriendsController();
-  GroupsController _groupsController = GroupsController();
+  ChatController _chatsController = ChatController();
 
   @override
   Widget build(BuildContext context) {
@@ -119,12 +120,14 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
           return ListTile(
             contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
             onTap: () {},
-            leading: Container(
-              width: 57,
-              height: 57,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(30)),
-                  color: Colors.indigo[200]),
+            leading: ClipRRect(
+              borderRadius: BorderRadius.circular(57),
+              child:  Image.network(
+                user.img,
+                fit: BoxFit.cover,
+                width: 57,
+                height: 57,
+              ),
             ),
             title: Text(user.firstName + ' ' + user.secondName),
             subtitle: Text(
@@ -149,7 +152,7 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
                 await _friendsController.acceptRequestFriend(
                     id_requestSender: user.id);
                 print('send done');
-                await _groupsController.createChat(
+                await _chatsController.createChat(
                   group: Group(
                     members: [
                       user.id,

@@ -63,12 +63,14 @@ class _CommentWidgetState extends State<CommentWidget> {
         contentPadding: EdgeInsets.zero,
         leading: Padding(
           padding: const EdgeInsets.only(left: 8.0),
-          child: Container(
-            width: 30,
-            height: 30,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(22)),
-                color: Colors.indigo[200]),
+          child:  ClipRRect(
+            borderRadius: BorderRadius.circular(57),
+            child:  Image.network(
+              user.img,
+              fit: BoxFit.cover,
+              width: 40,
+              height: 40,
+            ),
           ),
         ),
         title: Container(

@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   NotificationApi _notificationApi = NotificationApi();
 
   @override
-  void initState()  {
+  void initState() {
     _notificationApi.requestNotificationPermissions();
     print('done ');
     _currentIndex = 1;
@@ -51,43 +51,15 @@ class _HomePageState extends State<HomePage> {
         centerTitle: false,
         titleSpacing: 20,
         actions: [
-          MyUser.myUser != null
-              ? FlatButton(
-                  padding: EdgeInsets.zero,
-                  onPressed: () {
-                    Navigator.of(context).pushNamed('/ProfilePage', arguments: {
-                      'user': MyUser.myUser,
-                      'id_user': _authController.getUser.uid,
-                    });
-                  },
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 6),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 38,
-                          height: 38,
-                          decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
-                              color: Colors.indigo[200]),
-                        ),
-                        SizedBox(
-                          width: 6,
-                        ),
-                        Text(
-                          MyUser.myUser.firstName +
-                              ' ' +
-                              MyUser.myUser.secondName,
-                          style: TextStyle(
-                              color: Colors.grey[700],
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                )
-              : Container(),
+          IconButton(
+            icon: Icon(
+              Icons.chat,
+              color: Colors.blueGrey,
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, '/ChatsPage');
+            },
+          )
         ],
       ),
       bottomNavigationBar: FABBottomAppBar(
@@ -119,15 +91,24 @@ class _HomePageState extends State<HomePage> {
             if (_currentIndex == 2)
               Navigator.of(context).pushNamed('/SearchFriendsPage');
             else if (_currentIndex == 1)
-              Navigator.of(context).pushNamed('/StartChatPage');
+              Navigator.of(context).pushNamed(
+                '/ProfilePage',
+                arguments: {
+                  'user': MyUser.myUser,
+                  'id_user': _authController.getUser.uid
+                },
+              );
             else
-              Navigator.of(context).pushNamed('/ProfilePage', arguments: {
-                'user': MyUser.myUser,
-                'id_user': _authController.getUser.uid,
-              });
+              Navigator.of(context).pushNamed(
+                '/ProfilePage',
+                arguments: {
+                  'user': MyUser.myUser,
+                  'id_user': _authController.getUser.uid,
+                },
+              );
           },
           child: Icon(
-            _currentIndex == 1 || _currentIndex == 2 ? Icons.add : Icons.person,
+            _currentIndex == 2 ? Icons.add : Icons.person,
             color: Colors.white,
           ),
         ),

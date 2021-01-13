@@ -72,12 +72,14 @@ class _MembersTabState extends State<MembersTab>
                   },
                   title: Text(user.firstName + ' ' + user.secondName),
                   subtitle: Text('New User'),
-                  leading: Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(25)),
-                        color: Colors.indigo[200]),
+                  leading:  ClipRRect(
+                    borderRadius: BorderRadius.circular(57),
+                    child:  Image.network(
+                      user.img,
+                      fit: BoxFit.cover,
+                      width: 57,
+                      height: 57,
+                    ),
                   ),
                 );
               }

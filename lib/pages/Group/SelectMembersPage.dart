@@ -55,9 +55,9 @@ class _SelectFriendsPageState extends State<SelectFriendsPage> {
               if (widget.type == 'create') {
                 await _groupsController.createGroup(
                   group: widget.group,
-                  uids: selectedMembers,
+                  uids: selectedMembers..add(_authController.getUser.uid),
                 );
-                Navigator.popUntil(context, (route) => route.isFirst);
+                Navigator.popUntil(context, ModalRoute.withName('/ChatsPage'));
               } else {
                 print(widget.group.id);
                 print(selectedMembers);

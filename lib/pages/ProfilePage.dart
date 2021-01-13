@@ -53,7 +53,7 @@ class MapScreenState extends State<ProfilePage> {
           Stack(
             children: [
               Container(
-                height: 275.0,
+                height: 300.0,
                 width: size.width,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
@@ -95,7 +95,7 @@ class MapScreenState extends State<ProfilePage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 200),
+                padding: const EdgeInsets.only(top: 240),
                 child: Center(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -226,44 +226,38 @@ class MapScreenState extends State<ProfilePage> {
                                     title: Text('College'),
                                     subtitle: Text(widget.user.college),
                                   )),
-                              SizedBox(
-                                  width: size.width - 24,
-                                  child: ListTile(
-                                    trailing: IconButton(
-                                      icon: Icon(
-                                        Icons.copy,
-                                      ),
-                                      onPressed: () {},
-                                    ),
-                                    title: Text('E-Mail'),
-                                    subtitle: Text('syromar39@gmail.com'),
-                                  )),
-                              SizedBox(
-                                  width: size.width - 24,
-                                  child: ListTile(
-                                    trailing: isMyProfile
-                                        ? IconButton(
-                                            icon: Icon(
-                                              Icons.edit,
-                                            ),
-                                            onPressed: () {},
-                                          )
-                                        : SizedBox(
-                                            height: 2,
-                                            width: 2,
+                              isMyProfile
+                                  ? SizedBox(
+                                      width: size.width - 24,
+                                      child: ListTile(
+                                        title: Text('E-Mail'),
+                                        subtitle: Text('syromar39@gmail.com'),
+                                      ))
+                                  : Container(),
+                              isMyProfile
+                                  ? SizedBox(
+                                      width: size.width - 24,
+                                      child: ListTile(
+                                        trailing: IconButton(
+                                                icon: Icon(
+                                                  Icons.edit,
+                                                ),
+                                                onPressed: () {},
+                                              ),
+
+                                        title: Text('password'),
+                                        subtitle: TextField(
+                                          controller: TextEditingController(
+                                              text: 'rrrrrrrryuiodrcfvgbh'),
+                                          obscureText: true,
+                                          readOnly: true,
+                                          decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.zero,
+                                            border: InputBorder.none,
                                           ),
-                                    title: Text('password'),
-                                    subtitle: TextField(
-                                      controller: TextEditingController(
-                                          text: 'rrrrrrrryuiodrcfvgbh'),
-                                      obscureText: true,
-                                      readOnly: true,
-                                      decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.zero,
-                                        border: InputBorder.none,
-                                      ),
-                                    ),
-                                  ))
+                                        ),
+                                      ))
+                                  : Container(),
                             ],
                           ),
                         ),
@@ -467,7 +461,7 @@ class _AvatarState extends State<Avatar> {
         Center(
             child: CircleAvatar(
           backgroundColor: Colors.white,
-          radius: 78,
+          radius: 75,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(100),
             child: widget.imagePath != ''
@@ -492,7 +486,7 @@ class _AvatarState extends State<Avatar> {
         widget.myProfile
             ? Center(
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 75, right: 40),
+                  padding: const EdgeInsets.only(top: 125, right: 80),
                   child: InkWell(
                     onTap: () {
                       _getImage();

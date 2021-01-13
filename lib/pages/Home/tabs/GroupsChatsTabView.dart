@@ -44,11 +44,6 @@ class _GroupsChatsTabState extends State<GroupsChatsTab> {
                       Group group = Group()
                           .fromMap(snapshot.data.data())
                           .setId(user.groups[index]);
-                      if (group.type == Group.TYPE_CHAT)
-                        return _chatBuilder(
-                          context,
-                          group,
-                        );
                       return _groupBuilder(
                         context,
                         group,
@@ -66,43 +61,7 @@ class _GroupsChatsTabState extends State<GroupsChatsTab> {
         });
   }
 
-  Widget _chatBuilder(BuildContext context, Group group) {
-    User user;
-    return FutureBuilder(
-      future: _authController.getUserInfo(
-        _authController.getUser.uid == group.members[0]
-            ? group.members[1]
-            : group.members[0],
-      ),
-      builder: (_, snapshot) {
-        if (snapshot.hasData) {
-          user = User().fromMap(snapshot.data.data()).setId(snapshot.data.id);
-          return ListTile(
-            leading: Container(
-              width: 55,
-              height: 55,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(30)),
-                  color: Colors.indigo[200]),
-            ),
-            title: Text(user.firstName + ' ' + user.secondName),
-            subtitle: Text('New User'),
-            onTap: () {
-              Navigator.pushNamed(
-                context,
-                '/ChatRoomPage',
-                arguments: {
-                  'user': user,
-                  'group': group,
-                },
-              );
-            },
-          );
-        }
-        return Container();
-      },
-    );
-  }
+
 
   Widget _groupBuilder(BuildContext context, Group group) {
     print(group.name);
