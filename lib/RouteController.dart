@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stumeapp/pages/ChatRoom/ChatRoomPage.dart';
 import 'package:stumeapp/pages/ChatRoom/ChatsPage.dart';
+import 'package:stumeapp/pages/ChatRoom/RoomPage.dart';
 import 'package:stumeapp/pages/Friends/MyFriendsPage.dart';
 import 'package:stumeapp/pages/Friends/SearchFriends.dart';
 import 'package:stumeapp/pages/Group/CreatGroupPage.dart';
@@ -71,6 +72,12 @@ class RouteController {
                 ));
       case '/ChatsPage':
         return MaterialPageRoute(builder: (_) => ChatsPage());
+      case '/RoomPage':
+        return MaterialPageRoute(builder: (_) => RoomPage(
+          id_user: args['id_user'],
+          user: args['user'],
+          group: args['group'],
+        ));
     }
   }
 }

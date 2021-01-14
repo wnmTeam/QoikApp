@@ -17,9 +17,6 @@ class GroupsController {
         group: group,
       );
 
-  void addMemberToUniversity({uid, university, user}) {
-    api.addMemberToUniversity(uid: uid, university: university, user: user);
-  }
 
   void addMemberToCollege({uid, college}) {}
 

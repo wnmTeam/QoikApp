@@ -2,25 +2,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/Message.dart';
-import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ChatRoomPage extends StatefulWidget {
+class RoomPage extends StatefulWidget {
   String id_user;
   User user;
   Group group;
 
-  ChatRoomPage({this.id_user, this.user, this.group});
+  RoomPage({this.id_user, this.user, this.group});
 
   @override
-  _ChatRoomPageState createState() => _ChatRoomPageState();
+  _RoomPageState createState() => _RoomPageState();
 }
 
-class _ChatRoomPageState extends State<ChatRoomPage> {
+class _RoomPageState extends State<RoomPage> {
   bool isLoading = false;
+  bool isLoadingMembers = false;
   bool hasMore = true;
   int documentLimit = 25;
   DocumentSnapshot lastDocument = null;
@@ -33,23 +33,19 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
 
   TextEditingController _messageController = TextEditingController();
 
-  bool creatingChat = true;
-
   Size size;
+
+  Map members = {};
 
   Stream _getMessages;
 
   @override
   void initState() {
-    if (widget.group != null) {
-      setState(() {
-        creatingChat = false;
-      });
-      getMessages();
-    } else
-      createChat();
+    print('chat id');
+    print(getChatID());
     _getMessages = _chatController.getNewMessages(id_chat: getChatID());
-
+    getMembers();
+    getMessages();
     super.initState();
   }
 
@@ -61,21 +57,19 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
         title: ListTile(
           contentPadding: EdgeInsets.zero,
           onTap: () {},
-          title: Text(widget.user.firstName + ' ' + widget.user.secondName),
-          leading:  ClipRRect(
-            borderRadius: BorderRadius.circular(57),
-            child:  Image.network(
-              widget.user.img,
-              fit: BoxFit.cover,
-              width: 38,
-              height: 38,
-            ),
+          title: Text(widget.group.name),
+          leading: Container(
+            width: 38,
+            height: 38,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                color: Colors.indigo[200]),
           ),
         ),
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.grey[700]),
       ),
-      body: !creatingChat
+      body: !isLoading && !isLoadingMembers
           ? Column(
               children: [
                 Expanded(
@@ -169,25 +163,6 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
     );
   }
 
-  createChat() async {
-    Group group = Group(
-      members: [
-        widget.user.id,
-        _authController.getUser.uid,
-      ],
-      type: Group.TYPE_CHAT,
-      name: '',
-    ).setId(getChatID());
-    await _chatController.createChat(
-      group: group,
-    );
-
-    setState(() {
-      widget.group = group;
-      creatingChat = false;
-    });
-  }
-
   getMessages() async {
     if (!hasMore) {
       print('No More messages');
@@ -222,6 +197,20 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
     });
   }
 
+  getMembers() async {
+    for (String id in widget.group.members) {
+      var d = await _authController.getUserInfo(id);
+      User user = User().fromMap(d.data())..setId(d.id);
+      members[user.id] = user;
+    }
+
+
+
+    setState(() {
+      isLoadingMembers = false;
+    });
+  }
+
   String getChatID() {
     List l = [widget.user.id, _authController.getUser.uid];
     l.sort();
@@ -251,9 +240,22 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                     ),
                     color: Colors.deepOrange,
                   ),
-                  child: Text(
-                    message.text,
-                    style: TextStyle(color: Colors.white),
+                  child: Row(
+                    children: [
+                      Column(
+                        children: [
+                          Text(
+                            members[message.idOwner].firstName +
+                                members[message.idOwner].secondName,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          Text(
+                            message.text,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -264,7 +266,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             ClipRRect(
               borderRadius: BorderRadius.circular(57),
               child:  Image.network(
-                MyUser.myUser.img,
+                members[message.idOwner].img,
                 fit: BoxFit.cover,
                 width: 30,
                 height: 30,
@@ -282,7 +284,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
           ClipRRect(
             borderRadius: BorderRadius.circular(57),
             child:  Image.network(
-              widget.user.img,
+              members[message.idOwner].img,
               fit: BoxFit.cover,
               width: 30,
               height: 30,
@@ -305,11 +307,25 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                   ),
                   color: Colors.deepOrange[300],
                 ),
-                child: Text(
-                  message.text,
-                  style: TextStyle(color: Colors.white),
+                child:Row(
+                  children: [
+                    Column(
+                      children: [
+                        Text(
+                          members[message.idOwner].firstName +
+                              members[message.idOwner].secondName,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        Text(
+                          message.text,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
+
             ],
           ),
         ],

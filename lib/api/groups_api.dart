@@ -36,32 +36,7 @@ class GroupsApi {
     }
   }
 
-  void addMemberToUniversity({uid, User user, university}) async {
-    CollectionReference reference = _firestore
-        .collection('universityGroups')
-        .doc(university)
-        .collection('members');
 
-    await reference.doc(uid).set({
-      'name': user.firstName + ' ' + user.secondName,
-      'activeState': 'new user',
-      'img': 'dfghjkrtdyugijketdrfyughjkfghjhjkfb',
-    });
-    print('ooooooooooooooooooooooooooooooooooooooooo');
-  }
-
-  void addMemberToCollege({uid, User user, college}) {
-    CollectionReference reference = _firestore
-        .collection('collegeGroups')
-        .doc(college)
-        .collection('members');
-
-    reference.doc(uid).set({
-      'name': user.firstName + ' ' + user.secondName,
-      'activeState': 'new user',
-      'img': 'dfghjkrtdyugijketdrfyughjkfghjhjkfb',
-    });
-  }
 
   addMemberToGroup({uids, String id_group}) async {
     WriteBatch b = _firestore.batch();

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class FABBottomAppBarItem {
-  FABBottomAppBarItem({this.iconData, this.text});
+  FABBottomAppBarItem({this.iconData, this.text, this.svgIcon});
+
   IconData iconData;
   String text;
+  String svgIcon;
 }
 
 class FABBottomAppBar extends StatefulWidget {
@@ -20,6 +23,7 @@ class FABBottomAppBar extends StatefulWidget {
   }) {
     assert(this.items.length == 2 || this.items.length == 4);
   }
+
   final List<FABBottomAppBarItem> items;
   final String centerItemText;
   final double height;
@@ -90,7 +94,8 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
     int index,
     ValueChanged<int> onPressed,
   }) {
-    Color color = _selectedIndex == index ? widget.selectedColor : Colors.grey[600];
+    Color color =
+        _selectedIndex == index ? widget.selectedColor : Colors.grey[600];
     return Expanded(
       child: SizedBox(
         height: widget.height,
@@ -102,7 +107,14 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Icon(item.iconData, color: color, size: widget.iconSize),
+                item.svgIcon == null
+                    ? Icon(item.iconData, color: color, size: widget.iconSize)
+                    : SvgPicture.asset(
+                        'assets/lib.svg',
+                        color: color,
+                        width: 22,
+                        height: 22,
+                      ),
                 Text(
                   item.text,
                   style: TextStyle(color: color),

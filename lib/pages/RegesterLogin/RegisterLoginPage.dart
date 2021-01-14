@@ -33,24 +33,39 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
 
   bool _isRegister = true;
 
+  Future<bool> _onBackBressed() {
+    if (!_isRegister)
+      setState(() {
+        _isRegister = true;
+      });
+    else
+      Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
-    width = MediaQuery.of(context).size.width;
+    width = MediaQuery
+        .of(context)
+        .size
+        .width;
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              children: [
-                // Container(
-                //   height: 250,
-                //   child: Center(child: Text('LOGO')),
-                // ),
-                _isRegister ? _registerForm() : _loginForm(),
-              ],
+    return WillPopScope(
+      onWillPop: _onBackBressed,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                children: [
+                  // Container(
+                  //   height: 250,
+                  //   child: Center(child: Text('LOGO')),
+                  // ),
+                  _isRegister ? _registerForm() : _loginForm(),
+                ],
+              ),
             ),
           ),
         ),
@@ -106,7 +121,8 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
     }
   }
 
-  _loginForm() => Form(
+  _loginForm() =>
+      Form(
         key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -132,7 +148,6 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               "Log in to Live your life smarter with us!",
               style: TextStyle(
                 color: Color.fromARGB(150, 0, 0, 0),
-                fontSize: width / ConstValues.fontSize_4,
                 fontWeight: FontWeight.normal,
               ),
             ),
@@ -145,7 +160,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 floatingLabelBehavior: FloatingLabelBehavior.auto,
-                icon: Icon(Icons.email),
+                icon: Icon(Icons.email_outlined),
                 labelText: 'Email',
               ),
               validator: (String value) {
@@ -177,7 +192,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               height: 15,
             ),
             Align(
-              alignment: Alignment.centerRight,
+              alignment: Alignment.centerLeft,
               child: FlatButton(
                 onPressed: () async {
                   showDialog(
@@ -186,7 +201,8 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                         return ResetDialog(
                           resetEmailController: _resetController,
                           onPressed: () {
-                            _authController.resetPassword(_resetController.text);
+                            _authController
+                                .resetPassword(_resetController.text);
                           },
                         );
                       });
@@ -194,7 +210,6 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 child: Text(
                   "Forget your password?",
                   style: TextStyle(
-                    fontSize: width / ConstValues.fontSize_4,
                     color: Color.fromARGB(150, 0, 0, 0),
                     fontWeight: FontWeight.normal,
                   ),
@@ -243,8 +258,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
-                )
-              ),
+                )),
             // FlatButton(
             //   padding: EdgeInsets.zero,
             //   onPressed: () {
@@ -265,7 +279,6 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 Text(
                   "don't have an account ?",
                   style: TextStyle(
-                    fontSize: width / ConstValues.fontSize_4,
                     fontWeight: FontWeight.normal,
                   ),
                 ),
@@ -278,7 +291,6 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                   child: Text(
                     "Sign up",
                     style: TextStyle(
-                      fontSize: width / ConstValues.fontSize_4,
                       color: Colors.indigo,
                       fontWeight: FontWeight.bold,
                     ),
@@ -286,12 +298,12 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 ),
               ],
             ),
-
           ],
         ),
       );
 
-  _registerForm() => Form(
+  _registerForm() =>
+      Form(
         key: _formKey,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -311,13 +323,12 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 ),
               ),
               SizedBox(
-                height: 12,
+                height: 10,
               ),
               Text(
                 "Improve the communications with your collages",
                 style: TextStyle(
                   color: Color.fromARGB(150, 0, 0, 0),
-                  fontSize: width / ConstValues.fontSize_4,
                   fontWeight: FontWeight.normal,
                 ),
               ),
@@ -329,6 +340,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
                   floatingLabelBehavior: FloatingLabelBehavior.auto,
+                  icon: Icon(Icons.person_outline),
                   labelText: 'First Name',
                 ),
                 validator: (String value) {
@@ -347,6 +359,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 decoration: InputDecoration(
                   floatingLabelBehavior: FloatingLabelBehavior.auto,
                   labelText: 'Second Name',
+                  icon: Icon(Icons.person_outline),
                 ),
                 validator: (String value) {
                   if (value.isEmpty) {
@@ -409,18 +422,18 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 ),
               ),
               MyDropdownButton(
-                  items: [
-                    'hight school',
-                    'college',
-                    'master',
-                    'graduate',
-                  ],
-                  onSelected: (_selected) {
-                    setState(() {
-                      _degree = _selected;
-                    });
-                  },
-                  label: 'degree',
+                items: [
+                  'hight school',
+                  'college',
+                  'master',
+                  'graduate',
+                ],
+                onSelected: (_selected) {
+                  setState(() {
+                    _degree = _selected;
+                  });
+                },
+                label: 'degree',
               ),
               SizedBox(
                 height: 20,
@@ -432,7 +445,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   floatingLabelBehavior: FloatingLabelBehavior.auto,
-                  icon: Icon(Icons.email),
+                  icon: Icon(Icons.email_outlined),
                   labelText: 'Email',
                 ),
                 validator: (String value) {
@@ -542,12 +555,8 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                   Text(
                     "already have an account?",
                     style: TextStyle(
-                      fontSize: width / ConstValues.fontSize_4,
                       fontWeight: FontWeight.normal,
                     ),
-                  ),
-                  SizedBox(
-                    width: 2,
                   ),
                   FlatButton(
                     onPressed: () {
@@ -558,7 +567,6 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                     child: Text(
                       "Login",
                       style: TextStyle(
-                        fontSize: width / ConstValues.fontSize_4,
                         color: Colors.indigo,
                         fontWeight: FontWeight.bold,
                       ),

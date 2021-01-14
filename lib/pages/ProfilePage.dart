@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
+import 'package:stumeapp/controller/ChatController.dart';
 import 'package:stumeapp/controller/FriendsController.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as str;
@@ -25,14 +27,28 @@ class MapScreenState extends State<ProfilePage> {
   bool isMyProfile = false;
   String imagePath = "";
 
+  bool chatLoading = true;
+  bool friendLoading = true;
+
+  Group chat;
+  bool isFriend = false;
+  bool isRequested = false;
+
   var _image;
 
   AuthController _authController = AuthController();
   FriendsController _friendsController = FriendsController();
-  StorageController _storageController = StorageController();
+  ChatController _chatsController = ChatController();
 
   @override
   void initState() {
+    if (_authController.getUser.uid == widget.id_user) {
+      isMyProfile = true;
+      print('My Profile');
+    }
+    getChat();
+    getFriend();
+
     super.initState();
   }
 
@@ -40,283 +56,344 @@ class MapScreenState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.user.toMap());
     size = MediaQuery.of(context).size;
-    if (_authController.getUser.uid == widget.id_user) {
-      isMyProfile = true;
-      print('My Profile');
-    }
-    return Scaffold(
-        body: SafeArea(
-      child: ListView(
-        children: <Widget>[
-          Stack(
-            children: [
-              Container(
-                height: 300.0,
-                width: size.width,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(15),
-                    bottomRight: Radius.circular(11),
-                  ),
-                  color: Colors.indigo[300],
-                ),
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: 40,
-                    ),
-                    Avatar(
-                      imagePath: widget.user.img,
-                      myProfile: isMyProfile,
-                      ubdateImagerofile: (img) async {
-                        await uploadPic(context, img);
 
-                        await _authController.setImageUrl(
-                            id_user: widget.user.id);
-                      },
-                    ),
-                    SizedBox(
-                      height: 12,
-                    ),
-                    Text(
-                      widget.user.firstName + ' ' + widget.user.secondName,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 240),
-                child: Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      !isMyProfile
-                          ? Card(
-                              margin: EdgeInsets.symmetric(
-                                  vertical: 15, horizontal: 20),
-                              elevation: 3,
-                              child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    FlatButton.icon(
-                                      icon: Icon(
-                                        Icons.person_add,
-                                        color: Colors.blueGrey,
-                                      ),
-                                      label: Text('Add Friend'),
-                                      onPressed: () async {
-                                        await _friendsController
-                                            .sendRequestFriend(
-                                          id_sender:
-                                              _authController.getUser.uid,
-                                          id_receiver: widget.user.id,
-                                        );
-                                      },
-                                    ),
-                                    FlatButton.icon(
-                                      icon: Icon(
-                                        Icons.chat,
-                                        color: Colors.blueGrey,
-                                      ),
-                                      label: Text('Mesaage'),
-                                      onPressed: () {},
-                                    )
-                                  ],
-                                ),
-                              ),
-                            )
-                          : Container(),
-                      Card(
-                        margin: EdgeInsets.all(20),
-                        elevation: 3,
-                        child: Padding(
-                          padding: const EdgeInsets.all(6.0),
+    return Scaffold(
+        body: !chatLoading && !friendLoading
+            ? SafeArea(
+                child: ListView(
+                  children: <Widget>[
+                    Stack(
+                      children: [
+                        Container(
+                          height: 300.0,
+                          width: size.width,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(15),
+                              bottomRight: Radius.circular(11),
+                            ),
+                            color: Colors.indigo[300],
+                          ),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  'Personal Info',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                            children: <Widget>[
+                              SizedBox(
+                                height: 40,
+                              ),
+                              Avatar(
+                                imagePath: widget.user.img,
+                                myProfile: isMyProfile,
+                                ubdateImagerofile: (img) async {
+                                  await uploadPic(context, img);
+
+                                  await _authController.setImageUrl(
+                                      id_user: widget.user.id);
+                                },
+                              ),
+                              SizedBox(
+                                height: 12,
+                              ),
+                              Text(
+                                widget.user.firstName +
+                                    ' ' +
+                                    widget.user.secondName,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                               SizedBox(
                                 height: 8,
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Text(
-                                          widget.user.points.toString(),
-                                          style: TextStyle(
-                                            color: Colors.indigo,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 40,
-                                          ),
-                                        ),
-                                        Text('Points'),
-                                      ],
-                                    ),
-                                    Column(
-                                      children: [
-                                        Icon(
-                                          Icons.person,
-                                          color: Colors.indigo,
-                                          size: 50,
-                                        ),
-                                        Text(widget.user.tag),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: 18,
-                              ),
-                              SizedBox(
-                                  width: size.width - 24,
-                                  child: ListTile(
-                                    trailing: isMyProfile
-                                        ? IconButton(
-                                            icon: Icon(
-                                              Icons.edit,
-                                            ),
-                                            onPressed: () {},
-                                          )
-                                        : SizedBox(
-                                            height: 2,
-                                            width: 2,
-                                          ),
-                                    title: Text('Bio'),
-                                    subtitle: Text(
-                                      widget.user.bio,
-                                    ),
-                                  )),
-                              SizedBox(
-                                  width: size.width - 24,
-                                  child: ListTile(
-                                    title: Text('University'),
-                                    subtitle: Text(widget.user.university),
-                                  )),
-                              SizedBox(
-                                  width: size.width - 24,
-                                  child: ListTile(
-                                    title: Text('College'),
-                                    subtitle: Text(widget.user.college),
-                                  )),
-                              isMyProfile
-                                  ? SizedBox(
-                                      width: size.width - 24,
-                                      child: ListTile(
-                                        title: Text('E-Mail'),
-                                        subtitle: Text('syromar39@gmail.com'),
-                                      ))
-                                  : Container(),
-                              isMyProfile
-                                  ? SizedBox(
-                                      width: size.width - 24,
-                                      child: ListTile(
-                                        trailing: IconButton(
-                                                icon: Icon(
-                                                  Icons.edit,
-                                                ),
-                                                onPressed: () {},
-                                              ),
-
-                                        title: Text('password'),
-                                        subtitle: TextField(
-                                          controller: TextEditingController(
-                                              text: 'rrrrrrrryuiodrcfvgbh'),
-                                          obscureText: true,
-                                          readOnly: true,
-                                          decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.zero,
-                                            border: InputBorder.none,
-                                          ),
-                                        ),
-                                      ))
-                                  : Container(),
                             ],
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(isMyProfile ? 'My Friends' : 'Friends',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18)),
-                      ),
-                      FutureBuilder(
-                          future: _friendsController.getFriends(
-                            id: widget.id_user,
-                            limit: 8,
-                            last: null,
-                          ),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              List friends = snapshot.data.docs;
-
-                              print(friends);
-                              return SizedBox(
-                                height: 260,
-                                child: friends.length > 0
-                                    ? ListView.builder(
-                                        padding: EdgeInsets.all(8),
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: friends.length,
-                                        itemBuilder: (context, index) {
-                                          String id = friends[index].id;
-                                          print(friends[index].data());
-                                          return FriendWidget(
-                                            id: id,
-                                            isMyProfile: isMyProfile,
-                                          );
-                                        },
+                        Padding(
+                          padding: const EdgeInsets.only(top: 240),
+                          child: Center(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                !isMyProfile
+                                    ? Card(
+                                        margin: EdgeInsets.symmetric(
+                                          vertical: 15,
+                                          horizontal: 20,
+                                        ),
+                                        elevation: 3,
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 16.0,
+                                            horizontal: 8,
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              isFriend
+                                                  ? FlatButton.icon(
+                                                      icon: Icon(
+                                                        Icons.person_add,
+                                                        color: Colors.blueGrey,
+                                                      ),
+                                                      label:
+                                                          Text('Remove Friend'),
+                                                      onPressed: () async {},
+                                                    )
+                                                  : isRequested
+                                                      ? FlatButton.icon(
+                                                          color: Colors
+                                                              .indigoAccent,
+                                                          icon: Icon(
+                                                            Icons.person_remove,
+                                                            color:
+                                                                Colors.blueGrey,
+                                                          ),
+                                                          label: Text(
+                                                              'add Friend'),
+                                                          onPressed:
+                                                              () async {},
+                                                        )
+                                                      : FlatButton.icon(
+                                                          icon: Icon(
+                                                            Icons.person_remove,
+                                                            color:
+                                                                Colors.blueGrey,
+                                                          ),
+                                                          label: Text(
+                                                              'add Friend'),
+                                                          onPressed: () async {
+                                                            await _friendsController
+                                                                .sendRequestFriend(
+                                                              id_sender:
+                                                                  _authController
+                                                                      .getUser
+                                                                      .uid,
+                                                              id_receiver:
+                                                                  widget
+                                                                      .user.id,
+                                                            );
+                                                            setState(() {
+                                                              isRequested =
+                                                                  true;
+                                                            });
+                                                          },
+                                                        ),
+                                              FlatButton.icon(
+                                                icon: Icon(
+                                                  Icons.chat,
+                                                  color: Colors.blueGrey,
+                                                ),
+                                                label: Text('Mesaage'),
+                                                onPressed: () {
+                                                  Navigator.pushNamed(
+                                                      context, '/ChatRoomPage',
+                                                      arguments: {
+                                                        'group': chat,
+                                                        'user': widget.user,
+                                                      });
+                                                },
+                                              )
+                                            ],
+                                          ),
+                                        ),
                                       )
-                                    : Center(child: Text('No Friends')),
-                              );
-                            }
-                            return SizedBox(
-                              height: 250,
-                              child: Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            );
-                          }),
-                      SizedBox(
-                        height: 25,
-                      )
-                    ],
-                  ),
+                                    : Container(),
+                                Card(
+                                  margin: EdgeInsets.all(20),
+                                  elevation: 3,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(6.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            'Personal Info',
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              Column(
+                                                children: [
+                                                  Text(
+                                                    widget.user.points
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                      color: Colors.indigo,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 40,
+                                                    ),
+                                                  ),
+                                                  Text('Points'),
+                                                ],
+                                              ),
+                                              Column(
+                                                children: [
+                                                  Icon(
+                                                    Icons.person,
+                                                    color: Colors.indigo,
+                                                    size: 50,
+                                                  ),
+                                                  Text(widget.user.tag),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 18,
+                                        ),
+                                        SizedBox(
+                                            width: size.width - 24,
+                                            child: ListTile(
+                                              trailing: isMyProfile
+                                                  ? IconButton(
+                                                      icon: Icon(
+                                                        Icons.edit,
+                                                      ),
+                                                      onPressed: () {},
+                                                    )
+                                                  : SizedBox(
+                                                      height: 2,
+                                                      width: 2,
+                                                    ),
+                                              title: Text('Bio'),
+                                              subtitle: Text(
+                                                widget.user.bio,
+                                              ),
+                                            )),
+                                        SizedBox(
+                                            width: size.width - 24,
+                                            child: ListTile(
+                                              title: Text('University'),
+                                              subtitle:
+                                                  Text(widget.user.university),
+                                            )),
+                                        SizedBox(
+                                            width: size.width - 24,
+                                            child: ListTile(
+                                              title: Text('College'),
+                                              subtitle:
+                                                  Text(widget.user.college),
+                                            )),
+                                        isMyProfile
+                                            ? SizedBox(
+                                                width: size.width - 24,
+                                                child: ListTile(
+                                                  title: Text('E-Mail'),
+                                                  subtitle: Text(
+                                                      'syromar39@gmail.com'),
+                                                ))
+                                            : Container(),
+                                        isMyProfile
+                                            ? SizedBox(
+                                                width: size.width - 24,
+                                                child: ListTile(
+                                                  trailing: IconButton(
+                                                    icon: Icon(
+                                                      Icons.edit,
+                                                    ),
+                                                    onPressed: () {},
+                                                  ),
+                                                  title: Text('password'),
+                                                  subtitle: TextField(
+                                                    controller:
+                                                        TextEditingController(
+                                                            text:
+                                                                'rrrrrrrryuiodrcfvgbh'),
+                                                    obscureText: true,
+                                                    readOnly: true,
+                                                    decoration: InputDecoration(
+                                                      contentPadding:
+                                                          EdgeInsets.zero,
+                                                      border: InputBorder.none,
+                                                    ),
+                                                  ),
+                                                ))
+                                            : Container(),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                      isMyProfile ? 'My Friends' : 'Friends',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18)),
+                                ),
+                                FutureBuilder(
+                                    future: _friendsController.getFriends(
+                                      id: widget.id_user,
+                                      limit: 8,
+                                      last: null,
+                                    ),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        List friends = snapshot.data.docs;
+
+                                        print(friends);
+                                        return SizedBox(
+                                          height: 260,
+                                          child: friends.length > 0
+                                              ? ListView.builder(
+                                                  padding: EdgeInsets.all(8),
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  itemCount: friends.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    String id =
+                                                        friends[index].id;
+                                                    print(
+                                                        friends[index].data());
+                                                    return FriendWidget(
+                                                      id: id,
+                                                      isMyProfile: isMyProfile,
+                                                    );
+                                                  },
+                                                )
+                                              : Center(
+                                                  child: Text('No Friends')),
+                                        );
+                                      }
+                                      return SizedBox(
+                                        height: 250,
+                                        child: Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                      );
+                                    }),
+                                SizedBox(
+                                  height: 25,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    ));
+              )
+            : Center(child: CircularProgressIndicator()));
   }
 
   Future uploadPic(BuildContext context, img) async {
@@ -330,6 +407,42 @@ class MapScreenState extends State<ProfilePage> {
       String url = await res.ref.getDownloadURL();
       return _authController.setImageUrl(id_user: widget.user.id, url: url);
     });
+  }
+
+  getChat() async {
+    if (isMyProfile)
+      setState(() {
+        chatLoading = false;
+      });
+    var d = await _chatsController.getChat(getChatID());
+
+    setState(() {
+      if (d.data() != null) chat = Group().fromMap(d.data())..setId(d.id);
+      chatLoading = false;
+    });
+  }
+
+  getFriend() async {
+    if (isMyProfile)
+      setState(() {
+        friendLoading = false;
+      });
+    var d = await _friendsController.getFriend(
+      id_user: _authController.getUser.uid,
+      id_friend: widget.user.id,
+    );
+
+    setState(() {
+      if (d.data() != null) isFriend = true;
+      friendLoading = false;
+    });
+  }
+
+  String getChatID() {
+    List l = [widget.user.id, _authController.getUser.uid];
+    l.sort();
+
+    return l[0] + l[1];
   }
 }
 

@@ -44,4 +44,8 @@ class ChatController {
       limit: limit,
     );
   }
+
+  getChat(String chatID) {
+    return api.getChat(chatID);
+  }
 }

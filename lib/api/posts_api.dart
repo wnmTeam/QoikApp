@@ -47,6 +47,7 @@ class PostsApi {
 
     reference =
         _firestore.collection('groups').doc(id_group).collection('posts');
+    print(text);
     return reference.add({
       Post.TEXT: text,
       Post.ID_OWNER: auth.getUser.uid,

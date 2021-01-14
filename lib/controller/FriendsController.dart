@@ -28,4 +28,11 @@ class FriendsController {
         id: auth.getUser.uid,
         id_requestSender: id_requestSender,
       );
+
+  getFriend({id_user, String id_friend}) {
+    return api.getFriend(
+      id_user: id_user,
+      id_friend: id_friend,
+    );
+  }
 }

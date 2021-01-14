@@ -5,13 +5,15 @@ import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/GroupsController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class GroupsChatsTab extends StatefulWidget {
   @override
   _GroupsChatsTabState createState() => _GroupsChatsTabState();
 }
 
-class _GroupsChatsTabState extends State<GroupsChatsTab> {
+class _GroupsChatsTabState extends State<GroupsChatsTab>
+    with AutomaticKeepAliveClientMixin {
   GroupsController _groupsController = GroupsController();
 
   AuthController _authController = AuthController();
@@ -61,16 +63,11 @@ class _GroupsChatsTabState extends State<GroupsChatsTab> {
         });
   }
 
-
-
   Widget _groupBuilder(BuildContext context, Group group) {
-    print(group.name);
     return ListTile(
       title: group.type == Group.TYPE_UNIVERSITY
           ? Text('My University')
-          : group.type == Group.TYPE_COLLEGE
-              ? Text('My College')
-              : Text(group.name),
+          : Text('My College'),
       onTap: () {
         Navigator.of(context).pushNamed(
           '/GroupPage',
@@ -82,11 +79,25 @@ class _GroupsChatsTabState extends State<GroupsChatsTab> {
       leading: Container(
         width: 55,
         height: 55,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              'assets/col.svg',
+              color: Colors.white,
+              width: 25,
+              height: 25,
+            ),
+          ],
+        ),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(30)),
-            color: Colors.indigo[200]),
+            color: Colors.indigo[300]),
       ),
       subtitle: group.type == Group.TYPE_GROUP ? Text('') : Text(group.name),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

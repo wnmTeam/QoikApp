@@ -49,7 +49,7 @@ class User {
     this.recordDate,
     this.enterCount = 0,
     this.bio,
-    this.img,
+    this.img = '',
   });
 
   Map<String, dynamic> toMap() => {

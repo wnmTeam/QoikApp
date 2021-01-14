@@ -4,6 +4,7 @@ import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/pages/Group/tabs/MembersTabView.dart';
 import 'package:stumeapp/pages/Group/tabs/PostsTabView.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class GroupPage extends StatefulWidget {
   Group group;
@@ -20,6 +21,8 @@ class _GroupPageState extends State<GroupPage>
   int _currentIndex = 0;
 
   AuthController _authController = AuthController();
+
+  bool tt = true;
 
   @override
   void initState() {
@@ -60,9 +63,20 @@ class _GroupPageState extends State<GroupPage>
             leading: Container(
               width: 38,
               height: 38,
+              child:  Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    'assets/col.svg',
+                    color: Colors.white,
+                    width: 20,
+                    height: 20,
+                  ),
+                ],
+              ),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(20)),
-                  color: Colors.indigo[200]),
+                  color: Colors.indigo[300]),
             ),
           ),
           backgroundColor: Colors.white,
@@ -72,15 +86,23 @@ class _GroupPageState extends State<GroupPage>
             controller: _tabController,
             tabs: [
               Tab(
-                icon: Icon(
-                  Icons.chat,
-                  color: Colors.indigo,
+//                icon: Icon(
+//                  Icons.chat,
+//                  color: Colors.indigo,
+//                ),
+                child: Text(
+                  'Posts',
+                  style: TextStyle(color: Colors.indigo),
                 ),
               ),
               Tab(
-                icon: Icon(
-                  Icons.group,
-                  color: Colors.indigo,
+//                icon: Icon(
+//                  Icons.group,
+//                  color: Colors.indigo,
+//                ),
+                child: Text(
+                  'Members',
+                  style: TextStyle(color: Colors.indigo),
                 ),
               ),
             ],
@@ -93,34 +115,7 @@ class _GroupPageState extends State<GroupPage>
             MembersTab(widget.group),
           ],
         ),
-        floatingActionButton: _currentIndex == 0 ||
-                (_currentIndex == 1 &&
-                    widget.group.admins.contains(_authController.getUser.uid))
-            ? FloatingActionButton(
-                onPressed: () {
-                  if (_currentIndex == 0)
-                    Navigator.of(context).pushNamed(
-                      '/WritePostPage',
-                      arguments: {
-                        'group': widget.group,
-                      },
-                    );
-                  else
-                    Navigator.of(context).pushNamed(
-                      '/SelectMembers',
-                      arguments: {
-                        'group': widget.group,
-                        'type': 'add',
-                      },
-                    );
-                },
-                backgroundColor: Colors.indigo,
-                child: Icon(
-                  _currentIndex == 0 ? Icons.edit : Icons.add,
-                  color: Colors.white,
-                ),
-              )
-            : null,
+
       ),
     );
   }

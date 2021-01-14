@@ -11,7 +11,8 @@ class ChatsTab extends StatefulWidget {
   _ChatsTabState createState() => _ChatsTabState();
 }
 
-class _ChatsTabState extends State<ChatsTab> {
+class _ChatsTabState extends State<ChatsTab>
+    with AutomaticKeepAliveClientMixin {
   bool isLoading = false;
   bool hasMore = true;
   int documentLimit = 10;
@@ -50,12 +51,14 @@ class _ChatsTabState extends State<ChatsTab> {
         if (snapshot.hasData) {
           user = User().fromMap(snapshot.data.data()).setId(snapshot.data.id);
           return ListTile(
-            leading: Container(
-              width: 55,
-              height: 55,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(30)),
-                  color: Colors.indigo[200]),
+            leading: ClipRRect(
+              borderRadius: BorderRadius.circular(57),
+              child: Image.network(
+                user.img,
+                fit: BoxFit.cover,
+                width: 57,
+                height: 57,
+              ),
             ),
             title: Text(user.firstName + ' ' + user.secondName),
             subtitle: Text('New User'),
@@ -106,4 +109,7 @@ class _ChatsTabState extends State<ChatsTab> {
       });
     });
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

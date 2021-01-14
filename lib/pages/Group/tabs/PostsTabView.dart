@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/Models/Post.dart';
@@ -10,7 +13,9 @@ import '../PostWidget.dart';
 class PostsTab extends StatefulWidget {
   Group group;
 
-  PostsTab(this.group);
+  PostsTab(
+    this.group,
+  );
 
   @override
   _PostsTabState createState() => _PostsTabState();
@@ -19,13 +24,12 @@ class PostsTab extends StatefulWidget {
 class _PostsTabState extends State<PostsTab>
     with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController = ScrollController();
+  bool _isVisible = true;
 
   bool isLoading = false;
   bool hasMore = true;
   int documentLimit = 10;
   DocumentSnapshot lastDocument = null;
-
-  bool tt = true;
 
   PostsController _postsController = PostsController();
 
@@ -37,6 +41,26 @@ class _PostsTabState extends State<PostsTab>
   @override
   void initState() {
     _scrollController.addListener(() {
+      if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (_isVisible == true) {
+          print("**** ${_isVisible} up"); //Move IO away from setState
+          setState(() {
+            _isVisible = false;
+          });
+        }
+      } else {
+        if (_scrollController.position.userScrollDirection ==
+            ScrollDirection.forward) {
+          if (_isVisible == false) {
+            print("**** ${_isVisible} down"); //Move IO away from setState
+            setState(() {
+              _isVisible = true;
+            });
+          }
+        }
+      }
+
       double maxScroll = _scrollController.position.maxScrollExtent;
       double currentScroll = _scrollController.position.pixels;
       double delta = MediaQuery.of(context).size.height * 0.20;
@@ -62,21 +86,54 @@ class _PostsTabState extends State<PostsTab>
     super.dispose();
   }
 
+  Future<void> refresh() {
+    setState(() {
+      _isVisible = true;
+
+      isLoading = false;
+      hasMore = true;
+      lastDocument = null;
+
+      posts = [];
+    });
+    getPosts();
+    return Future.delayed(Duration(milliseconds: 10));
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      body: ListView.builder(
-        controller: _scrollController,
-        itemCount: posts.length,
-        itemBuilder: (context, index) {
-          return PostWidget(
-            post: Post().fromMap(posts[index].data())..setId(posts[index].id),
-            group: widget.group,
-          );
-        },
+      body: RefreshIndicator(
+        onRefresh: refresh,
+        child: ListView.builder(
+          controller: _scrollController,
+          itemCount: posts.length,
+          itemBuilder: (context, index) {
+            return PostWidget(
+              post: Post().fromMap(posts[index].data())..setId(posts[index].id),
+              group: widget.group,
+            );
+          },
+        ),
       ),
-
+      floatingActionButton: _isVisible
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(
+                  '/WritePostPage',
+                  arguments: {
+                    'group': widget.group,
+                  },
+                );
+              },
+              backgroundColor: Colors.indigo,
+              child: Icon(
+                Icons.edit,
+                color: Colors.white,
+              ),
+            )
+          : null,
     );
   }
 

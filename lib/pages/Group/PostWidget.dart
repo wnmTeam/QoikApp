@@ -7,6 +7,7 @@ import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/PostsController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'CommentWidget.dart';
 
@@ -66,7 +67,7 @@ class _PostWidgetState extends State<PostWidget>
           }
           if (snapshot.hasData) {
             print(widget.post.toMap());
-            user = User().fromMap(snapshot.data);
+            user = User().fromMap(snapshot.data)..setId(snapshot.data.id);
             return _postBuilder(widget.post);
           }
           return Container();
@@ -126,9 +127,9 @@ class _PostWidgetState extends State<PostWidget>
                     );
                   },
                   contentPadding: EdgeInsets.zero,
-                  leading:  ClipRRect(
+                  leading: ClipRRect(
                     borderRadius: BorderRadius.circular(57),
-                    child:  Image.network(
+                    child: Image.network(
                       user.img,
                       fit: BoxFit.cover,
                       width: 55,
@@ -145,7 +146,7 @@ class _PostWidgetState extends State<PostWidget>
                         child: Padding(
                           padding: const EdgeInsets.all(3.0),
                           child: Icon(
-                            Icons.more_vert,
+                            Icons.more_horiz,
                           ),
                         ),
                         onTap: () {},
@@ -233,8 +234,11 @@ class _PostWidgetState extends State<PostWidget>
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Icon(
-                                  Icons.arrow_upward,
+                                SvgPicture.asset(
+                                  'assets/like.svg',
+                                  width: 24,
+                                  height: 24,
+                                  color: Colors.blueGrey,
                                 ),
                                 SizedBox(
                                   width: 6,
@@ -264,6 +268,7 @@ class _PostWidgetState extends State<PostWidget>
                           children: [
                             Icon(
                               Icons.chat_bubble_outline,
+                              color: Colors.blueGrey,
                             ),
                             SizedBox(
                               width: 6,
@@ -320,7 +325,7 @@ class _PostWidgetState extends State<PostWidget>
                               children: [
                                 Icon(
                                   Icons.add_box,
-                                  color: Colors.grey[600],
+                                  color: Colors.blueGrey,
                                 ),
                                 SizedBox(
                                   width: 6,
@@ -376,7 +381,7 @@ class _PostWidgetState extends State<PostWidget>
                                             ..setId(newComments[i].id),
                                       post: widget.post,
                                       group: widget.group,
-                                      addPoint: (id){
+                                      addPoint: (id) {
                                         setState(() {
                                           widget.post.commentPointed = id;
                                         });
@@ -397,7 +402,7 @@ class _PostWidgetState extends State<PostWidget>
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(57),
-                        child:  Image.network(
+                        child: Image.network(
                           user.img,
                           fit: BoxFit.cover,
                           width: 40,

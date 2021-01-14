@@ -15,7 +15,7 @@ class StartingPage extends StatelessWidget {
           if (snapshot.data == null)
             return RegisterLoginPage();
           else {
-            if (!snapshot.data.emailVerified) return VerifyPage('kmkn');
+            if (!snapshot.data.emailVerified) return VerifyPage(_controller.getUser.email);
             return HomePage();
           }
         });

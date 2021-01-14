@@ -107,4 +107,12 @@ class FriendsApi {
     return l[0] + l[1];
   }
 
+  getFriend({id_user, String id_friend}) {
+    return _firestore
+        .collection('users')
+        .doc(id_user)
+        .collection('friends')
+        .doc(id_friend)
+        .get();
+  }
 }

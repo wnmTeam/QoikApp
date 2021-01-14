@@ -93,5 +93,9 @@ class ChatsApi {
         .get();
   }
 
+  getChat(chatId) {
+    return _firestore.collection('chats').doc(chatId).get();
+  }
+
 
 }

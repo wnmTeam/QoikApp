@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
+import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,7 +12,7 @@ class RoomsTab extends StatefulWidget {
   _RoomsTabState createState() => _RoomsTabState();
 }
 
-class _RoomsTabState extends State<RoomsTab> {
+class _RoomsTabState extends State<RoomsTab>with AutomaticKeepAliveClientMixin {
   bool isLoading = false;
   bool hasMore = true;
   int documentLimit = 10;
@@ -63,6 +64,7 @@ class _RoomsTabState extends State<RoomsTab> {
             context,
             '/RoomPage',
             arguments: {
+              'user': MyUser.myUser,
               'group': group,
             },
           );
@@ -100,4 +102,7 @@ class _RoomsTabState extends State<RoomsTab> {
       });
     });
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

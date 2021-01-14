@@ -20,7 +20,7 @@ class AuthController {
 
   get authStream => api.userChangesStream;
 
-  get getUser => api.getUser;
+   get getUser => api.getUser;
 
   Future createAccount(email, password, User user) async {
     await api.signUp(

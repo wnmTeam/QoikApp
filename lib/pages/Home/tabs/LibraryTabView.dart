@@ -15,7 +15,7 @@ class LibraryTab extends StatefulWidget {
   _LibraryTabState createState() => _LibraryTabState();
 }
 
-class _LibraryTabState extends State<LibraryTab> {
+class _LibraryTabState extends State<LibraryTab> with AutomaticKeepAliveClientMixin{
   LibraryController _libraryController = LibraryController();
 
   List<DocumentSnapshot> categories = [];
@@ -51,4 +51,7 @@ class _LibraryTabState extends State<LibraryTab> {
           }),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -51,14 +51,17 @@ class _HomePageState extends State<HomePage> {
         centerTitle: false,
         titleSpacing: 20,
         actions: [
-          IconButton(
-            icon: Icon(
-              Icons.chat,
-              color: Colors.blueGrey,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: IconButton(
+              icon: Icon(
+                Icons.chat,
+                color: Colors.blueGrey,
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, '/ChatsPage');
+              },
             ),
-            onPressed: () {
-              Navigator.pushNamed(context, '/ChatsPage');
-            },
           )
         ],
       ),
@@ -82,6 +85,7 @@ class _HomePageState extends State<HomePage> {
           FABBottomAppBarItem(
             iconData: Icons.library_books,
             text: 'Library',
+            svgIcon: 'assets/lib.svg',
           ),
         ],
       ),
