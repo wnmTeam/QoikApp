@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 // import 'package:google_fonts/google_fonts.dart';
 
 class ConstValues {
-  static Color FIRST_COLOR = Colors.white;
+  static Color FIRST_COLOR =Color(0xffe51a4b);
   static Color SECOND_COLOR = Color(0xffef5924);
   static Color THIRD_COLOR = Colors.teal[500];
   static Color FOURTH_COLOR = Color(0xff0670ba);
