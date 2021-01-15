@@ -44,28 +44,19 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    width = MediaQuery.of(context).size.width;
 
     return WillPopScope(
       onWillPop: _onBackBressed,
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                children: [
-                  // Container(
-                  //   height: 250,
-                  //   child: Center(child: Text('LOGO')),
-                  // ),
-                  _isRegister ? _registerForm() : _loginForm(),
-                ],
-              ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              children: [
+                _isRegister ? _registerForm() : _loginForm(),
+              ],
             ),
           ),
         ),
@@ -121,8 +112,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
     }
   }
 
-  _loginForm() =>
-      Form(
+  _loginForm() => Form(
         key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -302,8 +292,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
         ),
       );
 
-  _registerForm() =>
-      Form(
+  _registerForm() => Form(
         key: _formKey,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
