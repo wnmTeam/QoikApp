@@ -9,6 +9,8 @@ import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
 
+import '../../const_values.dart';
+
 class ChatRoomPage extends StatefulWidget {
   String id_user;
   User user;
@@ -95,7 +97,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                   },
                                   child: Text('Load More'),
                                 )
-                              : _MessageBuilder(Message()
+                              : _messageBuilder(Message()
                                   .fromMap(messages[i].data())
                                   .setId(messages[i].id)),
                         StreamBuilder(
@@ -113,7 +115,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                   child: Column(
                                     children: [
                                       for (var message in newMessages)
-                                        _MessageBuilder(Message()
+                                        _messageBuilder(Message()
                                             .fromMap(message.data())
                                             .setId(message.id)),
                                     ],
@@ -132,42 +134,75 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
-                        child: TextField(
-                          textAlign: TextAlign.start,
-                          controller: _messageController,
-                          enableSuggestions: true,
-                          // maxLines: null,
-                          // minLines: null,
-                          // expands: true,
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.red, width: 5.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(35.0),
+                            boxShadow: [
+                              BoxShadow(
+                                  offset: Offset(0, 3), blurRadius: 5, color: Colors.grey)
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              IconButton(
+                                  icon: Icon(
+                                    Icons.tag_faces,
+                                    color: ConstValues.FIRST_COLOR,
+                                  ),
+                                  onPressed: () {}),
+                              Expanded(
+                                child: TextField(
+                                  textAlign: TextAlign.start,
+                                  controller: _messageController,
+                                  enableSuggestions: true,
+
+                                  decoration: InputDecoration(
+                                      border:InputBorder.none,
+                                    hintText: "Type Something...",
+                                    hintStyle: TextStyle(color: ConstValues.FIRST_COLOR),),
+                                ),
                               ),
-                              contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 8),
-                              hintText: "Type a message..."),
+                              IconButton(
+                                icon: Icon(Icons.photo_camera, color: ConstValues.FIRST_COLOR),
+                                onPressed: () {},
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.attach_file, color: ConstValues.FIRST_COLOR),
+                                onPressed: () {},
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      FlatButton(
-                        child: Icon(
-                          Icons.send,
-                          color: Colors.indigo,
+                      SizedBox(width: 10),
+                      Container(
+                        padding: const EdgeInsets.all(0),
+                        decoration: BoxDecoration(
+                            color: ConstValues.FIRST_COLOR, shape: BoxShape.circle),
+                        child: FlatButton(
+                          child: Icon(
+                            // Icons.keyboard_voice,
+                            Icons.send,
+                            color: Colors.white,
+                          ),
+                          onLongPress: () {},
+                          onPressed: () {
+                            if (_messageController.text.isEmpty) return;
+                            _chatController.addMessage(
+                              message: Message(
+                                idOwner: _authController.getUser.uid,
+                                text: _messageController.text,
+                                date: DateTime.now(),
+                              ),
+                              id_chat: getChatID(),
+                            );
+                            _messageController.clear();
+                          },
                         ),
-                        onPressed: () {
-                          if (_messageController.text.isEmpty) return;
-                          _chatController.addMessage(
-                            message: Message(
-                              idOwner: _authController.getUser.uid,
-                              text: _messageController.text,
-                              date: DateTime.now(),
-                            ),
-                            id_chat: getChatID(),
-                          );
-                          _messageController.clear();
-                        },
                       ),
                     ],
                   ),
@@ -238,7 +273,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
     return l[0] + l[1];
   }
 
-  _MessageBuilder(Message message) {
+  _messageBuilder(Message message) {
     if (message.idOwner == _authController.getUser.uid) {
       //Start my message
       return Container(
@@ -247,61 +282,11 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(0),
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
-                        topLeft: Radius.circular(20),
-                      ),
-                      color: Colors.black38,
-                    ),
-                    child: Text(
-                      message.text,
-                      textAlign: TextAlign.justify,
-                      // overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  //TODO add message time
-                  // Text(
-                  //   message.date.toString(),
-                  //   textAlign: TextAlign.justify,
-                  //   maxLines: 100,
-                  //   // overflow: TextOverflow.ellipsis,
-                  //   style: TextStyle(color: Colors.red),
-                  // ),
-                ],
-              ),
-            ),
+            _message(message, Colors.black54, 0, 20, 20, 20),
             SizedBox(
               width: 5,
             ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(57),
-              //TODO hide images
-              child: 1 == 1
-                  ? CachedNetworkImage(
-                      placeholder: (context, url) => Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                      imageUrl: MyUser.myUser.img,
-                      fit: BoxFit.cover,
-                      width: 30,
-                      height: 30,
-                    )
-                  : Container(
-                      width: 30,
-                      height: 30,
-                    ),
-            )
+            _image(MyUser.myUser.img, true)
           ],
         ),
       );
@@ -315,54 +300,73 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(57),
-              //TODO hide images
-              child: 1 == 1
-                  ? CachedNetworkImage(
-                      placeholder: (context, url) => Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                      imageUrl: widget.user.img,
-                      fit: BoxFit.cover,
-                      width: 30,
-                      height: 30,
-                    )
-                  : Container(
-                      width: 30,
-                      height: 30,
-                    ),
-            ),
+            _image(widget.user.img, true),
             SizedBox(
               width: 5,
             ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(20),
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
-                        topLeft: Radius.circular(0),
-                      ),
-                      color: Colors.black54,
-                    ),
-                    child: Text(
-                      message.text,
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            _message(message, Colors.black26, 20, 20, 20, 0),
           ],
         ),
       );
       //End other's message
     }
   }
+
+  _message(Message message, Color color, double x1, double x2, double x3,
+          double x4) =>
+      Expanded(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Container(
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(x1),
+                  bottomLeft: Radius.circular(x2),
+                  bottomRight: Radius.circular(x3),
+                  topLeft: Radius.circular(x4),
+                ),
+                color: color,
+              ),
+              child: Text(
+                message.text,
+                textAlign: TextAlign.start,
+                // overflow: TextOverflow.ellipsis,
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            //TODO add message time
+            Text(
+              message.date.hour.toString()+":"+message.date.minute.toString()
+                  +":"+message.date.second.toString(),
+              textAlign: TextAlign.justify,
+              maxLines: 100,
+              // overflow: TextOverflow.ellipsis,
+              style: TextStyle(color: Colors.red),
+            ),
+          ],
+        ),
+      );
+
+  _image(String imageUrl, bool firstMessage) => ClipRRect(
+        borderRadius: BorderRadius.circular(57),
+        //TODO hide images
+        child: firstMessage
+            ? CachedNetworkImage(
+                placeholder: (context, url) => Center(
+                  child: CircularProgressIndicator(),
+                ),
+                imageUrl: imageUrl,
+                fit: BoxFit.cover,
+                width: 30,
+                height: 30,
+              )
+            : Container(
+                width: 30,
+                height: 30,
+              ),
+      );
+
 }
