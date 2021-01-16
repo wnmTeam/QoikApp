@@ -164,6 +164,7 @@ class _PostWidgetState extends State<PostWidget>
                 SizedBox(
                   height: 6,
                 ),
+                post.text.isNotEmpty?
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),
                   child: InkWell(
@@ -182,10 +183,16 @@ class _PostWidgetState extends State<PostWidget>
                     ),
                     onTap: () {},
                   ),
-                ),
+                ):Container(),
                 SizedBox(
                   height: 6,
                 ),
+                if (widget.post.images != null && widget.post.images.length > 0)
+                  Image.network(widget.post.images[0],),
+                if (widget.post.images != null && widget.post.images.length > 0)
+                  SizedBox(
+                    height: 6,
+                  ),
                 Divider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,

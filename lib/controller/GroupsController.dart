@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/api/groups_api.dart';
-import 'package:stumeapp/controller/StorageController.dart';
 
 class GroupsController {
   GroupsApi api = GroupsApi();
-  StorageController storage = StorageController();
 
   getMyGroups({String id_user}) {
     return api.getMyGroups(id_user: id_user);

@@ -1,12 +1,20 @@
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/User.dart';
 
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as str;
+import 'package:stumeapp/controller/AuthController.dart';
+
 class StorageController {
   static SharedPreferences prefs;
   static User _user;
+
+  AuthController _authController = AuthController();
 
   StorageController() {
     createPreferences();
@@ -64,6 +72,36 @@ class StorageController {
     await prefs.remove('user.' + User.UNIVERSITY);
     await prefs.remove('user.' + User.COLLEGE);
     await prefs.remove('user.' + User.POINTS);
+  }
+
+  Future getImage() {
+    return ImagePicker().getImage(source: ImageSource.gallery);
+  }
+
+  Future uploadPic(BuildContext context, img, id_user) async {
+    str.Reference firebaseStorageRef = str.FirebaseStorage.instance
+        .ref()
+        .child('profileImages')
+        .child(id_user);
+    str.UploadTask uploadTask = firebaseStorageRef.putFile(img);
+    str.TaskSnapshot taskSnapshot = await uploadTask.then((res) async {
+      String url = await res.ref.getDownloadURL();
+      return _authController.setImageUrl(id_user: id_user, url: url);
+    });
+  }
+
+  uploadPostImage({String id_post, String nom, File img, }) async {
+    String url;
+    str.Reference firebaseStorageRef = str.FirebaseStorage.instance
+        .ref()
+        .child('postImages')
+        .child(id_post + nom);
+    str.UploadTask uploadTask = firebaseStorageRef.putFile(img);
+    await uploadTask.then((res) async {
+       url = await res.ref.getDownloadURL();
+      return;
+    });
+    return url;
   }
 
 //  void setGroup(Group group) {

@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/GroupsController.dart';
-import 'package:stumeapp/controller/StorageController.dart';
 
 import '../api/auth.dart';
 
@@ -15,7 +14,6 @@ class AuthController {
   Stream<int> get _in => _streamController.stream;
 
   Auth api = Auth();
-  StorageController _storage = StorageController();
   GroupsController _groupsController = GroupsController();
 
   get authStream => api.userChangesStream;
@@ -45,12 +43,10 @@ class AuthController {
     await api.signIn(email, password);
     User user = User();
 
-    return _storage.setUser(user);
   }
 
   void logOut() {
     api.logOut();
-    _storage.deleteUser();
   }
 
   bool isUserVerified() => api.isUserVerified();
