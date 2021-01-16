@@ -10,6 +10,7 @@ import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
 
 import '../../const_values.dart';
+import '../../localization.dart';
 
 class ChatRoomPage extends StatefulWidget {
   String id_user;
@@ -143,7 +144,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                             borderRadius: BorderRadius.circular(35.0),
                             boxShadow: [
                               BoxShadow(
-                                  offset: Offset(0, 3), blurRadius: 5, color: Colors.grey)
+                                  offset: Offset(0, 3),
+                                  blurRadius: 5,
+                                  color: Colors.grey)
                             ],
                           ),
                           child: Row(
@@ -159,19 +162,22 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                   textAlign: TextAlign.start,
                                   controller: _messageController,
                                   enableSuggestions: true,
-
                                   decoration: InputDecoration(
-                                      border:InputBorder.none,
-                                    hintText: "Type Something...",
-                                    hintStyle: TextStyle(color: ConstValues.FIRST_COLOR),),
+                                    border: InputBorder.none,
+                                    hintText: Languages.translate(context,'type_a_message'),
+                                    hintStyle: TextStyle(
+                                        color: ConstValues.FIRST_COLOR),
+                                  ),
                                 ),
                               ),
                               IconButton(
-                                icon: Icon(Icons.photo_camera, color: ConstValues.FIRST_COLOR),
+                                icon: Icon(Icons.photo_camera,
+                                    color: ConstValues.FIRST_COLOR),
                                 onPressed: () {},
                               ),
                               IconButton(
-                                icon: Icon(Icons.attach_file, color: ConstValues.FIRST_COLOR),
+                                icon: Icon(Icons.attach_file,
+                                    color: ConstValues.FIRST_COLOR),
                                 onPressed: () {},
                               ),
                             ],
@@ -182,7 +188,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                       Container(
                         padding: const EdgeInsets.all(0),
                         decoration: BoxDecoration(
-                            color: ConstValues.FIRST_COLOR, shape: BoxShape.circle),
+                            color: ConstValues.FIRST_COLOR,
+                            shape: BoxShape.circle),
                         child: FlatButton(
                           child: Icon(
                             // Icons.keyboard_voice,
@@ -191,11 +198,11 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                           ),
                           onLongPress: () {},
                           onPressed: () {
-                            if (_messageController.text.isEmpty) return;
+                            if (_messageController.text.trim().isEmpty) return;
                             _chatController.addMessage(
                               message: Message(
                                 idOwner: _authController.getUser.uid,
-                                text: _messageController.text,
+                                text: _messageController.text.trim(),
                                 date: DateTime.now(),
                               ),
                               id_chat: getChatID(),
@@ -282,7 +289,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _message(message, Colors.black54, 0, 20, 20, 20),
+            _message(message, false, Colors.black54, 0, 20, 20, 20),
             SizedBox(
               width: 5,
             ),
@@ -304,7 +311,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             SizedBox(
               width: 5,
             ),
-            _message(message, Colors.black26, 20, 20, 20, 0),
+            _message(message, true, Colors.black26, 20, 20, 20, 0),
           ],
         ),
       );
@@ -312,12 +319,13 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
     }
   }
 
-  _message(Message message, Color color, double x1, double x2, double x3,
-          double x4) =>
+  _message(Message message, bool isSender, Color color, double x1, double x2,
+          double x3, double x4) =>
       Expanded(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.end,
+          crossAxisAlignment:
+              isSender ? CrossAxisAlignment.start : CrossAxisAlignment.end,
           children: [
             Container(
               padding: EdgeInsets.all(10),
@@ -330,22 +338,26 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                 ),
                 color: color,
               ),
-              child: Text(
-                message.text,
-                textAlign: TextAlign.start,
-                // overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: Colors.white),
+              child: Column(
+                crossAxisAlignment:
+                isSender ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    message.text ,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  Text(
+                       "\n"+ message.date.hour.toString() +
+                        ":" +
+                        message.date.minute.toString() +
+                        ":" +
+                        message.date.second.toString(),
+                    style: TextStyle(color: Colors.white54),
+                  ),
+                ],
               ),
             ),
-            //TODO add message time
-            Text(
-              message.date.hour.toString()+":"+message.date.minute.toString()
-                  +":"+message.date.second.toString(),
-              textAlign: TextAlign.justify,
-              maxLines: 100,
-              // overflow: TextOverflow.ellipsis,
-              style: TextStyle(color: Colors.red),
-            ),
+
           ],
         ),
       );
@@ -368,5 +380,4 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                 height: 30,
               ),
       );
-
 }

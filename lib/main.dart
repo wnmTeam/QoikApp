@@ -1,7 +1,10 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'RouteController.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'localization.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,6 +18,37 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+
+      supportedLocales: [
+        Locale('ar'),
+        Locale('en'),
+      ],
+      localizationsDelegates: [
+        AppLocalization.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+
+      // localeResolutionCallback: (locale, supportedLocals) {
+      //   if (SavedSetting.LANGUAGE == null) {
+      //     for (var supportedLocal in supportedLocals) {
+      //       print(supportedLocal.toString() + "  :  " + locale.toString());
+      //       //TODO: if you want to Use English Version Just flip the Following Condition from '!=' to '=='
+      //       if (supportedLocal.languageCode == locale.languageCode)
+      //         SavedSetting.LANGUAGE = supportedLocal.languageCode;
+      //       print('2 + ${SavedSetting.LANGUAGE}');
+      //       return supportedLocal;
+      //     }
+      //     SavedSetting.LANGUAGE = supportedLocals.first.languageCode;
+      //     print('1 + ${SavedSetting.LANGUAGE}');
+      //     return supportedLocals.first;
+      //   } else {
+      //     return Locale(SavedSetting.LANGUAGE);
+      //   }
+      // },
+
+
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
