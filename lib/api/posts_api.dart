@@ -1,13 +1,16 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/Models/Comment.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/Post.dart';
 import 'package:stumeapp/api/auth.dart';
+import 'package:stumeapp/controller/StorageController.dart';
 
 class PostsApi {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final StorageController _storageController = StorageController();
 
   Auth auth = Auth();
 
@@ -42,13 +45,12 @@ class PostsApi {
     }
   }
 
-  Future createPost(String text, String id_group) {
+  Future createPost(String text, List<File> images, String id_group) async {
     CollectionReference reference;
 
     reference =
         _firestore.collection('groups').doc(id_group).collection('posts');
-    print(text);
-    return reference.add({
+    DocumentReference ref = await reference.add({
       Post.TEXT: text,
       Post.ID_OWNER: auth.getUser.uid,
       Post.LIKE_COUNT: 0,
@@ -57,6 +59,22 @@ class PostsApi {
       Post.COMMENT_POINTED: null,
       Post.DATE: FieldValue.serverTimestamp(),
     });
+
+    List urls = [];
+    int i = 0;
+    for (File file in images) {
+      String url = await _storageController.uploadPostImage(
+        id_post: ref.id,
+        nom: i.toString(),
+        img: file,
+      );
+      urls.add(url);
+      i++;
+    }
+
+    return ref.set({
+      'images': FieldValue.arrayUnion(urls),
+    }, SetOptions(merge: true));
   }
 
   Future createComment(

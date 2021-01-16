@@ -16,6 +16,7 @@ class Post {
   int commentCount;
   int followCount;
   DateTime date;
+  List images = [];
 
   bool isLiked = false;
 
@@ -29,6 +30,7 @@ class Post {
     this.followCount,
     this.commentPointed,
     this.date,
+    this.images,
   });
 
   String get getStringDate {
@@ -59,6 +61,7 @@ class Post {
         COMMENT_COUNT: commentCount,
         FOLLOW_COUNT: followCount,
         COMMENT_POINTED: commentPointed,
+        IMAGES: images,
       };
 
   Post fromMap(map) {
@@ -69,6 +72,7 @@ class Post {
     this.commentCount = map[COMMENT_COUNT];
     this.followCount = map[FOLLOW_COUNT];
     this.commentPointed = map[COMMENT_POINTED];
+    this.images = map[IMAGES];
     return this;
   }
 

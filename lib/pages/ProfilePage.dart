@@ -39,6 +39,7 @@ class MapScreenState extends State<ProfilePage> {
   AuthController _authController = AuthController();
   FriendsController _friendsController = FriendsController();
   ChatController _chatsController = ChatController();
+  StorageController _storageController = StorageController();
 
   @override
   void initState() {
@@ -84,10 +85,11 @@ class MapScreenState extends State<ProfilePage> {
                                 imagePath: widget.user.img,
                                 myProfile: isMyProfile,
                                 ubdateImagerofile: (img) async {
-                                  await uploadPic(context, img);
-
-                                  await _authController.setImageUrl(
-                                      id_user: widget.user.id);
+                                  await _storageController.uploadPic(
+                                    context,
+                                    img,
+                                    widget.id_user,
+                                  );
                                 },
                               ),
                               SizedBox(
@@ -396,19 +398,6 @@ class MapScreenState extends State<ProfilePage> {
             : Center(child: CircularProgressIndicator()));
   }
 
-  Future uploadPic(BuildContext context, img) async {
-    print(widget.user.id);
-    str.Reference firebaseStorageRef = str.FirebaseStorage.instance
-        .ref()
-        .child('profileImages')
-        .child(widget.user.id);
-    str.UploadTask uploadTask = firebaseStorageRef.putFile(img);
-    str.TaskSnapshot taskSnapshot = await uploadTask.then((res) async {
-      String url = await res.ref.getDownloadURL();
-      return _authController.setImageUrl(id_user: widget.user.id, url: url);
-    });
-  }
-
   getChat() async {
     if (isMyProfile)
       setState(() {
@@ -566,6 +555,8 @@ class Avatar extends StatefulWidget {
 class _AvatarState extends State<Avatar> {
   File _image;
 
+  StorageController _storageController = StorageController();
+
   @override
   Widget build(BuildContext context) {
     print(widget.imagePath);
@@ -601,8 +592,16 @@ class _AvatarState extends State<Avatar> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 125, right: 80),
                   child: InkWell(
-                    onTap: () {
-                      _getImage();
+                    onTap: () async {
+                      final pickedFile = await _storageController.getImage();
+                      if (pickedFile != null) {
+                        {
+                          setState(() {
+                            _image = File(pickedFile.path);
+                          });
+                          widget.ubdateImagerofile(_image);
+                        }
+                      }
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -623,20 +622,5 @@ class _AvatarState extends State<Avatar> {
             : Container(),
       ],
     );
-  }
-
-  Future _getImage() async {
-    final pickedFile =
-        await ImagePicker().getImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      {
-        setState(() {
-          _image = File(pickedFile.path);
-        });
-        print('ghjkhgdefghjkl,nbvcdfghjk');
-        print(_image.path);
-        widget.ubdateImagerofile(_image);
-      }
-    }
   }
 }

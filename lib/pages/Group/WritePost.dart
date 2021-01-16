@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/controller/PostsController.dart';
+import 'package:stumeapp/controller/StorageController.dart';
 
 class WritePostPage extends StatefulWidget {
   Group group;
@@ -15,6 +18,10 @@ class WritePostPage extends StatefulWidget {
 class _WritePostPageState extends State<WritePostPage> {
   TextEditingController _postTextController = TextEditingController();
   PostsController _postsController = PostsController();
+
+  StorageController _storageController = StorageController();
+
+  List<File> _images = [];
 
   @override
   void initState() {
@@ -43,6 +50,41 @@ class _WritePostPageState extends State<WritePostPage> {
               ),
             ),
             RaisedButton(
+              onPressed: () async {
+                final pickedFile = await _storageController.getImage();
+                if (pickedFile != null) {
+                  {
+                    setState(() {
+                      _images.add(File(pickedFile.path));
+                    });
+                  }
+                }
+              },
+              color: Colors.indigo,
+              child: Text(
+                'get image',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            Wrap(
+              children: [
+                for (File img in _images)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      child: Image.file(
+                        img,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            RaisedButton(
               onPressed: () {
                 _sendPost(_postTextController.text);
               },
@@ -59,7 +101,7 @@ class _WritePostPageState extends State<WritePostPage> {
   }
 
   void _sendPost(String text) async {
-    await _postsController.createPost(text, widget.group.id);
+    await _postsController.createPost(text, _images, widget.group.id);
     Navigator.of(context).pop();
   }
 }
