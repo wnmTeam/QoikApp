@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
 
       supportedLocales: [
         Locale('ar'),
+        Locale('tr'),
         Locale('en'),
       ],
       localizationsDelegates: [
@@ -30,23 +31,6 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
       ],
 
-      // localeResolutionCallback: (locale, supportedLocals) {
-      //   if (SavedSetting.LANGUAGE == null) {
-      //     for (var supportedLocal in supportedLocals) {
-      //       print(supportedLocal.toString() + "  :  " + locale.toString());
-      //       //TODO: if you want to Use English Version Just flip the Following Condition from '!=' to '=='
-      //       if (supportedLocal.languageCode == locale.languageCode)
-      //         SavedSetting.LANGUAGE = supportedLocal.languageCode;
-      //       print('2 + ${SavedSetting.LANGUAGE}');
-      //       return supportedLocal;
-      //     }
-      //     SavedSetting.LANGUAGE = supportedLocals.first.languageCode;
-      //     print('1 + ${SavedSetting.LANGUAGE}');
-      //     return supportedLocals.first;
-      //   } else {
-      //     return Locale(SavedSetting.LANGUAGE);
-      //   }
-      // },
 
 
       debugShowCheckedModeBanner: false,
