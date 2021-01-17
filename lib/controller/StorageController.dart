@@ -1,20 +1,16 @@
-import 'dart:developer';
 import 'dart:io';
 
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/User.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as str;
-import 'package:stumeapp/controller/AuthController.dart';
 
 class StorageController {
   static SharedPreferences prefs;
   static User _user;
 
-  AuthController _authController = AuthController();
 
   StorageController() {
     createPreferences();
@@ -78,7 +74,7 @@ class StorageController {
     return ImagePicker().getImage(source: ImageSource.gallery);
   }
 
-  Future uploadPic(BuildContext context, img, id_user) async {
+  Future uploadPic( context, img, id_user) async {
     str.Reference firebaseStorageRef = str.FirebaseStorage.instance
         .ref()
         .child('profileImages')
@@ -86,7 +82,7 @@ class StorageController {
     str.UploadTask uploadTask = firebaseStorageRef.putFile(img);
     str.TaskSnapshot taskSnapshot = await uploadTask.then((res) async {
       String url = await res.ref.getDownloadURL();
-      return _authController.setImageUrl(id_user: id_user, url: url);
+      return ;
     });
   }
 
@@ -102,6 +98,14 @@ class StorageController {
       return;
     });
     return url;
+  }
+
+  String getUserPassword() {
+    return prefs.getString('password');
+  }
+
+  setPassword(String password){
+    return prefs.setString('password', password);
   }
 
 //  void setGroup(Group group) {

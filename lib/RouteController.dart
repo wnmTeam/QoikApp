@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stumeapp/Profile/ChangePasswordPage.dart';
 import 'package:stumeapp/pages/ChatRoom/ChatRoomPage.dart';
 import 'package:stumeapp/pages/ChatRoom/ChatsPage.dart';
 import 'package:stumeapp/pages/ChatRoom/RoomPage.dart';
@@ -11,9 +12,9 @@ import 'package:stumeapp/pages/Group/StartChatPage.dart';
 import 'package:stumeapp/pages/Group/WritePost.dart';
 import 'package:stumeapp/pages/Library/BookViewerPage.dart';
 import 'package:stumeapp/pages/Library/BooksLibraryPage.dart';
-import 'package:stumeapp/pages/ProfilePage.dart';
 import 'package:stumeapp/pages/RegesterLogin/RegisterLoginPage.dart';
 
+import 'Profile/ProfilePage.dart';
 import 'StartingPage.dart';
 
 class RouteController {
@@ -73,11 +74,14 @@ class RouteController {
       case '/ChatsPage':
         return MaterialPageRoute(builder: (_) => ChatsPage());
       case '/RoomPage':
-        return MaterialPageRoute(builder: (_) => RoomPage(
-          id_user: args['id_user'],
-          user: args['user'],
-          group: args['group'],
-        ));
+        return MaterialPageRoute(
+            builder: (_) => RoomPage(
+                  id_user: args['id_user'],
+                  user: args['user'],
+                  group: args['group'],
+                ));
+      case '/ChangePasswordPage':
+        return MaterialPageRoute(builder: (_) => ChangePasswordPage());
     }
   }
 }

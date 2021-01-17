@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/GroupsController.dart';
+import 'package:stumeapp/controller/StorageController.dart';
 
 import '../api/auth.dart';
 
@@ -15,6 +16,7 @@ class AuthController {
 
   Auth api = Auth();
   GroupsController _groupsController = GroupsController();
+  StorageController _storageController = StorageController();
 
   get authStream => api.userChangesStream;
 
@@ -25,7 +27,8 @@ class AuthController {
       email,
       password,
     );
-    print(user.toMap());
+    await _storageController.setPassword(password);
+
     await api.recordUserInfo(user);
 
     await _groupsController.addMemberToGroup(
@@ -41,8 +44,7 @@ class AuthController {
 
   login(String email, String password) async {
     await api.signIn(email, password);
-    User user = User();
-
+    await _storageController.setPassword(password);
   }
 
   void logOut() {
@@ -100,5 +102,13 @@ class AuthController {
 
   setImageUrl({String id_user, String url}) {
     return api.setImageUrl(id_user: id_user, url: url);
+  }
+
+  void updateBio(String text) {
+    api.updateBio(text);
+  }
+
+  updatePassword(String text) {
+    return api.updatePassword(text);
   }
 }

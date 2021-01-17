@@ -106,4 +106,15 @@ class Auth {
         .doc(id_user)
         .set({'img': url}, SetOptions(merge: true));
   }
+
+  void updateBio(String text) {
+    _firestore
+        .collection('users')
+        .doc(getUser.uid)
+        .set({'bio': text}, SetOptions(merge: true));
+  }
+
+  updatePassword(String text) {
+    return getUser.updatePassword(text);
+  }
 }

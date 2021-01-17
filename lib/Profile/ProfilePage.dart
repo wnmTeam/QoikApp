@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
+import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
@@ -41,12 +42,19 @@ class MapScreenState extends State<ProfilePage> {
   ChatController _chatsController = ChatController();
   StorageController _storageController = StorageController();
 
+  TextEditingController _bioController;
+  bool _editBio = false;
+
   @override
   void initState() {
     if (_authController.getUser.uid == widget.id_user) {
       isMyProfile = true;
       print('My Profile');
     }
+    _bioController = TextEditingController(
+      text: widget.user.bio,
+    );
+
     getChat();
     getFriend();
 
@@ -85,11 +93,12 @@ class MapScreenState extends State<ProfilePage> {
                                 imagePath: widget.user.img,
                                 myProfile: isMyProfile,
                                 ubdateImagerofile: (img) async {
-                                  await _storageController.uploadPic(
+                                  String url = await _storageController.uploadPic(
                                     context,
                                     img,
                                     widget.id_user,
                                   );
+                                  await _authController.setImageUrl(id_user: widget.id_user, url: url);
                                 },
                               ),
                               SizedBox(
@@ -267,17 +276,47 @@ class MapScreenState extends State<ProfilePage> {
                                               trailing: isMyProfile
                                                   ? IconButton(
                                                       icon: Icon(
-                                                        Icons.edit,
+                                                        !_editBio
+                                                            ? Icons.edit
+                                                            : Icons.save,
                                                       ),
-                                                      onPressed: () {},
+                                                      onPressed: () {
+                                                        if (_editBio) {
+                                                          _authController.updateBio(_bioController
+                                                              .text);
+                                                        }
+                                                        setState(() {
+                                                          if (_editBio) {
+                                                            MyUser.myUser.bio = _bioController
+                                                                .text;
+                                                            widget.user.bio =
+                                                                _bioController
+                                                                    .text;
+                                                          }
+                                                          _editBio = !_editBio;
+                                                        });
+                                                      },
                                                     )
                                                   : SizedBox(
                                                       height: 2,
                                                       width: 2,
                                                     ),
                                               title: Text('Bio'),
-                                              subtitle: Text(
-                                                widget.user.bio,
+                                              subtitle: TextField(
+                                                maxLines: 50,
+                                                autofocus: true,
+                                                minLines: 1,
+                                                style: TextStyle(
+                                                  color: Colors.grey[600],
+                                                  fontSize: 14,
+                                                ),
+                                                controller: _bioController,
+                                                readOnly: !_editBio,
+                                                decoration: InputDecoration(
+                                                  contentPadding:
+                                                      EdgeInsets.zero,
+                                                  border: InputBorder.none,
+                                                ),
                                               ),
                                             )),
                                         SizedBox(
@@ -311,7 +350,9 @@ class MapScreenState extends State<ProfilePage> {
                                                     icon: Icon(
                                                       Icons.edit,
                                                     ),
-                                                    onPressed: () {},
+                                                    onPressed: () {
+                                                      Navigator.pushNamed(context, '/ChangePasswordPage');
+                                                    },
                                                   ),
                                                   title: Text('password'),
                                                   subtitle: TextField(
