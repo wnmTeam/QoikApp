@@ -151,12 +151,17 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                           ),
                           child: Row(
                             children: [
+                              // IconButton(
+                              //     icon: Icon(
+                              //       Icons.tag_faces,
+                              //       color: ConstValues.firstColor,
+                              //     ),
+                              //     onPressed: () {}),
                               IconButton(
-                                  icon: Icon(
-                                    Icons.tag_faces,
-                                    color: ConstValues.firstColor,
-                                  ),
-                                  onPressed: () {}),
+                                icon: Icon(Icons.photo_camera,
+                                    color: ConstValues.firstColor),
+                                onPressed: () {},
+                              ),
                               Expanded(
                                 child: TextField(
                                   textAlign: TextAlign.start,
@@ -171,16 +176,12 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                   ),
                                 ),
                               ),
-                              IconButton(
-                                icon: Icon(Icons.photo_camera,
-                                    color: ConstValues.firstColor),
-                                onPressed: () {},
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.attach_file,
-                                    color: ConstValues.firstColor),
-                                onPressed: () {},
-                              ),
+
+                              // IconButton(
+                              //   icon: Icon(Icons.attach_file,
+                              //       color: ConstValues.firstColor),
+                              //   onPressed: () {},
+                              // ),
                             ],
                           ),
                         ),

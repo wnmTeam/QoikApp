@@ -44,6 +44,12 @@ dev_dependencies:
   cached_network_image: ^2.5.0
   flutter_localizations: # Add this line
     sdk: flutter         # Add this line
+  flutter_launcher_icons: "^0.8.0"
+
+flutter_icons:
+  image_path: "assets/logo.png"
+  android: true
+  ios: true
 
 
 # For information on the generic Dart part of this file, see the
