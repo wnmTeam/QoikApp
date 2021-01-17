@@ -64,7 +64,12 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
       appBar: AppBar(
         title: ListTile(
           contentPadding: EdgeInsets.zero,
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).pushNamed('/ProfilePage', arguments: {
+              'user': widget.user,
+              'id_user': widget.user.id,
+            });
+          },
           title: Text(widget.user.firstName + ' ' + widget.user.secondName),
           leading: ClipRRect(
             borderRadius: BorderRadius.circular(57),

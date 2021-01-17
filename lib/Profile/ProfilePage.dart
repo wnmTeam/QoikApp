@@ -145,7 +145,7 @@ class MapScreenState extends State<ProfilePage> {
                                               isFriend
                                                   ? FlatButton.icon(
                                                       icon: Icon(
-                                                        Icons.person_add,
+                                                        Icons.person_remove,
                                                         color: Colors.blueGrey,
                                                       ),
                                                       label:
@@ -157,7 +157,7 @@ class MapScreenState extends State<ProfilePage> {
                                                           color: Colors
                                                               .indigoAccent,
                                                           icon: Icon(
-                                                            Icons.person_remove,
+                                                            Icons.person_add,
                                                             color:
                                                                 Colors.blueGrey,
                                                           ),
@@ -168,7 +168,7 @@ class MapScreenState extends State<ProfilePage> {
                                                         )
                                                       : FlatButton.icon(
                                                           icon: Icon(
-                                                            Icons.person_remove,
+                                                            Icons.person_add,
                                                             color:
                                                                 Colors.blueGrey,
                                                           ),

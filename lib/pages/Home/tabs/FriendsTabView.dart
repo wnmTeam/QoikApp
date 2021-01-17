@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
+import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
@@ -22,47 +23,60 @@ class _FriendsTabState extends State<FriendsTab> {
   FriendsController _friendsController = FriendsController();
   AuthController _authController = AuthController();
 
-  List<DocumentSnapshot> friendRequests = [null];
+  List<DocumentSnapshot> friends = [null, null];
 
   @override
   void initState() {
-    getFriendRequests();
+    getMyFriends();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: friendRequests.length,
-      itemBuilder: (context, index) {
-        if (index == 0)
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: RaisedButton(
-                  elevation: 0,
-                  onPressed: () {
-                    Navigator.of(context).pushNamed('/MyFriendsPage',
-                        arguments: {'id_user': _authController.getUser.uid});
-                  },
-                  color: Colors.grey[300],
-                  child: Text('My Friends'),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                ),
-              )
-            ],
-          );
-        return RequestFriendWidget(friendRequests[index].id);
-      },
+    print(friends);
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            itemCount: friends.length,
+            itemBuilder: (context, index) {
+              if (index == 0)
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: RaisedButton(
+                        elevation: 0,
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(
+                            '/MyFriendsPage',
+                            arguments: {'id_user': _authController.getUser.uid},
+                          );
+                        },
+                        color: Colors.grey[300],
+                        child: Text('Friend Requests'),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                      ),
+                    )
+                  ],
+                );
+              else if (index == friends.length - 1)
+                return SizedBox(
+                  height: 30,
+                );
+              return UserWidget(id: friends[index].id);
+            },
+          ),
+        ),
+      ],
     );
   }
 
-  getFriendRequests() async {
+  getMyFriends() async {
     if (!hasMore) {
-      print('No More requests');
+      print('No More friends');
       return;
     }
     if (isLoading) {
@@ -73,17 +87,20 @@ class _FriendsTabState extends State<FriendsTab> {
 //      posts.add(null);
     });
     _friendsController
-        .getFriendRequests(
+        .getFriends(
+      id: MyUser.myUser.id,
       limit: documentLimit,
       last: lastDocument,
     )
         .then((value) {
-      print('reqs');
+      print('friends');
       print(value.docs.length);
       setState(() {
-        friendRequests.addAll(value.docs);
+        friends.insertAll(friends.length - 1, value.docs);
         isLoading = false;
-        lastDocument = friendRequests.last;
+        try {
+          lastDocument = friends.last;
+        } catch (e) {}
       });
     });
   }
@@ -92,89 +109,49 @@ class _FriendsTabState extends State<FriendsTab> {
   bool get wantKeepAlive => true;
 }
 
-class RequestFriendWidget extends StatefulWidget {
-  String id_sender;
+class UserWidget extends StatefulWidget {
+  String id;
 
-  RequestFriendWidget(this.id_sender);
+  UserWidget({this.id});
 
   @override
-  _RequestFriendWidgetState createState() => _RequestFriendWidgetState();
+  _UserWidgetState createState() => _UserWidgetState();
 }
 
-class _RequestFriendWidgetState extends State<RequestFriendWidget> {
+class _UserWidgetState extends State<UserWidget> {
   AuthController _authController = AuthController();
 
   User user;
 
-  FriendsController _friendsController = FriendsController();
-  ChatController _chatsController = ChatController();
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _authController.getUserInfo(widget.id_sender),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          user = User().fromMap(snapshot.data)..setId(widget.id_sender);
-
-          return ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-            onTap: () {},
-            leading: ClipRRect(
-              borderRadius: BorderRadius.circular(57),
-              child:  Image.network(
-                user.img,
-                fit: BoxFit.cover,
-                width: 57,
-                height: 57,
-              ),
-            ),
-            title: Text(user.firstName + ' ' + user.secondName),
-            subtitle: Text(
-              user.university + ' | ' + user.college,
-              style: TextStyle(
-                fontSize: 12,
-              ),
-            ),
-            trailing: RaisedButton(
-              elevation: 0,
-              color: Colors.indigo,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                'accept',
-                style: TextStyle(
-                  color: Colors.white,
+        future: _authController.getUserInfo(widget.id),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            user = User().fromMap(snapshot.data)..setId(widget.id);
+            return ListTile(
+              contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+              onTap: () {},
+              leading: ClipRRect(
+                borderRadius: BorderRadius.circular(57),
+                child: Image.network(
+                  user.img,
+                  fit: BoxFit.cover,
+                  width: 57,
+                  height: 57,
                 ),
               ),
-              onPressed: () async {
-                await _friendsController.acceptRequestFriend(
-                    id_requestSender: user.id);
-                print('send done');
-                await _chatsController.createChat(
-                  group: Group(
-                    members: [
-                      user.id,
-                      _authController.getUser.uid,
-                    ],
-                    type: Group.TYPE_CHAT,
-                    name: '',
-                  ).setId(getChatID()),
-                );
-              },
-            ),
-          );
-        }
-        return Container();
-      },
-    );
-  }
-
-  String getChatID() {
-    List l = [user.id, _authController.getUser.uid];
-    l.sort();
-
-    return l[0] + l[1];
+              title: Text(user.firstName + ' ' + user.secondName),
+              subtitle: Text(
+                user.university + ' | ' + user.college,
+                style: TextStyle(
+                  fontSize: 12,
+                ),
+              ),
+            );
+          }
+          return Container();
+        });
   }
 }

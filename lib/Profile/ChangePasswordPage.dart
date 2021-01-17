@@ -28,7 +28,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text('Change Password'),
+        title: Text('Change Password', style: TextStyle(color: Colors.grey[500]),),
         iconTheme: IconThemeData(color: Colors.grey[600]),
       ),
       body: Form(
