@@ -34,7 +34,7 @@ class RouteController {
         return MaterialPageRoute(builder: (_) => SearchFriendsPage());
       case '/MyFriendsPage':
         return MaterialPageRoute(
-            builder: (_) => MyFriendsPage(
+            builder: (_) => FriendsRequestsPage(
                   id_user: args['id_user'],
                 ));
       case '/SelectMembers':

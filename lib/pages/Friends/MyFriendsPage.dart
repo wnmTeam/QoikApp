@@ -1,21 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
+import 'package:stumeapp/controller/ChatController.dart';
 import 'package:stumeapp/controller/FriendsController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class MyFriendsPage extends StatefulWidget {
+class FriendsRequestsPage extends StatefulWidget {
 
   String id_user;
 
-  MyFriendsPage({this.id_user});
+  FriendsRequestsPage({this.id_user});
 
   @override
-  _MyFriendsPageState createState() => _MyFriendsPageState();
+  _FriendsRequestsPageState createState() => _FriendsRequestsPageState();
 }
 
-class _MyFriendsPageState extends State<MyFriendsPage> {
+class _FriendsRequestsPageState extends State<FriendsRequestsPage> {
   bool isLoading = false;
   bool hasMore = true;
   int documentLimit = 10;
@@ -24,11 +26,11 @@ class _MyFriendsPageState extends State<MyFriendsPage> {
   FriendsController _friendsController = FriendsController();
   AuthController _authController = AuthController();
 
-  List<DocumentSnapshot> friends = [];
+  List<DocumentSnapshot> friendRequests = [];
 
   @override
   void initState() {
-    getMyFriends();
+    getFriendRequests();
     super.initState();
   }
 
@@ -38,24 +40,24 @@ class _MyFriendsPageState extends State<MyFriendsPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          'My Friends',
+          'Friends Requests',
           style: TextStyle(color: Colors.grey[700]),
         ),
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.grey[700]),
       ),
       body: ListView.builder(
-        itemCount: friends.length,
+        itemCount: friendRequests.length,
         itemBuilder: (context, index) {
-          return UserWidget(id: friends[index].id);
+          return RequestFriendWidget(friendRequests[index].id);
         },
       ),
     );
   }
 
-  getMyFriends() async {
+  getFriendRequests() async {
     if (!hasMore) {
-      print('No More friends');
+      print('No More requests');
       return;
     }
     if (isLoading) {
@@ -66,68 +68,105 @@ class _MyFriendsPageState extends State<MyFriendsPage> {
 //      posts.add(null);
     });
     _friendsController
-        .getFriends(
-      id: widget.id_user,
+        .getFriendRequests(
       limit: documentLimit,
       last: lastDocument,
     )
         .then((value) {
-      print('friends');
+      print('reqs');
       print(value.docs.length);
       setState(() {
-        friends.addAll(value.docs);
+        friendRequests.addAll(value.docs);
         isLoading = false;
-        try {
-          lastDocument = friends.last;
-        } catch (e) {}
+        lastDocument = friendRequests.last;
       });
     });
   }
 }
 
-class UserWidget extends StatefulWidget {
-  String id;
+class RequestFriendWidget extends StatefulWidget {
+  String id_sender;
 
-  UserWidget({this.id});
+  RequestFriendWidget(this.id_sender);
 
   @override
-  _UserWidgetState createState() => _UserWidgetState();
+  _RequestFriendWidgetState createState() => _RequestFriendWidgetState();
 }
 
-class _UserWidgetState extends State<UserWidget> {
+class _RequestFriendWidgetState extends State<RequestFriendWidget> {
   AuthController _authController = AuthController();
 
   User user;
 
+  FriendsController _friendsController = FriendsController();
+  ChatController _chatsController = ChatController();
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: _authController.getUserInfo(widget.id),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            user = User().fromMap(snapshot.data)..setId(widget.id);
-            return ListTile(
-              contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-              onTap: () {},
-              leading: ClipRRect(
-                borderRadius: BorderRadius.circular(57),
-                child:  Image.network(
-                  user.img,
-                  fit: BoxFit.cover,
-                  width: 57,
-                  height: 57,
-                ),
+      future: _authController.getUserInfo(widget.id_sender),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          user = User().fromMap(snapshot.data)..setId(widget.id_sender);
+
+          return ListTile(
+            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            onTap: () {},
+            leading: ClipRRect(
+              borderRadius: BorderRadius.circular(57),
+              child:  Image.network(
+                user.img,
+                fit: BoxFit.cover,
+                width: 57,
+                height: 57,
               ),
-              title: Text(user.firstName + ' ' + user.secondName),
-              subtitle: Text(
-                user.university + ' | ' + user.college,
+            ),
+            title: Text(user.firstName + ' ' + user.secondName),
+            subtitle: Text(
+              user.university + ' | ' + user.college,
+              style: TextStyle(
+                fontSize: 12,
+              ),
+            ),
+            trailing: RaisedButton(
+              elevation: 0,
+              color: Colors.indigo,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                'accept',
                 style: TextStyle(
-                  fontSize: 12,
+                  color: Colors.white,
                 ),
               ),
-            );
-          }
-          return Container();
-        });
+              onPressed: () async {
+                await _friendsController.acceptRequestFriend(
+                    id_requestSender: user.id);
+                print('send done');
+                await _chatsController.createChat(
+                  group: Group(
+                    members: [
+                      user.id,
+                      _authController.getUser.uid,
+                    ],
+                    type: Group.TYPE_CHAT,
+                    name: '',
+                  ).setId(getChatID()),
+                );
+              },
+            ),
+          );
+        }
+        return Container();
+      },
+    );
+  }
+
+  String getChatID() {
+    List l = [user.id, _authController.getUser.uid];
+    l.sort();
+
+    return l[0] + l[1];
   }
 }
