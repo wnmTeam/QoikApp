@@ -154,7 +154,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                               IconButton(
                                   icon: Icon(
                                     Icons.tag_faces,
-                                    color: ConstValues.FIRST_COLOR,
+                                    color: ConstValues.firstColor,
                                   ),
                                   onPressed: () {}),
                               Expanded(
@@ -167,18 +167,18 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                     hintText: Languages.translate(
                                         context, 'type_a_message'),
                                     hintStyle: TextStyle(
-                                        color: ConstValues.FIRST_COLOR),
+                                        color: ConstValues.firstColor),
                                   ),
                                 ),
                               ),
                               IconButton(
                                 icon: Icon(Icons.photo_camera,
-                                    color: ConstValues.FIRST_COLOR),
+                                    color: ConstValues.firstColor),
                                 onPressed: () {},
                               ),
                               IconButton(
                                 icon: Icon(Icons.attach_file,
-                                    color: ConstValues.FIRST_COLOR),
+                                    color: ConstValues.firstColor),
                                 onPressed: () {},
                               ),
                             ],
@@ -189,7 +189,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                       Container(
                         padding: const EdgeInsets.all(0),
                         decoration: BoxDecoration(
-                            color: ConstValues.FIRST_COLOR,
+                            color: ConstValues.firstColor,
                             shape: BoxShape.circle),
                         child: FloatingActionButton(
                           onPressed: () {

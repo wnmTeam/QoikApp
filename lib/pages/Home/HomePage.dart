@@ -43,11 +43,11 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        iconTheme: IconThemeData(color: ConstValues.FIRST_COLOR),
+        iconTheme: IconThemeData(color: ConstValues.firstColor),
         backgroundColor: Colors.white,
         title: Text(
           'LOGO',
-          style: TextStyle(color: ConstValues.FIRST_COLOR),
+          style: TextStyle(color: ConstValues.firstColor),
         ),
         centerTitle: false,
         titleSpacing: 20,
@@ -134,7 +134,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      drawerScrimColor: ConstValues.FIRST_COLOR,
+      drawerScrimColor: ConstValues.firstColor,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: FutureBuilder(
         future: _authController.getUserInfo(_authController.getUser.uid),

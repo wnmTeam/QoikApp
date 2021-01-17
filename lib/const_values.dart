@@ -6,12 +6,7 @@ import 'package:flutter/material.dart';
 // import 'package:google_fonts/google_fonts.dart';
 
 class ConstValues {
-  static Color FIRST_COLOR =Color(0xffe51a4b);
-  static Color SECOND_COLOR = Color(0xffef5924);
-  static Color THIRD_COLOR = Colors.teal[500];
-  static Color FOURTH_COLOR = Color(0xff0670ba);
-  static Color mainColor = Color(0xFFF05924);
-  static Color altColor = Color(0xFF0571BC);
+
   static Color titleColor = Colors.cyan;
   static Color subTitleColor = Colors.black87;
   static Color textColor = Colors.black;
@@ -21,11 +16,25 @@ class ConstValues {
   static double fontSize_4 = 28;
   static double fontSize_5 = 28;
 
-  static User user;
+
+
+  static MaterialColor firstColor = MaterialColor(0xFFE51A4B, {
+    50: Color.fromRGBO(229, 26, 75, .1),
+    100: Color.fromRGBO(229, 26, 75, .2),
+    200: Color.fromRGBO(229, 26, 75, .3),
+    300: Color.fromRGBO(229, 26, 75, .4),
+    400: Color.fromRGBO(229, 26, 75, .5),
+    500: Color.fromRGBO(229, 26, 75, .6),
+    600: Color.fromRGBO(229, 26, 75, .7),
+    700: Color.fromRGBO(229, 26, 75, .8),
+    800: Color.fromRGBO(229, 26, 75, .9),
+    900: Color.fromRGBO(229, 26, 75, 1),
+  });
+
 }
 
 final dashBoardButtonStyle = BoxDecoration(
-  border: new Border.all(width: 3.0, color: ConstValues.SECOND_COLOR),
+  border: new Border.all(width: 3.0, color: ConstValues.firstColor),
   color: Colors.white,
   borderRadius: BorderRadius.circular(10),
   boxShadow: [
