@@ -43,11 +43,11 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.indigo),
+        iconTheme: IconThemeData(color: ConstValues.FIRST_COLOR),
         backgroundColor: Colors.white,
-        title: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Text('LOGO'),
+        title: Text(
+          'LOGO',
+          style: TextStyle(color: ConstValues.FIRST_COLOR),
         ),
         centerTitle: false,
         titleSpacing: 20,
