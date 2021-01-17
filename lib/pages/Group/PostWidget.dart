@@ -8,6 +8,7 @@ import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/PostsController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import 'CommentWidget.dart';
 
@@ -188,7 +189,11 @@ class _PostWidgetState extends State<PostWidget>
                   height: 6,
                 ),
                 if (widget.post.images != null && widget.post.images.length > 0)
-                  Image.network(widget.post.images[0],),
+                  CachedNetworkImage(
+                    placeholder: (context, url) => Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    imageUrl:widget.post.images[0],),
                 if (widget.post.images != null && widget.post.images.length > 0)
                   SizedBox(
                     height: 6,

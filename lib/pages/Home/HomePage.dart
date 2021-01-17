@@ -11,6 +11,7 @@ import 'package:stumeapp/pages/Home/tabs/GroupsChatsTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/HomeTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/LibraryTabView.dart';
 import 'package:stumeapp/pages/Home/widgets/FABwithBottomAppBar.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -45,12 +46,14 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         iconTheme: IconThemeData(color: ConstValues.firstColor),
         backgroundColor: Colors.white,
-        title: Text(
-          'LOGO',
-          style: TextStyle(color: ConstValues.firstColor),
+        title: SvgPicture.asset(
+          'assets/logo.svg',
+          // width: 24,
+          height: 36,
+          color: ConstValues.firstColor,
         ),
         centerTitle: false,
-        titleSpacing: 20,
+        titleSpacing: 5,
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
