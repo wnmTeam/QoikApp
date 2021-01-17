@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/api/notification_api.dart';
+import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 import 'package:stumeapp/pages/Home/tabs/FriendsTabView.dart';
@@ -133,7 +134,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      drawerScrimColor: Colors.indigo,
+      drawerScrimColor: ConstValues.FIRST_COLOR,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: FutureBuilder(
         future: _authController.getUserInfo(_authController.getUser.uid),

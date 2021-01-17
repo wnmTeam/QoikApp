@@ -164,7 +164,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                   enableSuggestions: true,
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
-                                    hintText: Languages.translate(context,'type_a_message'),
+                                    hintText: Languages.translate(
+                                        context, 'type_a_message'),
                                     hintStyle: TextStyle(
                                         color: ConstValues.FIRST_COLOR),
                                   ),
@@ -190,13 +191,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                         decoration: BoxDecoration(
                             color: ConstValues.FIRST_COLOR,
                             shape: BoxShape.circle),
-                        child: FlatButton(
-                          child: Icon(
-                            // Icons.keyboard_voice,
-                            Icons.send,
-                            color: Colors.white,
-                          ),
-                          onLongPress: () {},
+                        child: FloatingActionButton(
                           onPressed: () {
                             if (_messageController.text.trim().isEmpty) return;
                             _chatController.addMessage(
@@ -209,6 +204,11 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                             );
                             _messageController.clear();
                           },
+                          child: Icon(
+                            // Icons.keyboard_voice,
+                            Icons.send,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ],
@@ -339,15 +339,17 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                 color: color,
               ),
               child: Column(
-                crossAxisAlignment:
-                isSender ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+                crossAxisAlignment: isSender
+                    ? CrossAxisAlignment.start
+                    : CrossAxisAlignment.end,
                 children: [
                   Text(
-                    message.text ,
+                    message.text,
                     style: TextStyle(color: Colors.white),
                   ),
                   Text(
-                       "\n"+ message.date.hour.toString() +
+                    "\n" +
+                        message.date.hour.toString() +
                         ":" +
                         message.date.minute.toString() +
                         ":" +
@@ -357,7 +359,6 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                 ],
               ),
             ),
-
           ],
         ),
       );
