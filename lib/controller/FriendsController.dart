@@ -35,4 +35,11 @@ class FriendsController {
       id_friend: id_friend,
     );
   }
+
+  deleteFriend({String id_user1, String id_user2}) {
+    return api.deleteFriend(
+      id_user1: id_user1,
+      id_user2: id_user2,
+    );
+  }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Comment.dart';
 import 'package:stumeapp/Models/Group.dart';
+import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/Post.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
@@ -15,8 +16,10 @@ import 'CommentWidget.dart';
 class PostWidget extends StatefulWidget {
   Post post;
   Group group;
+  Function deletePost;
+  Function editPost;
 
-  PostWidget({this.post, this.group});
+  PostWidget({this.post, this.group, this.deletePost, this.editPost});
 
   @override
   _PostWidgetState createState() => _PostWidgetState();
@@ -63,11 +66,9 @@ class _PostWidgetState extends State<PostWidget>
           if (user != null) {
             comments.insertAll(0, newComments);
             newComments = [];
-            print('without build' + widget.post.text);
             return _postBuilder(widget.post);
           }
           if (snapshot.hasData) {
-            print(widget.post.toMap());
             user = User().fromMap(snapshot.data)..setId(snapshot.data.id);
             return _postBuilder(widget.post);
           }
@@ -96,7 +97,6 @@ class _PostWidgetState extends State<PostWidget>
         .then((value) {
       setState(() {
         print('comments');
-        print(value.docs.length.toString());
         comments.addAll(value.docs);
         isLoading = false;
         if (value.docs.length < commentsLimit) hasMoreComments = false;
@@ -143,14 +143,36 @@ class _PostWidgetState extends State<PostWidget>
                       Text(
                         user.firstName + ' ' + user.secondName,
                       ),
-                      InkWell(
-                        child: Padding(
-                          padding: const EdgeInsets.all(3.0),
-                          child: Icon(
-                            Icons.more_horiz,
-                          ),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: null,
+                          icon: Icon(Icons.more_horiz),
+                          onChanged: (String newValue) {
+                            switch (newValue) {
+                              case 'Delete':
+                                _deletePost();
+                                break;
+                              case 'Edit':
+                                _editPost();
+                                break;
+                              case 'Report':
+                                _reportPost();
+                                break;
+                            }
+                          },
+                          items: <String>[
+                            if (MyUser.myUser.id == widget.post.idOwner) 'Edit',
+                            if (MyUser.myUser.id == widget.post.idOwner)
+                              'Delete',
+                            if (MyUser.myUser.id != widget.post.idOwner)
+                              'Report',
+                          ].map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
                         ),
-                        onTap: () {},
                       ),
                     ],
                   ),
@@ -165,26 +187,27 @@ class _PostWidgetState extends State<PostWidget>
                 SizedBox(
                   height: 6,
                 ),
-                post.text.isNotEmpty?
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  child: InkWell(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0,
-                        vertical: 10,
-                      ),
-                      child: Text(
-                        post.text,
-                        style: TextStyle(
-                          color: Colors.grey[700],
-                          fontSize: 16,
+                post.text.isNotEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                        child: InkWell(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0,
+                              vertical: 10,
+                            ),
+                            child: Text(
+                              post.text,
+                              style: TextStyle(
+                                color: Colors.grey[700],
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                          onTap: () {},
                         ),
-                      ),
-                    ),
-                    onTap: () {},
-                  ),
-                ):Container(),
+                      )
+                    : Container(),
                 SizedBox(
                   height: 6,
                 ),
@@ -193,7 +216,8 @@ class _PostWidgetState extends State<PostWidget>
                     placeholder: (context, url) => Center(
                       child: CircularProgressIndicator(),
                     ),
-                    imageUrl:widget.post.images[0],),
+                    imageUrl: widget.post.images[0],
+                  ),
                 if (widget.post.images != null && widget.post.images.length > 0)
                   SizedBox(
                     height: 6,
@@ -208,8 +232,6 @@ class _PostWidgetState extends State<PostWidget>
                           group: widget.group,
                           id_post: widget.post.id),
                       builder: (context, snapshot) {
-                        print(snapshot.data);
-
                         if (snapshot.hasData) {
                           if (snapshot.data.data() != null &&
                               snapshot.data.data()['exists'] == 1)
@@ -296,8 +318,6 @@ class _PostWidgetState extends State<PostWidget>
                           group: widget.group,
                           id_post: widget.post.id),
                       builder: (context, snapshot) {
-                        print(snapshot.data);
-
                         if (snapshot.hasData) {
                           if (snapshot.data.data() != null &&
                               snapshot.data.data()['exists'] == 1)
@@ -457,35 +477,65 @@ class _PostWidgetState extends State<PostWidget>
     );
   }
 
-//  Future getComments() async {
-//    if (!hasMore) {
-//      print('No More Posts');
-//      return;
-//    }
-//    if (isLoading) {
-//      return;
-//    }
-//    log('hhhhhhhhhhhhhhhhhh', name: 'get Posts');
-//    setState(() {
-//      isLoading = true;
-//    });
-//    Future f = _postsController.getPosts(
-//      limit: documentLimit,
-//      last: lastDocument,
-//      group: widget.group,
-//    );
-//    return f.then((querySnapshot) {
-//      print('querySnapshot.docs.length' + querySnapshot.docs.length.toString());
-//      if (querySnapshot.docs.length < documentLimit) {
-//        hasMore = false;
+  _deletePost() async {
+    await _postsController.deletePost(
+      id_group: widget.group.id,
+      id_post: widget.post.id,
+    );
+    widget.deletePost();
+  }
+
+  _reportPost() {}
+
+  _editPost() async {
+    await Navigator.pushNamed(
+      context,
+      '/EditPostPage',
+      arguments: {
+        'post': widget.post,
+        'group': widget.group,
+        'editPost': (text) {
+//          widget.editPost(text);
+        }
+      },
+    );
+
+    DocumentSnapshot d = await _postsController.getPostChanges(
+      id_post: widget.post.id,
+      group: widget.group,
+    );
+    if (d.data() != null)
+      setState(() {
+        widget.post = Post().fromMap(d.data())..setId(widget.post.id);
+      });
+  }
+
+//  _showPopupMenu(){
+//    showMenu<String>(
+//      context: context,
+//      position: RelativeRect.fromLTRB(25.0, 25.0, 0.0, 0.0),      //position where you want to show the menu on screen
+//      items: [
+//        PopupMenuItem<String>(
+//            child: ListTile(leading: Icon(Icons.delete),title: Text('Delete'),), value: '1'),
+//        PopupMenuItem<String>(
+//            child: ListTile(leading: Icon(Icons.edit),title: Text('Edit'),), value: '2'),
+//        PopupMenuItem<String>(
+//            child: ListTile(leading: Icon(Icons.report),title: Text('Report'),), value: '3'),
+//      ],
+//      elevation: 8.0,
+//    )
+//        .then<void>((String itemSelected) {
+//
+//      if (itemSelected == null) return;
+//
+//      if(itemSelected == "1"){
+//        //code here
+//      }else if(itemSelected == "2"){
+//        //code here
+//      }else{
+//        //code here
 //      }
-//      lastDocument = querySnapshot.docs[querySnapshot.docs.length - 1];
-//      posts.removeAt(posts.length - 1);
-//      posts.addAll(querySnapshot.docs);
-//      if (hasMore) posts.add(null);
-//      setState(() {
-//        isLoading = false;
-//      });
+//
 //    });
 //  }
 

@@ -97,7 +97,7 @@ class _PostsTabState extends State<PostsTab>
       posts = [];
     });
     getPosts();
-    return Future.delayed(Duration(milliseconds: 10));
+    return Future.delayed(Duration(milliseconds: 1));
   }
 
   @override
@@ -113,6 +113,11 @@ class _PostsTabState extends State<PostsTab>
             return PostWidget(
               post: Post().fromMap(posts[index].data())..setId(posts[index].id),
               group: widget.group,
+              deletePost: () {
+                setState(() {
+                  posts.removeAt(index);
+                });
+              },
             );
           },
         ),

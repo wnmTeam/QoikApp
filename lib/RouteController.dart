@@ -6,6 +6,7 @@ import 'package:stumeapp/pages/ChatRoom/RoomPage.dart';
 import 'package:stumeapp/pages/Friends/MyFriendsPage.dart';
 import 'package:stumeapp/pages/Friends/SearchFriends.dart';
 import 'package:stumeapp/pages/Group/CreatGroupPage.dart';
+import 'package:stumeapp/pages/Group/EditPostPage.dart';
 import 'package:stumeapp/pages/Group/GroupPage.dart';
 import 'package:stumeapp/pages/Group/SelectMembersPage.dart';
 import 'package:stumeapp/pages/Group/StartChatPage.dart';
@@ -82,6 +83,13 @@ class RouteController {
                 ));
       case '/ChangePasswordPage':
         return MaterialPageRoute(builder: (_) => ChangePasswordPage());
+      case '/EditPostPage':
+        return MaterialPageRoute(
+            builder: (_) => EditPostPage(
+                  post: args['post'],
+                  group: args['group'],
+                  editPost: args['editPost'],
+                ));
     }
   }
 }

@@ -105,4 +105,19 @@ class PostsController {
       post: post,
     );
   }
+
+  deletePost({String id_group, String id_post}) {
+    return api.deletePost(
+      id_group: id_group,
+      id_post: id_post,
+    );
+  }
+
+   updatePost({String id_group, String id_post, String text}) {
+    return api.updatePost(
+      id_post: id_post,
+      id_group: id_group,
+      text: text,
+    );
+  }
 }

@@ -25,6 +25,14 @@ class _FriendsTabState extends State<FriendsTab> {
 
   List<DocumentSnapshot> friends = [null, null];
 
+  Future<void> refresh() {
+    setState(() {
+      friends = [null, null];
+    });
+    getMyFriends();
+    return Future.delayed(Duration(milliseconds: 1));
+  }
+
   @override
   void initState() {
     getMyFriends();
@@ -33,44 +41,48 @@ class _FriendsTabState extends State<FriendsTab> {
 
   @override
   Widget build(BuildContext context) {
-    print(friends);
-    return Column(
-      children: [
-        Expanded(
-          child: ListView.builder(
-            itemCount: friends.length,
-            itemBuilder: (context, index) {
-              if (index == 0)
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: RaisedButton(
-                        elevation: 0,
-                        onPressed: () {
-                          Navigator.of(context).pushNamed(
-                            '/MyFriendsPage',
-                            arguments: {'id_user': _authController.getUser.uid},
-                          );
-                        },
-                        color: Colors.grey[300],
-                        child: Text('Friend Requests'),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                      ),
-                    )
-                  ],
-                );
-              else if (index == friends.length - 1)
-                return SizedBox(
-                  height: 30,
-                );
-              return UserWidget(id: friends[index].id);
-            },
+    return RefreshIndicator(
+      onRefresh: refresh,
+      child: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: friends.length,
+              itemBuilder: (context, index) {
+                if (index == 0)
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: RaisedButton(
+                          elevation: 0,
+                          onPressed: () {
+                            Navigator.of(context).pushNamed(
+                              '/MyFriendsPage',
+                              arguments: {
+                                'id_user': _authController.getUser.uid
+                              },
+                            );
+                          },
+                          color: Colors.grey[300],
+                          child: Text('Friend Requests'),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                        ),
+                      )
+                    ],
+                  );
+                else if (index == friends.length - 1)
+                  return SizedBox(
+                    height: 30,
+                  );
+                return UserWidget(id: friends[index].id);
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -132,7 +144,15 @@ class _UserWidgetState extends State<UserWidget> {
             user = User().fromMap(snapshot.data)..setId(widget.id);
             return ListTile(
               contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pushNamed(
+                  '/ProfilePage',
+                  arguments: {
+                    'user': user,
+                    'id_user': user.id,
+                  },
+                );
+              },
               leading: ClipRRect(
                 borderRadius: BorderRadius.circular(57),
                 child: Image.network(

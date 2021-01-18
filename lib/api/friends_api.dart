@@ -115,4 +115,26 @@ class FriendsApi {
         .doc(id_friend)
         .get();
   }
+
+  deleteFriend({String id_user1, String id_user2}) {
+    WriteBatch batch = _firestore.batch();
+
+    batch.delete(
+      _firestore
+          .collection('users')
+          .doc(id_user1)
+          .collection('friends')
+          .doc(id_user2),
+    );
+
+    batch.delete(
+      _firestore
+          .collection('users')
+          .doc(id_user2)
+          .collection('friends')
+          .doc(id_user1),
+    );
+
+    return batch.commit();
+  }
 }

@@ -93,12 +93,14 @@ class MapScreenState extends State<ProfilePage> {
                                 imagePath: widget.user.img,
                                 myProfile: isMyProfile,
                                 ubdateImagerofile: (img) async {
-                                  String url = await _storageController.uploadPic(
+                                  String url =
+                                      await _storageController.uploadPic(
                                     context,
                                     img,
                                     widget.id_user,
                                   );
-                                  await _authController.setImageUrl(id_user: widget.id_user, url: url);
+                                  await _authController.setImageUrl(
+                                      id_user: widget.id_user, url: url);
                                 },
                               ),
                               SizedBox(
@@ -150,7 +152,18 @@ class MapScreenState extends State<ProfilePage> {
                                                       ),
                                                       label:
                                                           Text('Remove Friend'),
-                                                      onPressed: () async {},
+                                                      onPressed: () async {
+                                                        await _friendsController
+                                                            .deleteFriend(
+                                                          id_user1:
+                                                              MyUser.myUser.id,
+                                                          id_user2:
+                                                              widget.id_user,
+                                                        );
+                                                        setState(() {
+                                                          isFriend = false;
+                                                        });
+                                                      },
                                                     )
                                                   : isRequested
                                                       ? FlatButton.icon(
@@ -282,13 +295,16 @@ class MapScreenState extends State<ProfilePage> {
                                                       ),
                                                       onPressed: () {
                                                         if (_editBio) {
-                                                          _authController.updateBio(_bioController
-                                                              .text);
+                                                          _authController
+                                                              .updateBio(
+                                                                  _bioController
+                                                                      .text);
                                                         }
                                                         setState(() {
                                                           if (_editBio) {
-                                                            MyUser.myUser.bio = _bioController
-                                                                .text;
+                                                            MyUser.myUser.bio =
+                                                                _bioController
+                                                                    .text;
                                                             widget.user.bio =
                                                                 _bioController
                                                                     .text;
@@ -351,7 +367,9 @@ class MapScreenState extends State<ProfilePage> {
                                                       Icons.edit,
                                                     ),
                                                     onPressed: () {
-                                                      Navigator.pushNamed(context, '/ChangePasswordPage');
+                                                      Navigator.pushNamed(
+                                                          context,
+                                                          '/ChangePasswordPage');
                                                     },
                                                   ),
                                                   title: Text('password'),
@@ -504,7 +522,7 @@ class _FriendWidgetState extends State<FriendWidget> {
       future: _getUser,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          _user = User().fromMap(snapshot.data);
+          _user = User().fromMap(snapshot.data)..setId(snapshot.data.id);
           return _friendBuilder();
         }
         return Container();
@@ -563,7 +581,21 @@ class _FriendWidgetState extends State<FriendWidget> {
                           ),
                         )
                       : InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              '/ChatRoomPage',
+                              arguments: {
+                                'user': _user,
+                                'group': Group(
+                                  members: [
+                                    _user.id,
+                                    MyUser.myUser.id,
+                                  ],
+                                ),
+                              },
+                            );
+                          },
                           child: Padding(
                             padding: const EdgeInsets.all(4.0),
                             child: Icon(

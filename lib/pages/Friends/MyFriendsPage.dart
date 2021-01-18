@@ -8,7 +8,6 @@ import 'package:stumeapp/controller/FriendsController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FriendsRequestsPage extends StatefulWidget {
-
   String id_user;
 
   FriendsRequestsPage({this.id_user});
@@ -114,7 +113,7 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
             onTap: () {},
             leading: ClipRRect(
               borderRadius: BorderRadius.circular(57),
-              child:  Image.network(
+              child: Image.network(
                 user.img,
                 fit: BoxFit.cover,
                 width: 57,

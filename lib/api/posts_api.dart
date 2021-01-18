@@ -363,4 +363,27 @@ class PostsApi {
       SetOptions(merge: true),
     );
   }
+
+  deletePost({String id_group, String id_post}) {
+    return _firestore
+        .collection('groups')
+        .doc(id_group)
+        .collection('posts')
+        .doc(id_post)
+        .delete();
+  }
+
+  updatePost({String id_post, String id_group, String text}) {
+    return _firestore
+        .collection('groups')
+        .doc(id_group)
+        .collection('posts')
+        .doc(id_post)
+        .set(
+      {'text': text},
+      SetOptions(
+        merge: true,
+      ),
+    );
+  }
 }
