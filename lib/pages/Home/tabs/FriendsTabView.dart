@@ -8,6 +8,7 @@ import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
 import 'package:stumeapp/controller/FriendsController.dart';
 import 'package:stumeapp/controller/GroupsController.dart';
+import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
 class FriendsTab extends StatefulWidget {
   @override
@@ -185,7 +186,7 @@ class _UserWidgetState extends State<UserWidget> {
               ),
             );
           }
-          return Container();
+          return UserPlaceholder();
         });
   }
 }

@@ -10,6 +10,7 @@ import 'package:stumeapp/controller/PostsController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
 import 'CommentWidget.dart';
 
@@ -57,23 +58,29 @@ class _PostWidgetState extends State<PostWidget>
   @override
   bool get wantKeepAlive => true;
 
+//  @override
+//  Widget build(BuildContext context) {
+//    size = MediaQuery.of(context).size;
+//    return FutureBuilder(
+//        future: _getUser,
+//        builder: (context, snapshot) {
+//          if (user != null) {
+//            comments.insertAll(0, newComments);
+//            newComments = [];
+//            return _postBuilder(widget.post);
+//          }
+//          if (snapshot.hasData) {
+//            user = User().fromMap(snapshot.data)..setId(snapshot.data.id);
+//            return _postBuilder(widget.post);
+//          }
+//          return Container();
+//        });
+//  }
+
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
-    return FutureBuilder(
-        future: _getUser,
-        builder: (context, snapshot) {
-          if (user != null) {
-            comments.insertAll(0, newComments);
-            newComments = [];
-            return _postBuilder(widget.post);
-          }
-          if (snapshot.hasData) {
-            user = User().fromMap(snapshot.data)..setId(snapshot.data.id);
-            return _postBuilder(widget.post);
-          }
-          return Container();
-        });
+    return _postBuilder(widget.post);
   }
 
   void _loadComments() async {
@@ -119,71 +126,22 @@ class _PostWidgetState extends State<PostWidget>
             width: size.width - 24,
             child: Column(
               children: [
-                ListTile(
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      '/ProfilePage',
-                      arguments: {'id_user': widget.post.idOwner, 'user': user},
-                    );
-                  },
-                  contentPadding: EdgeInsets.zero,
-                  leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(57),
-                    child: Image.network(
-                      user.img,
-                      fit: BoxFit.cover,
-                      width: 55,
-                      height: 55,
-                    ),
-                  ),
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        user.firstName + ' ' + user.secondName,
-                      ),
-                      DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: null,
-                          icon: Icon(Icons.more_horiz),
-                          onChanged: (String newValue) {
-                            switch (newValue) {
-                              case 'Delete':
-                                _deletePost();
-                                break;
-                              case 'Edit':
-                                _editPost();
-                                break;
-                              case 'Report':
-                                _reportPost();
-                                break;
-                            }
-                          },
-                          items: <String>[
-                            if (MyUser.myUser.id == widget.post.idOwner) 'Edit',
-                            if (MyUser.myUser.id == widget.post.idOwner)
-                              'Delete',
-                            if (MyUser.myUser.id != widget.post.idOwner)
-                              'Report',
-                          ].map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    ],
-                  ),
-                  subtitle: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('New User'),
-                      Text(post.getStringDate),
-                    ],
-                  ),
-                ),
+                FutureBuilder(
+                    future: _getUser,
+                    builder: (context, snapshot) {
+                      if (user != null) {
+                        comments.insertAll(0, newComments);
+                        newComments = [];
+                        return _userWidget();
+                      }
+                      if (snapshot.hasData) {
+                        user = User().fromMap(snapshot.data)
+                          ..setId(snapshot.data.id);
+                        return _userWidget();
+                      }
+                      return UserPlaceholder();
+//                    return CircularProgressIndicator();
+                    }),
                 SizedBox(
                   height: 6,
                 ),
@@ -214,7 +172,12 @@ class _PostWidgetState extends State<PostWidget>
                 if (widget.post.images != null && widget.post.images.length > 0)
                   CachedNetworkImage(
                     placeholder: (context, url) => Center(
-                      child: CircularProgressIndicator(),
+                      child: Container(
+                        width: size.width,
+                        height: size.width - 100,
+                        color: Colors.grey[200],
+                        child: Center(child: CircularProgressIndicator()),
+                      ),
                     ),
                     imageUrl: widget.post.images[0],
                   ),
@@ -477,6 +440,72 @@ class _PostWidgetState extends State<PostWidget>
     );
   }
 
+  _userWidget() {
+    return ListTile(
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          '/ProfilePage',
+          arguments: {'id_user': widget.post.idOwner, 'user': user},
+        );
+      },
+      contentPadding: EdgeInsets.zero,
+      leading: ClipRRect(
+        borderRadius: BorderRadius.circular(57),
+        child: Image.network(
+          user.img,
+          fit: BoxFit.cover,
+          width: 55,
+          height: 55,
+        ),
+      ),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            user.firstName + ' ' + user.secondName,
+          ),
+          DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              value: null,
+              icon: Icon(Icons.more_horiz),
+              onChanged: (String newValue) {
+                switch (newValue) {
+                  case 'Delete':
+                    _deletePost();
+                    break;
+                  case 'Edit':
+                    _editPost();
+                    break;
+                  case 'Report':
+                    _reportPost();
+                    break;
+                }
+              },
+              items: <String>[
+                if (MyUser.myUser.id == widget.post.idOwner) 'Edit',
+                if (MyUser.myUser.id == widget.post.idOwner) 'Delete',
+                if (MyUser.myUser.id != widget.post.idOwner) 'Report',
+              ].map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+          ),
+        ],
+      ),
+      subtitle: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text('New User'),
+          Text(widget.post.getStringDate),
+        ],
+      ),
+    );
+  }
+
   _deletePost() async {
     await _postsController.deletePost(
       id_group: widget.group.id,
@@ -494,9 +523,7 @@ class _PostWidgetState extends State<PostWidget>
       arguments: {
         'post': widget.post,
         'group': widget.group,
-        'editPost': (text) {
-//          widget.editPost(text);
-        }
+        'editPost': (text) {}
       },
     );
 
@@ -509,34 +536,4 @@ class _PostWidgetState extends State<PostWidget>
         widget.post = Post().fromMap(d.data())..setId(widget.post.id);
       });
   }
-
-//  _showPopupMenu(){
-//    showMenu<String>(
-//      context: context,
-//      position: RelativeRect.fromLTRB(25.0, 25.0, 0.0, 0.0),      //position where you want to show the menu on screen
-//      items: [
-//        PopupMenuItem<String>(
-//            child: ListTile(leading: Icon(Icons.delete),title: Text('Delete'),), value: '1'),
-//        PopupMenuItem<String>(
-//            child: ListTile(leading: Icon(Icons.edit),title: Text('Edit'),), value: '2'),
-//        PopupMenuItem<String>(
-//            child: ListTile(leading: Icon(Icons.report),title: Text('Report'),), value: '3'),
-//      ],
-//      elevation: 8.0,
-//    )
-//        .then<void>((String itemSelected) {
-//
-//      if (itemSelected == null) return;
-//
-//      if(itemSelected == "1"){
-//        //code here
-//      }else if(itemSelected == "2"){
-//        //code here
-//      }else{
-//        //code here
-//      }
-//
-//    });
-//  }
-
 }

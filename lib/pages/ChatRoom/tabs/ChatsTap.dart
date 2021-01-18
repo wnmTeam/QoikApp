@@ -5,6 +5,7 @@ import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/controller/ChatController.dart';
+import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
 class ChatsTab extends StatefulWidget {
   @override
@@ -90,7 +91,7 @@ class _ChatsTabState extends State<ChatsTab>
             },
           );
         }
-        return Container();
+        return UserPlaceholder();
       },
     );
   }

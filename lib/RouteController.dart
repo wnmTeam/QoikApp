@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:stumeapp/Profile/ChangePasswordPage.dart';
 import 'package:stumeapp/pages/ChatRoom/ChatRoomPage.dart';
 import 'package:stumeapp/pages/ChatRoom/ChatsPage.dart';
 import 'package:stumeapp/pages/ChatRoom/RoomPage.dart';
@@ -13,9 +12,10 @@ import 'package:stumeapp/pages/Group/StartChatPage.dart';
 import 'package:stumeapp/pages/Group/WritePost.dart';
 import 'package:stumeapp/pages/Library/BookViewerPage.dart';
 import 'package:stumeapp/pages/Library/BooksLibraryPage.dart';
+import 'package:stumeapp/pages/Profile/ChangePasswordPage.dart';
+import 'package:stumeapp/pages/Profile/ProfilePage.dart';
 import 'package:stumeapp/pages/RegesterLogin/RegisterLoginPage.dart';
 
-import 'Profile/ProfilePage.dart';
 import 'StartingPage.dart';
 
 class RouteController {

@@ -7,6 +7,7 @@ import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/PostsController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
 class CommentWidget extends StatefulWidget {
   Comment comment;
@@ -46,7 +47,7 @@ class _CommentWidgetState extends State<CommentWidget> {
             user = User().fromMap(snapshot.data);
             return _postBuilder();
           }
-          return Container();
+          return UserPlaceholder();
         });
   }
 

@@ -69,13 +69,6 @@ class _PostsTabState extends State<PostsTab>
       }
     });
 
-//    streams.add(_postsController.getPosts(
-//      limit: documentLimit,
-//      last: lastDocument,
-//      group: widget.group,
-//    ));
-//    myposts.add([]);
-//    _scrollController.addListener(() {});
     getPosts();
     super.initState();
   }
@@ -94,7 +87,7 @@ class _PostsTabState extends State<PostsTab>
       hasMore = true;
       lastDocument = null;
 
-      posts = [];
+      posts = [null];
     });
     getPosts();
     return Future.delayed(Duration(milliseconds: 1));
@@ -110,6 +103,11 @@ class _PostsTabState extends State<PostsTab>
           controller: _scrollController,
           itemCount: posts.length,
           itemBuilder: (context, index) {
+            if (index == posts.length - 1) {
+              if (isLoading)
+                return Center(child: CircularProgressIndicator());
+              return Container();
+            }
             return PostWidget(
               post: Post().fromMap(posts[index].data())..setId(posts[index].id),
               group: widget.group,
@@ -162,14 +160,13 @@ class _PostsTabState extends State<PostsTab>
     )
         .then((value) {
       setState(() {
-        posts.addAll(value.docs);
-        print('posts');
-        print(value.docs.length);
-        if (value.docs.length < documentLimit) hasMore = false;
+        posts.insertAll(posts.length - 1, value.docs);
         isLoading = false;
-        try {
-          lastDocument = posts.last;
-        } catch (e) {}
+
+        if (value.docs.length < documentLimit)
+          hasMore = false;
+        else
+          lastDocument = value.docs.last;
       });
     });
   }

@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/GroupsController.dart';
+import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
 class MembersTab extends StatefulWidget {
   Group group;
@@ -23,7 +24,7 @@ class _MembersTabState extends State<MembersTab>
 
   bool isLoading = false;
   bool hasMore = true;
-  int documentLimit = 3;
+  int documentLimit = 10;
   DocumentSnapshot lastDocument;
 
   GroupsController _groupsController = GroupsController();
@@ -99,7 +100,7 @@ class _MembersTabState extends State<MembersTab>
                   ),
                 );
               }
-              return Container();
+              return UserPlaceholder();
             });
       },
     );

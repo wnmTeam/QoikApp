@@ -6,6 +6,7 @@ import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/FriendsController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/controller/GroupsController.dart';
+import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
 class SelectFriendsPage extends StatefulWidget {
   Group group;
@@ -21,7 +22,7 @@ class SelectFriendsPage extends StatefulWidget {
 class _SelectFriendsPageState extends State<SelectFriendsPage> {
   bool isLoading = false;
   bool hasMore = true;
-  int documentLimit = 2;
+  int documentLimit = 10;
   DocumentSnapshot lastDocument = null;
 
   FriendsController _friendsController = FriendsController();
@@ -189,7 +190,7 @@ class _UserWidgetState extends State<UserWidget> {
               ),
             );
           }
-          return Container();
+          return UserPlaceholder();
         });
   }
 }
