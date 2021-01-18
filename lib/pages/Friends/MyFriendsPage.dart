@@ -25,7 +25,20 @@ class _FriendsRequestsPageState extends State<FriendsRequestsPage> {
   FriendsController _friendsController = FriendsController();
   AuthController _authController = AuthController();
 
-  List<DocumentSnapshot> friendRequests = [];
+  List<DocumentSnapshot> friendRequests = [null, null];
+
+  Future<void> refresh() {
+    setState(() {
+      friendRequests = [
+        null,
+        null,
+      ];
+      hasMore = true;
+      lastDocument = null;
+    });
+    getFriendRequests();
+    return Future.delayed(Duration(milliseconds: 1));
+  }
 
   @override
   void initState() {
@@ -45,11 +58,30 @@ class _FriendsRequestsPageState extends State<FriendsRequestsPage> {
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.grey[700]),
       ),
-      body: ListView.builder(
-        itemCount: friendRequests.length,
-        itemBuilder: (context, index) {
-          return RequestFriendWidget(friendRequests[index].id);
-        },
+      body: RefreshIndicator(
+        onRefresh: refresh,
+        child: ListView.builder(
+          itemCount: friendRequests.length,
+          itemBuilder: (context, index) {
+            if (index == 0)
+              return SizedBox(
+                height: 30,
+              );
+            else if (index == friendRequests.length - 1) {
+              if (isLoading)
+                return Center(child: CircularProgressIndicator());
+              else if (hasMore)
+                return FlatButton(
+                  onPressed: () {
+                    getFriendRequests();
+                  },
+                  child: Text('Loade More'),
+                );
+              return Container();
+            }
+            return RequestFriendWidget(friendRequests[index].id);
+          },
+        ),
       ),
     );
   }
@@ -73,11 +105,14 @@ class _FriendsRequestsPageState extends State<FriendsRequestsPage> {
     )
         .then((value) {
       print('reqs');
-      print(value.docs.length);
       setState(() {
-        friendRequests.addAll(value.docs);
+        friendRequests.insertAll(friendRequests.length - 1, value.docs);
         isLoading = false;
-        lastDocument = friendRequests.last;
+
+        if (value.docs.length < documentLimit)
+          hasMore = false;
+        else
+          lastDocument = value.docs.last;
       });
     });
   }

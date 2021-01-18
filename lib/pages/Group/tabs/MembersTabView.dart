@@ -23,14 +23,14 @@ class _MembersTabState extends State<MembersTab>
 
   bool isLoading = false;
   bool hasMore = true;
-  int documentLimit = 10;
+  int documentLimit = 3;
   DocumentSnapshot lastDocument;
 
   GroupsController _groupsController = GroupsController();
 
   AuthController _authController = AuthController();
 
-  List<DocumentSnapshot> members = [];
+  List<DocumentSnapshot> members = [null, null];
 
   @override
   void initState() {
@@ -50,6 +50,22 @@ class _MembersTabState extends State<MembersTab>
     return ListView.builder(
       itemCount: members.length,
       itemBuilder: (_, index) {
+        if (index == 0)
+          return SizedBox(
+            height: 20,
+          );
+        else if (index == members.length - 1) {
+          if (isLoading)
+            return Center(child: CircularProgressIndicator());
+          else if (hasMore)
+            return FlatButton(
+              onPressed: () {
+                getMembers();
+              },
+              child: Text('Loade More'),
+            );
+          return Container();
+        }
         return FutureBuilder(
             future: _authController.getUserInfo(members[index].id),
             builder: (context, snapshot) {
@@ -72,9 +88,9 @@ class _MembersTabState extends State<MembersTab>
                   },
                   title: Text(user.firstName + ' ' + user.secondName),
                   subtitle: Text('New User'),
-                  leading:  ClipRRect(
+                  leading: ClipRRect(
                     borderRadius: BorderRadius.circular(57),
-                    child:  Image.network(
+                    child: Image.network(
                       user.img,
                       fit: BoxFit.cover,
                       width: 57,
@@ -91,13 +107,12 @@ class _MembersTabState extends State<MembersTab>
 
   getMembers() async {
     if (!hasMore) {
-      print('No More Products');
+      print('No More members');
       return;
     }
     if (isLoading) {
       return;
     }
-    log('hhhhhhhhhhhhhhhhhh', name: 'get members');
     setState(() {
       isLoading = true;
     });
@@ -107,14 +122,15 @@ class _MembersTabState extends State<MembersTab>
       last: lastDocument,
       group: widget.group,
     );
-    print('querySnapshot.docs.length' + querySnapshot.docs.length.toString());
-    if (querySnapshot.docs.length < documentLimit) {
-      hasMore = false;
-    }
-//    lastDocument = querySnapshot.docs[querySnapshot.docs.length - 1];
-    members.addAll(querySnapshot.docs);
+
     setState(() {
+      members.insertAll(members.length - 1, querySnapshot.docs);
       isLoading = false;
+
+      if (querySnapshot.docs.length < documentLimit)
+        hasMore = false;
+      else
+        lastDocument = querySnapshot.docs.last;
     });
   }
 

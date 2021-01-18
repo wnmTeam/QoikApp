@@ -21,14 +21,14 @@ class SelectFriendsPage extends StatefulWidget {
 class _SelectFriendsPageState extends State<SelectFriendsPage> {
   bool isLoading = false;
   bool hasMore = true;
-  int documentLimit = 10;
+  int documentLimit = 2;
   DocumentSnapshot lastDocument = null;
 
   FriendsController _friendsController = FriendsController();
   AuthController _authController = AuthController();
   GroupsController _groupsController = GroupsController();
 
-  List<DocumentSnapshot> friends = [];
+  List<DocumentSnapshot> friends = [null, null];
 
   List<String> selectedMembers = [];
 
@@ -75,6 +75,22 @@ class _SelectFriendsPageState extends State<SelectFriendsPage> {
       body: ListView.builder(
         itemCount: friends.length,
         itemBuilder: (context, index) {
+          if (index == 0)
+            return SizedBox(
+              height: 20,
+            );
+          else if (index == friends.length - 1) {
+            if (isLoading)
+              return Center(child: CircularProgressIndicator());
+            else if (hasMore)
+              return FlatButton(
+                onPressed: () {
+                  getMyFriends();
+                },
+                child: Text('Loade More'),
+              );
+            return Container();
+          }
           return UserWidget(
             id: friends[index].id,
             addUser: (id, selected) {
@@ -111,11 +127,12 @@ class _SelectFriendsPageState extends State<SelectFriendsPage> {
       print('friends');
       print(value.docs.length);
       setState(() {
-        friends.addAll(value.docs);
+        friends.insertAll(friends.length - 1, value.docs);
         isLoading = false;
-        try {
-          lastDocument = friends.last;
-        } catch (e) {}
+        if (value.docs.length < documentLimit)
+          hasMore = false;
+        else
+          lastDocument = value.docs.last;
       });
     });
   }
@@ -156,7 +173,7 @@ class _UserWidgetState extends State<UserWidget> {
               },
               leading: ClipRRect(
                 borderRadius: BorderRadius.circular(57),
-                child:  Image.network(
+                child: Image.network(
                   user.img,
                   fit: BoxFit.cover,
                   width: 57,

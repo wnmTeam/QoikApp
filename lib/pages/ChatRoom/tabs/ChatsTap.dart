@@ -21,7 +21,7 @@ class _ChatsTabState extends State<ChatsTab>
   AuthController _authController = AuthController();
   ChatController _chatsController = ChatController();
 
-  List<DocumentSnapshot> chats = [];
+  List<DocumentSnapshot> chats = [null, null];
 
   @override
   void initState() {
@@ -34,6 +34,22 @@ class _ChatsTabState extends State<ChatsTab>
     return ListView.builder(
       itemCount: chats.length,
       itemBuilder: (con, index) {
+        if (index == 0)
+          return SizedBox(
+            height: 20,
+          );
+        else if (index == chats.length - 1) {
+          if (isLoading)
+            return Center(child: CircularProgressIndicator());
+          else if (hasMore)
+            return FlatButton(
+              onPressed: () {
+                getChats();
+              },
+              child: Text('Loade More'),
+            );
+          return Container();
+        }
         return _chatBuilder(con, Group().fromMap(chats[index].data()));
       },
     );
@@ -89,7 +105,6 @@ class _ChatsTabState extends State<ChatsTab>
     }
     setState(() {
       isLoading = true;
-//      posts.add(null);
     });
     _chatsController
         .getChats(
@@ -101,11 +116,12 @@ class _ChatsTabState extends State<ChatsTab>
       print('chats');
       print(value.docs.length);
       setState(() {
-        chats.addAll(value.docs);
+        chats.insertAll(chats.length - 1, value.docs);
         isLoading = false;
-        try {
-          lastDocument = chats.last;
-        } catch (e) {}
+        if (value.docs.length < documentLimit)
+          hasMore = false;
+        else
+          lastDocument = value.docs.last;
       });
     });
   }

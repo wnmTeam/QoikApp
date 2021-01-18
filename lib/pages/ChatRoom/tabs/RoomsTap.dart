@@ -21,7 +21,7 @@ class _RoomsTabState extends State<RoomsTab>with AutomaticKeepAliveClientMixin {
   AuthController _authController = AuthController();
   ChatController _chatsController = ChatController();
 
-  List<DocumentSnapshot> rooms = [null];
+  List<DocumentSnapshot> rooms = [null, null];
 
   @override
   void initState() {
@@ -34,7 +34,7 @@ class _RoomsTabState extends State<RoomsTab>with AutomaticKeepAliveClientMixin {
     return ListView.builder(
       itemCount: rooms.length,
       itemBuilder: (con, index) {
-        if (rooms[index] == null)
+        if (index == 0)
           return ListTile(
             contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
             leading: Icon(Icons.group),
@@ -43,6 +43,18 @@ class _RoomsTabState extends State<RoomsTab>with AutomaticKeepAliveClientMixin {
               Navigator.pushNamed(context, '/CreateGroupPage');
             },
           );
+        else if (index == rooms.length - 1) {
+          if (isLoading)
+            return Center(child: CircularProgressIndicator());
+          else if (hasMore)
+            return FlatButton(
+              onPressed: () {
+                getRooms();
+              },
+              child: Text('Loade More'),
+            );
+          return Container();
+        }
         return _chatBuilder(con, Group().fromMap(rooms[index].data()));
       },
     );
@@ -94,11 +106,12 @@ class _RoomsTabState extends State<RoomsTab>with AutomaticKeepAliveClientMixin {
       print(value.docs.length);
       print(value.docs[0].id);
       setState(() {
-        rooms.addAll(value.docs);
+        rooms.insertAll(rooms.length - 1, value.docs);
         isLoading = false;
-        try {
-          lastDocument = rooms.last;
-        } catch (e) {}
+        if (value.docs.length < documentLimit)
+          hasMore = false;
+        else
+          lastDocument = value.docs.last;
       });
     });
   }

@@ -29,8 +29,7 @@ class GroupsApi {
 
     if (last == null) {
       log(reference.path, name: 'reference');
-      return reference.get();
-//      return reference.limit(limit).get();
+      return reference.limit(limit).get();
     } else {
       return reference.startAfterDocument(last).limit(limit).get();
     }

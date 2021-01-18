@@ -33,7 +33,7 @@ class _PostsTabState extends State<PostsTab>
 
   PostsController _postsController = PostsController();
 
-  List<DocumentSnapshot> posts = [];
+  List<DocumentSnapshot> posts = [null];
 
 //  List<List<DocumentChange>> myposts = [];
 //  List<Stream> streams = [];

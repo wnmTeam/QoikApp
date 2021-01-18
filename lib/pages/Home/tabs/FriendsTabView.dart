@@ -23,11 +23,13 @@ class _FriendsTabState extends State<FriendsTab> {
   FriendsController _friendsController = FriendsController();
   AuthController _authController = AuthController();
 
-  List<DocumentSnapshot> friends = [null, null];
+  List<DocumentSnapshot> friends = [null, null, null];
 
   Future<void> refresh() {
     setState(() {
-      friends = [null, null];
+      friends = [null, null, null];
+      hasMore = true;
+      lastDocument = null;
     });
     getMyFriends();
     return Future.delayed(Duration(milliseconds: 1));
@@ -73,10 +75,22 @@ class _FriendsTabState extends State<FriendsTab> {
                       )
                     ],
                   );
-                else if (index == friends.length - 1)
+                else if (index == friends.length - 2)
                   return SizedBox(
                     height: 30,
                   );
+                else if (index == friends.length - 1) {
+                  if (isLoading)
+                    return Center(child: CircularProgressIndicator());
+                  else if (hasMore)
+                    return FlatButton(
+                      onPressed: () {
+                        getMyFriends();
+                      },
+                      child: Text('Loade More'),
+                    );
+                  return Container();
+                }
                 return UserWidget(id: friends[index].id);
               },
             ),
@@ -96,7 +110,6 @@ class _FriendsTabState extends State<FriendsTab> {
     }
     setState(() {
       isLoading = true;
-//      posts.add(null);
     });
     _friendsController
         .getFriends(
@@ -108,11 +121,12 @@ class _FriendsTabState extends State<FriendsTab> {
       print('friends');
       print(value.docs.length);
       setState(() {
-        friends.insertAll(friends.length - 1, value.docs);
+        friends.insertAll(friends.length - 2, value.docs);
         isLoading = false;
-        try {
-          lastDocument = friends.last;
-        } catch (e) {}
+        if (value.docs.length < documentLimit)
+          hasMore = false;
+        else
+          lastDocument = value.docs.last;
       });
     });
   }
