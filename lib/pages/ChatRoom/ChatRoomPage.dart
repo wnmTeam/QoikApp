@@ -169,10 +169,13 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                               ),
                               Expanded(
                                 child: TextField(
+                                  maxLines: 5,
+                                  minLines: 1,
                                   textAlign: TextAlign.start,
                                   controller: _messageController,
                                   enableSuggestions: true,
                                   decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(vertical: 18, horizontal: 0),
                                     border: InputBorder.none,
                                     hintText: Languages.translate(
                                         context, 'type_a_message'),
@@ -192,29 +195,23 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                         ),
                       ),
                       SizedBox(width: 10),
-                      Container(
-                        padding: const EdgeInsets.all(0),
-                        decoration: BoxDecoration(
-                            color: ConstValues.firstColor,
-                            shape: BoxShape.circle),
-                        child: FloatingActionButton(
-                          onPressed: () {
-                            if (_messageController.text.trim().isEmpty) return;
-                            _chatController.addMessage(
-                              message: Message(
-                                idOwner: _authController.getUser.uid,
-                                text: _messageController.text.trim(),
-                                date: DateTime.now(),
-                              ),
-                              id_chat: getChatID(),
-                            );
-                            _messageController.clear();
-                          },
-                          child: Icon(
-                            // Icons.keyboard_voice,
-                            Icons.send,
-                            color: Colors.white,
-                          ),
+                      FloatingActionButton(
+                        backgroundColor: ConstValues.firstColor,
+                        onPressed: () {
+                          if (_messageController.text.trim().isEmpty) return;
+                          _chatController.addMessage(
+                            message: Message(
+                              idOwner: _authController.getUser.uid,
+                              text: _messageController.text.trim(),
+                            ),
+                            id_chat: getChatID(),
+                          );
+                          _messageController.clear();
+                        },
+                        child: Icon(
+                          // Icons.keyboard_voice,
+                          Icons.send,
+                          color: Colors.white,
                         ),
                       ),
                     ],
@@ -295,7 +292,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _message(message, false, Colors.black54, 0, 20, 20, 20),
+            _message(message, false, ConstValues.firstColor, 0, 20, 20, 20),
             SizedBox(
               width: 5,
             ),
@@ -317,7 +314,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             SizedBox(
               width: 5,
             ),
-            _message(message, true, Colors.black26, 20, 20, 20, 0),
+            _message(message, true, ConstValues.firstColor, 20, 20, 20, 0),
           ],
         ),
       );
@@ -353,13 +350,13 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                     message.text,
                     style: TextStyle(color: Colors.white),
                   ),
+                  SizedBox(
+                    height: 5,
+                  ),
                   Text(
-                    "\n" +
-                        message.date.hour.toString() +
+                    message.date.hour.toString() +
                         ":" +
-                        message.date.minute.toString() +
-                        ":" +
-                        message.date.second.toString(),
+                        message.date.minute.toString(),
                     style: TextStyle(color: Colors.white54),
                   ),
                 ],

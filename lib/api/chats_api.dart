@@ -37,7 +37,7 @@ class ChatsApi {
 
   Future addMessage({Message message, String id_chat}) {
     Map m = message.toMap();
-//    m['date'] = FieldValue.serverTimestamp();
+    m['date'] = FieldValue.serverTimestamp();
 
     return _firestore
         .collection('groups')
@@ -96,6 +96,4 @@ class ChatsApi {
   getChat(chatId) {
     return _firestore.collection('chats').doc(chatId).get();
   }
-
-
 }
