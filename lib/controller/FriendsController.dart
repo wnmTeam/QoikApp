@@ -42,4 +42,18 @@ class FriendsController {
       id_user2: id_user2,
     );
   }
+
+  deleteFriendRequest({String id_user, String id_other}) {
+    return api.deleteFriendRequest(
+      id_user: id_user,
+      id_other: id_other,
+    );
+  }
+
+  getFriendRequest({String id_user, String id_other}) {
+    return api.getFriendRequest(
+      id_user: id_user,
+      id_other: id_other,
+    );
+  }
 }

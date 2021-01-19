@@ -163,18 +163,12 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
                 fontSize: 12,
               ),
             ),
-            trailing: RaisedButton(
-              elevation: 0,
-              color: Colors.indigo,
+            trailing: FlatButton.icon(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: Text(
-                'accept',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
+             icon: Icon(Icons.person_add),
+              label: Text('Accept'),
               onPressed: () async {
                 await _friendsController.acceptRequestFriend(
                     id_requestSender: user.id);

@@ -34,6 +34,7 @@ class MapScreenState extends State<ProfilePage> {
   Group chat;
   bool isFriend = false;
   bool isRequested = false;
+  bool isHeRequeste = false;
 
   var _image;
 
@@ -167,43 +168,84 @@ class MapScreenState extends State<ProfilePage> {
                                                     )
                                                   : isRequested
                                                       ? FlatButton.icon(
-                                                          color: Colors
-                                                              .indigoAccent,
+                                                          color:
+                                                              Colors.grey[300],
                                                           icon: Icon(
-                                                            Icons.person_add,
+                                                            Icons.person_remove,
                                                             color:
                                                                 Colors.blueGrey,
                                                           ),
                                                           label: Text(
-                                                              'add Friend'),
-                                                          onPressed:
-                                                              () async {},
-                                                        )
-                                                      : FlatButton.icon(
-                                                          icon: Icon(
-                                                            Icons.person_add,
-                                                            color:
-                                                                Colors.blueGrey,
-                                                          ),
-                                                          label: Text(
-                                                              'add Friend'),
+                                                              'Cansel Request'),
                                                           onPressed: () async {
                                                             await _friendsController
-                                                                .sendRequestFriend(
-                                                              id_sender:
-                                                                  _authController
-                                                                      .getUser
-                                                                      .uid,
-                                                              id_receiver:
-                                                                  widget
-                                                                      .user.id,
+                                                                .deleteFriendRequest(
+                                                              id_user: widget
+                                                                  .user.id,
+                                                              id_other: MyUser
+                                                                  .myUser.id,
                                                             );
                                                             setState(() {
                                                               isRequested =
-                                                                  true;
+                                                                  false;
                                                             });
                                                           },
-                                                        ),
+                                                        )
+                                                      : isHeRequeste
+                                                          ? FlatButton.icon(
+                                                              color: Colors
+                                                                  .grey[300],
+                                                              icon: Icon(
+                                                                Icons
+                                                                    .person_add,
+                                                                color: Colors
+                                                                    .blueGrey,
+                                                              ),
+                                                              label: Text(
+                                                                  'Accept'),
+                                                              onPressed:
+                                                                  () async {
+                                                                await _friendsController
+                                                                    .acceptRequestFriend(
+                                                                  id_requestSender:
+                                                                      widget
+                                                                          .user
+                                                                          .id,
+                                                                );
+                                                                setState(() {
+                                                                  isFriend =
+                                                                      true;
+                                                                });
+                                                              },
+                                                            )
+                                                          : FlatButton.icon(
+                                                              icon: Icon(
+                                                                Icons
+                                                                    .person_add,
+                                                                color: Colors
+                                                                    .blueGrey,
+                                                              ),
+                                                              label: Text(
+                                                                  'Add Friend'),
+                                                              onPressed:
+                                                                  () async {
+                                                                await _friendsController
+                                                                    .sendRequestFriend(
+                                                                  id_sender:
+                                                                      _authController
+                                                                          .getUser
+                                                                          .uid,
+                                                                  id_receiver:
+                                                                      widget
+                                                                          .user
+                                                                          .id,
+                                                                );
+                                                                setState(() {
+                                                                  isRequested =
+                                                                      true;
+                                                                });
+                                                              },
+                                                            ),
                                               FlatButton.icon(
                                                 icon: Icon(
                                                   Icons.chat,
@@ -458,10 +500,12 @@ class MapScreenState extends State<ProfilePage> {
   }
 
   getChat() async {
-    if (isMyProfile)
+    if (isMyProfile) {
       setState(() {
         chatLoading = false;
       });
+      return;
+    }
     var d = await _chatsController.getChat(getChatID());
 
     setState(() {
@@ -471,17 +515,46 @@ class MapScreenState extends State<ProfilePage> {
   }
 
   getFriend() async {
-    if (isMyProfile)
+    if (isMyProfile) {
       setState(() {
         friendLoading = false;
       });
+      return;
+    }
     var d = await _friendsController.getFriend(
-      id_user: _authController.getUser.uid,
+      id_user: MyUser.myUser.id,
       id_friend: widget.user.id,
     );
-
+    if (d.data() != null) {
+      setState(() {
+        isFriend = true;
+        friendLoading = false;
+      });
+      return;
+    }
+    d = await _friendsController.getFriendRequest(
+      id_user: MyUser.myUser.id,
+      id_other: widget.user.id,
+    );
+    if (d.data() != null) {
+      setState(() {
+        isHeRequeste = true;
+        friendLoading = false;
+      });
+      return;
+    }
+    d = await _friendsController.getFriendRequest(
+      id_user: widget.user.id,
+      id_other: MyUser.myUser.id,
+    );
+    if (d.data() != null) {
+      setState(() {
+        isRequested = true;
+        friendLoading = false;
+      });
+      return;
+    }
     setState(() {
-      if (d.data() != null) isFriend = true;
       friendLoading = false;
     });
   }
@@ -569,41 +642,6 @@ class _FriendWidgetState extends State<FriendWidget> {
                       ),
                     ),
                   ),
-                  !widget.isMyProfile
-                      ? InkWell(
-                          onTap: () {},
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Icon(
-                              Icons.person_add,
-                              color: Colors.indigo[400],
-                            ),
-                          ),
-                        )
-                      : InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              '/ChatRoomPage',
-                              arguments: {
-                                'user': _user,
-                                'group': Group(
-                                  members: [
-                                    _user.id,
-                                    MyUser.myUser.id,
-                                  ],
-                                ),
-                              },
-                            );
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Icon(
-                              Icons.chat,
-                              color: Colors.indigo[400],
-                            ),
-                          ),
-                        )
                 ],
               ),
             )

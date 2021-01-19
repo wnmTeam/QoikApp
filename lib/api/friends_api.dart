@@ -137,4 +137,22 @@ class FriendsApi {
 
     return batch.commit();
   }
+
+  deleteFriendRequest({String id_user, String id_other}) {
+    return _firestore
+        .collection('users')
+        .doc(id_user)
+        .collection('friendRequests')
+        .doc(id_other)
+        .delete();
+  }
+
+  getFriendRequest({String id_user, String id_other}) {
+    return _firestore
+        .collection('users')
+        .doc(id_user)
+        .collection('friendRequests')
+        .doc(id_other)
+        .get();
+  }
 }
