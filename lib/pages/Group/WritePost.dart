@@ -6,6 +6,8 @@ import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/controller/PostsController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 
+import '../../const_values.dart';
+
 class WritePostPage extends StatefulWidget {
   Group group;
 
@@ -23,6 +25,10 @@ class _WritePostPageState extends State<WritePostPage> {
 
   List<File> _images = [];
 
+  bool waiting = false;
+
+  Size size;
+
   @override
   void initState() {
     super.initState();
@@ -30,6 +36,9 @@ class _WritePostPageState extends State<WritePostPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    size = MediaQuery.of(context).size;
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -89,11 +98,31 @@ class _WritePostPageState extends State<WritePostPage> {
                 _sendPost(_postTextController.text);
               },
               color: Colors.indigo,
-              child: Text(
+              child: !waiting?Text(
                 'submet',
                 style: TextStyle(
                   color: Colors.white,
                 ),
+              ):Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(backgroundColor: Colors.white,)),
+                  SizedBox(
+                    width: 12,
+                  ),
+                  Text(
+                    'WAITING..',
+                    style: TextStyle(
+                      fontSize: size.width / ConstValues.fontSize_2,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
             )
           ],
@@ -101,6 +130,9 @@ class _WritePostPageState extends State<WritePostPage> {
   }
 
   void _sendPost(String text) async {
+    setState(() {
+      waiting = true;
+    });
     await _postsController.createPost(text, _images, widget.group.id);
     Navigator.of(context).pop();
   }

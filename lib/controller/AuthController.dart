@@ -71,13 +71,6 @@ class AuthController {
   Future addPoint({String id_user}) => api.addPoint(id_user: id_user);
 
   Future updateUserTag(User user) {
-    DateTime _temp = DateTime(
-        user.recordDate.year,
-        user.recordDate.month,
-        user.recordDate.day,
-        user.recordDate.hour,
-        user.recordDate.minute,
-        user.recordDate.second);
     switch (user.tag) {
       case User.TAG_NEW_USER:
         if (DateTime.now().difference(user.recordDate).inDays > 6)

@@ -80,7 +80,11 @@ class _FriendsRequestsPageState extends State<FriendsRequestsPage> {
                 );
               return Container();
             }
-            return RequestFriendWidget(friendRequests[index].id);
+            return RequestFriendWidget(friendRequests[index].id, () {
+              setState(() {
+                friendRequests.removeAt(index);
+              });
+            });
           },
         ),
       ),
@@ -121,8 +125,9 @@ class _FriendsRequestsPageState extends State<FriendsRequestsPage> {
 
 class RequestFriendWidget extends StatefulWidget {
   String id_sender;
+  Function deleteRequest;
 
-  RequestFriendWidget(this.id_sender);
+  RequestFriendWidget(this.id_sender, this.deleteRequest);
 
   @override
   _RequestFriendWidgetState createState() => _RequestFriendWidgetState();
@@ -167,7 +172,10 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
-             icon: Icon(Icons.person_add),
+              icon: Icon(
+                Icons.person_add,
+                color: Colors.grey[700],
+              ),
               label: Text('Accept'),
               onPressed: () async {
                 await _friendsController.acceptRequestFriend(
@@ -183,6 +191,15 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
                     name: '',
                   ).setId(getChatID()),
                 );
+                Navigator.pushNamed(
+                  context,
+                  '/ProfilePage',
+                  arguments: {
+                    'id_user': user.id,
+                    'user': user,
+                  },
+                );
+                widget.deleteRequest();
               },
             ),
           );

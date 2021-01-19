@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
+import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/GroupsController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
 class GroupsChatsTab extends StatefulWidget {
   @override
@@ -29,38 +31,27 @@ class _GroupsChatsTabState extends State<GroupsChatsTab>
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: _authController.getUserInfo(_authController.getUser.uid),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            user = User().fromMap(snapshot.data.data());
-            return ListView.builder(
-              itemCount: user.groups.length,
-              itemBuilder: (context, index) {
-                return FutureBuilder(
-                  future: _groupsController.getGroupInfo(
-                      id_group: user.groups[index]),
-                  builder: (_, snapshot) {
-                    if (snapshot.hasData) {
-                      print(user.groups[index]);
-                      Group group = Group()
-                          .fromMap(snapshot.data.data())
-                          .setId(user.groups[index]);
-                      return _groupBuilder(
-                        context,
-                        group,
-                      );
-                    }
-                    return Container();
-                  },
-                );
-              },
-            );
-          }
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        });
+    return ListView.builder(
+      itemCount: MyUser.myUser.groups.length,
+      itemBuilder: (context, index) {
+        return FutureBuilder(
+          future: _groupsController.getGroupInfo(id_group: MyUser.myUser.groups[index]),
+          builder: (_, snapshot) {
+            if (snapshot.hasData) {
+              print(MyUser.myUser.groups[index]);
+              Group group = Group()
+                  .fromMap(snapshot.data.data())
+                  .setId(MyUser.myUser.groups[index]);
+              return _groupBuilder(
+                context,
+                group,
+              );
+            }
+            return UserPlaceholder();
+          },
+        );
+      },
+    );
   }
 
   Widget _groupBuilder(BuildContext context, Group group) {

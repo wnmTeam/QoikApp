@@ -12,6 +12,7 @@ import 'package:stumeapp/pages/Home/tabs/HomeTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/LibraryTabView.dart';
 import 'package:stumeapp/pages/Home/widgets/FABwithBottomAppBar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -19,7 +20,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   int _currentIndex;
+  bool loading = true;
   List tabViews = [];
 
   AuthController _authController = AuthController();
@@ -31,6 +35,7 @@ class _HomePageState extends State<HomePage> {
     _notificationApi.requestNotificationPermissions();
     print('done ');
     _currentIndex = 1;
+    _getUserInfo();
     tabViews = [
       HomeTab(),
       GroupsChatsTab(),
@@ -39,9 +44,21 @@ class _HomePageState extends State<HomePage> {
     ];
   }
 
+  _getUserInfo() async {
+    DocumentSnapshot d =
+        await _authController.getUserInfo(_authController.getUser.uid);
+    User user = User().fromMap(d.data()).setId(d.id);
+    MyUser.myUser = user;
+    _authController.updateUserTag(user);
+    setState(() {
+      loading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
         iconTheme: IconThemeData(color: ConstValues.firstColor),
@@ -54,19 +71,72 @@ class _HomePageState extends State<HomePage> {
         ),
         centerTitle: false,
         titleSpacing: 5,
+//        leading: Row(
+//          children: [
+//            IconButton(
+//              icon: Icon(Icons.menu),
+//              onPressed: () => _scaffoldKey.currentState.openDrawer(),
+//            ),
+//            IconButton(
+//              icon: Icon(
+//                Icons.notifications,
+//                color: Colors.blueGrey,
+//              ),
+//              onPressed: () {
+//                Navigator.pushNamed(context, '/ChatsPage');
+//              },
+//            ),
+//          ],
+//        ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: IconButton(
-              icon: Icon(
-                Icons.chat,
-                color: Colors.blueGrey,
-              ),
-              onPressed: () {
-                Navigator.pushNamed(context, '/ChatsPage');
-              },
+          IconButton(
+            icon: Icon(
+              Icons.notifications,
+              color: Colors.blueGrey,
             ),
-          )
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.chat,
+              color: Colors.blueGrey,
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, '/ChatsPage');
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+            child: !loading
+                ? InkWell(
+                    onTap: () {},
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.network(
+                            MyUser.myUser.img,
+                            fit: BoxFit.cover,
+                            width: 40,
+                            height: 40,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            width: 40,
+                            height: 40,
+                            color: Colors.grey[300],
+                          )),
+                    ],
+                  ),
+          ),
         ],
       ),
       bottomNavigationBar: FABBottomAppBar(
@@ -139,22 +209,11 @@ class _HomePageState extends State<HomePage> {
       ),
       drawerScrimColor: ConstValues.firstColor,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: FutureBuilder(
-        future: _authController.getUserInfo(_authController.getUser.uid),
-        builder: (_, snapshot) {
-          if (snapshot.hasData) {
-            User user =
-                User().fromMap(snapshot.data.data()).setId(snapshot.data.id);
-            MyUser.myUser = user;
-            _authController.updateUserTag(user);
-//            _storageController.setUser(user);
-            return tabViews[_currentIndex];
-          }
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-      ),
+      body: !loading
+          ? tabViews[_currentIndex]
+          : Center(
+              child: CircularProgressIndicator(),
+            ),
     );
   }
 

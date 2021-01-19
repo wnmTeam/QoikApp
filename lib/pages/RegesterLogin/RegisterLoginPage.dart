@@ -32,6 +32,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
   bool _checkedTrueInfo = false;
 
   bool _isRegister = true;
+  bool waiting = false;
 
   Future<bool> _onBackBressed() {
     if (!_isRegister)
@@ -232,19 +233,50 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 color: Colors.indigo,
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
-                    await _authController.login(
-                        _emailController.text, _passwordController.text);
-                    print('login done');
+                    setState(() {
+                      waiting = true;
+                    });
+                    try {
+                      await _authController.login(
+                          _emailController.text, _passwordController.text);
+                    } on Exception catch (e) {
+                      // TODO
+                    }
                   }
+                  setState(() {
+                    waiting = false;
+                  });
                 },
-                child: Text(
-                  'LOG IN',
-                  style: TextStyle(
-                    fontSize: width / ConstValues.fontSize_2,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                child: !waiting
+                    ? Text(
+                        'LOG IN',
+                        style: TextStyle(
+                          fontSize: width / ConstValues.fontSize_2,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: CircularProgressIndicator(backgroundColor: Colors.white,)),
+                          SizedBox(
+                            width: 12,
+                          ),
+                          Text(
+                            'WAITING..',
+                            style: TextStyle(
+                              fontSize: width / ConstValues.fontSize_2,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
                 padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
@@ -501,38 +533,68 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               RaisedButton(
                 color: Colors.indigo,
                 onPressed: () async {
+                  setState(() {
+                    waiting = true;
+                  });
                   if (_formKey.currentState.validate() &&
                       _checkedTrueInfo == true) {
-                    _authController.createAccount(
-                      _emailController.text,
-                      _passwordController.text,
-                      User(
-                        firstName: _firstNameController.text,
-                        secondName: _secondNameController.text,
-                        degree: _degree,
-                        gender: _gender,
-                        university: _university,
-                        college: _college,
-                        groups: [_university, _college],
-                        points: 10,
-                        enterCount: 0,
-                        bio: 'Hey There.. I am New User.',
-                        recordDate: DateTime.now(),
-                      ),
-                    );
+                    try {
+                      _authController.createAccount(
+                        _emailController.text,
+                        _passwordController.text,
+                        User(
+                          firstName: _firstNameController.text,
+                          secondName: _secondNameController.text,
+                          degree: _degree,
+                          gender: _gender,
+                          university: _university,
+                          college: _college,
+                          groups: [_university, _college],
+                          points: 10,
+                          enterCount: 0,
+                          bio: 'Hey There.. I am New User.',
+                          recordDate: DateTime.now(),
+                        ),
+                      );
+                    } catch (e) {}
                   }
+                  setState(() {
+                    waiting = false;
+                  });
                 },
                 padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
-                child: Text(
-                  "Create account",
-                  style: TextStyle(
-                    fontSize: width / ConstValues.fontSize_2,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
+                child: !waiting
+                    ? Text(
+                        "Create account",
+                        style: TextStyle(
+                          fontSize: width / ConstValues.fontSize_2,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(backgroundColor: Colors.white,)),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Text(
+                      'WAITING..',
+                      style: TextStyle(
+                        fontSize: width / ConstValues.fontSize_2,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(
