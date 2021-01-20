@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 class ConstValues {
 
-  static Color secondColor = Color(0xffff4463);
+  static Color secondColor = Color(0xffbb6377);
   static Color titleColor = Colors.cyan;
   static Color subTitleColor = Colors.black87;
   static Color textColor = Colors.black;
@@ -17,7 +17,7 @@ class ConstValues {
   static double fontSize_4 = 28;
   static double fontSize_5 = 28;
 
-
+static Color accentColor =  Color(0xFF8D5CD7);
 
   static MaterialColor firstColor = MaterialColor(0xFFE51A4B, {
     50: Color.fromRGBO(229, 26, 75, .1),

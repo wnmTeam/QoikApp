@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/User.dart';
+import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/pages/ChatRoom/tabs/ChatsTap.dart';
 import 'package:stumeapp/pages/ChatRoom/tabs/RoomsTap.dart';
@@ -44,17 +45,17 @@ class _ChatsPageState extends State<ChatsPage>
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          iconTheme: IconThemeData(color: Colors.grey[700]),
+          backgroundColor: ConstValues.firstColor,
           title: TabBar(
+            indicatorColor: Colors.white70,
             indicatorPadding: EdgeInsets.symmetric(horizontal: 30),
             controller: _tabController,
             tabs: [
               Tab(
-                child: Text('Chats', style: TextStyle(color: Colors.grey[600]),),
+                child: Text('Chats',),
               ),
               Tab(
-                child: Text('Rooms', style: TextStyle(color: Colors.grey[600]),),
+                child: Text('Rooms',),
               ),
             ],
           ),

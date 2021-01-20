@@ -61,13 +61,12 @@ class _HomePageState extends State<HomePage> {
       key: _scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
-        iconTheme: IconThemeData(color: ConstValues.firstColor),
-        backgroundColor: Colors.white,
+        backgroundColor: ConstValues.firstColor,
         title: SvgPicture.asset(
           'assets/logo.svg',
           // width: 24,
           height: 36,
-          color: ConstValues.firstColor,
+          color: Colors.white,
         ),
         centerTitle: false,
         titleSpacing: 5,
@@ -92,13 +91,13 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             icon: Icon(
               Icons.notifications,
-              color: Colors.blueGrey,
+              color: Colors.white,
             ),
           ),
           IconButton(
             icon: Icon(
               Icons.chat,
-              color: Colors.blueGrey,
+              color: Colors.white,
             ),
             onPressed: () {
               Navigator.pushNamed(context, '/ChatsPage');
@@ -108,7 +107,15 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
             child: !loading
                 ? InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pushNamed(
+                        '/ProfilePage',
+                        arguments: {
+                          'user': MyUser.myUser,
+                          'id_user': _authController.getUser.uid,
+                        },
+                      );
+                    },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -140,8 +147,9 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       bottomNavigationBar: FABBottomAppBar(
+        backgroundColor: ConstValues.firstColor,
         notchedShape: CircularNotchedRectangle(),
-        selectedColor: Colors.indigo,
+        selectedColor: Colors.white,
         onTabSelected: _selectedTab,
         items: [
           FABBottomAppBarItem(

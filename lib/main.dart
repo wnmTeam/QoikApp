@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       showSemanticsDebugger: false,
       theme: ThemeData(
         primarySwatch: ConstValues.firstColor ,
-        accentColor: ConstValues.firstColor[700],
+        accentColor: Color(0xFF8D5CD7),
       ),
 
       // darkTheme: ThemeData(

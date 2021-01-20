@@ -74,20 +74,6 @@ class FriendsApi {
         });
 
     batch.set(
-        _firestore.collection('users').doc(id_requestSender),
-        {
-          'groups': FieldValue.arrayUnion([getChatID(id, id_requestSender)])
-        },
-        SetOptions(merge: true));
-
-    batch.set(
-        _firestore.collection('users').doc(id),
-        {
-          'groups': FieldValue.arrayUnion([getChatID(id, id_requestSender)])
-        },
-        SetOptions(merge: true));
-
-    batch.set(
         _firestore
             .collection('users')
             .doc(id_requestSender)

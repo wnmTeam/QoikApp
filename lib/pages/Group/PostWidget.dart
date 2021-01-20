@@ -5,6 +5,7 @@ import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/Post.dart';
 import 'package:stumeapp/Models/User.dart';
+import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/PostsController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -18,9 +19,14 @@ class PostWidget extends StatefulWidget {
   Post post;
   Group group;
   Function deletePost;
-  Function editPost;
+  Function updatePost;
 
-  PostWidget({this.post, this.group, this.deletePost, this.editPost});
+  PostWidget({
+    this.post,
+    this.group,
+    this.deletePost,
+    this.updatePost,
+  });
 
   @override
   _PostWidgetState createState() => _PostWidgetState();
@@ -223,8 +229,8 @@ class _PostWidgetState extends State<PostWidget>
                               });
                           },
                           color: widget.post.getIsLiked
-                              ? Color.fromARGB(100, 100, 100, 255)
-                              : Colors.grey[200],
+                              ? ConstValues.firstColor[100]
+                              : Colors.grey[100],
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(25)),
                           child: Container(
@@ -235,7 +241,7 @@ class _PostWidgetState extends State<PostWidget>
                                   'assets/like.svg',
                                   width: 24,
                                   height: 24,
-                                  color: Colors.blueGrey,
+                                  color: ConstValues.secondColor,
                                 ),
                                 SizedBox(
                                   width: 6,
@@ -256,7 +262,7 @@ class _PostWidgetState extends State<PostWidget>
                         });
                         _loadComments();
                       },
-                      color: Colors.grey[200],
+                      color: Colors.grey[100],
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25)),
                       child: Container(
@@ -265,7 +271,7 @@ class _PostWidgetState extends State<PostWidget>
                           children: [
                             Icon(
                               Icons.chat_bubble_outline,
-                              color: Colors.blueGrey,
+                              color: ConstValues.secondColor,
                             ),
                             SizedBox(
                               width: 6,
@@ -310,8 +316,8 @@ class _PostWidgetState extends State<PostWidget>
                               });
                           },
                           color: widget.post.getIsFollowed
-                              ? Color.fromARGB(100, 100, 100, 255)
-                              : Colors.grey[200],
+                              ? ConstValues.firstColor[100]
+                              : Colors.grey[100],
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(25)),
                           child: Container(
@@ -320,7 +326,7 @@ class _PostWidgetState extends State<PostWidget>
                               children: [
                                 Icon(
                                   Icons.add_box,
-                                  color: Colors.blueGrey,
+                                  color: ConstValues.secondColor,
                                 ),
                                 SizedBox(
                                   width: 6,
@@ -398,7 +404,7 @@ class _PostWidgetState extends State<PostWidget>
                       ClipRRect(
                         borderRadius: BorderRadius.circular(57),
                         child: Image.network(
-                          user.img,
+                          MyUser.myUser.img,
                           fit: BoxFit.cover,
                           width: 40,
                           height: 40,
@@ -418,7 +424,7 @@ class _PostWidgetState extends State<PostWidget>
                       IconButton(
                           icon: Icon(
                             Icons.send,
-                            color: Colors.indigo,
+                            color: ConstValues.firstColor,
                           ),
                           onPressed: () async {
                             String text = _commentController.text;
@@ -531,9 +537,6 @@ class _PostWidgetState extends State<PostWidget>
       id_post: widget.post.id,
       group: widget.group,
     );
-    if (d.data() != null)
-      setState(() {
-        widget.post = Post().fromMap(d.data())..setId(widget.post.id);
-      });
+    if (d.data() != null) widget.updatePost(d);
   }
 }

@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/Models/Post.dart';
+import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/PostsController.dart';
 
 import '../PostWidget.dart';
@@ -104,8 +105,7 @@ class _PostsTabState extends State<PostsTab>
           itemCount: posts.length,
           itemBuilder: (context, index) {
             if (index == posts.length - 1) {
-              if (isLoading)
-                return Center(child: CircularProgressIndicator());
+              if (isLoading) return Center(child: CircularProgressIndicator());
               return Container();
             }
             return PostWidget(
@@ -114,6 +114,11 @@ class _PostsTabState extends State<PostsTab>
               deletePost: () {
                 setState(() {
                   posts.removeAt(index);
+                });
+              },
+              updatePost: (d) {
+                setState(() {
+                  posts[index] = d;
                 });
               },
             );
@@ -130,7 +135,7 @@ class _PostsTabState extends State<PostsTab>
                   },
                 );
               },
-              backgroundColor: Colors.indigo,
+              backgroundColor: ConstValues.accentColor,
               child: Icon(
                 Icons.edit,
                 color: Colors.white,

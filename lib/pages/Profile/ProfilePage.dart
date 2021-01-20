@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
+import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
 import 'package:stumeapp/controller/FriendsController.dart';
@@ -83,7 +84,7 @@ class MapScreenState extends State<ProfilePage> {
                               bottomLeft: Radius.circular(15),
                               bottomRight: Radius.circular(11),
                             ),
-                            color: Colors.indigo[300],
+                            color: ConstValues.accentColor,
                           ),
                           child: Column(
                             children: <Widget>[
@@ -300,7 +301,8 @@ class MapScreenState extends State<ProfilePage> {
                                                     widget.user.points
                                                         .toString(),
                                                     style: TextStyle(
-                                                      color: Colors.indigo,
+                                                      color: ConstValues
+                                                          .firstColor,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       fontSize: 40,
@@ -313,7 +315,8 @@ class MapScreenState extends State<ProfilePage> {
                                                 children: [
                                                   Icon(
                                                     Icons.person,
-                                                    color: Colors.indigo,
+                                                    color:
+                                                        ConstValues.firstColor,
                                                     size: 50,
                                                   ),
                                                   Text(widget.user.tag),

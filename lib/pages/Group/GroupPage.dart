@@ -6,6 +6,8 @@ import 'package:stumeapp/pages/Group/tabs/MembersTabView.dart';
 import 'package:stumeapp/pages/Group/tabs/PostsTabView.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../const_values.dart';
+
 class GroupPage extends StatefulWidget {
   Group group;
 
@@ -53,22 +55,32 @@ class _GroupPageState extends State<GroupPage>
             contentPadding: EdgeInsets.zero,
             onTap: () {},
             title: widget.group.type == Group.TYPE_UNIVERSITY
-                ? Text('My University')
+                ? Text(
+                    'My University',
+                    style: TextStyle(color: Colors.white),
+                  )
                 : widget.group.type == Group.TYPE_COLLEGE
-                    ? Text('My College')
-                    : Text(widget.group.name),
+                    ? Text(
+                        'My College',
+                        style: TextStyle(color: Colors.white),
+                      )
+                    : Text(
+                        widget.group.name,
+                        style: TextStyle(color: Colors.white),
+                      ),
             subtitle: widget.group.type == Group.TYPE_GROUP
                 ? null
-                : Text(widget.group.name),
+                : Text(widget.group.name,
+                    style: TextStyle(color: Colors.white70)),
             leading: Container(
               width: 38,
               height: 38,
-              child:  Column(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SvgPicture.asset(
                     'assets/col.svg',
-                    color: Colors.white,
+                    color: ConstValues.accentColor,
                     width: 20,
                     height: 20,
                   ),
@@ -76,12 +88,12 @@ class _GroupPageState extends State<GroupPage>
               ),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(20)),
-                  color: Colors.indigo[300]),
+                  color: Colors.white),
             ),
           ),
-          backgroundColor: Colors.white,
-          iconTheme: IconThemeData(color: Colors.grey[700]),
+          backgroundColor: ConstValues.firstColor,
           bottom: TabBar(
+            indicatorColor: Colors.white70,
             indicatorPadding: EdgeInsets.symmetric(horizontal: 30),
             controller: _tabController,
             tabs: [
@@ -92,17 +104,11 @@ class _GroupPageState extends State<GroupPage>
 //                ),
                 child: Text(
                   'Posts',
-                  style: TextStyle(color: Colors.indigo),
                 ),
               ),
               Tab(
-//                icon: Icon(
-//                  Icons.group,
-//                  color: Colors.indigo,
-//                ),
                 child: Text(
                   'Members',
-                  style: TextStyle(color: Colors.indigo),
                 ),
               ),
             ],
@@ -115,7 +121,6 @@ class _GroupPageState extends State<GroupPage>
             MembersTab(widget.group),
           ],
         ),
-
       ),
     );
   }

@@ -95,7 +95,7 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
     ValueChanged<int> onPressed,
   }) {
     Color color =
-        _selectedIndex == index ? widget.selectedColor : Colors.grey[600];
+        _selectedIndex == index ? widget.selectedColor : Colors.grey[500];
     return Expanded(
       child: SizedBox(
         height: widget.height,

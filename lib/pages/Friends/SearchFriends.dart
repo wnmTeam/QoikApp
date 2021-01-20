@@ -26,8 +26,6 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.grey[700]),
         actions: [
           IconButton(
               icon: Icon(Icons.search),
@@ -43,6 +41,7 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
           decoration: InputDecoration(
             border: InputBorder.none,
             hintText: 'Search...',
+            hintStyle: TextStyle(color: Colors.white70)
           ),
           onSubmitted: (value) {
             if (value.isNotEmpty) {
@@ -50,6 +49,7 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
               getFriendRequests(_getCases(value));
             }
           },
+          style: TextStyle(color: Colors.white70),
           textInputAction: TextInputAction.search,
         ),
       ),

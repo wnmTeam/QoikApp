@@ -230,7 +230,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
             //   ),
             // ),
             RaisedButton(
-                color: Colors.indigo,
+                color: ConstValues.firstColor,
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
                     setState(() {
@@ -313,7 +313,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                   child: Text(
                     "Sign up",
                     style: TextStyle(
-                      color: Colors.indigo,
+                      color: ConstValues.firstColor,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -400,7 +400,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                     Row(
                       children: [
                         Radio(
-                          activeColor: Colors.indigoAccent,
+                          activeColor: ConstValues.firstColor,
                           value: 1,
                           groupValue: _value,
                           onChanged: (i) {
@@ -421,7 +421,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                     Row(
                       children: [
                         Radio(
-                          activeColor: Colors.indigoAccent,
+                          activeColor: ConstValues.firstColor,
                           value: 2,
                           groupValue: _value,
                           onChanged: (i) {
@@ -517,6 +517,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 height: 15,
               ),
               CheckboxListTile(
+                activeColor: ConstValues.firstColor,
                 contentPadding: EdgeInsets.zero,
                 title: Text("All  information are true"),
                 value: _checkedTrueInfo,
@@ -531,7 +532,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 height: 15,
               ),
               RaisedButton(
-                color: Colors.indigo,
+                color: ConstValues.firstColor,
                 onPressed: () async {
                   setState(() {
                     waiting = true;
@@ -618,7 +619,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                     child: Text(
                       "Login",
                       style: TextStyle(
-                        color: Colors.indigo,
+                        color: ConstValues.firstColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

@@ -19,6 +19,8 @@ class _EditPostPageState extends State<EditPostPage> {
 
   PostsController _postsController = PostsController();
 
+  bool loading = false;
+
   @override
   void initState() {
     _postTextController = TextEditingController(text: widget.post.text);
@@ -47,6 +49,9 @@ class _EditPostPageState extends State<EditPostPage> {
             ),
             RaisedButton(
               onPressed: () async {
+                setState(() {
+                  loading = true;
+                });
                 await _postsController.updatePost(
                   id_group: widget.group.id,
                   id_post: widget.post.id,
@@ -57,7 +62,7 @@ class _EditPostPageState extends State<EditPostPage> {
                   _postTextController.text,
                 );
               },
-              child: Text('Save'),
+              child: loading ? Text('Waiting') : Text('Save'),
             ),
           ],
         ),

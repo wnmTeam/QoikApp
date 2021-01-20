@@ -8,6 +8,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/controller/GroupsController.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
+import '../../const_values.dart';
+
 class SelectFriendsPage extends StatefulWidget {
   Group group;
 
@@ -20,6 +22,8 @@ class SelectFriendsPage extends StatefulWidget {
 }
 
 class _SelectFriendsPageState extends State<SelectFriendsPage> {
+  bool loading = false;
+
   bool isLoading = false;
   bool hasMore = true;
   int documentLimit = 10;
@@ -51,26 +55,57 @@ class _SelectFriendsPageState extends State<SelectFriendsPage> {
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.grey[700]),
         actions: [
-          FlatButton(
-            onPressed: () async {
-              if (widget.type == 'create') {
-                await _groupsController.createGroup(
-                  group: widget.group,
-                  uids: selectedMembers..add(_authController.getUser.uid),
-                );
-                Navigator.popUntil(context, ModalRoute.withName('/ChatsPage'));
-              } else {
-                print(widget.group.id);
-                print(selectedMembers);
-                await _groupsController.addMemberToGroup(
-                  id_group: widget.group.id,
-                  uids: selectedMembers,
-                );
-                Navigator.pop(context);
-              }
-            },
-            child: widget.type == 'create' ? Text('Create Group') : Text('add'),
-          )
+          loading
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(
+                          backgroundColor: Colors.white,
+                        )),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Text(
+                      'Waiting..',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                  ],
+                )
+              : FlatButton(
+                  onPressed: () async {
+                    setState(() {
+                      loading = true;
+                    });
+                    if (widget.type == 'create') {
+                      await _groupsController.createGroup(
+                        group: widget.group,
+                        uids: selectedMembers..add(_authController.getUser.uid),
+                      );
+                      int count = 0;
+                      Navigator.popUntil(context, (route) {
+                        return count++ == 2;
+                      });
+                    } else {
+                      await _groupsController.addMemberToGroup(
+                        id_group: widget.group.id,
+                        uids: selectedMembers,
+                      );
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: widget.type == 'create'
+                      ? Text('Create Group')
+                      : Text('Add'),
+                )
         ],
       ),
       body: ListView.builder(

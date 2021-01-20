@@ -29,34 +29,47 @@ class _RoomsTabState extends State<RoomsTab>with AutomaticKeepAliveClientMixin {
     super.initState();
   }
 
+  Future<void> refresh() {
+    setState(() {
+      rooms = [null, null];
+      hasMore = true;
+      lastDocument = null;
+    });
+    getRooms();
+    return Future.delayed(Duration(milliseconds: 1));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: rooms.length,
-      itemBuilder: (con, index) {
-        if (index == 0)
-          return ListTile(
-            contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
-            leading: Icon(Icons.group),
-            title: Text('Create Group'),
-            onTap: () {
-              Navigator.pushNamed(context, '/CreateGroupPage');
-            },
-          );
-        else if (index == rooms.length - 1) {
-          if (isLoading)
-            return Center(child: CircularProgressIndicator());
-          else if (hasMore)
-            return FlatButton(
-              onPressed: () {
-                getRooms();
+    return RefreshIndicator(
+      onRefresh: refresh,
+      child: ListView.builder(
+        itemCount: rooms.length,
+        itemBuilder: (con, index) {
+          if (index == 0)
+            return ListTile(
+              contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+              leading: Icon(Icons.group),
+              title: Text('Create Group'),
+              onTap: () {
+                Navigator.pushNamed(context, '/CreateGroupPage');
               },
-              child: Text('Loade More'),
             );
-          return Container();
-        }
-        return _chatBuilder(con, Group().fromMap(rooms[index].data()));
-      },
+          else if (index == rooms.length - 1) {
+            if (isLoading)
+              return Center(child: CircularProgressIndicator());
+            else if (hasMore)
+              return FlatButton(
+                onPressed: () {
+                  getRooms();
+                },
+                child: Text('Loade More'),
+              );
+            return Container();
+          }
+          return _chatBuilder(con, Group().fromMap(rooms[index].data()));
+        },
+      ),
     );
   }
 
@@ -103,8 +116,6 @@ class _RoomsTabState extends State<RoomsTab>with AutomaticKeepAliveClientMixin {
     )
         .then((value) {
       print('rooms');
-      print(value.docs.length);
-      print(value.docs[0].id);
       setState(() {
         rooms.insertAll(rooms.length - 1, value.docs);
         isLoading = false;

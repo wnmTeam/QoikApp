@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
+import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/GroupsController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
@@ -83,7 +84,7 @@ class _GroupsChatsTabState extends State<GroupsChatsTab>
         ),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(30)),
-            color: Colors.indigo[300]),
+            color: ConstValues.accentColor),
       ),
       subtitle: group.type == Group.TYPE_GROUP ? Text('') : Text(group.name),
     );

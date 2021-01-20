@@ -70,7 +70,10 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
               'id_user': widget.user.id,
             });
           },
-          title: Text(widget.user.firstName + ' ' + widget.user.secondName),
+          title: Text(
+            widget.user.firstName + ' ' + widget.user.secondName,
+            style: TextStyle(color: Colors.white),
+          ),
           leading: ClipRRect(
             borderRadius: BorderRadius.circular(57),
             child: CachedNetworkImage(
@@ -84,8 +87,6 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             ),
           ),
         ),
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.grey[700]),
       ),
       body: !creatingChat
           ? Column(
@@ -175,12 +176,12 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                   controller: _messageController,
                                   enableSuggestions: true,
                                   decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(vertical: 18, horizontal: 0),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 18, horizontal: 0),
                                     border: InputBorder.none,
                                     hintText: Languages.translate(
                                         context, 'type_a_message'),
-                                    hintStyle: TextStyle(
-                                        color: ConstValues.firstColor),
+                                    hintStyle: TextStyle(color: Colors.grey),
                                   ),
                                 ),
                               ),
@@ -292,7 +293,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _message(message, false, ConstValues.firstColor, 0, 20, 20, 20),
+            _message(message, false, ConstValues.secondColor, 0, 20, 20, 20),
             SizedBox(
               width: 5,
             ),
@@ -314,7 +315,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             SizedBox(
               width: 5,
             ),
-            _message(message, true, ConstValues.firstColor, 20, 20, 20, 0),
+            _message(message, true, ConstValues.accentColor, 20, 20, 20, 0),
           ],
         ),
       );

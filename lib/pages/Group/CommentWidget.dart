@@ -9,6 +9,8 @@ import 'package:stumeapp/controller/PostsController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
+import '../../const_values.dart';
+
 class CommentWidget extends StatefulWidget {
   Comment comment;
   Group group;
@@ -101,7 +103,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                               vertical: 0, horizontal: 15),
                           child: Icon(
                             Icons.star,
-                            color: Colors.amber,
+                            color: Colors.amber[300],
                             size: 30,
                           ),
                         )
@@ -142,8 +144,8 @@ class _CommentWidgetState extends State<CommentWidget> {
                             ),
                             decoration: BoxDecoration(
                               color: widget.comment.isLiked
-                                  ? Color.fromARGB(100, 100, 100, 255)
-                                  : Colors.grey[200],
+                                  ? ConstValues.firstColor[100]
+                                  : Colors.grey[100],
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ),
@@ -175,7 +177,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                               ),
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.grey[200],
+                              color: Colors.grey[100],
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ),
