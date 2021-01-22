@@ -67,7 +67,9 @@ class _RoomPageState extends State<RoomPage> {
       appBar: AppBar(
         title: ListTile(
           contentPadding: EdgeInsets.zero,
-          onTap: () {},
+          onTap: () {
+            Navigator.pushNamed(context, '/RoomInfoPage', arguments: {'group': widget.group},);
+          },
           title: Text(widget.group.name,
               style: TextStyle(
                 color: Colors.white,
