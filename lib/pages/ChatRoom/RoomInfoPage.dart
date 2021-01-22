@@ -7,8 +7,12 @@ import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
 class RoomInfoPage extends StatefulWidget {
   Group group;
+  Function onUpdate;
 
-  RoomInfoPage({this.group});
+  RoomInfoPage({
+    this.group,
+    this.onUpdate,
+  });
 
   @override
   _RoomInfoPageState createState() => _RoomInfoPageState();
@@ -34,6 +38,17 @@ class _RoomInfoPageState extends State<RoomInfoPage> {
       floatingActionButton: isAdmin
           ? FloatingActionButton(
               child: Icon(Icons.person_add),
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  '/SelectMembers',
+                  arguments: {
+                    'group': widget.group,
+                    'type': 'add',
+                  },
+                );
+                widget.onUpdate();
+              },
             )
           : null,
       body: ListView.builder(

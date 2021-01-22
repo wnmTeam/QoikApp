@@ -80,6 +80,7 @@ class RouteController {
                   id_user: args['id_user'],
                   user: args['user'],
                   group: args['group'],
+                  onUpdate: args['onUpdate'],
                 ));
       case '/ChangePasswordPage':
         return MaterialPageRoute(builder: (_) => ChangePasswordPage());
@@ -93,7 +94,10 @@ class RouteController {
 
       case '/RoomInfoPage':
         return MaterialPageRoute(
-            builder: (_) => RoomInfoPage(group: args['group']));
+            builder: (_) => RoomInfoPage(
+                  group: args['group'],
+                  onUpdate: args['onUpdate'],
+                ));
     }
   }
 }

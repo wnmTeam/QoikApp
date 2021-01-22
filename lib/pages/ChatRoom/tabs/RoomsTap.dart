@@ -67,13 +67,13 @@ class _RoomsTabState extends State<RoomsTab>with AutomaticKeepAliveClientMixin {
               );
             return Container();
           }
-          return _chatBuilder(con, Group().fromMap(rooms[index].data())..setId(rooms[index].id));
+          return _chatBuilder(con, Group().fromMap(rooms[index].data())..setId(rooms[index].id), index);
         },
       ),
     );
   }
 
-  Widget _chatBuilder(BuildContext context, Group group) {
+  Widget _chatBuilder(BuildContext context, Group group, int index) {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 14),
         leading: Container(
@@ -91,6 +91,11 @@ class _RoomsTabState extends State<RoomsTab>with AutomaticKeepAliveClientMixin {
             arguments: {
               'user': MyUser.myUser,
               'group': group,
+              'onUpdate': (){
+                setState(() async {
+                  rooms[index] = await _chatsController.getRoom(id: group.id);
+                });
+              }
             },
           );
         });

@@ -113,4 +113,8 @@ class ChatsApi {
   getChat(chatId) {
     return _firestore.collection('chats').doc(chatId).get();
   }
+
+  getRoom({String id}) {
+    return _firestore.collection('rooms').doc(id).get();
+  }
 }

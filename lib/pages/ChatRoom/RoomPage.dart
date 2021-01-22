@@ -19,8 +19,9 @@ class RoomPage extends StatefulWidget {
   String id_user;
   User user;
   Group group;
+  Function onUpdate;
 
-  RoomPage({this.id_user, this.user, this.group});
+  RoomPage({this.id_user, this.user, this.group, this.onUpdate});
 
   @override
   _RoomPageState createState() => _RoomPageState();

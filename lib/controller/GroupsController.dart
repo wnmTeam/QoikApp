@@ -5,18 +5,12 @@ import 'package:stumeapp/api/groups_api.dart';
 class GroupsController {
   GroupsApi api = GroupsApi();
 
-  getMyGroups({String id_user}) {
-    return api.getMyGroups(id_user: id_user);
-  }
-
   getMembers({int limit, DocumentSnapshot last, Group group}) => api.getMembers(
         limit: limit,
         last: last,
         group: group,
       );
 
-
-  void addMemberToCollege({uid, college}) {}
 
   addMemberToGroup({uids, String id_group}) {
     return api.addMemberToGroup(

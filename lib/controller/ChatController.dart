@@ -70,4 +70,8 @@ class ChatController {
   getChat(String chatID) {
     return api.getChat(chatID);
   }
+
+  getRoom({String id}) {
+    return api.getRoom(id: id);
+  }
 }

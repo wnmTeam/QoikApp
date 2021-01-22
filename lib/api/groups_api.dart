@@ -38,24 +38,9 @@ class GroupsApi {
 
 
   addMemberToGroup({uids, String id_group}) async {
-    WriteBatch b = _firestore.batch();
-
-    for (String uid in uids) {
-      DocumentReference r = _firestore
-          .collection('rooms')
-          .doc(id_group)
-          .collection('members')
-          .doc(uid);
-      b.set(r, {'ex': true});
-      r = _firestore.collection('users').doc(uid);
-      b.set(
-          r,
-          {
-            'groups': FieldValue.arrayUnion([id_group])
-          },
-          SetOptions(merge: true));
-    }
-    return b.commit();
+    return _firestore.collection('rooms').doc(id_group).set({
+      'members': FieldValue.arrayUnion(uids),
+    }, SetOptions(merge: true));
   }
 
   Future createGroup({Group group, List uids}) async {
