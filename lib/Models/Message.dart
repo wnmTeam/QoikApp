@@ -8,11 +8,13 @@ class Message {
   String idOwner;
   String text;
   DateTime date;
+  List images = [];
 
   Message({
     this.idOwner,
     this.text,
     this.date,
+    this.images,
   });
 
   String get getStringDate {
@@ -27,11 +29,13 @@ class Message {
         ID_OWNER: idOwner,
         TEXT: text,
         DATE: date,
+        IMAGES: images,
       };
 
   Message fromMap(map) {
     this.idOwner = map[ID_OWNER];
     this.text = map[TEXT];
+    this.images = map[IMAGES];
     try {
       this.date = map[DATE].toDate();
     } catch (e) {

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,6 +10,7 @@ import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
+import 'package:stumeapp/controller/StorageController.dart';
 
 import '../../const_values.dart';
 import '../../localization.dart';
@@ -24,7 +27,10 @@ class ChatRoomPage extends StatefulWidget {
 }
 
 class _ChatRoomPageState extends State<ChatRoomPage> {
+  var first;
+
   bool isLoading = false;
+  bool getNew = false;
   bool hasMore = true;
   int documentLimit = 25;
   DocumentSnapshot lastDocument = null;
@@ -37,7 +43,11 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
 
   TextEditingController _messageController = TextEditingController();
 
+  StorageController _storageController = StorageController();
+
   bool creatingChat = true;
+
+  List<File> _images;
 
   Size size;
 
@@ -52,7 +62,6 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
       getMessages();
     } else
       createChat();
-    _getMessages = _chatController.getNewMessages(id_chat: getChatID());
 
     super.initState();
   }
@@ -78,9 +87,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             borderRadius: BorderRadius.circular(57),
             child: CachedNetworkImage(
               placeholder: (context, url) => Center(
-                child: CircularProgressIndicator(),
+                child: Container(),
               ),
-              imageUrl: widget.user.img,
+              imageUrl: widget.user.img != null ? widget.user.img : ' ',
               fit: BoxFit.cover,
               width: 38,
               height: 38,
@@ -108,11 +117,15 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                   .fromMap(messages[i].data())
                                   .setId(messages[i].id)),
                         StreamBuilder(
-                          stream: _getMessages,
+                          stream: getNew
+                              ? _chatController.getNewMessages(
+                                  id_chat: getChatID(),
+                                  last: first,
+                                  type: 'chats')
+                              : null,
                           builder: (_, snapshot) {
                             if (snapshot.hasData &&
                                 snapshot.data.docs.length > 0) {
-                              print(snapshot.data.docs[0].data());
                               newMessages = snapshot.data.docs;
                             }
                             return Row(
@@ -166,7 +179,23 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                               IconButton(
                                 icon: Icon(Icons.photo_camera,
                                     color: ConstValues.firstColor),
-                                onPressed: () {},
+                                onPressed: () async {
+                                  final pickedFile =
+                                      await _storageController.getImage();
+                                  if (pickedFile != null) {
+                                    {
+                                      _images.add(File(pickedFile.path));
+                                      _chatController.addMessage(
+                                        message: Message(
+                                          idOwner: _authController.getUser.uid,
+                                        ),
+                                        images: _images,
+                                        id_chat: getChatID(),
+                                        type: 'chats',
+                                      );
+                                    }
+                                  }
+                                },
                               ),
                               Expanded(
                                 child: TextField(
@@ -206,6 +235,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                               text: _messageController.text.trim(),
                             ),
                             id_chat: getChatID(),
+                            type: 'chats',
                           );
                           _messageController.clear();
                         },
@@ -260,25 +290,31 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
       id_chat: getChatID(),
       limit: documentLimit,
       last: lastDocument,
+      type: 'chats',
     )
         .then((value) {
       print('messages');
       print(value.docs.length);
       setState(() {
         messages.remove(null);
-        messages.addAll(value.docs);
 
+        messages.addAll(value.docs);
+        if (!getNew) {
+          if (messages.length == 0)
+            first = null;
+          else
+            first = messages.first;
+        }
+        getNew = true;
         isLoading = false;
-        try {
-          lastDocument = messages.last;
-        } catch (e) {}
+        lastDocument = messages.last;
         if (value.docs.length == documentLimit) messages.add(null);
       });
     });
   }
 
   String getChatID() {
-    List l = [widget.user.id, _authController.getUser.uid];
+    List l = [widget.user.id, MyUser.myUser.id];
     l.sort();
 
     return l[0] + l[1];
@@ -349,10 +385,10 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                 children: [
                   Text(
                     message.text,
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                   SizedBox(
-                    height: 5,
+                    height: 1,
                   ),
                   Text(
                     message.date.hour.toString() +
@@ -373,9 +409,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
         child: firstMessage
             ? CachedNetworkImage(
                 placeholder: (context, url) => Center(
-                  child: CircularProgressIndicator(),
+                  child: Container(),
                 ),
-                imageUrl: imageUrl,
+                imageUrl: imageUrl != null ? imageUrl : ' ',
                 fit: BoxFit.cover,
                 width: 30,
                 height: 30,

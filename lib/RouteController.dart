@@ -69,7 +69,6 @@ class RouteController {
       case '/ProfilePage':
         return MaterialPageRoute(
             builder: (_) => ProfilePage(
-                  id_user: args['id_user'],
                   user: args['user'],
                 ));
       case '/ChatsPage':

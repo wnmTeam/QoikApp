@@ -9,11 +9,11 @@ class ChatsApi {
     int limit,
     DocumentSnapshot last,
     String id_chat,
+    String type,
   }) {
     CollectionReference reference;
 
-    reference =
-        _firestore.collection('groups').doc(id_chat).collection('messages');
+    reference = _firestore.collection(type).doc(id_chat).collection('messages');
 
     if (last == null) {
       return reference
@@ -35,24 +35,41 @@ class ChatsApi {
     }
   }
 
-  Future addMessage({Message message, String id_chat}) {
+  Future addMessage({
+    Message message,
+    String id_chat,
+    String type,
+  }) {
     Map m = message.toMap();
     m['date'] = FieldValue.serverTimestamp();
 
     return _firestore
-        .collection('groups')
+        .collection(type)
         .doc(id_chat)
         .collection('messages')
         .add(m);
   }
 
-  Stream getNewMessages({String id_chat}) {
+  Stream getNewMessages({
+    String id_chat,
+    last,
+    String type,
+  }) {
+    if (last != null)
+      return _firestore
+          .collection(type)
+          .doc(id_chat)
+          .collection('messages')
+          .orderBy('date')
+          .startAfterDocument(last)
+          .snapshots();
+
     return _firestore
-        .collection('groups')
+        .collection(type)
         .doc(id_chat)
         .collection('messages')
         .orderBy('date')
-        .startAfter([DateTime.now()]).snapshots();
+        .snapshots();
   }
 
   getChats({String id_user, int limit, DocumentSnapshot last}) {

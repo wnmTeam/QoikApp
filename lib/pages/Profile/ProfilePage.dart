@@ -14,10 +14,9 @@ import 'package:firebase_storage/firebase_storage.dart' as str;
 import 'package:stumeapp/controller/StorageController.dart';
 
 class ProfilePage extends StatefulWidget {
-  String id_user;
   User user;
 
-  ProfilePage({this.id_user, this.user});
+  ProfilePage({ this.user});
 
   @override
   MapScreenState createState() => MapScreenState();
@@ -49,7 +48,7 @@ class MapScreenState extends State<ProfilePage> {
 
   @override
   void initState() {
-    if (_authController.getUser.uid == widget.id_user) {
+    if (MyUser.myUser.id == widget.user.id) {
       isMyProfile = true;
       print('My Profile');
     }
@@ -99,10 +98,10 @@ class MapScreenState extends State<ProfilePage> {
                                       await _storageController.uploadPic(
                                     context,
                                     img,
-                                    widget.id_user,
+                                    widget.user.id,
                                   );
                                   await _authController.setImageUrl(
-                                      id_user: widget.id_user, url: url);
+                                      id_user: widget.user.id, url: url);
                                 },
                               ),
                               SizedBox(
@@ -160,7 +159,7 @@ class MapScreenState extends State<ProfilePage> {
                                                           id_user1:
                                                               MyUser.myUser.id,
                                                           id_user2:
-                                                              widget.id_user,
+                                                              widget.user.id,
                                                         );
                                                         setState(() {
                                                           isFriend = false;
@@ -447,7 +446,7 @@ class MapScreenState extends State<ProfilePage> {
                                 ),
                                 FutureBuilder(
                                     future: _friendsController.getFriends(
-                                      id: widget.id_user,
+                                      id: widget.user.id,
                                       limit: 8,
                                       last: null,
                                     ),
@@ -563,7 +562,7 @@ class MapScreenState extends State<ProfilePage> {
   }
 
   String getChatID() {
-    List l = [widget.user.id, _authController.getUser.uid];
+    List l = [widget.user.id, MyUser.myUser.id];
     l.sort();
 
     return l[0] + l[1];

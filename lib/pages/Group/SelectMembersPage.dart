@@ -210,7 +210,7 @@ class _UserWidgetState extends State<UserWidget> {
               leading: ClipRRect(
                 borderRadius: BorderRadius.circular(57),
                 child: Image.network(
-                  user.img,
+                  user.img != null ? user.img : ' ',
                   fit: BoxFit.cover,
                   width: 57,
                   height: 57,

@@ -67,7 +67,7 @@ class _RoomsTabState extends State<RoomsTab>with AutomaticKeepAliveClientMixin {
               );
             return Container();
           }
-          return _chatBuilder(con, Group().fromMap(rooms[index].data()));
+          return _chatBuilder(con, Group().fromMap(rooms[index].data())..setId(rooms[index].id));
         },
       ),
     );

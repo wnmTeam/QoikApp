@@ -105,7 +105,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-            child: !loading
+            child: !loading && MyUser.myUser.img != null
                 ? InkWell(
                     onTap: () {
                       Navigator.of(context).pushNamed(
@@ -139,7 +139,7 @@ class _HomePageState extends State<HomePage> {
                           child: Container(
                             width: 40,
                             height: 40,
-                            color: Colors.grey[300],
+                            color: Colors.white,
                           )),
                     ],
                   ),

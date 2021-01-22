@@ -46,7 +46,7 @@ class _CommentWidgetState extends State<CommentWidget> {
             return _postBuilder();
           }
           if (snapshot.hasData) {
-            user = User().fromMap(snapshot.data);
+            user = User().fromMap(snapshot.data)..setId(snapshot.data.id);
             return _postBuilder();
           }
           return UserPlaceholder();
@@ -60,7 +60,7 @@ class _CommentWidgetState extends State<CommentWidget> {
           Navigator.pushNamed(
             context,
             '/ProfilePage',
-            arguments: {'id_user': widget.comment.idOwner, 'user': user},
+            arguments: {'user': user},
           );
         },
         contentPadding: EdgeInsets.zero,

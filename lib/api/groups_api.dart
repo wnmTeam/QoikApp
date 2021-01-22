@@ -42,7 +42,7 @@ class GroupsApi {
 
     for (String uid in uids) {
       DocumentReference r = _firestore
-          .collection('groups')
+          .collection('rooms')
           .doc(id_group)
           .collection('members')
           .doc(uid);
@@ -61,24 +61,6 @@ class GroupsApi {
   Future createGroup({Group group, List uids}) async {
     var d = _firestore.collection('rooms').add(group.toMap());
     return d;
-//    WriteBatch b = _firestore.batch();
-//
-//    for (String uid in uids) {
-//      DocumentReference r = _firestore
-//          .collection('groups')
-//          .doc(d.id)
-//          .collection('members')
-//          .doc(uid);
-//      b.set(r, {'ex': true});
-//      r = _firestore.collection('users').doc(uid);
-//      b.set(
-//          r,
-//          {
-//            'groups': FieldValue.arrayUnion([d.id])
-//          },
-//          SetOptions(merge: true));
-//    }
-//    return b.commit();
   }
 
   Future getGroupInfo({id_group}) {
