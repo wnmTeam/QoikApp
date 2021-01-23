@@ -11,7 +11,6 @@ class StorageController {
   static SharedPreferences prefs;
   static User _user;
 
-
   StorageController() {
     createPreferences();
   }
@@ -29,7 +28,6 @@ class StorageController {
   }
 
   Future setUser(User user) async {
-
     await setString('user.' + User.FIRST_NAME, user.firstName);
     await setString('user.' + User.SECOND_NAME, user.secondName);
     await setString('user.' + User.GENDER, user.gender);
@@ -37,7 +35,6 @@ class StorageController {
     await setString('user.' + User.UNIVERSITY, user.university);
     await setString('user.' + User.COLLEGE, user.college);
     return prefs.setInt('user.' + User.POINTS, user.points);
-
   }
 
   User getUser() {
@@ -74,7 +71,7 @@ class StorageController {
     return ImagePicker().getImage(source: ImageSource.gallery);
   }
 
-  Future uploadPic( context, img, id_user) async {
+  Future uploadPic(context, img, id_user) async {
     str.Reference firebaseStorageRef = str.FirebaseStorage.instance
         .ref()
         .child('profileImages')
@@ -82,19 +79,43 @@ class StorageController {
     str.UploadTask uploadTask = firebaseStorageRef.putFile(img);
     str.TaskSnapshot taskSnapshot = await uploadTask.then((res) async {
       String url = await res.ref.getDownloadURL();
-      return ;
+      return;
     });
   }
 
-  uploadPostImage({String id_post, String nom, File img, }) async {
+  uploadPostImage({
+    String id_post,
+    String nom,
+    File img,
+    String id_group,
+  }) async {
     String url;
     str.Reference firebaseStorageRef = str.FirebaseStorage.instance
         .ref()
         .child('postImages')
-        .child(id_post + nom);
+        .child(id_group + id_post + nom);
     str.UploadTask uploadTask = firebaseStorageRef.putFile(img);
     await uploadTask.then((res) async {
-       url = await res.ref.getDownloadURL();
+      url = await res.ref.getDownloadURL();
+      return;
+    });
+    return url;
+  }
+
+  uploadMessageImage(
+      {String id_message,
+      String nom,
+      File img,
+      String type,
+      String id_group}) async {
+    String url;
+    str.Reference firebaseStorageRef = str.FirebaseStorage.instance
+        .ref()
+        .child(type + 'Images')
+        .child(id_group + id_message + nom);
+    str.UploadTask uploadTask = firebaseStorageRef.putFile(img);
+    await uploadTask.then((res) async {
+      url = await res.ref.getDownloadURL();
       return;
     });
     return url;
@@ -104,7 +125,7 @@ class StorageController {
     return prefs.getString('password');
   }
 
-  setPassword(String password){
+  setPassword(String password) {
     return prefs.setString('password', password);
   }
 

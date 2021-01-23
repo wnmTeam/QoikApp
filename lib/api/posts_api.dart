@@ -65,6 +65,7 @@ class PostsApi {
     for (File file in images) {
       String url = await _storageController.uploadPostImage(
         id_post: ref.id,
+        id_group: id_group,
         nom: i.toString(),
         img: file,
       );

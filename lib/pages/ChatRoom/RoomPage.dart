@@ -69,7 +69,11 @@ class _RoomPageState extends State<RoomPage> {
         title: ListTile(
           contentPadding: EdgeInsets.zero,
           onTap: () {
-            Navigator.pushNamed(context, '/RoomInfoPage', arguments: {'group': widget.group},);
+            Navigator.pushNamed(
+              context,
+              '/RoomInfoPage',
+              arguments: {'group': widget.group},
+            );
           },
           title: Text(widget.group.name,
               style: TextStyle(
@@ -167,6 +171,7 @@ class _RoomPageState extends State<RoomPage> {
                                 icon: Icon(Icons.photo_camera,
                                     color: ConstValues.firstColor),
                                 onPressed: () async {
+                                  _images = [];
                                   final pickedFile =
                                       await _storageController.getImage();
                                   if (pickedFile != null) {
@@ -174,7 +179,8 @@ class _RoomPageState extends State<RoomPage> {
                                       _images.add(File(pickedFile.path));
                                       _chatController.addMessage(
                                         message: Message(
-                                          idOwner: _authController.getUser.uid,
+                                          idOwner: MyUser.myUser.id,
+                                          images: [],
                                         ),
                                         images: _images,
                                         id_chat: widget.group.id,
@@ -341,7 +347,7 @@ class _RoomPageState extends State<RoomPage> {
               isSender ? CrossAxisAlignment.start : CrossAxisAlignment.end,
           children: [
             Container(
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.all(4),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                   topRight: Radius.circular(x1),
@@ -358,7 +364,7 @@ class _RoomPageState extends State<RoomPage> {
                 children: [
                   isSender
                       ? Padding(
-                          padding: const EdgeInsets.only(bottom: 0.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: Text(
                             members[message.idOwner].firstName +
                                 ' ' +
@@ -372,18 +378,54 @@ class _RoomPageState extends State<RoomPage> {
                       : Container(
                           width: 1,
                         ),
-                  Text(
-                    message.text,
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
+                  if (message.text != null)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        message.text,
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                    ),
                   SizedBox(
                     height: 1,
                   ),
-                  Text(
-                    message.date.hour.toString() +
-                        ":" +
-                        message.date.minute.toString(),
-                    style: TextStyle(color: Colors.white54),
+                  if (message.images != null)
+                    Padding(
+                      padding:
+                          EdgeInsets.only(bottom: 5, top: !isSender ? 0 : 4),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(!isSender ? x1 : 0),
+                          topLeft: Radius.circular(!isSender ? x4 : 0),
+                        ),
+                        child: CachedNetworkImage(
+                          placeholder: (context, url) => Center(
+                            child: Container(
+                              width: size.width / 2,
+                              height: size.width / 2,
+                              color: Colors.grey.withOpacity(0.3),
+                            ),
+                          ),
+                          imageUrl: message.images.length > 0
+                              ? message.images[0]
+                              : ' ',
+                          fit: BoxFit.cover,
+                          width: size.width / 2,
+                          height: size.width / 2,
+                        ),
+                      ),
+                    ),
+                  SizedBox(
+                    height: 1,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Text(
+                      message.date.hour.toString() +
+                          ":" +
+                          message.date.minute.toString(),
+                      style: TextStyle(color: Colors.white54),
+                    ),
                   ),
                 ],
               ),

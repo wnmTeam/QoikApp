@@ -100,3 +100,42 @@ class ResetDialog extends StatelessWidget {
     );
   }
 }
+
+class BottomSheetWidget extends StatefulWidget {
+  BottomSheetWidget(
+    this.type,
+    this.future,
+  );
+
+  String type;
+  Function future;
+
+  @override
+  _BottomSheetWidgetState createState() => _BottomSheetWidgetState();
+}
+
+class _BottomSheetWidgetState extends State<BottomSheetWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: widget.future(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData)
+          return ListView.builder(
+            itemCount: snapshot.data[widget.type],
+            itemBuilder: (context, index) {
+              String item = snapshot.data[widget.type][index];
+              return ListTile(
+                title: Text(item),
+                onTap: () {
+                  Navigator.pop(context, item);
+                },
+              );
+            },
+          );
+        return Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+}
+

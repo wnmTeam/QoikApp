@@ -14,6 +14,8 @@ class RegisterLoginPage extends StatefulWidget {
 double width;
 
 class _RegisterLoginPageState extends State<RegisterLoginPage> {
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _firstNameController = TextEditingController();
@@ -50,6 +52,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
     return WillPopScope(
       onWillPop: _onBackBressed,
       child: Scaffold(
+        key: scaffoldKey,
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Padding(
@@ -74,35 +77,34 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
       case 'master':
         return Column(
           children: [
-            MyDropdownButton(
-                items: [
-                  'University1',
-                  'University2',
-                  'University3',
-                  'University4',
-                ],
-                onSelected: (_selected) {
-                  setState(() {
-                    _university = _selected;
-                  });
-                },
-                label: 'University'),
+            ListTile(
+              onTap: () {
+                _bottomSheetBuild(
+                  'universities',
+                  _authController.getUniversities(),
+                );
+              },
+              contentPadding: EdgeInsets.zero,
+              title: Text('University'),
+              subtitle:
+                  Text(_university == null ? 'Tap to select' : _university),
+              leading: Icon(Icons.account_balance_outlined),
+            ),
             SizedBox(
               height: 20,
             ),
-            MyDropdownButton(
-                items: [
-                  'College1',
-                  'College2',
-                  'College3',
-                  'College4',
-                ],
-                onSelected: (_selected) {
-                  setState(() {
-                    _college = _selected;
-                  });
-                },
-                label: 'College'),
+            ListTile(
+              onTap: () {
+                _bottomSheetBuild(
+                  'colleges',
+                  _authController.getColleges(),
+                );
+              },
+              contentPadding: EdgeInsets.zero,
+              title: Text('College'),
+              subtitle: Text(_college == null ? 'Tap to select' : _college),
+              leading: Icon(Icons.account_balance_outlined),
+            ),
             SizedBox(
               height: 20,
             ),
@@ -263,7 +265,9 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                           SizedBox(
                               width: 18,
                               height: 18,
-                              child: CircularProgressIndicator(backgroundColor: Colors.white,)),
+                              child: CircularProgressIndicator(
+                                backgroundColor: Colors.white,
+                              )),
                           SizedBox(
                             width: 12,
                           ),
@@ -577,26 +581,28 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                         ),
                       )
                     : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(
-                        width: 18,
-                        height: 18,
-                        child: CircularProgressIndicator(backgroundColor: Colors.white,)),
-                    SizedBox(
-                      width: 12,
-                    ),
-                    Text(
-                      'WAITING..',
-                      style: TextStyle(
-                        fontSize: width / ConstValues.fontSize_2,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: CircularProgressIndicator(
+                                backgroundColor: Colors.white,
+                              )),
+                          SizedBox(
+                            width: 12,
+                          ),
+                          Text(
+                            'WAITING..',
+                            style: TextStyle(
+                              fontSize: width / ConstValues.fontSize_2,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
               ),
               SizedBox(
                 height: 15,
@@ -630,4 +636,43 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
           ),
         ),
       );
+
+  _bottomSheetBuild(
+    String type,
+    Future future,
+  ) {
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+        ),
+//        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return FutureBuilder(
+            future: future,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                print(snapshot.data.data());
+                return ListView.builder(
+                  itemCount: snapshot.data.data()[type].length,
+                  itemBuilder: (context, index) {
+                    String item = snapshot.data.data()[type][index];
+                    return ListTile(
+                      title: Text(item),
+                      onTap: () {
+                        setState(() {
+                          if (type == 'colleges') _college = item;
+                          else _university = item;
+                        });
+                        Navigator.pop(context, item);
+                      },
+                    );
+                  },
+                );
+              }
+              return Center(child: CircularProgressIndicator());
+            },
+          );
+        });
+  }
 }

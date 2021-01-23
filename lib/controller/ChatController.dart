@@ -32,6 +32,7 @@ class ChatController {
       message: message,
       id_chat: id_chat,
       type: type,
+      images: images,
     );
   }
 

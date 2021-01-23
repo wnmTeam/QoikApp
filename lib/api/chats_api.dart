@@ -1,9 +1,14 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/Message.dart';
+import 'package:stumeapp/controller/StorageController.dart';
 
 class ChatsApi {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  StorageController _storageController = StorageController();
 
   Future getMessages({
     int limit,
@@ -39,6 +44,7 @@ class ChatsApi {
     Message message,
     String id_chat,
     String type,
+    List<File> images,
   }) {
     Map m = message.toMap();
     m['date'] = FieldValue.serverTimestamp();
@@ -47,7 +53,24 @@ class ChatsApi {
         .collection(type)
         .doc(id_chat)
         .collection('messages')
-        .add(m);
+        .add(m)
+        .then((value) async {
+      for (int i = 0; i < images.length; i++) {
+        String url = await _storageController.uploadMessageImage(
+          type: type,
+          id_group: id_chat,
+          id_message: value.id,
+          img: images[i],
+          nom: i.toString(),
+        );
+        await addImageToMessage(
+          type: type,
+          id_group: id_chat,
+          id_message: value.id,
+          url: url,
+        );
+      }
+    });
   }
 
   Stream getNewMessages({
@@ -116,5 +139,17 @@ class ChatsApi {
 
   getRoom({String id}) {
     return _firestore.collection('rooms').doc(id).get();
+  }
+
+  addImageToMessage(
+      {String type, String id_group, String id_message, String url}) {
+    return _firestore
+        .collection(type)
+        .doc(id_group)
+        .collection('messages')
+        .doc(id_message)
+        .set({
+      'images': FieldValue.arrayUnion([url]),
+    }, SetOptions(merge: true));
   }
 }

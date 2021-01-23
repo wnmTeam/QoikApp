@@ -104,4 +104,13 @@ class AuthController {
   updatePassword(String text) {
     return api.updatePassword(text);
   }
+
+  Future getUniversities(){
+    return api.getUniversities();
+  }
+
+  Future getColleges(){
+    return api.getColleges();
+  }
+
 }

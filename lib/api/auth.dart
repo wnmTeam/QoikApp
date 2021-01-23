@@ -117,4 +117,12 @@ class Auth {
   updatePassword(String text) {
     return getUser.updatePassword(text);
   }
+
+  Future getUniversities() {
+    return _firestore.collection('appInfo').doc('universities').get();
+  }
+
+  Future getColleges() {
+    return _firestore.collection('appInfo').doc('colleges').get();
+  }
 }
