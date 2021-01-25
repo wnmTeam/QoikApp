@@ -442,7 +442,7 @@ class _RoomPageState extends State<RoomPage> {
                 placeholder: (context, url) => Center(
                   child: Container(),
                 ),
-                imageUrl: imageUrl,
+                imageUrl: imageUrl != null ? imageUrl : ' ',
                 fit: BoxFit.cover,
                 width: 30,
                 height: 30,

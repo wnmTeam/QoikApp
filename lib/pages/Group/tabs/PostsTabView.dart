@@ -135,7 +135,7 @@ class _PostsTabState extends State<PostsTab>
                   },
                 );
               },
-              backgroundColor: ConstValues.accentColor,
+              backgroundColor: ConstValues.firstColor,
               child: Icon(
                 Icons.edit,
                 color: Colors.white,

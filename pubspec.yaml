@@ -45,6 +45,8 @@ dev_dependencies:
   flutter_localizations: # Add this line
     sdk: flutter         # Add this line
   flutter_launcher_icons: "^0.8.0"
+  timeago: ^2.0.29
+
 
 flutter_icons:
   image_path: "assets/logo.png"

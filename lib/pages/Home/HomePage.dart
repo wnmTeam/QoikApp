@@ -105,7 +105,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-            child: !loading && MyUser.myUser.img != null
+            child: !loading
                 ? InkWell(
                     onTap: () {
                       Navigator.of(context).pushNamed(
@@ -122,7 +122,7 @@ class _HomePageState extends State<HomePage> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: Image.network(
-                            MyUser.myUser.img,
+                            MyUser.myUser.img != null ? MyUser.myUser.img : ' ',
                             fit: BoxFit.cover,
                             width: 40,
                             height: 40,
@@ -173,6 +173,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: SafeArea(
         child: FloatingActionButton(
+          backgroundColor: ConstValues.firstColor,
           onPressed: () {
             if (_currentIndex == 2)
               Navigator.of(context).pushNamed('/SearchFriendsPage');

@@ -387,4 +387,27 @@ class PostsApi {
       ),
     );
   }
+
+  deletePoint({String id_group, Comment comment, Post post}) {
+    return _firestore
+        .collection('groups')
+        .doc(id_group)
+        .collection('posts')
+        .doc(post.id)
+        .set(
+      {'commentPointed': null},
+      SetOptions(merge: true),
+    );
+  }
+
+  getCommentChanges({String id_group, String id_post, String id_comment}) {
+    return _firestore
+        .collection('groups')
+        .doc(id_group)
+        .collection('posts')
+        .doc(id_post)
+        .collection('comments')
+        .doc(id_comment)
+        .get();
+  }
 }

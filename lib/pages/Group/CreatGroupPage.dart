@@ -53,7 +53,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                   'group': Group(
                     name: _nameController.text,
                     type: Group.TYPE_GROUP,
-                    img: 'bfvdddfbgnhm,',
+                    img: ' ',
                     admins: [_authController.getUser.uid],
                   ),
                   'type': 'create',

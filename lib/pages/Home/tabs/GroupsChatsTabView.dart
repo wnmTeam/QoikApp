@@ -84,7 +84,7 @@ class _GroupsChatsTabState extends State<GroupsChatsTab>
         ),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(30)),
-            color: ConstValues.accentColor),
+            color: ConstValues.firstColor[600]),
       ),
       subtitle: group.type == Group.TYPE_GROUP ? Text('') : Text(group.name),
     );

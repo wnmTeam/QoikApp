@@ -125,4 +125,11 @@ class Auth {
   Future getColleges() {
     return _firestore.collection('appInfo').doc('colleges').get();
   }
+
+  deletePoint({String id_user}) {
+    return _firestore.collection('users').doc(id_user).set(
+      {'points': FieldValue.increment(-1)},
+      SetOptions(merge: true),
+    );
+  }
 }

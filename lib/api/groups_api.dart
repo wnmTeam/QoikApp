@@ -35,9 +35,7 @@ class GroupsApi {
     }
   }
 
-
-
-  addMemberToGroup({uids, String id_group}) async {
+  addMemberToRoom({uids, String id_group}) async {
     return _firestore.collection('rooms').doc(id_group).set({
       'members': FieldValue.arrayUnion(uids),
     }, SetOptions(merge: true));
@@ -50,5 +48,23 @@ class GroupsApi {
 
   Future getGroupInfo({id_group}) {
     return _firestore.collection('groups').doc(id_group).get();
+  }
+
+  addMemberToGroup({uid, String id_group, String type}) {
+    WriteBatch batch = _firestore.batch();
+    batch.set(_firestore.collection('groups').doc(id_group), {
+      'name': id_group,
+      'type': type,
+    });
+
+    batch.set(
+        _firestore
+            .collection('groups')
+            .doc(id_group)
+            .collection('members')
+            .doc(uid),
+        {'ex': true});
+
+    return batch.commit();
   }
 }

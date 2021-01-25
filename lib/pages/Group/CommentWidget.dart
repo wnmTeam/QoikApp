@@ -6,7 +6,6 @@ import 'package:stumeapp/Models/Post.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/PostsController.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
 import '../../const_values.dart';
@@ -17,8 +16,15 @@ class CommentWidget extends StatefulWidget {
   Post post;
 
   Function addPoint;
+  Function deletePoint;
 
-  CommentWidget({this.comment, this.post, this.group, this.addPoint});
+  CommentWidget({
+    this.comment,
+    this.post,
+    this.group,
+    this.addPoint,
+    this.deletePoint,
+  });
 
   @override
   _CommentWidgetState createState() => _CommentWidgetState();
@@ -66,10 +72,10 @@ class _CommentWidgetState extends State<CommentWidget> {
         contentPadding: EdgeInsets.zero,
         leading: Padding(
           padding: const EdgeInsets.only(left: 8.0),
-          child:  ClipRRect(
+          child: ClipRRect(
             borderRadius: BorderRadius.circular(57),
-            child:  Image.network(
-              user.img,
+            child: Image.network(
+              user.img != null? user.img: ' ',
               fit: BoxFit.cover,
               width: 40,
               height: 40,
@@ -98,13 +104,26 @@ class _CommentWidgetState extends State<CommentWidget> {
                     ),
                   ),
                   widget.comment.id == widget.post.commentPointed
-                      ? Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 0, horizontal: 15),
-                          child: Icon(
-                            Icons.star,
-                            color: Colors.amber[300],
-                            size: 30,
+                      ? InkWell(
+                          onTap: () async {
+                            await _postsController.deletePoint(
+                              id_group: widget.group.id,
+                              comment: widget.comment,
+                              post: widget.post,
+                            );
+                            print('delete point');
+                            await _authController.deletePoint(
+                                id_user: widget.comment.idOwner);
+                            widget.deletePoint();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 0, horizontal: 15),
+                            child: Icon(
+                              Icons.star,
+                              color: Colors.amber[300],
+                              size: 30,
+                            ),
                           ),
                         )
                       : Container(),

@@ -20,7 +20,7 @@ class AuthController {
 
   get authStream => api.userChangesStream;
 
-   get getUser => api.getUser;
+  get getUser => api.getUser;
 
   Future createAccount(email, password, User user) async {
     await api.signUp(
@@ -32,13 +32,15 @@ class AuthController {
     await api.recordUserInfo(user);
 
     await _groupsController.addMemberToGroup(
-      uids: [getUser.uid],
+      uid: getUser.uid,
       id_group: user.university,
+      type: 'university',
     );
     print('un');
     await _groupsController.addMemberToGroup(
-      uids: [getUser.uid],
+      uid: getUser.uid,
       id_group: user.college,
+      type: 'college',
     );
   }
 
@@ -105,12 +107,15 @@ class AuthController {
     return api.updatePassword(text);
   }
 
-  Future getUniversities(){
+  Future getUniversities() {
     return api.getUniversities();
   }
 
-  Future getColleges(){
+  Future getColleges() {
     return api.getColleges();
   }
 
+  deletePoint({String id_user}) {
+    return api.deletePoint(id_user: id_user);
+  }
 }

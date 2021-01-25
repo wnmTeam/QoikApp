@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
+import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
@@ -37,6 +38,7 @@ class _RoomInfoPageState extends State<RoomInfoPage> {
       ),
       floatingActionButton: isAdmin
           ? FloatingActionButton(
+              backgroundColor: ConstValues.firstColor,
               child: Icon(Icons.person_add),
               onPressed: () {
                 Navigator.pushNamed(

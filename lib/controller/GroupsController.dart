@@ -12,8 +12,8 @@ class GroupsController {
       );
 
 
-  addMemberToGroup({uids, String id_group}) {
-    return api.addMemberToGroup(
+  addMemberToRoom({uids, String id_group}) {
+    return api.addMemberToRoom(
       uids: uids,
       id_group: id_group,
     );
@@ -27,4 +27,8 @@ class GroupsController {
 
 
   Future getGroupInfo({id_group}) => api.getGroupInfo(id_group: id_group);
+
+  addMemberToGroup({uid, String id_group, String type}) {
+    return api.addMemberToGroup(uid: uid, id_group: id_group, type: type);
+  }
 }

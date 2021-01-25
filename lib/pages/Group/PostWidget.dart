@@ -182,7 +182,6 @@ class _PostWidgetState extends State<PostWidget>
                         width: size.width,
                         height: size.width - 100,
                         color: Colors.grey[200],
-                        child: Center(child: CircularProgressIndicator()),
                       ),
                     ),
                     imageUrl: widget.post.images[0],
@@ -239,8 +238,8 @@ class _PostWidgetState extends State<PostWidget>
                               children: [
                                 SvgPicture.asset(
                                   'assets/like.svg',
-                                  width: 24,
-                                  height: 24,
+                                  width: 20,
+                                  height: 20,
                                   color: ConstValues.secondColor,
                                 ),
                                 SizedBox(
@@ -354,10 +353,19 @@ class _PostWidgetState extends State<PostWidget>
                         ..setId(comments[i].id),
                       post: widget.post,
                       group: widget.group,
-                      addPoint: (id) {
-                        setState(() {
-                          widget.post.commentPointed = id;
-                        });
+                      addPoint: (id) async {
+                        var d = await _postsController.getPostChanges(
+                          group: widget.group,
+                          id_post: widget.post.id,
+                        );
+                        if (d.data() != null) widget.updatePost(d);
+                      },
+                      deletePoint: () async {
+                        var d = await _postsController.getPostChanges(
+                          group: widget.group,
+                          id_post: widget.post.id,
+                        );
+                        if (d.data() != null) widget.updatePost(d);
                       },
                     ),
                 if (commentsShow)
@@ -382,10 +390,23 @@ class _PostWidgetState extends State<PostWidget>
                                             ..setId(newComments[i].id),
                                       post: widget.post,
                                       group: widget.group,
-                                      addPoint: (id) {
-                                        setState(() {
-                                          widget.post.commentPointed = id;
-                                        });
+                                      addPoint: (id) async {
+                                        var d = await _postsController
+                                            .getPostChanges(
+                                          group: widget.group,
+                                          id_post: widget.post.id,
+                                        );
+                                        if (d.data() != null)
+                                          widget.updatePost(d);
+                                      },
+                                      deletePoint: () async {
+                                        var d = await _postsController
+                                            .getPostChanges(
+                                          group: widget.group,
+                                          id_post: widget.post.id,
+                                        );
+                                        if (d.data() != null)
+                                          widget.updatePost(d);
                                       },
                                     ),
                                 ],
@@ -404,7 +425,7 @@ class _PostWidgetState extends State<PostWidget>
                       ClipRRect(
                         borderRadius: BorderRadius.circular(57),
                         child: Image.network(
-                          MyUser.myUser.img,
+                          MyUser.myUser.img != null ? MyUser.myUser.img : ' ',
                           fit: BoxFit.cover,
                           width: 40,
                           height: 40,
@@ -459,7 +480,7 @@ class _PostWidgetState extends State<PostWidget>
       leading: ClipRRect(
         borderRadius: BorderRadius.circular(57),
         child: Image.network(
-          user.img,
+          user.img != null ? user.img : ' ',
           fit: BoxFit.cover,
           width: 55,
           height: 55,
@@ -505,8 +526,14 @@ class _PostWidgetState extends State<PostWidget>
       subtitle: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('New User'),
-          Text(widget.post.getStringDate),
+          Text(
+            'New User',
+            style: TextStyle(fontSize: 12),
+          ),
+          Text(
+            widget.post.getStringDate,
+            style: TextStyle(fontSize: 12),
+          ),
         ],
       ),
     );

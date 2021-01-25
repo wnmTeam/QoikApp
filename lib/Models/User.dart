@@ -12,11 +12,12 @@ class User {
   static const String ENTER_COUNT = 'enterCount';
   static const String BIO = 'bio';
   static const String IMG = 'img';
+  static const String EMAIL = 'email';
 
-  static const String TAG_NEW_USER = 'new user';
-  static const String TAG_NORMAL_USER = 'normal user';
-  static const String TAG_ACTIVE_USER = 'active user';
-  static const String TAG_EX_USER = 'ex user';
+  static const String TAG_NEW_USER = 'New User';
+  static const String TAG_NORMAL_USER = 'Normal User';
+  static const String TAG_ACTIVE_USER = 'Active User';
+  static const String TAG_EX_USER = 'EX User';
   static const String TAG_SURE_USER = 'sure user';
 
   String firstName;
@@ -31,6 +32,7 @@ class User {
   DateTime recordDate;
   String bio;
   String img;
+  String email;
 
   String tag;
 
@@ -50,6 +52,7 @@ class User {
     this.enterCount = 0,
     this.bio,
     this.img = '',
+    this.email,
   });
 
   Map<String, dynamic> toMap() => {
@@ -66,6 +69,7 @@ class User {
         ENTER_COUNT: enterCount,
         BIO: bio,
         IMG: img,
+        EMAIL: email,
       };
 
   User fromMap(map) {
@@ -82,6 +86,7 @@ class User {
     this.enterCount = map[ENTER_COUNT];
     this.bio = map[BIO];
     this.img = map[IMG];
+    this.email = map[EMAIL];
 
     return this;
   }

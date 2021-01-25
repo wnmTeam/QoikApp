@@ -9,14 +9,12 @@ import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
 import 'package:stumeapp/controller/FriendsController.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart' as str;
 import 'package:stumeapp/controller/StorageController.dart';
 
 class ProfilePage extends StatefulWidget {
   User user;
 
-  ProfilePage({ this.user});
+  ProfilePage({this.user});
 
   @override
   MapScreenState createState() => MapScreenState();
@@ -45,6 +43,7 @@ class MapScreenState extends State<ProfilePage> {
 
   TextEditingController _bioController;
   bool _editBio = false;
+  bool uploadImage = false;
 
   @override
   void initState() {
@@ -83,7 +82,7 @@ class MapScreenState extends State<ProfilePage> {
                               bottomLeft: Radius.circular(15),
                               bottomRight: Radius.circular(11),
                             ),
-                            color: ConstValues.accentColor,
+                            color: ConstValues.firstColor[600],
                           ),
                           child: Column(
                             children: <Widget>[
@@ -93,7 +92,11 @@ class MapScreenState extends State<ProfilePage> {
                               Avatar(
                                 imagePath: widget.user.img,
                                 myProfile: isMyProfile,
+                                uploadImage: uploadImage,
                                 ubdateImagerofile: (img) async {
+                                  setState(() {
+                                    uploadImage = true;
+                                  });
                                   String url =
                                       await _storageController.uploadPic(
                                     context,
@@ -102,8 +105,15 @@ class MapScreenState extends State<ProfilePage> {
                                   );
                                   await _authController.setImageUrl(
                                       id_user: widget.user.id, url: url);
+                                  print(url);
+                                  print(widget.user.id);
+
+                                  setState(() {
+                                    uploadImage = false;
+                                  });
                                 },
                               ),
+
                               SizedBox(
                                 height: 12,
                               ),
@@ -117,6 +127,7 @@ class MapScreenState extends State<ProfilePage> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
+                              uploadImage?SizedBox(width: size.width / 2,child: LinearProgressIndicator()):Container(),
                               SizedBox(
                                 height: 8,
                               ),
@@ -393,13 +404,13 @@ class MapScreenState extends State<ProfilePage> {
                                               subtitle:
                                                   Text(widget.user.college),
                                             )),
-                                        isMyProfile
+                                        isMyProfile && widget.user.email != null
                                             ? SizedBox(
                                                 width: size.width - 24,
                                                 child: ListTile(
                                                   title: Text('E-Mail'),
-                                                  subtitle: Text(
-                                                      'syromar39@gmail.com'),
+                                                  subtitle:
+                                                      Text(widget.user.email),
                                                 ))
                                             : Container(),
                                         isMyProfile
@@ -658,8 +669,13 @@ class Avatar extends StatefulWidget {
   String imagePath;
   bool myProfile;
   Function ubdateImagerofile;
+  bool uploadImage;
 
-  Avatar({this.imagePath, this.myProfile, this.ubdateImagerofile});
+  Avatar(
+      {this.imagePath,
+      this.myProfile,
+      this.ubdateImagerofile,
+      this.uploadImage});
 
   @override
   _AvatarState createState() => _AvatarState();
@@ -681,14 +697,14 @@ class _AvatarState extends State<Avatar> {
           radius: 75,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(100),
-            child: widget.imagePath != ''
+            child: widget.imagePath != null
                 ? Image.network(
                     widget.imagePath,
                     fit: BoxFit.cover,
                     width: 150,
                     height: 150,
                   )
-                : _image != null
+                : _image != null && !widget.uploadImage
                     ? Image.file(
                         _image,
                         fit: BoxFit.cover,

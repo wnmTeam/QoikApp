@@ -72,15 +72,17 @@ class StorageController {
   }
 
   Future uploadPic(context, img, id_user) async {
+    String url;
     str.Reference firebaseStorageRef = str.FirebaseStorage.instance
         .ref()
         .child('profileImages')
         .child(id_user);
     str.UploadTask uploadTask = firebaseStorageRef.putFile(img);
     str.TaskSnapshot taskSnapshot = await uploadTask.then((res) async {
-      String url = await res.ref.getDownloadURL();
+      url = await res.ref.getDownloadURL();
       return;
     });
+    return url;
   }
 
   uploadPostImage({

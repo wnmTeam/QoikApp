@@ -95,7 +95,7 @@ class _SelectFriendsPageState extends State<SelectFriendsPage> {
                         return count++ == 2;
                       });
                     } else {
-                      await _groupsController.addMemberToGroup(
+                      await _groupsController.addMemberToRoom(
                         id_group: widget.group.id,
                         uids: selectedMembers,
                       );

@@ -169,6 +169,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
             TextFormField(
               controller: _passwordController,
               textInputAction: TextInputAction.done,
+              obscureText: true,
               keyboardType: TextInputType.visiblePassword,
               decoration: InputDecoration(
                 icon: Icon(Icons.lock_open),
@@ -487,6 +488,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 controller: _passwordController,
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.visiblePassword,
+                obscureText: true,
                 decoration: InputDecoration(
                   icon: Icon(Icons.lock_open),
                   labelText: "Password",
@@ -505,6 +507,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 controller: _coPasswordController,
                 textInputAction: TextInputAction.done,
                 keyboardType: TextInputType.visiblePassword,
+                obscureText: true,
                 decoration: InputDecoration(
                   icon: Icon(Icons.lock_open),
                   labelText: "Confirm password",
@@ -559,6 +562,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                           enterCount: 0,
                           bio: 'Hey There.. I am New User.',
                           recordDate: DateTime.now(),
+                          email: _emailController.text,
                         ),
                       );
                     } catch (e) {}

@@ -80,7 +80,7 @@ class _GroupPageState extends State<GroupPage>
                 children: [
                   SvgPicture.asset(
                     'assets/col.svg',
-                    color: ConstValues.accentColor,
+                    color: ConstValues.firstColor[400],
                     width: 20,
                     height: 20,
                   ),

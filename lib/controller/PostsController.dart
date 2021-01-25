@@ -113,11 +113,27 @@ class PostsController {
     );
   }
 
-   updatePost({String id_group, String id_post, String text}) {
+  updatePost({String id_group, String id_post, String text}) {
     return api.updatePost(
       id_post: id_post,
       id_group: id_group,
       text: text,
+    );
+  }
+
+  deletePoint({String id_group, Comment comment, Post post}) {
+    return api.deletePoint(
+      id_group: id_group,
+      comment: comment,
+      post: post,
+    );
+  }
+
+  getCommentChanges({String id_group, String id_post, String id_comment}) {
+    return api.getCommentChanges(
+      id_group: id_group,
+      id_post: id_post,
+      id_comment: id_comment,
     );
   }
 }
