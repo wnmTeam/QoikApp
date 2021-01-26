@@ -24,8 +24,8 @@ class Auth {
     }
   }
 
-  void logOut() {
-    _firebaseAuth.signOut();
+  logOut() {
+    return _firebaseAuth.signOut();
   }
 
   sendEmailVerification() {
@@ -129,6 +129,15 @@ class Auth {
   deletePoint({String id_user}) {
     return _firestore.collection('users').doc(id_user).set(
       {'points': FieldValue.increment(-1)},
+      SetOptions(merge: true),
+    );
+  }
+
+  recordEnter() {
+    return _firestore.collection('users').doc(getUser.uid).set(
+      {
+        'enterCount': FieldValue.increment(1),
+      },
       SetOptions(merge: true),
     );
   }

@@ -679,4 +679,5 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
           );
         });
   }
+
 }

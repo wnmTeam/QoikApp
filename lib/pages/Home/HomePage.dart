@@ -5,7 +5,6 @@ import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/api/notification_api.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
-import 'package:stumeapp/controller/StorageController.dart';
 import 'package:stumeapp/pages/Home/tabs/FriendsTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/GroupsChatsTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/HomeTabView.dart';
@@ -27,15 +26,16 @@ class _HomePageState extends State<HomePage> {
   List tabViews = [];
 
   AuthController _authController = AuthController();
-  StorageController _storageController = StorageController();
   NotificationApi _notificationApi = NotificationApi();
+
 
   @override
   void initState() {
-    _notificationApi.requestNotificationPermissions();
-    print('done ');
     _currentIndex = 1;
     _getUserInfo();
+    _notificationApi.requestNotificationPermissions();
+    _notificationApi.saveDeviceToken(_authController.getUser.uid);
+    _authController.recordEnter();
     tabViews = [
       HomeTab(),
       GroupsChatsTab(),

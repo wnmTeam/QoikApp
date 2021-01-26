@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/User.dart';
+import 'package:stumeapp/api/notification_api.dart';
 import 'package:stumeapp/controller/GroupsController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 
@@ -18,6 +19,8 @@ class AuthController {
   GroupsController _groupsController = GroupsController();
   StorageController _storageController = StorageController();
 
+  NotificationApi _notificationApi = NotificationApi();
+
   get authStream => api.userChangesStream;
 
   get getUser => api.getUser;
@@ -30,6 +33,7 @@ class AuthController {
     await _storageController.setPassword(password);
 
     await api.recordUserInfo(user);
+    await _notificationApi.saveDeviceToken(getUser.uid);
 
     await _groupsController.addMemberToGroup(
       uid: getUser.uid,
@@ -46,11 +50,13 @@ class AuthController {
 
   login(String email, String password) async {
     await api.signIn(email, password);
+    await _notificationApi.saveDeviceToken(getUser.uid);
     await _storageController.setPassword(password);
   }
 
-  void logOut() {
-    api.logOut();
+  void logOut() async {
+    await _notificationApi.removeDeviceToken(getUser.uid);
+    await api.logOut();
   }
 
   bool isUserVerified() => api.isUserVerified();
@@ -73,6 +79,7 @@ class AuthController {
   Future addPoint({String id_user}) => api.addPoint(id_user: id_user);
 
   Future updateUserTag(User user) {
+    print(user.tag);
     switch (user.tag) {
       case User.TAG_NEW_USER:
         if (DateTime.now().difference(user.recordDate).inDays > 6)
@@ -80,11 +87,17 @@ class AuthController {
         break;
 
       case User.TAG_NORMAL_USER:
+        print('yyyyyyyyyyyyeeeeeeeeeeeeeessssssssssssssssss');
+        print(user.enterCount);
+        print(user.recordDate);
+        print(DateTime.now().difference(user.recordDate).inDays);
         if (DateTime.now().difference(user.recordDate).inDays > 89 &&
-            DateTime.now().difference(user.recordDate).inDays /
-                    user.enterCount >
-                90 / 60)
+            user.enterCount /
+                    DateTime.now().difference(user.recordDate).inDays >
+                60 / 90) {
+          print('yyyyyyyyyyyyeeeeeeeeeeeeeessssssssssssssssss');
           return api.updateUserTag(user: user, tag: User.TAG_ACTIVE_USER);
+        }
         break;
       case User.TAG_ACTIVE_USER:
         if (user.points > 100)
@@ -117,5 +130,9 @@ class AuthController {
 
   deletePoint({String id_user}) {
     return api.deletePoint(id_user: id_user);
+  }
+
+  recordEnter() {
+    return api.recordEnter();
   }
 }

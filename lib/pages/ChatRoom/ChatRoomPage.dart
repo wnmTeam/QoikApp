@@ -237,6 +237,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                               text: _messageController.text.trim(),
                             ),
                             id_chat: getChatID(),
+                            images: [],
                             type: 'chats',
                           );
                           _messageController.clear();

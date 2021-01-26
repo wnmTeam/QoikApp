@@ -211,6 +211,11 @@ class _PostWidgetState extends State<PostWidget>
                           padding: EdgeInsets.symmetric(vertical: 10),
                           elevation: 0,
                           onPressed: () async {
+                            setState(() {
+                              if(!widget.post.isLiked)
+                              widget.post.likeCount++;
+                              else widget.post.likeCount--;
+                            });
                             await _postsController.setLike(
                                 id_user: _authController.getUser.uid,
                                 group: widget.group,
@@ -222,10 +227,7 @@ class _PostWidgetState extends State<PostWidget>
                               group: widget.group,
                             );
                             if (d.data() != null)
-                              setState(() {
-                                widget.post = Post().fromMap(d.data())
-                                  ..setId(widget.post.id);
-                              });
+                                widget.updatePost(d);
                           },
                           color: widget.post.getIsLiked
                               ? ConstValues.firstColor[100]

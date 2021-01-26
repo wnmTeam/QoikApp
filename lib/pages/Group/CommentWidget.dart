@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Comment.dart';
 import 'package:stumeapp/Models/Group.dart';
+import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/Post.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
@@ -75,7 +76,7 @@ class _CommentWidgetState extends State<CommentWidget> {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(57),
             child: Image.network(
-              user.img != null? user.img: ' ',
+              user.img != null ? user.img : ' ',
               fit: BoxFit.cover,
               width: 40,
               height: 40,
@@ -106,15 +107,17 @@ class _CommentWidgetState extends State<CommentWidget> {
                   widget.comment.id == widget.post.commentPointed
                       ? InkWell(
                           onTap: () async {
-                            await _postsController.deletePoint(
-                              id_group: widget.group.id,
-                              comment: widget.comment,
-                              post: widget.post,
-                            );
-                            print('delete point');
-                            await _authController.deletePoint(
-                                id_user: widget.comment.idOwner);
-                            widget.deletePoint();
+                            if (widget.post.idOwner == MyUser.myUser.id) {
+                              await _postsController.deletePoint(
+                                id_group: widget.group.id,
+                                comment: widget.comment,
+                                post: widget.post,
+                              );
+                              print('delete point');
+                              await _authController.deletePoint(
+                                  id_user: widget.comment.idOwner);
+                              widget.deletePoint();
+                            }
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
