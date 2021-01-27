@@ -10,6 +10,7 @@ class Group {
 
   static const String TYPE_UNIVERSITY = 'university';
   static const String TYPE_COLLEGE = 'college';
+  static const String TYPE_MOFADALAH = 'mofadalah';
   static const String TYPE_CHAT = 'chat';
   static const String TYPE_GROUP = 'group';
   static const String NAME = 'name';

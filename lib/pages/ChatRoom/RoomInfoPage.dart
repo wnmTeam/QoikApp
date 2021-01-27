@@ -87,7 +87,7 @@ class _RoomInfoPageState extends State<RoomInfoPage> {
                             : Container(),
                       ],
                     ),
-                    subtitle: Text('New User'),
+                    subtitle: Text(user.tag),
                     leading: ClipRRect(
                       borderRadius: BorderRadius.circular(57),
                       child: Image.network(

@@ -28,7 +28,7 @@ class GroupsController {
 
   Future getGroupInfo({id_group}) => api.getGroupInfo(id_group: id_group);
 
-  addMemberToGroup({uid, String id_group, String type}) {
-    return api.addMemberToGroup(uid: uid, id_group: id_group, type: type);
+  addMemberToGroup({uid, String id_group, String type, String name}) {
+    return api.addMemberToGroup(uid: uid, id_group: id_group, type: type, name: name);
   }
 }

@@ -34,18 +34,45 @@ class AuthController {
 
     await api.recordUserInfo(user);
     await _notificationApi.saveDeviceToken(getUser.uid);
+    if (user.college != null) {
+      await _groupsController.addMemberToGroup(
+        uid: getUser.uid,
+        id_group: user.groups[0],
+        name : user.university,
+        type: 'university',
+      );
+      print('un');
+      await _groupsController.addMemberToGroup(
+        uid: getUser.uid,
+        name : user.college,
+        id_group: user.groups[1],
+        type: 'college',
+      );
+      print('coll');
+    }
+
+    if (user.oldUniversity != null) {
+      await _groupsController.addMemberToGroup(
+        uid: getUser.uid,
+        id_group: user.groups[2],
+        name : user.oldUniversity,
+        type: 'university',
+      );
+      print('old un');
+    }
 
     await _groupsController.addMemberToGroup(
       uid: getUser.uid,
-      id_group: user.university,
-      type: 'university',
+      id_group: Group.TYPE_MOFADALAH,
+      type: Group.TYPE_MOFADALAH,
     );
-    print('un');
-    await _groupsController.addMemberToGroup(
-      uid: getUser.uid,
-      id_group: user.college,
-      type: 'college',
-    );
+    if (user.degree != 'hight school')
+      await _groupsController.addMemberToGroup(
+        uid: getUser.uid,
+        id_group: 'Graduates And Masters',
+        type: 'G',
+      );
+    return;
   }
 
   login(String email, String password) async {

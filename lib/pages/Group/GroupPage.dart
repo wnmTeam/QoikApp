@@ -65,10 +65,10 @@ class _GroupPageState extends State<GroupPage>
                         style: TextStyle(color: Colors.white),
                       )
                     : Text(
-                        widget.group.name,
+                        widget.group.id,
                         style: TextStyle(color: Colors.white),
                       ),
-            subtitle: widget.group.type == Group.TYPE_GROUP
+            subtitle: widget.group.type == 'G' || widget.group.type == Group.TYPE_MOFADALAH
                 ? null
                 : Text(widget.group.name,
                     style: TextStyle(color: Colors.white70)),
@@ -80,7 +80,7 @@ class _GroupPageState extends State<GroupPage>
                 children: [
                   SvgPicture.asset(
                     'assets/col.svg',
-                    color: ConstValues.firstColor[400],
+                    color: ConstValues.firstColor[700],
                     width: 20,
                     height: 20,
                   ),

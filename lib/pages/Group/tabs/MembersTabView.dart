@@ -88,7 +88,7 @@ class _MembersTabState extends State<MembersTab>
                     );
                   },
                   title: Text(user.firstName + ' ' + user.secondName),
-                  subtitle: Text('New User'),
+                  subtitle: Text(user.tag),
                   leading: ClipRRect(
                     borderRadius: BorderRadius.circular(57),
                     child: Image.network(

@@ -42,6 +42,8 @@ class _PostWidgetState extends State<PostWidget>
   bool hasMoreComments = true;
   bool isLoading = false;
 
+  bool _isExbended = false;
+
   TextEditingController _commentController = TextEditingController();
 
   PostsController _postsController = PostsController();
@@ -162,13 +164,19 @@ class _PostWidgetState extends State<PostWidget>
                             ),
                             child: Text(
                               post.text,
+                              maxLines: _isExbended ? 100 : 5,
+                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 color: Colors.grey[700],
                                 fontSize: 16,
                               ),
                             ),
                           ),
-                          onTap: () {},
+                          onTap: () {
+                            setState(() {
+                              _isExbended = ! _isExbended;
+                            });
+                          },
                         ),
                       )
                     : Container(),
@@ -212,9 +220,10 @@ class _PostWidgetState extends State<PostWidget>
                           elevation: 0,
                           onPressed: () async {
                             setState(() {
-                              if(!widget.post.isLiked)
-                              widget.post.likeCount++;
-                              else widget.post.likeCount--;
+                              if (!widget.post.isLiked)
+                                widget.post.likeCount++;
+                              else
+                                widget.post.likeCount--;
                             });
                             await _postsController.setLike(
                                 id_user: _authController.getUser.uid,
@@ -226,8 +235,7 @@ class _PostWidgetState extends State<PostWidget>
                               id_post: widget.post.id,
                               group: widget.group,
                             );
-                            if (d.data() != null)
-                                widget.updatePost(d);
+                            if (d.data() != null) widget.updatePost(d);
                           },
                           color: widget.post.getIsLiked
                               ? ConstValues.firstColor[100]
@@ -494,33 +502,36 @@ class _PostWidgetState extends State<PostWidget>
           Text(
             user.firstName + ' ' + user.secondName,
           ),
-          DropdownButtonHideUnderline(
-            child: DropdownButton<String>(
-              value: null,
-              icon: Icon(Icons.more_horiz),
-              onChanged: (String newValue) {
-                switch (newValue) {
-                  case 'Delete':
-                    _deletePost();
-                    break;
-                  case 'Edit':
-                    _editPost();
-                    break;
-                  case 'Report':
-                    _reportPost();
-                    break;
-                }
-              },
-              items: <String>[
-                if (MyUser.myUser.id == widget.post.idOwner) 'Edit',
-                if (MyUser.myUser.id == widget.post.idOwner) 'Delete',
-                if (MyUser.myUser.id != widget.post.idOwner) 'Report',
-              ].map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
+          SizedBox(
+            height: 30,
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                value: null,
+                icon: Icon(Icons.more_horiz),
+                onChanged: (String newValue) {
+                  switch (newValue) {
+                    case 'Delete':
+                      _deletePost();
+                      break;
+                    case 'Edit':
+                      _editPost();
+                      break;
+                    case 'Report':
+                      _reportPost();
+                      break;
+                  }
+                },
+                items: <String>[
+                  if (MyUser.myUser.id == widget.post.idOwner) 'Edit',
+                  if (MyUser.myUser.id == widget.post.idOwner) 'Delete',
+                  if (MyUser.myUser.id != widget.post.idOwner) 'Report',
+                ].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
             ),
           ),
         ],
@@ -529,12 +540,15 @@ class _PostWidgetState extends State<PostWidget>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            'New User',
+            user.tag,
             style: TextStyle(fontSize: 12),
           ),
-          Text(
-            widget.post.getStringDate,
-            style: TextStyle(fontSize: 12),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: Text(
+              widget.post.getStringDate,
+              style: TextStyle(fontSize: 12),
+            ),
           ),
         ],
       ),

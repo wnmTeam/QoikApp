@@ -50,10 +50,10 @@ class GroupsApi {
     return _firestore.collection('groups').doc(id_group).get();
   }
 
-  addMemberToGroup({uid, String id_group, String type}) {
+  addMemberToGroup({uid, String id_group, String type, String name}) {
     WriteBatch batch = _firestore.batch();
     batch.set(_firestore.collection('groups').doc(id_group), {
-      'name': id_group,
+      'name': name,
       'type': type,
     });
 

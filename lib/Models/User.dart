@@ -4,6 +4,7 @@ class User {
   static const String GENDER = 'gender';
   static const String DEGREE = 'degree';
   static const String UNIVERSITY = 'university';
+  static const String OLD_UNIVERSITY = 'old university';
   static const String COLLEGE = 'college';
   static const String GROUPS = 'groups';
   static const String POINTS = 'points';
@@ -25,6 +26,7 @@ class User {
   String gender;
   String degree;
   String university;
+  String oldUniversity;
   String college;
   List groups;
   int points;
@@ -44,6 +46,7 @@ class User {
     this.gender,
     this.degree,
     this.university,
+    this.oldUniversity,
     this.college,
     this.points = 0,
     this.groups,
@@ -61,6 +64,7 @@ class User {
         'gender': gender,
         'degree': degree,
         'university': university,
+        OLD_UNIVERSITY: oldUniversity,
         'college': college,
         GROUPS: groups,
         POINTS: points,
@@ -78,6 +82,7 @@ class User {
     this.gender = map['gender'];
     this.degree = map['degree'];
     this.university = map['university'];
+    this.oldUniversity = map[OLD_UNIVERSITY];
     this.college = map['college'];
     this.groups = map[GROUPS];
     this.points = map[POINTS];

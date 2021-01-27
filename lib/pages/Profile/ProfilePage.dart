@@ -82,7 +82,7 @@ class MapScreenState extends State<ProfilePage> {
                               bottomLeft: Radius.circular(15),
                               bottomRight: Radius.circular(11),
                             ),
-                            color: ConstValues.firstColor[600],
+                            color: ConstValues.firstColor[700],
                           ),
                           child: Column(
                             children: <Widget>[
@@ -649,7 +649,7 @@ class _FriendWidgetState extends State<FriendWidget> {
                   Padding(
                     padding: const EdgeInsets.only(left: 3.0),
                     child: Text(
-                      'New User',
+                      _user.tag,
                       style: TextStyle(
                         color: Colors.grey,
                       ),

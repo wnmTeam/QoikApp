@@ -59,7 +59,7 @@ class _GroupsChatsTabState extends State<GroupsChatsTab>
     return ListTile(
       title: group.type == Group.TYPE_UNIVERSITY
           ? Text('My University')
-          : Text('My College'),
+          :group.type == Group.TYPE_COLLEGE? Text('My College'):Text(group.id),
       onTap: () {
         Navigator.of(context).pushNamed(
           '/GroupPage',
@@ -86,7 +86,8 @@ class _GroupsChatsTabState extends State<GroupsChatsTab>
             borderRadius: BorderRadius.all(Radius.circular(30)),
             color: ConstValues.firstColor[600]),
       ),
-      subtitle: group.type == Group.TYPE_GROUP ? Text('') : Text(group.name),
+      subtitle: group.type == Group.TYPE_MOFADALAH || group.type == 'G' ? Text('') : Text(group.name),
+      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
     );
   }
 

@@ -78,7 +78,7 @@ class _ChatsTabState extends State<ChatsTab>
               ),
             ),
             title: Text(user.firstName + ' ' + user.secondName),
-            subtitle: Text('New User'),
+            subtitle: Text(user.tag),
             onTap: () {
               Navigator.pushNamed(
                 context,

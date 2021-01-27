@@ -54,10 +54,7 @@ class _FriendsRequestsPageState extends State<FriendsRequestsPage> {
       appBar: AppBar(
         title: Text(
           'Friends Requests',
-          style: TextStyle(color: Colors.grey[700]),
         ),
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.grey[700]),
       ),
       body: RefreshIndicator(
         onRefresh: refresh,

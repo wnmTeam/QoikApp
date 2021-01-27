@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
@@ -31,6 +32,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
   String _degree;
   String _college;
   String _university;
+  String _oldUniversity;
   bool _checkedTrueInfo = false;
 
   bool _isRegister = true;
@@ -74,42 +76,9 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
         return Container();
       case 'college':
       case 'graduate':
+        return _universityCollegeBuilder();
       case 'master':
-        return Column(
-          children: [
-            ListTile(
-              onTap: () {
-                _bottomSheetBuild(
-                  'universities',
-                  _authController.getUniversities(),
-                );
-              },
-              contentPadding: EdgeInsets.zero,
-              title: Text('University'),
-              subtitle:
-                  Text(_university == null ? 'Tap to select' : _university),
-              leading: Icon(Icons.account_balance_outlined),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            ListTile(
-              onTap: () {
-                _bottomSheetBuild(
-                  'colleges',
-                  _authController.getColleges(),
-                );
-              },
-              contentPadding: EdgeInsets.zero,
-              title: Text('College'),
-              subtitle: Text(_college == null ? 'Tap to select' : _college),
-              leading: Icon(Icons.account_balance_outlined),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-          ],
-        );
+        return _masterBuilder();
       default:
         return Container();
     }
@@ -464,7 +433,11 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               SizedBox(
                 height: 20,
               ),
-              _degreeInfoBuild(),
+              Row(
+                children: [
+                  _degreeInfoBuild(),
+                ],
+              ),
               TextFormField(
                 controller: _emailController,
                 textInputAction: TextInputAction.next,
@@ -547,6 +520,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                   if (_formKey.currentState.validate() &&
                       _checkedTrueInfo == true) {
                     try {
+                      List groups = setGroups();
                       _authController.createAccount(
                         _emailController.text,
                         _passwordController.text,
@@ -557,7 +531,8 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                           gender: _gender,
                           university: _university,
                           college: _college,
-                          groups: [_university, _college],
+                          oldUniversity: _oldUniversity,
+                          groups: groups,
                           points: 10,
                           enterCount: 0,
                           bio: 'Hey There.. I am New User.',
@@ -641,6 +616,46 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
         ),
       );
 
+  _universityCollegeBuilder() {
+    return SizedBox(
+      width: width,
+      child: Column(
+        children: [
+          ListTile(
+            onTap: () {
+              _bottomSheetBuild(
+                'universities',
+                _authController.getUniversities(),
+              );
+            },
+            contentPadding: EdgeInsets.zero,
+            title: Text('University'),
+            subtitle: Text(_university == null ? 'Tap to select' : _university),
+            leading: Icon(Icons.account_balance_outlined),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          ListTile(
+            onTap: () {
+              _bottomSheetBuild(
+                'colleges',
+                _authController.getColleges(),
+              );
+            },
+            contentPadding: EdgeInsets.zero,
+            title: Text('College'),
+            subtitle: Text(_college == null ? 'Tap to select' : _college),
+            leading: Icon(Icons.account_balance_outlined),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+        ],
+      ),
+    );
+  }
+
   _bottomSheetBuild(
     String type,
     Future future,
@@ -652,21 +667,30 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
         ),
 //        isScrollControlled: true,
         builder: (BuildContext context) {
+          String temp;
+          if (type == 'old')
+            temp = 'universities';
+          else
+            temp = type;
           return FutureBuilder(
             future: future,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 print(snapshot.data.data());
                 return ListView.builder(
-                  itemCount: snapshot.data.data()[type].length,
+                  itemCount: snapshot.data.data()[temp].length,
                   itemBuilder: (context, index) {
-                    String item = snapshot.data.data()[type][index];
+                    String item = snapshot.data.data()[temp][index];
                     return ListTile(
                       title: Text(item),
                       onTap: () {
                         setState(() {
-                          if (type == 'colleges') _college = item;
-                          else _university = item;
+                          if (type == 'colleges')
+                            _college = item;
+                          else if (type == 'old')
+                            _oldUniversity = item;
+                          else
+                            _university = item;
                         });
                         Navigator.pop(context, item);
                       },
@@ -680,4 +704,62 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
         });
   }
 
+  _masterBuilder() {
+    return Column(
+      children: [
+        _universityCollegeBuilder(),
+        SizedBox(
+          width: width,
+          child: ListTile(
+            onTap: () {
+              _bottomSheetBuild(
+                'old',
+                _authController.getUniversities(),
+              );
+            },
+            contentPadding: EdgeInsets.zero,
+            title: Text('Old University'),
+            subtitle:
+                Text(_oldUniversity == null ? 'Tap to select' : _oldUniversity),
+            leading: Icon(Icons.account_balance_outlined),
+          ),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+      ],
+    );
+  }
+
+  List setGroups() {
+    List g = [];
+
+    switch (_degree) {
+      case 'college':
+      case 'graduate':
+        g.addAll([
+          _university + '|' + _college,
+          _college,
+          'Graduates And Masters',
+          Group.TYPE_MOFADALAH,
+        ]);
+        break;
+      case 'high school':
+        g.addAll([
+          Group.TYPE_MOFADALAH,
+        ]);
+        break;
+      case 'master':
+        g.addAll([
+          _university + '|' + _college,
+          _college,
+          _oldUniversity + '|' + _college,
+          'Graduates And Masters',
+          Group.TYPE_MOFADALAH,
+        ]);
+        break;
+    }
+
+    return g;
+  }
 }
