@@ -201,19 +201,60 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       drawer: Drawer(
-        child: Column(
-          children: [
-            DrawerHeader(
-              child: Container(),
-            ),
-            ListTile(
-              title: Text('Log out'),
-              leading: Icon(Icons.logout),
-              onTap: () {
-                _authController.logOut();
-              },
-            )
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              DrawerHeader(
+                child: Container(),
+              ),
+              ListTile(
+                title: Text('My Profile'),
+                leading: Icon(Icons.person),
+                onTap: () {
+                  Navigator.of(context).pushNamed(
+                    '/ProfilePage',
+                    arguments: {
+                      'user': MyUser.myUser,
+                      'id_user': _authController.getUser.uid,
+                    },
+                  );
+                },
+              ),
+              ListTile(
+                title: Text('Setting'),
+                leading: Icon(Icons.settings),
+                onTap: () {
+                },
+              ),
+              Divider(),
+              ListTile(
+                title: Text('About'),
+                leading: Icon(Icons.warning_rounded),
+                onTap: () {
+                },
+              ),
+              ListTile(
+                title: Text('Contact Us'),
+                leading: Icon(Icons.group),
+                onTap: () {
+                },
+              ),
+              ListTile(
+                title: Text('FAQ'),
+                leading: Icon(Icons.help),
+                onTap: () {
+                },
+              ),
+              Divider(),
+              ListTile(
+                title: Text('Log out', style: TextStyle(color: Colors.red),),
+                leading: Icon(Icons.logout, color: Colors.red),
+                onTap: () {
+                  _authController.logOut();
+                },
+              )
+            ],
+          ),
         ),
       ),
       drawerScrimColor: ConstValues.firstColor,

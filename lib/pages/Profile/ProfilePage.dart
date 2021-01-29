@@ -187,7 +187,7 @@ class MapScreenState extends State<ProfilePage> {
                                                                 Colors.blueGrey,
                                                           ),
                                                           label: Text(
-                                                              'Cansel Request'),
+                                                              'Cancel Request'),
                                                           onPressed: () async {
                                                             await _friendsController
                                                                 .deleteFriendRequest(

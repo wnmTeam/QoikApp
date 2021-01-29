@@ -75,4 +75,8 @@ class ChatController {
   getRoom({String id}) {
     return api.getRoom(id: id);
   }
+
+   Future removeMemberFromRoom({String id_user, String id_room}) {
+    return api.removeMemberFromRoom(id_user: id_user, id_room: id_room);
+  }
 }

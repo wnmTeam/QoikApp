@@ -4,6 +4,7 @@ import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
+import 'package:stumeapp/controller/ChatController.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
 class RoomInfoPage extends StatefulWidget {
@@ -21,6 +22,7 @@ class RoomInfoPage extends StatefulWidget {
 
 class _RoomInfoPageState extends State<RoomInfoPage> {
   AuthController _authController = AuthController();
+  ChatController _chatController = ChatController();
 
   bool isAdmin = false;
 
@@ -67,14 +69,95 @@ class _RoomInfoPageState extends State<RoomInfoPage> {
                   print(user.id);
                   return ListTile(
                     onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        '/ProfilePage',
-                        arguments: {
-                          'id_user': user.id,
-                          'user': user,
-                        },
-                      );
+                      if (widget.group.admins.contains(MyUser.myUser.id) &&
+                          user.id != MyUser.myUser.id) {
+                        showModalBottomSheet(
+                            context: context,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(25.0)),
+                            ),
+                            builder: (BuildContext context) {
+                              return Column(
+                                children: [
+                                  ListTile(
+                                    leading: Icon(Icons.person),
+                                    title: Text('Show Profile'),
+                                    onTap: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        '/ProfilePage',
+                                        arguments: {
+                                          'id_user': user.id,
+                                          'user': user,
+                                        },
+                                      );
+                                    },
+                                  ),
+                                  ListTile(
+                                    leading: Icon(Icons.person_remove),
+                                    title: Text('Remove'),
+                                    onTap: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title: Text("Delete User"),
+                                              content: Text("Delete " +
+                                                  user.firstName +
+                                                  ' ' +
+                                                  user.secondName +
+                                                  ' From This Room?'),
+                                              actions: [
+                                                FlatButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Text(
+                                                    'Cancel',
+                                                    style: TextStyle(
+                                                        color: Colors.black),
+                                                  ),
+                                                ),
+                                                FlatButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(
+                                                        context, 'delete');
+                                                  },
+                                                  child: Text(
+                                                    'Delete',
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          }).then((value) async {
+                                        if (value == 'delete') {
+                                          setState(() {
+                                            widget.group.members
+                                                .removeAt(index);
+                                          });
+                                          Navigator.pop(context);
+                                          await _chatController
+                                              .removeMemberFromRoom(
+                                            id_user: user.id,
+                                            id_room: widget.group.id,
+                                          );
+                                        }
+                                      });
+                                    },
+                                  ),
+                                ],
+                              );
+                            });
+                      } else
+                        Navigator.pushNamed(
+                          context,
+                          '/ProfilePage',
+                          arguments: {
+                            'id_user': user.id,
+                            'user': user,
+                          },
+                        );
                     },
                     title: Row(
                       children: [

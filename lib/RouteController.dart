@@ -81,6 +81,7 @@ class RouteController {
                   user: args['user'],
                   group: args['group'],
                   onUpdate: args['onUpdate'],
+                  exitGroup: args['exitGroup'],
                 ));
       case '/ChangePasswordPage':
         return MaterialPageRoute(builder: (_) => ChangePasswordPage());

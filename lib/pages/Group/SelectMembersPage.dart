@@ -50,10 +50,7 @@ class _SelectFriendsPageState extends State<SelectFriendsPage> {
       appBar: AppBar(
         title: Text(
           'Select Members',
-          style: TextStyle(color: Colors.grey[700]),
         ),
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.grey[700]),
         actions: [
           loading
               ? Row(
@@ -72,7 +69,7 @@ class _SelectFriendsPageState extends State<SelectFriendsPage> {
                     Text(
                       'Waiting..',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Colors.white,
                       ),
                     ),
                     SizedBox(
@@ -102,9 +99,12 @@ class _SelectFriendsPageState extends State<SelectFriendsPage> {
                       Navigator.pop(context);
                     }
                   },
-                  child: widget.type == 'create'
-                      ? Text('Create Group')
-                      : Text('Add'),
+                  child: Text(
+                    widget.type == 'create' ? 'Create Group' : 'Add',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
                 )
         ],
       ),

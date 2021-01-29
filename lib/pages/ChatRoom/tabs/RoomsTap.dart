@@ -12,7 +12,8 @@ class RoomsTab extends StatefulWidget {
   _RoomsTabState createState() => _RoomsTabState();
 }
 
-class _RoomsTabState extends State<RoomsTab>with AutomaticKeepAliveClientMixin {
+class _RoomsTabState extends State<RoomsTab>
+    with AutomaticKeepAliveClientMixin {
   bool isLoading = false;
   bool hasMore = true;
   int documentLimit = 10;
@@ -67,7 +68,10 @@ class _RoomsTabState extends State<RoomsTab>with AutomaticKeepAliveClientMixin {
               );
             return Container();
           }
-          return _chatBuilder(con, Group().fromMap(rooms[index].data())..setId(rooms[index].id), index);
+          return _chatBuilder(
+              con,
+              Group().fromMap(rooms[index].data())..setId(rooms[index].id),
+              index);
         },
       ),
     );
@@ -75,7 +79,7 @@ class _RoomsTabState extends State<RoomsTab>with AutomaticKeepAliveClientMixin {
 
   Widget _chatBuilder(BuildContext context, Group group, int index) {
     return ListTile(
-      contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 14),
+        contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 14),
         leading: Container(
           width: 55,
           height: 55,
@@ -91,9 +95,15 @@ class _RoomsTabState extends State<RoomsTab>with AutomaticKeepAliveClientMixin {
             arguments: {
               'user': MyUser.myUser,
               'group': group,
-              'onUpdate': (){
+              'onUpdate': () async {
+                var d = await _chatsController.getRoom(id: group.id);
+                setState(() {
+                  rooms[index] = d;
+                });
+              },
+              'exitGroup': () {
                 setState(() async {
-                  rooms[index] = await _chatsController.getRoom(id: group.id);
+                  rooms.removeAt(index);
                 });
               }
             },

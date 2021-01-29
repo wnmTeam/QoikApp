@@ -20,8 +20,10 @@ class RoomPage extends StatefulWidget {
   User user;
   Group group;
   Function onUpdate;
+  Function exitGroup;
 
-  RoomPage({this.id_user, this.user, this.group, this.onUpdate});
+  RoomPage(
+      {this.id_user, this.user, this.group, this.onUpdate, this.exitGroup});
 
   @override
   _RoomPageState createState() => _RoomPageState();
@@ -54,6 +56,8 @@ class _RoomPageState extends State<RoomPage> {
 
   List<File> _images;
 
+  bool iamOut = false;
+
   @override
   void initState() {
     getMembers();
@@ -66,6 +70,19 @@ class _RoomPageState extends State<RoomPage> {
     size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
+        actions: <Widget>[
+          PopupMenuButton<String>(
+            onSelected: handleClick,
+            itemBuilder: (BuildContext context) {
+              return {'Group Info', 'Exit Group'}.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
+          ),
+        ],
         title: ListTile(
           contentPadding: EdgeInsets.zero,
           onTap: () {
@@ -140,6 +157,7 @@ class _RoomPageState extends State<RoomPage> {
                     ),
                   ),
                 ),
+                !iamOut?
                 Container(
                   width: size.width,
                   padding: const EdgeInsets.all(8.0),
@@ -240,7 +258,7 @@ class _RoomPageState extends State<RoomPage> {
                       ),
                     ],
                   ),
-                ),
+                ):Text('You Can Not Send More Messages!'),
               ],
             )
           : Center(child: CircularProgressIndicator()),
@@ -281,7 +299,9 @@ class _RoomPageState extends State<RoomPage> {
         }
         getNew = true;
         isLoading = false;
-        lastDocument = messages.last;
+        try {
+          lastDocument = messages.last;
+        } catch (e) {}
         if (value.docs.length == documentLimit) messages.add(null);
       });
     });
@@ -289,9 +309,13 @@ class _RoomPageState extends State<RoomPage> {
 
   getMembers() async {
     for (String id in widget.group.members) {
-      var d = await _authController.getUserInfo(id);
-      User user = User().fromMap(d.data())..setId(d.id);
-      members[user.id] = user;
+      if (id == MyUser.myUser.id)
+        members[id] = MyUser.myUser;
+      else {
+        var d = await _authController.getUserInfo(id);
+        User user = User().fromMap(d.data())..setId(d.id);
+        members[user.id] = user;
+      }
     }
 
     setState(() {
@@ -326,7 +350,11 @@ class _RoomPageState extends State<RoomPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _image(members[message.idOwner].img, true),
+            _image(
+                members[message.idOwner] != null
+                    ? members[message.idOwner].img
+                    : ' ',
+                true),
             SizedBox(
               width: 5,
             ),
@@ -366,9 +394,11 @@ class _RoomPageState extends State<RoomPage> {
                       ? Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: Text(
-                            members[message.idOwner].firstName +
-                                ' ' +
-                                members[message.idOwner].secondName,
+                            members[message.idOwner] != null
+                                ? members[message.idOwner].firstName +
+                                    ' ' +
+                                    members[message.idOwner].secondName
+                                : 'Deleted User',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -436,7 +466,6 @@ class _RoomPageState extends State<RoomPage> {
 
   _image(String imageUrl, bool firstMessage) => ClipRRect(
         borderRadius: BorderRadius.circular(57),
-        //TODO hide images
         child: firstMessage
             ? CachedNetworkImage(
                 placeholder: (context, url) => Center(
@@ -452,4 +481,57 @@ class _RoomPageState extends State<RoomPage> {
                 height: 30,
               ),
       );
+
+  void handleClick(String value) {
+    switch (value) {
+      case 'Group Info':
+        Navigator.pushNamed(
+          context,
+          '/RoomInfoPage',
+          arguments: {'group': widget.group},
+        );
+        break;
+      case 'Exit Group':
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text("Exit Room?"),
+                actions: [
+                  FlatButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      'Cancel',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                  FlatButton(
+                    onPressed: () {
+                      Navigator.pop(context, 'delete');
+                    },
+                    child: Text(
+                      'Exit',
+                    ),
+                  ),
+                ],
+              );
+            }).then((value) async {
+          if (value == 'delete') {
+            setState(() {
+              iamOut = true;
+            });
+            _chatController.removeMemberFromRoom(
+              id_user: MyUser.myUser.id,
+              id_room: widget.group.id,
+            );
+            widget.exitGroup();
+
+//            Navigator.pop(context);
+          }
+        });
+        break;
+    }
+  }
 }

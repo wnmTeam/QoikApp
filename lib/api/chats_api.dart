@@ -152,4 +152,11 @@ class ChatsApi {
       'images': FieldValue.arrayUnion([url]),
     }, SetOptions(merge: true));
   }
+
+  removeMemberFromRoom({String id_user, String id_room}) {
+    _firestore.collection('rooms').doc(id_room).set({
+      'members': FieldValue.arrayRemove([id_user]),
+      'admins': FieldValue.arrayRemove([id_user]),
+    }, SetOptions(merge: true));
+  }
 }
