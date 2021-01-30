@@ -38,13 +38,13 @@ class AuthController {
       await _groupsController.addMemberToGroup(
         uid: getUser.uid,
         id_group: user.groups[0],
-        name : user.university,
+        name: user.university,
         type: 'university',
       );
       print('un');
       await _groupsController.addMemberToGroup(
         uid: getUser.uid,
-        name : user.college,
+        name: user.college,
         id_group: user.groups[1],
         type: 'college',
       );
@@ -55,7 +55,7 @@ class AuthController {
       await _groupsController.addMemberToGroup(
         uid: getUser.uid,
         id_group: user.groups[2],
-        name : user.oldUniversity,
+        name: user.oldUniversity,
         type: 'university',
       );
       print('old un');
@@ -102,6 +102,24 @@ class AuthController {
         limit: limit,
         last: last,
       );
+
+  search(
+      {String text,
+      int limit,
+      last,
+      String gender,
+      String college,
+      String university,
+}) {
+    return api.search(
+      text: text.toLowerCase(),
+      limit: limit,
+      last: last,
+      college: college,
+      university: university,
+      gender: gender,
+    );
+  }
 
   Future addPoint({String id_user}) => api.addPoint(id_user: id_user);
 

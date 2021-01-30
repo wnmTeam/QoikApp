@@ -141,4 +141,27 @@ class Auth {
       SetOptions(merge: true),
     );
   }
+
+  search({
+    String text,
+    int limit,
+    last,
+    String gender,
+    String college,
+    String university,
+  }) {
+    Query q = _firestore.collection('users');
+
+    if (gender != null) q = q.where('gender', isEqualTo: gender);
+
+    if (university != null) q = q.where('university', isEqualTo: university);
+
+    if (college != null) q = q.where('college', isEqualTo: college);
+
+    q = q.orderBy('fullName').startAt([text]).endAt([text + '\uf8ff']);
+
+    if (last != null) return q.startAfterDocument(last).limit(limit).get();
+
+    return q.limit(limit).get();
+  }
 }

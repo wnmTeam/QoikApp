@@ -1,6 +1,7 @@
 class User {
   static const String FIRST_NAME = 'firstName';
   static const String SECOND_NAME = 'secondName';
+  static const String FULL_NAME = 'fullName';
   static const String GENDER = 'gender';
   static const String DEGREE = 'degree';
   static const String UNIVERSITY = 'university';
@@ -23,6 +24,7 @@ class User {
 
   String firstName;
   String secondName;
+  String fullName;
   String gender;
   String degree;
   String university;
@@ -61,6 +63,7 @@ class User {
   Map<String, dynamic> toMap() => {
         'firstName': firstName,
         'secondName': secondName,
+        FULL_NAME: firstName.toLowerCase() + ' ' + secondName.toLowerCase(),
         'gender': gender,
         'degree': degree,
         'university': university,
@@ -92,7 +95,7 @@ class User {
     this.bio = map[BIO];
     this.img = map[IMG];
     this.email = map[EMAIL];
-
+    this.fullName = map[FULL_NAME];
     return this;
   }
 
