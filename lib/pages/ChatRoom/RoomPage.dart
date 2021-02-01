@@ -200,6 +200,7 @@ class _RoomPageState extends State<RoomPage> {
                                           idOwner: MyUser.myUser.id,
                                           images: [],
                                         ),
+                                        id_receiver: widget.group.id,
                                         images: _images,
                                         id_chat: widget.group.id,
                                         type: 'rooms',
@@ -245,6 +246,8 @@ class _RoomPageState extends State<RoomPage> {
                               idOwner: _authController.getUser.uid,
                               text: _messageController.text.trim(),
                             ),
+                            id_receiver: widget.group.id,
+                            images: [],
                             id_chat: widget.group.id,
                             type: 'rooms',
                           );

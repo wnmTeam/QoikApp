@@ -3,12 +3,16 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/Message.dart';
+import 'package:stumeapp/Models/MyUser.dart';
+import 'package:stumeapp/Models/Notification.dart';
+import 'package:stumeapp/api/notification_api.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 
 class ChatsApi {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   StorageController _storageController = StorageController();
+  NotificationApi _notificationsApi = NotificationApi();
 
   Future getMessages({
     int limit,
@@ -43,13 +47,16 @@ class ChatsApi {
   Future addMessage({
     Message message,
     String id_chat,
+    String id_receiver,
     String type,
     List<File> images,
-  }) {
+  }) async {
+    WriteBatch batch = _firestore.batch();
+
     Map m = message.toMap();
     m['date'] = FieldValue.serverTimestamp();
 
-    return _firestore
+    await _firestore
         .collection(type)
         .doc(id_chat)
         .collection('messages')
@@ -71,6 +78,15 @@ class ChatsApi {
         );
       }
     });
+
+    return _notificationsApi.sendNotification(
+      Notification(
+        idSender: MyUser.myUser.id,
+        idReceiver: id_receiver,
+        data: message.text,
+        type: type,
+      ),
+    );
   }
 
   Stream getNewMessages({

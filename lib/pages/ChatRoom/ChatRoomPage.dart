@@ -192,6 +192,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                           images: [],
                                         ),
                                         images: _images,
+                                        id_receiver: widget.user.id,
                                         id_chat: getChatID(),
                                         type: 'chats',
                                       );
@@ -236,6 +237,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                               idOwner: _authController.getUser.uid,
                               text: _messageController.text.trim(),
                             ),
+                            id_receiver: widget.user.id,
                             id_chat: getChatID(),
                             images: [],
                             type: 'chats',

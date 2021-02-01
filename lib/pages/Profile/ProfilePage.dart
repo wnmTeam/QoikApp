@@ -10,6 +10,7 @@ import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
 import 'package:stumeapp/controller/FriendsController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class ProfilePage extends StatefulWidget {
   User user;
@@ -113,7 +114,6 @@ class MapScreenState extends State<ProfilePage> {
                                   });
                                 },
                               ),
-
                               SizedBox(
                                 height: 12,
                               ),
@@ -127,7 +127,11 @@ class MapScreenState extends State<ProfilePage> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              uploadImage?SizedBox(width: size.width / 2,child: LinearProgressIndicator()):Container(),
+                              uploadImage
+                                  ? SizedBox(
+                                      width: size.width / 2,
+                                      child: LinearProgressIndicator())
+                                  : Container(),
                               SizedBox(
                                 height: 8,
                               ),
@@ -307,6 +311,18 @@ class MapScreenState extends State<ProfilePage> {
                                             children: [
                                               Column(
                                                 children: [
+                                                  Image.asset(
+                                                    _userTagImage(),
+                                                    width: 50,
+                                                    height: 50,
+                                                    color:
+                                                    ConstValues.firstColor,
+                                                  ),
+                                                  Text(widget.user.tag),
+                                                ],
+                                              ),
+                                              Column(
+                                                children: [
                                                   Text(
                                                     widget.user.points
                                                         .toString(),
@@ -315,21 +331,26 @@ class MapScreenState extends State<ProfilePage> {
                                                           .firstColor,
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      fontSize: 40,
+                                                      fontSize: 45,
                                                     ),
                                                   ),
                                                   Text('Points'),
                                                 ],
                                               ),
+
                                               Column(
                                                 children: [
-                                                  Icon(
-                                                    Icons.person,
+                                                  SvgPicture.asset(
+                                                    'assets/${widget.user.gender}.svg',
+                                                    width: 40,
+                                                    height: 40,
                                                     color:
                                                         ConstValues.firstColor,
-                                                    size: 50,
                                                   ),
-                                                  Text(widget.user.tag),
+                                                  SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Text(widget.user.gender),
                                                 ],
                                               ),
                                             ],
@@ -577,6 +598,21 @@ class MapScreenState extends State<ProfilePage> {
     l.sort();
 
     return l[0] + l[1];
+  }
+
+  String _userTagImage() {
+    switch (widget.user.tag) {
+      case User.TAG_NEW_USER:
+        return 'assets/newUser.png';
+      case User.TAG_NORMAL_USER:
+        return 'assets/normalUser.png';
+      case User.TAG_ACTIVE_USER:
+        return 'assets/activeUser.png';
+      case User.TAG_EX_USER:
+        return 'assets/exUser.png';
+      case User.TAG_SURE_USER:
+        return 'assets/sureUser.png';
+    }
   }
 }
 

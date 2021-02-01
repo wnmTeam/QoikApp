@@ -150,6 +150,8 @@ class _PostWidgetState extends State<PostWidget>
                       return UserPlaceholder();
 //                    return CircularProgressIndicator();
                     }),
+                post.text.isNotEmpty
+                    ?Divider():Container(),
                 SizedBox(
                   height: 6,
                 ),

@@ -75,6 +75,7 @@ class _GroupPageState extends State<GroupPage>
             leading: Container(
               width: 38,
               height: 38,
+              color: Colors.white70,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

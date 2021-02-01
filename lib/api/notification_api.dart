@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:stumeapp/Models/Notification.dart';
 
 class NotificationApi {
   final FirebaseMessaging fbm = FirebaseMessaging();
@@ -47,5 +48,12 @@ class NotificationApi {
         .doc(Platform.operatingSystem);
 
     return tokens.delete();
+  }
+
+  sendNotification(Notification notification) {
+    Map m = notification.toMap();
+    m[Notification.DATE] = FieldValue.serverTimestamp();
+
+    return _firestore.collection('notifications').add(m);
   }
 }

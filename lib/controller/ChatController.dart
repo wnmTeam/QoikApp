@@ -25,6 +25,7 @@ class ChatController {
   Future addMessage({
     Message message,
     String id_chat,
+    String id_receiver,
     List<File> images,
     String type,
   }) {
@@ -33,6 +34,7 @@ class ChatController {
       id_chat: id_chat,
       type: type,
       images: images,
+      id_receiver: id_receiver,
     );
   }
 
@@ -76,7 +78,7 @@ class ChatController {
     return api.getRoom(id: id);
   }
 
-   Future removeMemberFromRoom({String id_user, String id_room}) {
+  Future removeMemberFromRoom({String id_user, String id_room}) {
     return api.removeMemberFromRoom(id_user: id_user, id_room: id_room);
   }
 }
