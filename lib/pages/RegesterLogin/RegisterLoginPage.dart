@@ -617,7 +617,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
             ],
           ),
         ),
-  );
+      );
 
   _main() =>
       Container(
