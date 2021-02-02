@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -121,13 +122,23 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
-                      MyUser.myUser.img != null ? MyUser.myUser.img : ' ',
-                      fit: BoxFit.cover,
-                      width: 40,
-                      height: 40,
-                    ),
-                  ),
+                          //TODO:
+                          child: CachedNetworkImage(
+                            imageUrl: MyUser.myUser.img != null
+                                ? MyUser.myUser.img
+                                : ' ',
+                            placeholder: (context, url) {
+                              //TODO: Replace the placeHolder
+                              return Icon(
+                                Icons.person,
+                                color: Colors.white,
+                              );
+                            },
+                            fit: BoxFit.cover,
+                            width: 40,
+                            height: 40,
+                          ),
+                        ),
                 ],
               ),
             )
