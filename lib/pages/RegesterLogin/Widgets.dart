@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:stumeapp/localization.dart';
 
 class MyDropdownButton extends StatefulWidget {
   Function(String) onSelected;
@@ -41,7 +42,10 @@ class _MyDropdownButtonState extends State<MyDropdownButton> {
       },
       validator: (String value) {
         if (value.isEmpty) {
-          return 'this field is required';
+          return Languages.translate(
+            context,
+            'field_requered',
+          );
         }
         return null;
       },
@@ -74,13 +78,19 @@ class ResetDialog extends StatelessWidget {
           children: [
             TextFormField(
               controller: resetEmailController,
-              decoration: const InputDecoration(
-                labelText: 'reset email',
+              decoration: InputDecoration(
+                labelText: Languages.translate(
+                  context,
+                  'reset_email',
+                ),
                 border: OutlineInputBorder(),
               ),
               validator: (String value) {
                 if (value.isEmpty) {
-                  return 'email is required';
+                  return Languages.translate(
+                    context,
+                    'email_is_Requered',
+                  );
                 }
                 return null;
               },
@@ -92,7 +102,10 @@ class ResetDialog extends StatelessWidget {
                   Navigator.of(context).pop();
                 }
               },
-              child: Text('done'),
+              child: Text(Languages.translate(
+                context,
+                'done',
+              )),
             )
           ],
         ),

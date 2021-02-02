@@ -6,6 +6,7 @@ import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/controller/FriendsController.dart';
+import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
 class SearchFriendsPage extends StatefulWidget {
@@ -46,7 +47,10 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
           controller: _searchController,
           decoration: InputDecoration(
               border: InputBorder.none,
-              hintText: 'Search...',
+              hintText: Languages.translate(
+                context,
+                'search',
+              ),
               hintStyle: TextStyle(color: Colors.white70)),
           onSubmitted: (value) {
             if (value.isNotEmpty) {
@@ -75,7 +79,10 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
                     _search();
                   },
                   child: Text(
-                    _university != null ? _university : 'University',
+                    _university != null ? _university : Languages.translate(
+                      context,
+                      'university',
+                    ),
                     style: TextStyle(fontSize: 13),
                   ),
                   shape: RoundedRectangleBorder(
@@ -92,7 +99,10 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
                     _search();
                   },
                   child: Text(
-                    _college != null ? _college : 'College',
+                    _college != null ? _college : Languages.translate(
+                      context,
+                      'college',
+                    ),
                     style: TextStyle(fontSize: 13),
                   ),
                   shape: RoundedRectangleBorder(
@@ -106,7 +116,10 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
                     _search();
                   },
                   child: Text(
-                    _gender != null ? _gender : 'Gender',
+                    _gender != null ? _gender : Languages.translate(
+                      context,
+                      'gender',
+                    ),
                     style: TextStyle(fontSize: 13),
                   ),
                   shape: RoundedRectangleBorder(
@@ -134,7 +147,10 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
                       SizedBox(
                         width: 3,
                       ),
-                      Text('Clear',
+                      Text(Languages.translate(
+                        context,
+                        'clear',
+                      ),
                           style: TextStyle(
                             color: Colors.white,
                           )),
@@ -159,7 +175,10 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
                         onPressed: () {
                           getFriendRequests(_searchController.text);
                         },
-                        child: Text('Load More..'));
+                        child: Text(Languages.translate(
+                          context,
+                          'load_more',
+                        )));
                   return Container();
                 }
                 return UserWidget(
@@ -234,7 +253,10 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
             return ListView(
               children: [
                 ListTile(
-                  title: Text('None'),
+                  title: Text(Languages.translate(
+                    context,
+                    'none',
+                  )),
                   onTap: () {
                     setState(() {
                       _gender = null;
@@ -243,7 +265,10 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
                   },
                 ),
                 ListTile(
-                  title: Text('Male'),
+                  title: Text(Languages.translate(
+                    context,
+                    'male',
+                  )),
                   onTap: () {
                     setState(() {
                       _gender = 'Male';
@@ -252,7 +277,10 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
                   },
                 ),
                 ListTile(
-                  title: Text('Female'),
+                  title: Text(Languages.translate(
+                    context,
+                    'female',
+                  )),
                   onTap: () {
                     setState(() {
                       _gender = 'Female';
@@ -273,7 +301,10 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
                   itemBuilder: (context, index) {
                     String item = items[index];
                     return ListTile(
-                      title: Text(null != item ? item : 'None'),
+                      title: Text(null != item ? item : Languages.translate(
+                        context,
+                        'none',
+                      )),
                       onTap: () {
                         setState(() {
                           if (type == 'colleges')

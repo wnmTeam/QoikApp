@@ -4,6 +4,7 @@ import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
+import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/ChatRoom/tabs/ChatsTap.dart';
 import 'package:stumeapp/pages/ChatRoom/tabs/RoomsTap.dart';
 import 'package:stumeapp/pages/Group/tabs/MembersTabView.dart';
@@ -52,10 +53,16 @@ class _ChatsPageState extends State<ChatsPage>
             controller: _tabController,
             tabs: [
               Tab(
-                child: Text('Chats',),
+                child: Text(Languages.translate(
+                  context,
+                  'chats',
+                ),),
               ),
               Tab(
-                child: Text('Rooms',),
+                child: Text(Languages.translate(
+                  context,
+                  'rooms',
+                ),),
               ),
             ],
           ),

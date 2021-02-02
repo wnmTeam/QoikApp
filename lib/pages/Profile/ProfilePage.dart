@@ -11,6 +11,7 @@ import 'package:stumeapp/controller/ChatController.dart';
 import 'package:stumeapp/controller/FriendsController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:stumeapp/localization.dart';
 
 class ProfilePage extends StatefulWidget {
   User user;
@@ -166,8 +167,11 @@ class MapScreenState extends State<ProfilePage> {
                                                         Icons.person_remove,
                                                         color: Colors.blueGrey,
                                                       ),
-                                                      label:
-                                                          Text('Remove Friend'),
+                                                      label: Text(
+                                                          Languages.translate(
+                                                        context,
+                                                        'remove_friend',
+                                                      )),
                                                       onPressed: () async {
                                                         await _friendsController
                                                             .deleteFriend(
@@ -190,8 +194,11 @@ class MapScreenState extends State<ProfilePage> {
                                                             color:
                                                                 Colors.blueGrey,
                                                           ),
-                                                          label: Text(
-                                                              'Cancel Request'),
+                                                          label: Text(Languages
+                                                              .translate(
+                                                            context,
+                                                            'cancel_reques',
+                                                          )),
                                                           onPressed: () async {
                                                             await _friendsController
                                                                 .deleteFriendRequest(
@@ -217,7 +224,11 @@ class MapScreenState extends State<ProfilePage> {
                                                                     .blueGrey,
                                                               ),
                                                               label: Text(
-                                                                  'Accept'),
+                                                                  Languages
+                                                                      .translate(
+                                                                context,
+                                                                'accept',
+                                                              )),
                                                               onPressed:
                                                                   () async {
                                                                 await _friendsController
@@ -241,7 +252,11 @@ class MapScreenState extends State<ProfilePage> {
                                                                     .blueGrey,
                                                               ),
                                                               label: Text(
-                                                                  'Add Friend'),
+                                                                  Languages
+                                                                      .translate(
+                                                                context,
+                                                                'add_friend',
+                                                              )),
                                                               onPressed:
                                                                   () async {
                                                                 await _friendsController
@@ -266,7 +281,10 @@ class MapScreenState extends State<ProfilePage> {
                                                   Icons.chat,
                                                   color: Colors.blueGrey,
                                                 ),
-                                                label: Text('Mesaage'),
+                                                label: Text(Languages.translate(
+                                                  context,
+                                                  'message',
+                                                )),
                                                 onPressed: () {
                                                   Navigator.pushNamed(
                                                       context, '/ChatRoomPage',
@@ -293,7 +311,10 @@ class MapScreenState extends State<ProfilePage> {
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Text(
-                                            'Personal Info',
+                                            Languages.translate(
+                                              context,
+                                              'personal_info',
+                                            ),
                                             style: TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold,
@@ -316,7 +337,7 @@ class MapScreenState extends State<ProfilePage> {
                                                     width: 50,
                                                     height: 50,
                                                     color:
-                                                    ConstValues.firstColor,
+                                                        ConstValues.firstColor,
                                                   ),
                                                   Text(widget.user.tag),
                                                 ],
@@ -334,10 +355,12 @@ class MapScreenState extends State<ProfilePage> {
                                                       fontSize: 45,
                                                     ),
                                                   ),
-                                                  Text('Points'),
+                                                  Text(Languages.translate(
+                                                    context,
+                                                    'points',
+                                                  )),
                                                 ],
                                               ),
-
                                               Column(
                                                 children: [
                                                   SvgPicture.asset(
@@ -393,7 +416,10 @@ class MapScreenState extends State<ProfilePage> {
                                                       height: 2,
                                                       width: 2,
                                                     ),
-                                              title: Text('Bio'),
+                                              title: Text(Languages.translate(
+                                                context,
+                                                'bio',
+                                              )),
                                               subtitle: TextField(
                                                 maxLines: 50,
                                                 autofocus: true,
@@ -414,14 +440,20 @@ class MapScreenState extends State<ProfilePage> {
                                         SizedBox(
                                             width: size.width - 24,
                                             child: ListTile(
-                                              title: Text('University'),
+                                              title: Text(Languages.translate(
+                                                context,
+                                                'university',
+                                              )),
                                               subtitle:
                                                   Text(widget.user.university),
                                             )),
                                         SizedBox(
                                             width: size.width - 24,
                                             child: ListTile(
-                                              title: Text('College'),
+                                              title: Text(Languages.translate(
+                                                context,
+                                                'college',
+                                              )),
                                               subtitle:
                                                   Text(widget.user.college),
                                             )),
@@ -429,7 +461,11 @@ class MapScreenState extends State<ProfilePage> {
                                             ? SizedBox(
                                                 width: size.width - 24,
                                                 child: ListTile(
-                                                  title: Text('E-Mail'),
+                                                  title:
+                                                      Text(Languages.translate(
+                                                    context,
+                                                    'email',
+                                                  )),
                                                   subtitle:
                                                       Text(widget.user.email),
                                                 ))
@@ -448,7 +484,11 @@ class MapScreenState extends State<ProfilePage> {
                                                           '/ChangePasswordPage');
                                                     },
                                                   ),
-                                                  title: Text('password'),
+                                                  title:
+                                                      Text(Languages.translate(
+                                                    context,
+                                                    'password',
+                                                  )),
                                                   subtitle: TextField(
                                                     controller:
                                                         TextEditingController(
@@ -471,7 +511,15 @@ class MapScreenState extends State<ProfilePage> {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
-                                      isMyProfile ? 'My Friends' : 'Friends',
+                                      isMyProfile
+                                          ? Languages.translate(
+                                              context,
+                                              'my_friends',
+                                            )
+                                          : Languages.translate(
+                                              context,
+                                              'friends',
+                                            ),
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18)),
@@ -508,7 +556,11 @@ class MapScreenState extends State<ProfilePage> {
                                                   },
                                                 )
                                               : Center(
-                                                  child: Text('No Friends')),
+                                                  child:
+                                                      Text(Languages.translate(
+                                                  context,
+                                                  'no_friends',
+                                                ))),
                                         );
                                       }
                                       return SizedBox(

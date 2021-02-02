@@ -16,10 +16,10 @@ class Book {
   });
 
   Map<String, dynamic> toMap() => {
-        NAME: name,
-        URL: url,
-        IMG: img,
-      };
+    NAME: name,
+    URL: url,
+    IMG: img,
+  };
 
   Book fromMap(map) {
     this.img = map[IMG];

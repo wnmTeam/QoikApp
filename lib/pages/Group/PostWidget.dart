@@ -11,6 +11,7 @@ import 'package:stumeapp/controller/PostsController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
 import 'CommentWidget.dart';
@@ -353,7 +354,10 @@ class _PostWidgetState extends State<PostWidget>
                 ),
                 if (commentsShow && hasMoreComments)
                   FlatButton(
-                    child: Text('load more..'),
+                    child: Text(Languages.translate(
+                      context,
+                      'load_more',
+                    )),
                     onPressed: () {
                       _loadComments();
                     },
@@ -451,7 +455,10 @@ class _PostWidgetState extends State<PostWidget>
                           controller: _commentController,
                           decoration: InputDecoration(
                               border: InputBorder.none,
-                              hintText: 'Comment here..'),
+                              hintText: Languages.translate(
+                                context,
+                                'write_comment',
+                              )),
                         ),
                       ),
                       IconButton(

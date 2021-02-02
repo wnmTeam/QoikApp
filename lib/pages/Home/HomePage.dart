@@ -5,6 +5,7 @@ import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/api/notification_api.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
+import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/Home/tabs/FriendsTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/GroupsChatsTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/HomeTabView.dart';
@@ -27,7 +28,6 @@ class _HomePageState extends State<HomePage> {
 
   AuthController _authController = AuthController();
   NotificationApi _notificationApi = NotificationApi();
-
 
   @override
   void initState() {
@@ -154,19 +154,30 @@ class _HomePageState extends State<HomePage> {
         items: [
           FABBottomAppBarItem(
             iconData: Icons.home,
-            text: 'Home',
+            text: Languages.translate(
+              context,
+              'home',
+            ),
           ),
           FABBottomAppBarItem(
-            iconData: Icons.chat_rounded,
-            text: 'Groups',
-          ),
+              iconData: Icons.chat_rounded,
+              text: Languages.translate(
+                context,
+                'groups',
+              )),
           FABBottomAppBarItem(
             iconData: Icons.group,
-            text: 'Friends',
+            text: Languages.translate(
+              context,
+              'friends',
+            ),
           ),
           FABBottomAppBarItem(
             iconData: Icons.library_books,
-            text: 'Library',
+            text: Languages.translate(
+              context,
+              'library',
+            ),
             svgIcon: 'assets/lib.svg',
           ),
         ],
@@ -208,7 +219,10 @@ class _HomePageState extends State<HomePage> {
                 child: Container(),
               ),
               ListTile(
-                title: Text('My Profile'),
+                title: Text(Languages.translate(
+                  context,
+                  'my_profile',
+                )),
                 leading: Icon(Icons.person),
                 onTap: () {
                   Navigator.of(context).pushNamed(
@@ -221,33 +235,49 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
               ListTile(
-                title: Text('Setting'),
+                title: Text(
+                  Languages.translate(
+                    context,
+                    'setting',
+                  ),
+                ),
                 leading: Icon(Icons.settings),
-                onTap: () {
-                },
+                onTap: () {},
               ),
               Divider(),
               ListTile(
-                title: Text('About'),
+                title: Text(Languages.translate(
+                  context,
+                  'about',
+                )),
                 leading: Icon(Icons.warning_rounded),
-                onTap: () {
-                },
+                onTap: () {},
               ),
               ListTile(
-                title: Text('Contact Us'),
+                title: Text(Languages.translate(
+                  context,
+                  'contact_us',
+                )),
                 leading: Icon(Icons.group),
-                onTap: () {
-                },
+                onTap: () {},
               ),
               ListTile(
-                title: Text('FAQ'),
+                title: Text(Languages.translate(
+                  context,
+                  'faq',
+                )),
                 leading: Icon(Icons.help),
-                onTap: () {
-                },
+                onTap: () {},
               ),
               Divider(),
               ListTile(
-                title: Text('Log out', style: TextStyle(color: Colors.red),),
+                title: Text(
+                  Languages.translate(
+                    context,
+                    'log_out',
+                  ),
+                  style: TextStyle(color: Colors.red),
+                ),
                 leading: Icon(Icons.logout, color: Colors.red),
                 onTap: () {
                   _authController.logOut();

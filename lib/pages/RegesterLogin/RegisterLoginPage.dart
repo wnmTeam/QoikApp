@@ -4,6 +4,7 @@ import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
+import 'package:stumeapp/localization.dart';
 
 import 'Widgets.dart';
 
@@ -97,7 +98,10 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               height: 12,
             ),
             Text(
-              "Welcome back!",
+              Languages.translate(
+                context,
+                'welcome_back',
+              ),
               style: TextStyle(
                 fontSize: width / ConstValues.fontSize_1,
                 fontWeight: FontWeight.w900,
@@ -107,7 +111,10 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               height: 12,
             ),
             Text(
-              "Log in to Live your life smarter with us!",
+              Languages.translate(
+                context,
+                'login_statment',
+              ),
               style: TextStyle(
                 color: Color.fromARGB(150, 0, 0, 0),
                 fontWeight: FontWeight.normal,
@@ -123,11 +130,17 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               decoration: InputDecoration(
                 floatingLabelBehavior: FloatingLabelBehavior.auto,
                 icon: Icon(Icons.email_outlined),
-                labelText: 'Email',
+                labelText: Languages.translate(
+                  context,
+                  'email',
+                ),
               ),
               validator: (String value) {
                 if (value.isEmpty) {
-                  return 'email is required';
+                  return Languages.translate(
+                    context,
+                    'email_is_Requered',
+                  );
                 }
                 return null;
               },
@@ -142,11 +155,17 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               keyboardType: TextInputType.visiblePassword,
               decoration: InputDecoration(
                 icon: Icon(Icons.lock_open),
-                labelText: "Password",
+                labelText: Languages.translate(
+                  context,
+                  'password',
+                ),
               ),
               validator: (String value) {
                 if (value.isEmpty) {
-                  return 'password is required';
+                  return Languages.translate(
+                    context,
+                    'password_is_Requered',
+                  );
                 }
                 return null;
               },
@@ -171,7 +190,10 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                       });
                 },
                 child: Text(
-                  "Forget your password?",
+                  Languages.translate(
+                    context,
+                    'forgut_password',
+                  ),
                   style: TextStyle(
                     color: Color.fromARGB(150, 0, 0, 0),
                     fontWeight: FontWeight.normal,
@@ -221,7 +243,10 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 },
                 child: !waiting
                     ? Text(
-                        'LOG IN',
+                        Languages.translate(
+                          context,
+                          'login',
+                        ),
                         style: TextStyle(
                           fontSize: width / ConstValues.fontSize_2,
                           color: Colors.white,
@@ -242,7 +267,10 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                             width: 12,
                           ),
                           Text(
-                            'WAITING..',
+                            Languages.translate(
+                              context,
+                              'whaiting',
+                            ),
                             style: TextStyle(
                               fontSize: width / ConstValues.fontSize_2,
                               color: Colors.white,
@@ -273,7 +301,10 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "don't have an account ?",
+                  Languages.translate(
+                    context,
+                    'dont_have_account',
+                  ),
                   style: TextStyle(
                     fontWeight: FontWeight.normal,
                   ),
@@ -285,7 +316,10 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                     });
                   },
                   child: Text(
-                    "Sign up",
+                    Languages.translate(
+                      context,
+                      'create_account',
+                    ),
                     style: TextStyle(
                       color: ConstValues.firstColor,
                       fontWeight: FontWeight.bold,
@@ -311,7 +345,10 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 height: 12,
               ),
               Text(
-                "Let's Get Started!",
+                Languages.translate(
+                  context,
+                  'signup_statment',
+                ),
                 style: TextStyle(
                   fontSize: width / ConstValues.fontSize_1,
                   fontWeight: FontWeight.w900,
@@ -321,7 +358,10 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 height: 10,
               ),
               Text(
-                "Improve the communications with your collages",
+                Languages.translate(
+                  context,
+                  'signup_statment1',
+                ),
                 style: TextStyle(
                   color: Color.fromARGB(150, 0, 0, 0),
                   fontWeight: FontWeight.normal,
@@ -336,11 +376,17 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 decoration: InputDecoration(
                   floatingLabelBehavior: FloatingLabelBehavior.auto,
                   icon: Icon(Icons.person_outline),
-                  labelText: 'First Name',
+                  labelText: Languages.translate(
+                    context,
+                    'first_name',
+                  ),
                 ),
                 validator: (String value) {
                   if (value.isEmpty) {
-                    return 'this field is required';
+                    return Languages.translate(
+                      context,
+                      'field_requered',
+                    );
                   }
                   return null;
                 },
@@ -353,12 +399,18 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
                   floatingLabelBehavior: FloatingLabelBehavior.auto,
-                  labelText: 'Second Name',
+                  labelText: Languages.translate(
+                    context,
+                    'second_name',
+                  ),
                   icon: Icon(Icons.person_outline),
                 ),
                 validator: (String value) {
                   if (value.isEmpty) {
-                    return 'this field is required';
+                    return Languages.translate(
+                      context,
+                      'field_requered',
+                    );
                   }
                   return null;
                 },
@@ -385,7 +437,10 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                           },
                         ),
                         Text(
-                          'male',
+                          Languages.translate(
+                            context,
+                            'male',
+                          ),
                           style: TextStyle(
                             fontSize: 18,
                           ),
@@ -406,7 +461,10 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                           },
                         ),
                         Text(
-                          'female',
+                          Languages.translate(
+                            context,
+                            'female',
+                          ),
                           style: TextStyle(
                             fontSize: 18,
                           ),
@@ -428,7 +486,10 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                     _degree = _selected;
                   });
                 },
-                label: 'degree',
+                label: Languages.translate(
+                  context,
+                  'degree',
+                ),
               ),
               SizedBox(
                 height: 20,
@@ -445,11 +506,17 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 decoration: InputDecoration(
                   floatingLabelBehavior: FloatingLabelBehavior.auto,
                   icon: Icon(Icons.email_outlined),
-                  labelText: 'Email',
+                  labelText: Languages.translate(
+                    context,
+                    'email',
+                  ),
                 ),
                 validator: (String value) {
                   if (value.isEmpty) {
-                    return 'email is required';
+                    return Languages.translate(
+                      context,
+                      'email_is_Requered',
+                    );
                   }
                   return null;
                 },
@@ -464,11 +531,17 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 obscureText: true,
                 decoration: InputDecoration(
                   icon: Icon(Icons.lock_open),
-                  labelText: "Password",
+                  labelText: Languages.translate(
+                    context,
+                    'password',
+                  ),
                 ),
                 validator: (String value) {
                   if (value.isEmpty) {
-                    return 'password is required';
+                    return Languages.translate(
+                      context,
+                      'password_is_Requered',
+                    );
                   }
                   return null;
                 },
@@ -483,13 +556,22 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 obscureText: true,
                 decoration: InputDecoration(
                   icon: Icon(Icons.lock_open),
-                  labelText: "Confirm password",
+                  labelText: Languages.translate(
+                    context,
+                    'confirm_password',
+                  ),
                 ),
                 validator: (String value) {
                   if (value.isEmpty) {
-                    return 'this field is required';
+                    return Languages.translate(
+                      context,
+                      'field_requered',
+                    );
                   } else if (value != _passwordController.text)
-                    return 'wrong password';
+                    return Languages.translate(
+                      context,
+                      'wrong_password',
+                    );
                   return null;
                 },
               ),
@@ -499,7 +581,10 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               CheckboxListTile(
                 activeColor: ConstValues.firstColor,
                 contentPadding: EdgeInsets.zero,
-                title: Text("All  information are true"),
+                title: Text(Languages.translate(
+                  context,
+                  'info_true',
+                )),
                 value: _checkedTrueInfo,
                 onChanged: (newValue) {
                   setState(() {
@@ -552,7 +637,10 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 ),
                 child: !waiting
                     ? Text(
-                        "Create account",
+                        Languages.translate(
+                          context,
+                          'create_account',
+                        ),
                         style: TextStyle(
                           fontSize: width / ConstValues.fontSize_2,
                           color: Colors.white,
@@ -573,7 +661,10 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                             width: 12,
                           ),
                           Text(
-                            'WAITING..',
+                            Languages.translate(
+                              context,
+                              'whaiting',
+                            ),
                             style: TextStyle(
                               fontSize: width / ConstValues.fontSize_2,
                               color: Colors.white,
@@ -590,7 +681,10 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "already have an account?",
+                    Languages.translate(
+                      context,
+                      'have_account',
+                    ),
                     style: TextStyle(
                       fontWeight: FontWeight.normal,
                     ),
@@ -602,7 +696,10 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                       });
                     },
                     child: Text(
-                      "Login",
+                      Languages.translate(
+                        context,
+                        'login',
+                      ),
                       style: TextStyle(
                         color: ConstValues.firstColor,
                         fontWeight: FontWeight.bold,
@@ -629,8 +726,16 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               );
             },
             contentPadding: EdgeInsets.zero,
-            title: Text('University'),
-            subtitle: Text(_university == null ? 'Tap to select' : _university),
+            title: Text(Languages.translate(
+              context,
+              'university',
+            )),
+            subtitle: Text(_university == null
+                ? Languages.translate(
+                    context,
+                    'tap_to_select',
+                  )
+                : _university),
             leading: Icon(Icons.account_balance_outlined),
           ),
           SizedBox(
@@ -644,8 +749,16 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               );
             },
             contentPadding: EdgeInsets.zero,
-            title: Text('College'),
-            subtitle: Text(_college == null ? 'Tap to select' : _college),
+            title: Text(Languages.translate(
+              context,
+              'college',
+            )),
+            subtitle: Text(_college == null
+                ? Languages.translate(
+                    context,
+                    'tap_to_select',
+                  )
+                : _college),
             leading: Icon(Icons.account_balance_outlined),
           ),
           SizedBox(
@@ -718,9 +831,16 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               );
             },
             contentPadding: EdgeInsets.zero,
-            title: Text('Old University'),
-            subtitle:
-                Text(_oldUniversity == null ? 'Tap to select' : _oldUniversity),
+            title: Text(Languages.translate(
+              context,
+              'old_university',
+            )),
+            subtitle: Text(_oldUniversity == null
+                ? Languages.translate(
+                    context,
+                    'tap_to_select',
+                  )
+                : _oldUniversity),
             leading: Icon(Icons.account_balance_outlined),
           ),
         ),

@@ -5,6 +5,7 @@ import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/FriendsController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:stumeapp/localization.dart';
 
 class CreateGroupPage extends StatefulWidget {
   @override
@@ -28,7 +29,10 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Group'),
+        title: Text( Languages.translate(
+          context,
+          'ceate_group',
+        )),
         elevation: 0,
       ),
       body: Column(
@@ -60,7 +64,10 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                 },
               );
             },
-            child: Text('Next'),
+            child: Text( Languages.translate(
+              context,
+              'next',
+            )),
           )
         ],
       ),

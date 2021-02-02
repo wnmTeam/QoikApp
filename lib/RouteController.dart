@@ -9,7 +9,6 @@ import 'package:stumeapp/pages/Group/CreatGroupPage.dart';
 import 'package:stumeapp/pages/Group/EditPostPage.dart';
 import 'package:stumeapp/pages/Group/GroupPage.dart';
 import 'package:stumeapp/pages/Group/SelectMembersPage.dart';
-import 'package:stumeapp/pages/Group/StartChatPage.dart';
 import 'package:stumeapp/pages/Group/WritePost.dart';
 import 'package:stumeapp/pages/Library/BookViewerPage.dart';
 import 'package:stumeapp/pages/Library/BooksLibraryPage.dart';
@@ -47,8 +46,6 @@ class RouteController {
                 ));
       case '/CreateGroupPage':
         return MaterialPageRoute(builder: (_) => CreateGroupPage());
-      case '/StartChatPage':
-        return MaterialPageRoute(builder: (_) => StartChatPage());
       case '/ChatRoomPage':
         return MaterialPageRoute(
             builder: (_) => ChatRoomPage(

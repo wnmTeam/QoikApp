@@ -74,7 +74,13 @@ class _RoomPageState extends State<RoomPage> {
           PopupMenuButton<String>(
             onSelected: handleClick,
             itemBuilder: (BuildContext context) {
-              return {'Group Info', 'Exit Group'}.map((String choice) {
+              return {Languages.translate(
+              context,
+              'group_info',
+              ), Languages.translate(
+                context,
+                'exit_group',
+              )}.map((String choice) {
                 return PopupMenuItem<String>(
                   value: choice,
                   child: Text(choice),
@@ -119,7 +125,10 @@ class _RoomPageState extends State<RoomPage> {
                                   onPressed: () {
                                     getMessages();
                                   },
-                                  child: Text('Load More'),
+                                  child: Text(Languages.translate(
+                                    context,
+                                    'load_more',
+                                  )),
                                 )
                               : _messageBuilder(Message()
                                   .fromMap(messages[i].data())
@@ -261,7 +270,10 @@ class _RoomPageState extends State<RoomPage> {
                       ),
                     ],
                   ),
-                ):Text('You Can Not Send More Messages!'),
+                ):Text(Languages.translate(
+                  context,
+                  'cant_send_messages',
+                )),
               ],
             )
           : Center(child: CircularProgressIndicator()),
@@ -401,7 +413,10 @@ class _RoomPageState extends State<RoomPage> {
                                 ? members[message.idOwner].firstName +
                                     ' ' +
                                     members[message.idOwner].secondName
-                                : 'Deleted User',
+                                : Languages.translate(
+                              context,
+                              'deleted_user',
+                            ),
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -499,14 +514,20 @@ class _RoomPageState extends State<RoomPage> {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: Text("Exit Room?"),
+                title: Text(Languages.translate(
+                  context,
+                  'exit_group_q',
+                )),
                 actions: [
                   FlatButton(
                     onPressed: () {
                       Navigator.pop(context);
                     },
                     child: Text(
-                      'Cancel',
+                      Languages.translate(
+                        context,
+                        'cancel',
+                      ),
                       style: TextStyle(color: Colors.black),
                     ),
                   ),
@@ -515,7 +536,10 @@ class _RoomPageState extends State<RoomPage> {
                       Navigator.pop(context, 'delete');
                     },
                     child: Text(
-                      'Exit',
+                      Languages.translate(
+                        context,
+                        'exit',
+                      ),
                     ),
                   ),
                 ],

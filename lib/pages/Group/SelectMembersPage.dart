@@ -6,6 +6,7 @@ import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/FriendsController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/controller/GroupsController.dart';
+import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
 import '../../const_values.dart';
@@ -49,7 +50,10 @@ class _SelectFriendsPageState extends State<SelectFriendsPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          'Select Members',
+          Languages.translate(
+            context,
+            'select_members',
+          ),
         ),
         actions: [
           loading
@@ -67,7 +71,10 @@ class _SelectFriendsPageState extends State<SelectFriendsPage> {
                       width: 12,
                     ),
                     Text(
-                      'Waiting..',
+                      Languages.translate(
+                        context,
+                        'whaiting',
+                      ),
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -100,7 +107,15 @@ class _SelectFriendsPageState extends State<SelectFriendsPage> {
                     }
                   },
                   child: Text(
-                    widget.type == 'create' ? 'Create Group' : 'Add',
+                    widget.type == 'create'
+                        ? Languages.translate(
+                            context,
+                            'create_group',
+                          )
+                        : Languages.translate(
+                            context,
+                            'add',
+                          ),
                     style: TextStyle(
                       color: Colors.white,
                     ),
@@ -123,7 +138,10 @@ class _SelectFriendsPageState extends State<SelectFriendsPage> {
                 onPressed: () {
                   getMyFriends();
                 },
-                child: Text('Loade More'),
+                child: Text(Languages.translate(
+                  context,
+                  'load_more',
+                )),
               );
             return Container();
           }

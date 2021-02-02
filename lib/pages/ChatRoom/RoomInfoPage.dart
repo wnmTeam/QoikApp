@@ -5,6 +5,7 @@ import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
+import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
 class RoomInfoPage extends StatefulWidget {
@@ -82,7 +83,10 @@ class _RoomInfoPageState extends State<RoomInfoPage> {
                                 children: [
                                   ListTile(
                                     leading: Icon(Icons.person),
-                                    title: Text('Show Profile'),
+                                    title: Text(Languages.translate(
+                                      context,
+                                      'show_profile',
+                                    )),
                                     onTap: () {
                                       Navigator.pushNamed(
                                         context,
@@ -96,25 +100,42 @@ class _RoomInfoPageState extends State<RoomInfoPage> {
                                   ),
                                   ListTile(
                                     leading: Icon(Icons.person_remove),
-                                    title: Text('Remove'),
+                                    title: Text(Languages.translate(
+                                      context,
+                                      'remove',
+                                    )),
                                     onTap: () {
                                       showDialog(
                                           context: context,
                                           builder: (context) {
                                             return AlertDialog(
-                                              title: Text("Delete User"),
-                                              content: Text("Delete " +
+                                              title: Text(Languages.translate(
+                                                context,
+                                                'delete',
+                                              )),
+                                              content: Text(Languages.translate(
+                                                    context,
+                                                    'delete',
+                                                  ) +
+                                                  " " +
                                                   user.firstName +
                                                   ' ' +
                                                   user.secondName +
-                                                  ' From This Room?'),
+                                                  ' ' +
+                                                  Languages.translate(
+                                                    context,
+                                                    'from_room',
+                                                  )),
                                               actions: [
                                                 FlatButton(
                                                   onPressed: () {
                                                     Navigator.pop(context);
                                                   },
                                                   child: Text(
-                                                    'Cancel',
+                                                    Languages.translate(
+                                                      context,
+                                                      'cancel',
+                                                    ),
                                                     style: TextStyle(
                                                         color: Colors.black),
                                                   ),
@@ -125,7 +146,10 @@ class _RoomInfoPageState extends State<RoomInfoPage> {
                                                         context, 'delete');
                                                   },
                                                   child: Text(
-                                                    'Delete',
+                                                    Languages.translate(
+                                                      context,
+                                                      'delete',
+                                                    ),
                                                   ),
                                                 ),
                                               ],
