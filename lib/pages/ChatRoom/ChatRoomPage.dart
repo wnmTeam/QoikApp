@@ -87,7 +87,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             borderRadius: BorderRadius.circular(57),
             child: CachedNetworkImage(
               placeholder: (context, url) => Center(
-                child: Container(),
+                child: CircularProgressIndicator(),
               ),
               imageUrl: widget.user.img != null ? widget.user.img : ' ',
               fit: BoxFit.cover,
@@ -332,7 +332,11 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _message(message, false, ConstValues.secondColor, 0, 20, 20, 20),
+            Directionality.of(context) == TextDirection.ltr
+                ? _message(
+                    message, false, ConstValues.secondColor, 0, 20, 20, 20)
+                : _message(
+                    message, false, ConstValues.secondColor, 20, 20, 20, 0),
             SizedBox(
               width: 5,
             ),
@@ -354,7 +358,24 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             SizedBox(
               width: 5,
             ),
-            _message(message, true, ConstValues.accentColor, 20, 20, 20, 0),
+            Directionality.of(context) == TextDirection.ltr ?
+            _message(
+                message,
+                true,
+                ConstValues.accentColor,
+                20,
+                20,
+                20,
+                0)
+                :
+            _message(
+                message,
+                false,
+                ConstValues.secondColor,
+                0,
+                20,
+                20,
+                20)
           ],
         ),
       );
