@@ -11,6 +11,7 @@ import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
+import 'package:stumeapp/pages/ImageView/ImageView.dart';
 
 import '../../const_values.dart';
 import '../../localization.dart';
@@ -408,27 +409,42 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                     height: 1,
                   ),
                   if (message.images != null)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(x1),
-                          topLeft: Radius.circular(x4),
-                        ),
-                        child: CachedNetworkImage(
-                          placeholder: (context, url) => Center(
-                            child: Container(
+                    GestureDetector(
+                      onTap: () {
+                        print(message.images.length > 0
+                            ? message.images[0]
+                            : ' ');
+
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => ImageView(message.images.length > 0
+                                ? message.images[0]
+                                : ' ')));
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(x1),
+                            topLeft: Radius.circular(x4),
+                          ),
+                          child: Hero(
+                            tag: "chat_image",
+                            child: CachedNetworkImage(
+                              placeholder: (context, url) => Center(
+                                child: Container(
+                                  width: size.width / 2,
+                                  height: size.width / 2,
+                                  color: Colors.grey.withOpacity(0.3),
+                                ),
+                              ),
+                              imageUrl: message.images.length > 0
+                                  ? message.images[0]
+                                  : ' ',
+                              fit: BoxFit.cover,
                               width: size.width / 2,
                               height: size.width / 2,
-                              color: Colors.grey.withOpacity(0.3),
                             ),
                           ),
-                          imageUrl: message.images.length > 0
-                              ? message.images[0]
-                              : ' ',
-                          fit: BoxFit.cover,
-                          width: size.width / 2,
-                          height: size.width / 2,
                         ),
                       ),
                     ),
