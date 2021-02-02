@@ -87,7 +87,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             borderRadius: BorderRadius.circular(57),
             child: CachedNetworkImage(
               placeholder: (context, url) => Center(
-                child: CircularProgressIndicator(),
+                //TODO: Change the placeHolder
+                // child: Image.asset("assets/user_image_placeholder.png"),
+                child: Container(),
               ),
               imageUrl: widget.user.img != null ? widget.user.img : ' ',
               fit: BoxFit.cover,
@@ -358,24 +360,11 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             SizedBox(
               width: 5,
             ),
-            Directionality.of(context) == TextDirection.ltr ?
-            _message(
-                message,
-                true,
-                ConstValues.accentColor,
-                20,
-                20,
-                20,
-                0)
-                :
-            _message(
-                message,
-                false,
-                ConstValues.secondColor,
-                0,
-                20,
-                20,
-                20)
+            Directionality.of(context) == TextDirection.ltr
+                ? _message(
+                    message, true, ConstValues.accentColor, 20, 20, 20, 0)
+                : _message(
+                    message, false, ConstValues.secondColor, 0, 20, 20, 20)
           ],
         ),
       );
@@ -468,6 +457,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
         child: firstMessage
             ? CachedNetworkImage(
                 placeholder: (context, url) => Center(
+                  //TODO: Change the placeHolder
+                  // child: Image.asset("assets/user_image_placeholder.png"),
                   child: Container(),
                 ),
                 imageUrl: imageUrl != null ? imageUrl : ' ',
