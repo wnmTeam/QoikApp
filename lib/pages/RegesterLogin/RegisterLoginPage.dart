@@ -639,6 +639,9 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                         isMain = false;
                       });
                     },
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
                     color: Colors.white,
                     child: Text(
                       "SignIn",
@@ -656,6 +659,9 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                         isMain = false;
                       });
                     },
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
                     color: Colors.white,
                     child: Text(
                       "SignUp",
