@@ -37,6 +37,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
 
   bool _isRegister = true;
   bool waiting = false;
+  bool isMain = true;
 
   Future<bool> _onBackBressed() {
     if (!_isRegister)
@@ -56,16 +57,18 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              children: [
-                _isRegister ? _registerForm() : _loginForm(),
-              ],
-            ),
-          ),
-        ),
+        body: isMain
+            ? _main()
+            : SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    children: [
+                      _isRegister ? _registerForm() : _loginForm(),
+                    ],
+                  ),
+                ),
+              ),
       ),
     );
   }
@@ -613,6 +616,56 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               ),
             ],
           ),
+        ),
+  );
+
+  _main() =>
+      Container(
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Image.asset("assets/launchImage.png"),
+            ),
+            Positioned(
+              bottom: 100,
+              right: 0,
+              left: 0,
+              child: Column(
+                children: [
+                  FlatButton(
+                    onPressed: () {
+                      setState(() {
+                        _isRegister = false;
+                        isMain = false;
+                      });
+                    },
+                    color: Colors.white,
+                    child: Text(
+                      "SignIn",
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
+                  Text(
+                    "OR",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  FlatButton(
+                    onPressed: () {
+                      setState(() {
+                        _isRegister = true;
+                        isMain = false;
+                      });
+                    },
+                    color: Colors.white,
+                    child: Text(
+                      "SignUp",
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       );
 
