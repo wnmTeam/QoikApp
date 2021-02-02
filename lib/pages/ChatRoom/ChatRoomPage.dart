@@ -11,6 +11,7 @@ import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
+import 'package:stumeapp/pages/ImageView/ImageView.dart';
 
 import '../../const_values.dart';
 import '../../localization.dart';
@@ -87,6 +88,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             borderRadius: BorderRadius.circular(57),
             child: CachedNetworkImage(
               placeholder: (context, url) => Center(
+                //TODO: Change the placeHolder
+                // child: Image.asset("assets/user_image_placeholder.png"),
                 child: Container(),
               ),
               imageUrl: widget.user.img != null ? widget.user.img : ' ',
@@ -339,7 +342,11 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _message(message, false, ConstValues.secondColor, 0, 20, 20, 20),
+            Directionality.of(context) == TextDirection.ltr
+                ? _message(
+                    message, false, ConstValues.secondColor, 0, 20, 20, 20)
+                : _message(
+                    message, false, ConstValues.secondColor, 20, 20, 20, 0),
             SizedBox(
               width: 5,
             ),
@@ -361,7 +368,11 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             SizedBox(
               width: 5,
             ),
-            _message(message, true, ConstValues.accentColor, 20, 20, 20, 0),
+            Directionality.of(context) == TextDirection.ltr
+                ? _message(
+                    message, true, ConstValues.accentColor, 20, 20, 20, 0)
+                : _message(
+                    message, false, ConstValues.secondColor, 0, 20, 20, 20)
           ],
         ),
       );
@@ -405,27 +416,42 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                     height: 1,
                   ),
                   if (message.images != null)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(x1),
-                          topLeft: Radius.circular(x4),
-                        ),
-                        child: CachedNetworkImage(
-                          placeholder: (context, url) => Center(
-                            child: Container(
+                    GestureDetector(
+                      onTap: () {
+                        print(message.images.length > 0
+                            ? message.images[0]
+                            : ' ');
+
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => ImageView(message.images.length > 0
+                                ? message.images[0]
+                                : ' ')));
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(x1),
+                            topLeft: Radius.circular(x4),
+                          ),
+                          child: Hero(
+                            tag: "chat_image",
+                            child: CachedNetworkImage(
+                              placeholder: (context, url) => Center(
+                                child: Container(
+                                  width: size.width / 2,
+                                  height: size.width / 2,
+                                  color: Colors.grey.withOpacity(0.3),
+                                ),
+                              ),
+                              imageUrl: message.images.length > 0
+                                  ? message.images[0]
+                                  : ' ',
+                              fit: BoxFit.cover,
                               width: size.width / 2,
                               height: size.width / 2,
-                              color: Colors.grey.withOpacity(0.3),
                             ),
                           ),
-                          imageUrl: message.images.length > 0
-                              ? message.images[0]
-                              : ' ',
-                          fit: BoxFit.cover,
-                          width: size.width / 2,
-                          height: size.width / 2,
                         ),
                       ),
                     ),
@@ -454,6 +480,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
         child: firstMessage
             ? CachedNetworkImage(
                 placeholder: (context, url) => Center(
+                  //TODO: Change the placeHolder
+                  // child: Image.asset("assets/user_image_placeholder.png"),
                   child: Container(),
                 ),
                 imageUrl: imageUrl != null ? imageUrl : ' ',

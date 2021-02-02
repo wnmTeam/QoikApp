@@ -42,10 +42,11 @@ dev_dependencies:
   firebase_messaging: ^7.0.3
   flutter_svg:
   cached_network_image: ^2.5.0
-  flutter_localizations: # Add this line
-    sdk: flutter         # Add this line
+  flutter_localizations:
+    sdk: flutter
   flutter_launcher_icons: "^0.8.0"
   timeago: ^2.0.29
+  photo_view: ^0.10.3
 
 
 #flutter_icons:

@@ -1,9 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/controller/ChatController.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
@@ -47,7 +47,7 @@ class _ChatsTabState extends State<ChatsTab>
               onPressed: () {
                 getChats();
               },
-              child: Text('Loade More'),
+              child: Text('Load More'),
             );
           return Container();
         }
