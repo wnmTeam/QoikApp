@@ -1,5 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stumeapp/Models/Comment.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/MyUser.dart';
@@ -8,9 +11,7 @@ import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/PostsController.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:stumeapp/pages/ImageView/ImageView.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
 import 'CommentWidget.dart';
@@ -155,44 +156,54 @@ class _PostWidgetState extends State<PostWidget>
                 ),
                 post.text.isNotEmpty
                     ? Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                        child: InkWell(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0,
-                              vertical: 10,
-                            ),
-                            child: Text(
-                              post.text,
-                              maxLines: _isExbended ? 100 : 5,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Colors.grey[700],
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                          onTap: () {
-                            setState(() {
-                              _isExbended = ! _isExbended;
-                            });
-                          },
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                  child: InkWell(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0,
+                        vertical: 10,
+                      ),
+                      child: Text(
+                        post.text,
+                        maxLines: _isExbended ? 100 : 5,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.grey[700],
+                          fontSize: 16,
                         ),
-                      )
+                      ),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        _isExbended = ! _isExbended;
+                      });
+                    },
+                  ),
+                )
                     : Container(),
                 SizedBox(
                   height: 6,
                 ),
                 if (widget.post.images != null && widget.post.images.length > 0)
-                  CachedNetworkImage(
-                    placeholder: (context, url) => Center(
-                      child: Container(
-                        width: size.width,
-                        height: size.width - 100,
-                        color: Colors.grey[200],
+                  GestureDetector(
+                    onTap: () {
+                      print("------------------------");
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => ImageView(widget.post.images[0])));
+                    },
+                    child: Hero(
+                      tag: widget.post.images[0],
+                      child: CachedNetworkImage(
+                        placeholder: (context, url) => Center(
+                          child: Container(
+                            width: size.width,
+                            height: size.width - 100,
+                            color: Colors.grey[200],
+                          ),
+                        ),
+                        imageUrl: widget.post.images[0],
                       ),
                     ),
-                    imageUrl: widget.post.images[0],
                   ),
                 if (widget.post.images != null && widget.post.images.length > 0)
                   SizedBox(
@@ -231,7 +242,7 @@ class _PostWidgetState extends State<PostWidget>
                                 id_post: widget.post.id);
 
                             DocumentSnapshot d =
-                                await _postsController.getPostChanges(
+                            await _postsController.getPostChanges(
                               id_post: widget.post.id,
                               group: widget.group,
                             );
@@ -314,7 +325,7 @@ class _PostWidgetState extends State<PostWidget>
                             );
 
                             DocumentSnapshot d =
-                                await _postsController.getPostChanges(
+                            await _postsController.getPostChanges(
                               id_post: widget.post.id,
                               group: widget.group,
                             );
@@ -397,7 +408,7 @@ class _PostWidgetState extends State<PostWidget>
                                     CommentWidget(
                                       comment: Comment()
                                           .fromMap(newComments[i].data())
-                                            ..setId(newComments[i].id),
+                                        ..setId(newComments[i].id),
                                       post: widget.post,
                                       group: widget.group,
                                       addPoint: (id) async {

@@ -337,9 +337,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
           children: [
             Directionality.of(context) == TextDirection.ltr
                 ? _message(
-                    message, false, ConstValues.secondColor, 0, 20, 20, 20)
+                    message, false, ConstValues.secondColor, 0, 10, 10, 10)
                 : _message(
-                    message, false, ConstValues.secondColor, 20, 20, 20, 0),
+                    message, false, ConstValues.secondColor, 10, 10, 10, 0),
             SizedBox(
               width: 5,
             ),
@@ -363,9 +363,21 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             ),
             Directionality.of(context) == TextDirection.ltr
                 ? _message(
-                    message, true, ConstValues.accentColor, 20, 20, 20, 0)
+                message,
+                true,
+                ConstValues.accentColor,
+                10,
+                10,
+                10,
+                0)
                 : _message(
-                    message, false, ConstValues.secondColor, 0, 20, 20, 20)
+                message,
+                true,
+                ConstValues.secondColor,
+                0,
+                10,
+                10,
+                10)
           ],
         ),
       );
@@ -411,10 +423,6 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                   if (message.images != null)
                     GestureDetector(
                       onTap: () {
-                        print(message.images.length > 0
-                            ? message.images[0]
-                            : ' ');
-
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (_) => ImageView(message.images.length > 0
                                 ? message.images[0]
@@ -428,15 +436,18 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                             topLeft: Radius.circular(x4),
                           ),
                           child: Hero(
-                            tag: "chat_image",
+                            tag: message.images.length > 0
+                                ? message.images[0]
+                                : ' ',
                             child: CachedNetworkImage(
-                              placeholder: (context, url) => Center(
-                                child: Container(
-                                  width: size.width / 2,
-                                  height: size.width / 2,
-                                  color: Colors.grey.withOpacity(0.3),
-                                ),
-                              ),
+                              placeholder: (context, url) =>
+                                  Center(
+                                    child: Container(
+                                      width: size.width / 2,
+                                      height: size.width / 2,
+                                      color: Colors.grey.withOpacity(0.3),
+                                    ),
+                                  ),
                               imageUrl: message.images.length > 0
                                   ? message.images[0]
                                   : ' ',
