@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/Post.dart';
 import 'package:stumeapp/controller/PostsController.dart';
+import 'package:stumeapp/localization.dart';
 
 class EditPostPage extends StatefulWidget {
   Post post;
@@ -40,7 +41,10 @@ class _EditPostPageState extends State<EditPostPage> {
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.all(10),
                   border: InputBorder.none,
-                  hintText: 'Type Some Thing..',
+                  hintText: Languages.translate(
+                    context,
+                    'type_some_thing',
+                  ),
                 ),
                 autofocus: true,
                 controller: _postTextController,
@@ -62,7 +66,15 @@ class _EditPostPageState extends State<EditPostPage> {
                   _postTextController.text,
                 );
               },
-              child: loading ? Text('Waiting') : Text('Save'),
+              child: loading
+                  ? Text(Languages.translate(
+                      context,
+                      'whaiting',
+                    ))
+                  : Text(Languages.translate(
+                      context,
+                      'save',
+                    )),
             ),
           ],
         ),

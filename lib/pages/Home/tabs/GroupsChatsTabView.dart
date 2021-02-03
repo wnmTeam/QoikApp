@@ -8,6 +8,7 @@ import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/GroupsController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
 class GroupsChatsTab extends StatefulWidget {
@@ -58,8 +59,14 @@ class _GroupsChatsTabState extends State<GroupsChatsTab>
   Widget _groupBuilder(BuildContext context, Group group) {
     return ListTile(
       title: group.type == Group.TYPE_UNIVERSITY
-          ? Text('My University')
-          :group.type == Group.TYPE_COLLEGE? Text('My College'):Text(group.id),
+          ? Text(Languages.translate(
+        context,
+        'my_university',
+      ))
+          :group.type == Group.TYPE_COLLEGE? Text(Languages.translate(
+        context,
+        'my_college',
+      )):Text(group.id),
       onTap: () {
         Navigator.of(context).pushNamed(
           '/GroupPage',

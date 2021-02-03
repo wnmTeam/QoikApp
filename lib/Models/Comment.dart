@@ -30,11 +30,11 @@ class Comment {
   }
 
   Map<String, dynamic> toMap() => {
-        ID_OWNER: idOwner,
-        TEXT: text,
-        DATE: date,
-        LIKE_COUNT: likeCount,
-      };
+    ID_OWNER: idOwner,
+    TEXT: text,
+    DATE: date,
+    LIKE_COUNT: likeCount,
+  };
 
   Comment fromMap(map) {
     this.idOwner = map[ID_OWNER];

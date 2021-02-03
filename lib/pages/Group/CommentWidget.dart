@@ -7,6 +7,7 @@ import 'package:stumeapp/Models/Post.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/PostsController.dart';
+import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
 import '../../const_values.dart';
@@ -160,7 +161,10 @@ class _CommentWidgetState extends State<CommentWidget> {
                               padding: const EdgeInsets.symmetric(
                                   vertical: 4.0, horizontal: 6),
                               child: Text(
-                                ' Like ',
+                                ' ' + Languages.translate(
+                                    context,
+                                    'like',
+                                ) + ' ',
                                 style: TextStyle(fontSize: 15),
                               ),
                             ),
@@ -194,7 +198,10 @@ class _CommentWidgetState extends State<CommentWidget> {
                               padding: const EdgeInsets.symmetric(
                                   vertical: 4.0, horizontal: 6),
                               child: Text(
-                                ' Give Point ',
+                                ' ' + Languages.translate(
+                                  context,
+                                  'give_point',
+                                ) + ' ',
                                 style: TextStyle(fontSize: 15),
                               ),
                             ),

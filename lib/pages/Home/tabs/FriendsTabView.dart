@@ -5,6 +5,7 @@ import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/FriendsController.dart';
+import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
 class FriendsTab extends StatefulWidget {
@@ -66,7 +67,10 @@ class _FriendsTabState extends State<FriendsTab> {
                             );
                           },
                           color: Colors.grey[300],
-                          child: Text('Friend Requests'),
+                          child: Text(Languages.translate(
+                            context,
+                            'frind_requests',
+                          )),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20)),
                         ),
@@ -85,7 +89,10 @@ class _FriendsTabState extends State<FriendsTab> {
                       onPressed: () {
                         getMyFriends();
                       },
-                      child: Text('Loade More'),
+                      child: Text(Languages.translate(
+                        context,
+                        'load_more',
+                      )),
                     );
                   return Container();
                 }

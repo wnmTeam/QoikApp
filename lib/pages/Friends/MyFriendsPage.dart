@@ -6,6 +6,7 @@ import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
 import 'package:stumeapp/controller/FriendsController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
 class FriendsRequestsPage extends StatefulWidget {
@@ -53,7 +54,10 @@ class _FriendsRequestsPageState extends State<FriendsRequestsPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          'Friends Requests',
+          Languages.translate(
+            context,
+            'frind_requests',
+          ),
         ),
       ),
       body: RefreshIndicator(
@@ -73,7 +77,10 @@ class _FriendsRequestsPageState extends State<FriendsRequestsPage> {
                   onPressed: () {
                     getFriendRequests();
                   },
-                  child: Text('Loade More'),
+                  child: Text(Languages.translate(
+                    context,
+                    'load_more',
+                  )),
                 );
               return Container();
             }
@@ -173,11 +180,17 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
                 Icons.person_add,
                 color: Colors.grey[700],
               ),
-              label: Text('Accept'),
+              label: Text(Languages.translate(
+                context,
+                'accept',
+              )),
               onPressed: () async {
                 await _friendsController.acceptRequestFriend(
                     id_requestSender: user.id);
-                print('send done');
+                print(Languages.translate(
+                  context,
+                  'send_done',
+                ));
                 await _chatsController.createChat(
                   group: Group(
                     members: [

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/controller/PostsController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
+import 'package:stumeapp/localization.dart';
 
 import '../../const_values.dart';
 
@@ -42,7 +43,10 @@ class _WritePostPageState extends State<WritePostPage> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
-          title: Text('New Post'),
+          title: Text(Languages.translate(
+            context,
+            'new_post',
+          )),
         ),
         body: ListView(
           children: [
@@ -52,7 +56,10 @@ class _WritePostPageState extends State<WritePostPage> {
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.all(10),
                   border: InputBorder.none,
-                  hintText: 'Type Some Thing..',
+                  hintText: Languages.translate(
+                    context,
+                    'write_post',
+                  ),
                 ),
                 controller: _postTextController,
                 maxLines: 7,
@@ -71,7 +78,10 @@ class _WritePostPageState extends State<WritePostPage> {
               },
               color: Colors.indigo,
               child: Text(
-                'get image',
+                Languages.translate(
+                  context,
+                  'chose_image',
+                ),
                 style: TextStyle(
                   color: Colors.white,
                 ),
@@ -99,7 +109,10 @@ class _WritePostPageState extends State<WritePostPage> {
               },
               color: Colors.indigo,
               child: !waiting?Text(
-                'submet',
+                Languages.translate(
+                  context,
+                  'post',
+                ),
                 style: TextStyle(
                   color: Colors.white,
                 ),
@@ -115,7 +128,10 @@ class _WritePostPageState extends State<WritePostPage> {
                     width: 12,
                   ),
                   Text(
-                    'WAITING..',
+                    Languages.translate(
+                      context,
+                      'whaiting',
+                    ),
                     style: TextStyle(
                       fontSize: size.width / ConstValues.fontSize_2,
                       color: Colors.white,

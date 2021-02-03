@@ -114,7 +114,10 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                   onPressed: () {
                                     getMessages();
                                   },
-                                  child: Text('Load More'),
+                                  child: Text(Languages.translate(
+                                    context,
+                                    'load_more',
+                                  ),),
                                 )
                               : _messageBuilder(Message()
                                   .fromMap(messages[i].data())
@@ -195,6 +198,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                           images: [],
                                         ),
                                         images: _images,
+                                        id_receiver: widget.user.id,
                                         id_chat: getChatID(),
                                         type: 'chats',
                                       );
@@ -214,7 +218,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                         vertical: 18, horizontal: 0),
                                     border: InputBorder.none,
                                     hintText: Languages.translate(
-                                        context, 'type_a_message'),
+                                      context,
+                                      'type_a_message',
+                                    ),
                                     hintStyle: TextStyle(color: Colors.grey),
                                   ),
                                 ),
@@ -239,6 +245,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                               idOwner: _authController.getUser.uid,
                               text: _messageController.text.trim(),
                             ),
+                            id_receiver: widget.user.id,
                             id_chat: getChatID(),
                             images: [],
                             type: 'chats',

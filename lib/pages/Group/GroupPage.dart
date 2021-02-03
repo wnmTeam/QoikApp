@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/controller/AuthController.dart';
+import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/Group/tabs/MembersTabView.dart';
 import 'package:stumeapp/pages/Group/tabs/PostsTabView.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -56,19 +57,26 @@ class _GroupPageState extends State<GroupPage>
             onTap: () {},
             title: widget.group.type == Group.TYPE_UNIVERSITY
                 ? Text(
-                    'My University',
+                    Languages.translate(
+                      context,
+                      'my_university',
+                    ),
                     style: TextStyle(color: Colors.white),
                   )
                 : widget.group.type == Group.TYPE_COLLEGE
                     ? Text(
-                        'My College',
+                        Languages.translate(
+                          context,
+                          'my_college',
+                        ),
                         style: TextStyle(color: Colors.white),
                       )
                     : Text(
                         widget.group.id,
                         style: TextStyle(color: Colors.white),
                       ),
-            subtitle: widget.group.type == 'G' || widget.group.type == Group.TYPE_MOFADALAH
+            subtitle: widget.group.type == 'G' ||
+                    widget.group.type == Group.TYPE_MOFADALAH
                 ? null
                 : Text(widget.group.name,
                     style: TextStyle(color: Colors.white70)),
@@ -87,8 +95,9 @@ class _GroupPageState extends State<GroupPage>
                 ],
               ),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  color: Colors.white),
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                color: Colors.white70,
+              ),
             ),
           ),
           backgroundColor: ConstValues.firstColor,
@@ -103,12 +112,18 @@ class _GroupPageState extends State<GroupPage>
 //                  color: Colors.indigo,
 //                ),
                 child: Text(
-                  'Posts',
+                  Languages.translate(
+                    context,
+                    'posts',
+                  ),
                 ),
               ),
               Tab(
                 child: Text(
-                  'Members',
+                  Languages.translate(
+                    context,
+                    'members',
+                  ),
                 ),
               ),
             ],
