@@ -489,16 +489,23 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
         borderRadius: BorderRadius.circular(57),
         //TODO hide images
         child: firstMessage
-            ? CachedNetworkImage(
-                placeholder: (context, url) => Center(
-                  //TODO: Change the placeHolder
-                  // child: Image.asset("assets/user_image_placeholder.png"),
-                  child: Container(),
+            ? GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) =>
+                          ImageView(imageUrl != null ? imageUrl : ' ')));
+                },
+                child: CachedNetworkImage(
+                  placeholder: (context, url) => Center(
+                    //TODO: Change the placeHolder
+                    // child: Image.asset("assets/user_image_placeholder.png"),
+                    child: Container(),
+                  ),
+                  imageUrl: imageUrl != null ? imageUrl : ' ',
+                  fit: BoxFit.cover,
+                  width: 30,
+                  height: 30,
                 ),
-                imageUrl: imageUrl != null ? imageUrl : ' ',
-                fit: BoxFit.cover,
-                width: 30,
-                height: 30,
               )
             : Container(
                 width: 30,
