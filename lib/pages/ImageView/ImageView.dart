@@ -46,12 +46,9 @@ class _ImageViewState extends State<ImageView> {
           loadingBuilder: (context, event) => Padding(
             padding: EdgeInsets.all(50),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 CircularProgressIndicator(),
-                SizedBox(
-                  height: 200,
-                ),
                 LinearProgressIndicator(
                   value: event == null
                       ? 0
