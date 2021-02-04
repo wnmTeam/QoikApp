@@ -5,6 +5,7 @@ import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
+import 'package:stumeapp/pages/ImageView/ImageView.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
 class ChatsTab extends StatefulWidget {
@@ -68,13 +69,23 @@ class _ChatsTabState extends State<ChatsTab>
         if (snapshot.hasData) {
           user = User().fromMap(snapshot.data.data()).setId(snapshot.data.id);
           return ListTile(
-            leading: ClipRRect(
-              borderRadius: BorderRadius.circular(57),
-              child: Image.network(
-                user.img != null ? user.img : 'we',
-                fit: BoxFit.cover,
-                width: 57,
-                height: 57,
+            leading: GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) =>
+                        ImageView(user.img != null ? user.img : 'we')));
+              },
+              child: Hero(
+                tag: user.img != null ? user.img : 'we',
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(57),
+                  child: Image.network(
+                    user.img != null ? user.img : 'we',
+                    fit: BoxFit.cover,
+                    width: 57,
+                    height: 57,
+                  ),
+                ),
               ),
             ),
             title: Text(user.firstName + ' ' + user.secondName),

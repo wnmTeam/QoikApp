@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
@@ -10,8 +11,8 @@ import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
 import 'package:stumeapp/controller/FriendsController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stumeapp/localization.dart';
+import 'package:stumeapp/pages/ImageView/ImageView.dart';
 
 class ProfilePage extends StatefulWidget {
   User user;
@@ -780,30 +781,50 @@ class _AvatarState extends State<Avatar> {
     return Stack(
       children: <Widget>[
         Center(
-            child: CircleAvatar(
-          backgroundColor: Colors.white,
-          radius: 75,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(100),
-            child: widget.imagePath != null
-                ? Image.network(
-                    widget.imagePath,
-                    fit: BoxFit.cover,
-                    width: 150,
-                    height: 150,
-                  )
+            child: GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => ImageView(widget.imagePath != null
+                    ? widget.imagePath
+                    : _image != null && !widget.uploadImage
+                        ? _image
+                        : ""),
+              ),
+            );
+          },
+          child: Hero(
+            tag: widget.imagePath != null
+                ? widget.imagePath
                 : _image != null && !widget.uploadImage
-                    ? Image.file(
-                        _image,
+                    ? _image
+                    : "",
+            child: CircleAvatar(
+              backgroundColor: Colors.white,
+              radius: 75,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(100),
+                child: widget.imagePath != null
+                    ? Image.network(
+                        widget.imagePath,
                         fit: BoxFit.cover,
                         width: 150,
                         height: 150,
                       )
-                    : Container(
-                        color: Colors.white,
-                      ),
+                    : _image != null && !widget.uploadImage
+                        ? Image.file(
+                            _image,
+                            fit: BoxFit.cover,
+                            width: 150,
+                            height: 150,
+                          )
+                        : Container(
+                            color: Colors.white,
+                          ),
+              ),
+            ),
           ),
-        )),
+            )),
         widget.myProfile
             ? Center(
                 child: Padding(
