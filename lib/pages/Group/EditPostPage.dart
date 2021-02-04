@@ -31,9 +31,42 @@ class _EditPostPageState extends State<EditPostPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        //todo: translation
+        title: Text("Post editing"),
+        centerTitle: true,
+        actions: [
+          Tooltip(
+            //todo: translation
+            message: "Save",
+            child: FlatButton(
+                onPressed: () async {
+                  if (loading) return;
+
+                  setState(() {
+                    loading = true;
+                  });
+                  await _postsController.updatePost(
+                    id_group: widget.group.id,
+                    id_post: widget.post.id,
+                    text: _postTextController.text,
+                  );
+                  Navigator.pop(
+                    context,
+                    _postTextController.text,
+                  );
+                },
+                child: Icon(
+                  loading ? Icons.watch_later_outlined : Icons.save,
+                  color: Colors.white,
+                )),
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
               color: Colors.white,
@@ -48,34 +81,76 @@ class _EditPostPageState extends State<EditPostPage> {
                 ),
                 autofocus: true,
                 controller: _postTextController,
-                maxLines: 7,
+                maxLines: 17,
               ),
             ),
-            RaisedButton(
-              onPressed: () async {
-                setState(() {
-                  loading = true;
-                });
-                await _postsController.updatePost(
-                  id_group: widget.group.id,
-                  id_post: widget.post.id,
-                  text: _postTextController.text,
-                );
-                Navigator.pop(
-                  context,
-                  _postTextController.text,
-                );
-              },
-              child: loading
-                  ? Text(Languages.translate(
-                      context,
-                      'whaiting',
-                    ))
-                  : Text(Languages.translate(
-                      context,
-                      'save',
-                    )),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextButton.icon(
+                  icon: Icon(Icons.camera_alt),
+                  onPressed: () {},
+                  //todo: translation
+                  label: Text("Change the image"),
+                ),
+                TextButton.icon(
+                  icon: Icon(Icons.camera_alt),
+                  onPressed: () {},
+                  //todo: translation
+                  label: Text("Change the image"),
+                ),
+                TextButton.icon(
+                  icon: Icon(Icons.camera_alt),
+                  onPressed: () {},
+                  //todo: translation
+                  label: Text("Change the image"),
+                ),
+                TextButton.icon(
+                  icon: Icon(Icons.camera_alt),
+                  onPressed: () {},
+                  //todo: translation
+                  label: Text("Change the image"),
+                ),
+              ],
             ),
+            // Container(
+            //   alignment: Alignment.center,
+            //   child: RaisedButton(
+            //       onPressed: () async {
+            //         setState(() {
+            //           loading = true;
+            //         });
+            //         await _postsController.updatePost(
+            //           id_group: widget.group.id,
+            //           id_post: widget.post.id,
+            //           text: _postTextController.text,
+            //         );
+            //         Navigator.pop(
+            //           context,
+            //           _postTextController.text,
+            //         );
+            //       },
+            //       shape: RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.circular(30.0),
+            //       ),
+            //       color: ConstValues.firstColor,
+            //       child: Text(
+            //         loading
+            //             ? Languages.translate(
+            //                 context,
+            //                 'whaiting',
+            //               )
+            //             : Languages.translate(
+            //                 context,
+            //                 'save',
+            //               ),
+            //         style: TextStyle(
+            //           fontSize: 20,
+            //           color: Colors.white,
+            //           fontWeight: FontWeight.bold,
+            //         ),
+            //       )),
+            // ),
           ],
         ),
       ),
