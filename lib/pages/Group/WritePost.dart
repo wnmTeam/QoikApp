@@ -54,7 +54,12 @@ class _WritePostPageState extends State<WritePostPage> {
               ),
               child: FlatButton(
                   onPressed: () {
-                    _sendPost(_postTextController.text);
+                    if (_postTextController.text.isEmpty &&
+                        _images.length == 0) {
+                      return;
+                    } else {
+                      _sendPost(_postTextController.text);
+                    }
                   },
                   child: Icon(
                     !waiting ? Icons.post_add : Icons.watch_later_outlined,
