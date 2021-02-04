@@ -7,8 +7,6 @@ import 'package:stumeapp/controller/PostsController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 import 'package:stumeapp/localization.dart';
 
-import '../../const_values.dart';
-
 class WritePostPage extends StatefulWidget {
   Group group;
 
@@ -42,11 +40,28 @@ class _WritePostPageState extends State<WritePostPage> {
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          title: Text(Languages.translate(
-            context,
-            'new_post',
-          )),
+          title: Text(
+            Languages.translate(
+              context,
+              'new_post',
+            ),
+          ),
+          actions: [
+            Tooltip(
+              message: Languages.translate(
+                context,
+                'post',
+              ),
+              child: FlatButton(
+                  onPressed: () {
+                    _sendPost(_postTextController.text);
+                  },
+                  child: Icon(
+                    !waiting ? Icons.post_add : Icons.watch_later_outlined,
+                    color: Colors.white,
+                  )),
+            ),
+          ],
         ),
         body: ListView(
           children: [
@@ -62,29 +77,7 @@ class _WritePostPageState extends State<WritePostPage> {
                   ),
                 ),
                 controller: _postTextController,
-                maxLines: 7,
-              ),
-            ),
-            RaisedButton(
-              onPressed: () async {
-                final pickedFile = await _storageController.getImage();
-                if (pickedFile != null) {
-                  {
-                    setState(() {
-                      _images.add(File(pickedFile.path));
-                    });
-                  }
-                }
-              },
-              color: Colors.indigo,
-              child: Text(
-                Languages.translate(
-                  context,
-                  'chose_image',
-                ),
-                style: TextStyle(
-                  color: Colors.white,
-                ),
+                maxLines: 17,
               ),
             ),
             Wrap(
@@ -103,44 +96,106 @@ class _WritePostPageState extends State<WritePostPage> {
                   ),
               ],
             ),
-            RaisedButton(
-              onPressed: () {
-                _sendPost(_postTextController.text);
-              },
-              color: Colors.indigo,
-              child: !waiting?Text(
-                Languages.translate(
-                  context,
-                  'post',
+
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _images.length == 0 ?
+                TextButton.icon(
+                  icon: Icon(Icons.camera_alt),
+                  onPressed: () async {
+                    final pickedFile = await _storageController.getImage();
+                    if (pickedFile != null) {
+                      {
+                        setState(() {
+                          _images.add(File(pickedFile.path));
+                        });
+                      }
+                    }
+                  },
+                  label: Text(Languages.translate(
+                    context,
+                    'chose_image',
+                  ),),
+                ) :
+                TextButton.icon(
+                  icon: Icon(Icons.camera_alt),
+                  onPressed: () async {
+                    final pickedFile = await _storageController.getImage();
+                    if (pickedFile != null) {
+                      {
+                        setState(() {
+                          _images.clear();
+                          _images.add(File(pickedFile.path));
+                        });
+                      }
+                    }
+                  },
+                  label: Text("Change the image",),
                 ),
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ):Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                      width: 18,
-                      height: 18,
-                      child: CircularProgressIndicator(backgroundColor: Colors.white,)),
-                  SizedBox(
-                    width: 12,
-                  ),
-                  Text(
-                    Languages.translate(
-                      context,
-                      'whaiting',
-                    ),
-                    style: TextStyle(
-                      fontSize: size.width / ConstValues.fontSize_2,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            )
+              ],
+            ),
+
+            // RaisedButton(
+            //   onPressed: () async {
+            //     final pickedFile = await _storageController.getImage();
+            //     if (pickedFile != null) {
+            //       {
+            //         setState(() {
+            //           _images.add(File(pickedFile.path));
+            //         });
+            //       }
+            //     }
+            //   },
+            //   color: Colors.indigo,
+            //   child: Text(
+            //     Languages.translate(
+            //       context,
+            //       'chose_image',
+            //     ),
+            //     style: TextStyle(
+            //       color: Colors.white,
+            //     ),
+            //   ),
+            // ),
+            // RaisedButton(
+            //   onPressed: () {
+            //     _sendPost(_postTextController.text);
+            //   },
+            //   color: Colors.indigo,
+            //   child: !waiting?Text(
+            //     Languages.translate(
+            //       context,
+            //       'post',
+            //     ),
+            //     style: TextStyle(
+            //       color: Colors.white,
+            //     ),
+            //   ):Row(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     mainAxisSize: MainAxisSize.min,
+            //     children: [
+            //       SizedBox(
+            //           width: 18,
+            //           height: 18,
+            //           child: CircularProgressIndicator(backgroundColor: Colors.white,)),
+            //       SizedBox(
+            //         width: 12,
+            //       ),
+            //       Text(
+            //         Languages.translate(
+            //           context,
+            //           'whaiting',
+            //         ),
+            //         style: TextStyle(
+            //           fontSize: size.width / ConstValues.fontSize_2,
+            //           color: Colors.white,
+            //           fontWeight: FontWeight.bold,
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // )
           ],
         ));
   }
