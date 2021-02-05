@@ -8,6 +8,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/controller/FriendsController.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
 
 class SearchFriendsPage extends StatefulWidget {
   @override
@@ -371,8 +373,13 @@ class _UserWidgetState extends State<UserWidget> {
               },
               leading: ClipRRect(
                 borderRadius: BorderRadius.circular(57),
-                child: Image.network(
-                  widget.user.img != null ? widget.user.img : ' ',
+                child:CachedNetworkImage(
+                  placeholder: (context, url) => Center(
+                    //TODO: Change the placeHolder
+                    child: Image.asset(ConstValues.userImage),
+//                    child: Container(),
+                  ),
+                  imageUrl: widget.user.img != null ? widget.user.img : ConstValues.userImage,
                   fit: BoxFit.cover,
                   width: 57,
                   height: 57,

@@ -5,6 +5,7 @@ import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/api/notification_api.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
+import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/Home/tabs/FriendsTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/GroupsChatsTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/HomeTabView.dart';
@@ -12,6 +13,8 @@ import 'package:stumeapp/pages/Home/tabs/LibraryTabView.dart';
 import 'package:stumeapp/pages/Home/widgets/FABwithBottomAppBar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
 
 class HomePage extends StatefulWidget {
   @override
@@ -105,9 +108,9 @@ class _HomePageState extends State<HomePage> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-            child: !loading
-                ? InkWell(
+            child:InkWell(
                     onTap: () {
+                      if(!loading)
                       Navigator.of(context).pushNamed(
                         '/ProfilePage',
                         arguments: {
@@ -121,8 +124,13 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(20),
-                          child: Image.network(
-                            MyUser.myUser.img != null ? MyUser.myUser.img : ' ',
+                          child: CachedNetworkImage(
+                            placeholder: (context, url) => Center(
+                              //TODO: Change the placeHolder
+                              child: Image.asset(ConstValues.userImage),
+//                    child: Container(),
+                            ),
+                            imageUrl: !loading && MyUser.myUser.img != null ? MyUser.myUser.img : ConstValues.userImage,
                             fit: BoxFit.cover,
                             width: 40,
                             height: 40,
@@ -131,18 +139,7 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   )
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            width: 40,
-                            height: 40,
-                            color: Colors.white,
-                          )),
-                    ],
-                  ),
+
           ),
         ],
       ),
@@ -154,19 +151,31 @@ class _HomePageState extends State<HomePage> {
         items: [
           FABBottomAppBarItem(
             iconData: Icons.home,
-            text: 'Home',
+            text: Languages.translate(
+              context,
+              'home',
+            ),
           ),
           FABBottomAppBarItem(
             iconData: Icons.chat_rounded,
-            text: 'Groups',
+            text: Languages.translate(
+              context,
+              'groups',
+            ),
           ),
           FABBottomAppBarItem(
             iconData: Icons.group,
-            text: 'Friends',
+            text: Languages.translate(
+              context,
+              'friends',
+            ),
           ),
           FABBottomAppBarItem(
             iconData: Icons.library_books,
-            text: 'Library',
+            text: Languages.translate(
+              context,
+              'library',
+            ),
             svgIcon: 'assets/lib.svg',
           ),
         ],
@@ -208,8 +217,11 @@ class _HomePageState extends State<HomePage> {
                 child: Container(),
               ),
               ListTile(
-                title: Text('My Profile'),
-                leading: Icon(Icons.person),
+                title: Text(Languages.translate(
+                  context,
+                  'my_profile',
+                )),
+                leading: Icon(Icons.person_outline),
                 onTap: () {
                   Navigator.of(context).pushNamed(
                     '/ProfilePage',
@@ -221,33 +233,48 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
               ListTile(
-                title: Text('Setting'),
-                leading: Icon(Icons.settings),
+                title: Text(Languages.translate(
+                  context,
+                  'setting',
+                )),
+                leading: Icon(Icons.settings_outlined),
                 onTap: () {
                 },
               ),
               Divider(),
               ListTile(
-                title: Text('About'),
-                leading: Icon(Icons.warning_rounded),
+                title: Text(Languages.translate(
+                  context,
+                  'about',
+                )),
+                leading: Icon(Icons.error_outline),
                 onTap: () {
                 },
               ),
               ListTile(
-                title: Text('Contact Us'),
-                leading: Icon(Icons.group),
+                title: Text(Languages.translate(
+                  context,
+                  'contact_us',
+                )),
+                leading: Icon(Icons.email_outlined),
                 onTap: () {
                 },
               ),
               ListTile(
-                title: Text('FAQ'),
-                leading: Icon(Icons.help),
+                title: Text(Languages.translate(
+                  context,
+                  'faq',
+                )),
+                leading: Icon(Icons.help_outline),
                 onTap: () {
                 },
               ),
               Divider(),
               ListTile(
-                title: Text('Log out', style: TextStyle(color: Colors.red),),
+                title: Text(Languages.translate(
+                  context,
+                  'log_out',
+                ), style: TextStyle(color: Colors.red),),
                 leading: Icon(Icons.logout, color: Colors.red),
                 onTap: () {
                   _authController.logOut();

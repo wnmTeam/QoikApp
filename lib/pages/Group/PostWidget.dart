@@ -153,37 +153,39 @@ class _PostWidgetState extends State<PostWidget>
                       return UserPlaceholder();
 //                    return CircularProgressIndicator();
                     }),
-                post.text.isNotEmpty
-                    ?Divider():Container(),
+                Container(
+                  height: 1,
+                  color: Colors.grey[200],
+                ),
                 SizedBox(
-                  height: 6,
+                  height: 10,
                 ),
                 post.text.isNotEmpty
                     ? Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  child: InkWell(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0,
-                        vertical: 10,
-                      ),
-                      child: Text(
-                        post.text,
-                        maxLines: _isExbended ? 100 : 5,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Colors.grey[700],
-                          fontSize: 16,
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                        child: InkWell(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0,
+                              vertical: 10,
+                            ),
+                            child: Text(
+                              post.text,
+                              maxLines: _isExbended ? 100 : 5,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colors.grey[700],
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                          onTap: () {
+                            setState(() {
+                              _isExbended = !_isExbended;
+                            });
+                          },
                         ),
-                      ),
-                    ),
-                    onTap: () {
-                      setState(() {
-                        _isExbended = ! _isExbended;
-                      });
-                    },
-                  ),
-                )
+                      )
                     : Container(),
                 SizedBox(
                   height: 6,
@@ -246,7 +248,7 @@ class _PostWidgetState extends State<PostWidget>
                                 id_post: widget.post.id);
 
                             DocumentSnapshot d =
-                            await _postsController.getPostChanges(
+                                await _postsController.getPostChanges(
                               id_post: widget.post.id,
                               group: widget.group,
                             );
@@ -329,7 +331,7 @@ class _PostWidgetState extends State<PostWidget>
                             );
 
                             DocumentSnapshot d =
-                            await _postsController.getPostChanges(
+                                await _postsController.getPostChanges(
                               id_post: widget.post.id,
                               group: widget.group,
                             );
@@ -415,7 +417,7 @@ class _PostWidgetState extends State<PostWidget>
                                     CommentWidget(
                                       comment: Comment()
                                           .fromMap(newComments[i].data())
-                                        ..setId(newComments[i].id),
+                                            ..setId(newComments[i].id),
                                       post: widget.post,
                                       group: widget.group,
                                       addPoint: (id) async {
@@ -452,8 +454,13 @@ class _PostWidgetState extends State<PostWidget>
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(57),
-                        child: Image.network(
-                          MyUser.myUser.img != null ? MyUser.myUser.img : ' ',
+                        child: CachedNetworkImage(
+                          placeholder: (context, url) => Center(
+                            //TODO: Change the placeHolder
+                            child: Image.asset(ConstValues.userImage),
+//                    child: Container(),
+                          ),
+                          imageUrl: user.img != null ? user.img : ConstValues.userImage,
                           fit: BoxFit.cover,
                           width: 40,
                           height: 40,
@@ -510,8 +517,13 @@ class _PostWidgetState extends State<PostWidget>
       contentPadding: EdgeInsets.zero,
       leading: ClipRRect(
         borderRadius: BorderRadius.circular(57),
-        child: Image.network(
-          user.img != null ? user.img : ' ',
+        child: CachedNetworkImage(
+          placeholder: (context, url) => Center(
+            //TODO: Change the placeHolder
+            child: Image.asset(ConstValues.userImage),
+//                    child: Container(),
+          ),
+          imageUrl: user.img != null ? user.img : ConstValues.userImage,
           fit: BoxFit.cover,
           width: 55,
           height: 55,
@@ -561,7 +573,10 @@ class _PostWidgetState extends State<PostWidget>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            user.tag,
+        Languages.translate(
+        context,
+        user.tag,
+      ),
             style: TextStyle(fontSize: 12),
           ),
           Padding(

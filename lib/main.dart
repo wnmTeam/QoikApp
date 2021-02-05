@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return MaterialApp(
-      title: 'Stume',
+      title: 'Qoiq',
       debugShowCheckedModeBanner: true,
       debugShowMaterialGrid: false,
       showPerformanceOverlay: false,

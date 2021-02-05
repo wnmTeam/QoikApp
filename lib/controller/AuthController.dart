@@ -146,9 +146,9 @@ class AuthController {
         break;
       case User.TAG_ACTIVE_USER:
         if (user.points > 100)
-          return api.updateUserTag(user: user, tag: User.TAG_EX_USER);
+          return api.updateUserTag(user: user, tag: User.TAG_PREMIUM_USER);
         break;
-      case User.TAG_EX_USER:
+      case User.TAG_PREMIUM_USER:
         break;
     }
   }

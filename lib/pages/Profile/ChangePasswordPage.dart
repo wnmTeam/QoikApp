@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
+import 'package:stumeapp/localization.dart';
 
 class ChangePasswordPage extends StatefulWidget {
   @override
@@ -28,7 +29,10 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text('Change Password', style: TextStyle(color: Colors.grey[500]),),
+        title: Text(Languages.translate(
+          context,
+          'change_password',
+        ), style: TextStyle(color: Colors.grey[500]),),
         iconTheme: IconThemeData(color: Colors.grey[600]),
       ),
       body: Form(
@@ -44,12 +48,21 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               keyboardType: TextInputType.visiblePassword,
               decoration: InputDecoration(
                 icon: Icon(Icons.lock_open),
-                labelText: "Old Password",
+                labelText: Languages.translate(
+                  context,
+                  'old_password',
+                ),
               ),
               validator: (String value) {
                 if (value.isEmpty) {
-                  return 'password is required';
-                } else if (value != password) return 'wrong password';
+                  return Languages.translate(
+                    context,
+                    'password_is_Requered',
+                  );
+                } else if (value != password) return Languages.translate(
+                  context,
+                  'wrong_password',
+                );
                 return null;
               },
             ),
@@ -62,11 +75,17 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               keyboardType: TextInputType.visiblePassword,
               decoration: InputDecoration(
                 icon: Icon(Icons.lock_open),
-                labelText: "New password",
+                labelText: Languages.translate(
+                  context,
+                  'new_passeord',
+                ),
               ),
               validator: (String value) {
                 if (value.isEmpty) {
-                  return 'this field is required';
+                  return Languages.translate(
+                    context,
+                    'field_requered',
+                  );
                 }
                 return null;
               },
@@ -81,7 +100,10 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   print('login done');
                 }
               },
-              child: Text('save'),
+              child: Text(Languages.translate(
+                context,
+                'save',
+              )),
             )
           ],
         ),

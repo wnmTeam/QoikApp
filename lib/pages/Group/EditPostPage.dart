@@ -84,35 +84,6 @@ class _EditPostPageState extends State<EditPostPage> {
                 maxLines: 17,
               ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextButton.icon(
-                  icon: Icon(Icons.camera_alt),
-                  onPressed: () {},
-                  //todo: translation
-                  label: Text("Change the image"),
-                ),
-                TextButton.icon(
-                  icon: Icon(Icons.camera_alt),
-                  onPressed: () {},
-                  //todo: translation
-                  label: Text("Change the image"),
-                ),
-                TextButton.icon(
-                  icon: Icon(Icons.camera_alt),
-                  onPressed: () {},
-                  //todo: translation
-                  label: Text("Change the image"),
-                ),
-                TextButton.icon(
-                  icon: Icon(Icons.camera_alt),
-                  onPressed: () {},
-                  //todo: translation
-                  label: Text("Change the image"),
-                ),
-              ],
-            ),
             // Container(
             //   alignment: Alignment.center,
             //   child: RaisedButton(

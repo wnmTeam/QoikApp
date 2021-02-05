@@ -13,6 +13,7 @@ import 'package:stumeapp/controller/FriendsController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/ImageView/ImageView.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ProfilePage extends StatefulWidget {
   User user;
@@ -340,7 +341,10 @@ class MapScreenState extends State<ProfilePage> {
                                                     color:
                                                         ConstValues.firstColor,
                                                   ),
-                                                  Text(widget.user.tag),
+                                                  Text(Languages.translate(
+                                                    context,
+                                                    widget.user.tag,
+                                                  )),
                                                 ],
                                               ),
                                               Column(
@@ -374,7 +378,10 @@ class MapScreenState extends State<ProfilePage> {
                                                   SizedBox(
                                                     height: 10,
                                                   ),
-                                                  Text(widget.user.gender),
+                                                  Text(Languages.translate(
+                                                    context,
+                                                    widget.user.gender,
+                                                  )),
                                                 ],
                                               ),
                                             ],
@@ -661,9 +668,9 @@ class MapScreenState extends State<ProfilePage> {
         return 'assets/normalUser.png';
       case User.TAG_ACTIVE_USER:
         return 'assets/activeUser.png';
-      case User.TAG_EX_USER:
+      case User.TAG_PREMIUM_USER:
         return 'assets/exUser.png';
-      case User.TAG_SURE_USER:
+      case User.TAG_VERIFIED_USER:
         return 'assets/sureUser.png';
     }
   }
@@ -805,26 +812,34 @@ class _AvatarState extends State<Avatar> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(100),
                 child: widget.imagePath != null
-                    ? Image.network(
-                        widget.imagePath,
+                    ? CachedNetworkImage(
+                        placeholder: (context, url) => Center(
+                          //TODO: Change the placeHolder
+                          child: Image.asset(ConstValues.userImage),
+//                    child: Container(),
+                        ),
+                        imageUrl: widget.imagePath,
                         fit: BoxFit.cover,
-                        width: 150,
                         height: 150,
+                        width: 150,
                       )
                     : _image != null && !widget.uploadImage
                         ? Image.file(
                             _image,
                             fit: BoxFit.cover,
-                            width: 150,
                             height: 150,
+                            width: 150,
                           )
-                        : Container(
-                            color: Colors.white,
+                        : Image.asset(
+                            ConstValues.userImage,
+                            fit: BoxFit.cover,
+                            height: 150,
+                            width: 150,
                           ),
               ),
             ),
           ),
-            )),
+        )),
         widget.myProfile
             ? Center(
                 child: Padding(

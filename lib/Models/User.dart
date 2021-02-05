@@ -19,8 +19,8 @@ class User {
   static const String TAG_NEW_USER = 'New User';
   static const String TAG_NORMAL_USER = 'Normal User';
   static const String TAG_ACTIVE_USER = 'Active User';
-  static const String TAG_EX_USER = 'EX User';
-  static const String TAG_SURE_USER = 'sure user';
+  static const String TAG_PREMIUM_USER = 'Premium User';
+  static const String TAG_VERIFIED_USER = 'Verified User';
 
   String firstName;
   String secondName;

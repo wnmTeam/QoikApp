@@ -9,6 +9,8 @@ import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/PostsController.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
 
 import '../../const_values.dart';
 
@@ -76,11 +78,16 @@ class _CommentWidgetState extends State<CommentWidget> {
           padding: const EdgeInsets.only(left: 8.0),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(57),
-            child: Image.network(
-              user.img != null ? user.img : ' ',
+            child: CachedNetworkImage(
+              placeholder: (context, url) => Center(
+                //TODO: Change the placeHolder
+                child: Image.asset(ConstValues.userImage),
+//                    child: Container(),
+              ),
+              imageUrl: user.img != null ? user.img : ConstValues.userImage,
               fit: BoxFit.cover,
-              width: 40,
-              height: 40,
+              width: 57,
+              height: 57,
             ),
           ),
         ),

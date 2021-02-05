@@ -40,13 +40,12 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
   bool waiting = false;
   bool isMain = true;
 
-  Future<bool> _onBackBressed() {
-    if (!_isRegister)
+  Future<bool> _onBackBressed() async{
+    if (!isMain)
       setState(() {
-        _isRegister = true;
+        isMain = true;
       });
-    else
-      Navigator.pop(context);
+    else return true;
   }
 
   @override
@@ -716,53 +715,78 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
         ),
       );
 
-  _main() =>
-      Container(
+  _main() => Container(
         child: Stack(
           children: [
             Positioned.fill(
-              child: Image.asset("assets/launchImage.png"),
+              child: Image.asset(
+                "assets/launchImage.png",
+                fit: BoxFit.fill,
+              ),
             ),
             Positioned(
-              bottom: 100,
+              bottom: 75,
               right: 0,
               left: 0,
               child: Column(
                 children: [
-                  FlatButton(
+                  RaisedButton(
                     onPressed: () {
                       setState(() {
+                        isMain = false;
                         _isRegister = false;
-                        isMain = false;
                       });
                     },
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
+                      borderRadius: BorderRadius.circular(30.0),
                     ),
                     color: Colors.white,
-                    child: Text(
-                      "SignIn",
-                      style: TextStyle(color: Colors.red),
+                    child: Container(
+                      width: 200,
+                      height: 60,
+                      child: Center(
+                        child: Text(
+                          Languages.translate(
+                            context,
+                            'login',
+                          ),
+                          style: TextStyle(
+                            color: ConstValues.firstColor,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                  Text(
-                    "OR",
-                    style: TextStyle(color: Colors.white),
+                  SizedBox(
+                    height: 20,
                   ),
-                  FlatButton(
+                  RaisedButton(
                     onPressed: () {
                       setState(() {
-                        _isRegister = true;
                         isMain = false;
+                        _isRegister = true;
                       });
                     },
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
+                      borderRadius: BorderRadius.circular(30.0),
                     ),
                     color: Colors.white,
-                    child: Text(
-                      "SignUp",
-                      style: TextStyle(color: Colors.red),
+                    child: Container(
+                      width: 200,
+                      height: 60,
+                      child: Center(
+                        child: Text(
+                          Languages.translate(
+                            context,
+                            'create_account',
+                          ),
+                          style: TextStyle(
+                              color: ConstValues.firstColor,
+                              fontSize: 20,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ],

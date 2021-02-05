@@ -486,14 +486,16 @@ class _RoomPageState extends State<RoomPage> {
         borderRadius: BorderRadius.circular(57),
         child: firstMessage
             ? CachedNetworkImage(
-                placeholder: (context, url) => Center(
-                  child: Container(),
-                ),
-                imageUrl: imageUrl != null ? imageUrl : ' ',
-                fit: BoxFit.cover,
-                width: 30,
-                height: 30,
-              )
+          placeholder: (context, url) => Center(
+            //TODO: Change the placeHolder
+            child: Image.asset(ConstValues.userImage),
+//                    child: Container(),
+          ),
+          imageUrl: imageUrl != null ? imageUrl : ConstValues.userImage,
+          fit: BoxFit.cover,
+          width: 57,
+          height: 57,
+        )
             : Container(
                 width: 30,
                 height: 30,

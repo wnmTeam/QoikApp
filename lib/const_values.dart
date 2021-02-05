@@ -32,6 +32,8 @@ static Color accentColor =  Color(0xFF8D5CD7);
     900: Color.fromRGBO(229, 26, 75, 1),
   });
 
+  static String userImage = 'assets/user.png';
+
 }
 
 final dashBoardButtonStyle = BoxDecoration(

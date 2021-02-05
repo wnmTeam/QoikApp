@@ -86,5 +86,14 @@
   "deleted_user":"Deleted User",
   "exit_group":"Exit Group",
   "group_info":"Group Info",
-  "cant_send_messages":"You Can't Send More Messages Here"
+  "cant_send_messages":"You Can't Send More Messages Here",
+  "New User": "New User",
+  "Normal User": "Normal User",
+  "Active User": "Active User",
+  "Premium User": "Premium User",
+  "Verified User": "Verified User",
+  "new_passeord": "New Password",
+  "old_password": "Old Password",
+  "change_password": "Change Password"
+
 }

@@ -89,10 +89,10 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             child: CachedNetworkImage(
               placeholder: (context, url) => Center(
                 //TODO: Change the placeHolder
-                // child: Image.asset("assets/user_image_placeholder.png"),
-                child: Container(),
+                child: Image.asset(ConstValues.userImage),
+//                    child: Container(),
               ),
-              imageUrl: widget.user.img != null ? widget.user.img : ' ',
+              imageUrl: widget.user.img != null ? widget.user.img : ConstValues.userImage,
               fit: BoxFit.cover,
               width: 38,
               height: 38,
@@ -114,10 +114,12 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                   onPressed: () {
                                     getMessages();
                                   },
-                                  child: Text(Languages.translate(
-                                    context,
-                                    'load_more',
-                                  ),),
+                                  child: Text(
+                                    Languages.translate(
+                                      context,
+                                      'load_more',
+                                    ),
+                                  ),
                                 )
                               : _messageBuilder(Message()
                                   .fromMap(messages[i].data())
@@ -370,21 +372,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             ),
             Directionality.of(context) == TextDirection.ltr
                 ? _message(
-                message,
-                true,
-                ConstValues.accentColor,
-                10,
-                10,
-                10,
-                0)
+                    message, true, ConstValues.accentColor, 10, 10, 10, 0)
                 : _message(
-                message,
-                true,
-                ConstValues.secondColor,
-                0,
-                10,
-                10,
-                10)
+                    message, true, ConstValues.secondColor, 0, 10, 10, 10)
           ],
         ),
       );
@@ -447,14 +437,13 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                 ? message.images[0]
                                 : ' ',
                             child: CachedNetworkImage(
-                              placeholder: (context, url) =>
-                                  Center(
-                                    child: Container(
-                                      width: size.width / 2,
-                                      height: size.width / 2,
-                                      color: Colors.grey.withOpacity(0.3),
-                                    ),
-                                  ),
+                              placeholder: (context, url) => Center(
+                                child: Container(
+                                  width: size.width / 2,
+                                  height: size.width / 2,
+                                  color: Colors.grey.withOpacity(0.3),
+                                ),
+                              ),
                               imageUrl: message.images.length > 0
                                   ? message.images[0]
                                   : ' ',
@@ -493,15 +482,15 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (_) =>
-                          ImageView(imageUrl != null ? imageUrl : ' ')));
+                          ImageView(imageUrl != null ? imageUrl : ConstValues.userImage)));
                 },
                 child: CachedNetworkImage(
                   placeholder: (context, url) => Center(
                     //TODO: Change the placeHolder
-                    // child: Image.asset("assets/user_image_placeholder.png"),
-                    child: Container(),
+                     child: Image.asset(ConstValues.userImage),
+//                    child: Container(),
                   ),
-                  imageUrl: imageUrl != null ? imageUrl : ' ',
+                  imageUrl: imageUrl != null ? imageUrl : ConstValues.userImage,
                   fit: BoxFit.cover,
                   width: 30,
                   height: 30,

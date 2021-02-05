@@ -3,10 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/User.dart';
+import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
+import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/ImageView/ImageView.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
 
 class ChatsTab extends StatefulWidget {
   @override
@@ -73,14 +77,19 @@ class _ChatsTabState extends State<ChatsTab>
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (_) =>
-                        ImageView(user.img != null ? user.img : 'we')));
+                        ImageView(user.img != null ? user.img : ConstValues.userImage)));
               },
               child: Hero(
-                tag: user.img != null ? user.img : 'we',
+                tag: user.img != null ? user.img : ConstValues.userImage,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(57),
-                  child: Image.network(
-                    user.img != null ? user.img : 'we',
+                  child: CachedNetworkImage(
+                    placeholder: (context, url) => Center(
+                      //TODO: Change the placeHolder
+                      child: Image.asset(ConstValues.userImage),
+//                    child: Container(),
+                    ),
+                    imageUrl: user.img != null ? user.img : ConstValues.userImage,
                     fit: BoxFit.cover,
                     width: 57,
                     height: 57,
@@ -89,7 +98,10 @@ class _ChatsTabState extends State<ChatsTab>
               ),
             ),
             title: Text(user.firstName + ' ' + user.secondName),
-            subtitle: Text(user.tag),
+            subtitle: Text(Languages.translate(
+              context,
+              user.tag,
+            )),
             onTap: () {
               Navigator.pushNamed(
                 context,
