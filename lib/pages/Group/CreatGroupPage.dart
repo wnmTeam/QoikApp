@@ -1,10 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/User.dart';
+import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/FriendsController.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/localization.dart';
 
 class CreateGroupPage extends StatefulWidget {
@@ -29,47 +30,99 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text( Languages.translate(
+        title: Text(Languages.translate(
           context,
           'ceate_group',
         )),
         elevation: 0,
-      ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 30,
-          ),
-          Avatar(
-            imagePath: 'dfghjk',
-            myProfile: true,
-          ),
-          TextField(
-            controller: _nameController,
-          ),
-          RaisedButton(
-            onPressed: () {
-              if (_nameController.text.trim().isEmpty) return;
-              Navigator.pushNamed(
-                context,
-                '/SelectMembers',
-                arguments: {
-                  'group': Group(
-                    name: _nameController.text,
-                    type: Group.TYPE_GROUP,
-                    img: ' ',
-                    admins: [_authController.getUser.uid],
-                  ),
-                  'type': 'create',
-                },
-              );
-            },
-            child: Text( Languages.translate(
+        actions: [
+          Tooltip(
+            message: Languages.translate(
               context,
               'next',
-            )),
-          )
+            ),
+            child: FlatButton(
+                onPressed: () {
+                  if (_nameController.text.trim().isEmpty) return;
+                  Navigator.pushNamed(
+                    context,
+                    '/SelectMembers',
+                    arguments: {
+                      'group': Group(
+                        name: _nameController.text,
+                        type: Group.TYPE_GROUP,
+                        img: ' ',
+                        admins: [_authController.getUser.uid],
+                      ),
+                      'type': 'create',
+                    },
+                  );
+                },
+                child: Icon(
+                  Icons.done,
+                  color: Colors.white,
+                )),
+          ),
         ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 30,
+              ),
+              Avatar(
+                imagePath: 'assets/user.png',
+                myProfile: true,
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              TextField(
+                controller: _nameController,
+                decoration: InputDecoration(
+                  // floatingLabelBehavior: FloatingLabelBehavior.auto,
+                  labelText: "Group name",
+                ),
+                onChanged: (value) {
+                  if (value.isNotEmpty) {}
+                },
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              RaisedButton(
+                color: ConstValues.firstColor,
+                textColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                onPressed: () {
+                  if (_nameController.text.trim().isEmpty) return;
+                  Navigator.pushNamed(
+                    context,
+                    '/SelectMembers',
+                    arguments: {
+                      'group': Group(
+                        name: _nameController.text,
+                        type: Group.TYPE_GROUP,
+                        img: ' ',
+                        admins: [_authController.getUser.uid],
+                      ),
+                      'type': 'create',
+                    },
+                  );
+                },
+                child: Text(Languages.translate(
+                  context,
+                  'next',
+                )),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -135,26 +188,29 @@ class Avatar extends StatelessWidget {
         ),
         myProfile
             ? Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 75, right: 40),
+            child: InkWell(
+              onTap: () {
+                //TODO:
+                print("onTap");
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[400],
+                  shape: BoxShape.circle,
+                ),
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 75, right: 40),
-                  child: InkWell(
-                    onTap: () {},
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey[400],
-                        shape: BoxShape.circle,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(7.0),
-                        child: Icon(
-                          Icons.camera_alt,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
+                  padding: const EdgeInsets.all(7.0),
+                  child: Icon(
+                    Icons.camera_alt,
+                    color: Colors.white,
                   ),
                 ),
-              )
+              ),
+            ),
+          ),
+        )
             : Container(),
       ],
     );

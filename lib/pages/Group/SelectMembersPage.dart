@@ -1,15 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/FriendsController.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/controller/GroupsController.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-
 
 import '../../const_values.dart';
 
@@ -58,71 +57,78 @@ class _SelectFriendsPageState extends State<SelectFriendsPage> {
           ),
         ),
         actions: [
-          loading
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(
-                        width: 18,
-                        height: 18,
-                        child: CircularProgressIndicator(
-                          backgroundColor: Colors.white,
-                        )),
-                    SizedBox(
-                      width: 12,
-                    ),
-                    Text(
-                      Languages.translate(
-                        context,
-                        'whaiting',
-                      ),
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                  ],
-                )
-              : FlatButton(
-                  onPressed: () async {
-                    setState(() {
-                      loading = true;
-                    });
-                    if (widget.type == 'create') {
-                      await _groupsController.createGroup(
-                        group: widget.group,
-                        uids: selectedMembers..add(_authController.getUser.uid),
-                      );
-                      int count = 0;
-                      Navigator.popUntil(context, (route) {
-                        return count++ == 2;
-                      });
-                    } else {
-                      await _groupsController.addMemberToRoom(
-                        id_group: widget.group.id,
-                        uids: selectedMembers,
-                      );
-                      Navigator.pop(context);
-                    }
-                  },
-                  child: Text(
-                    widget.type == 'create'
-                        ? Languages.translate(
-                            context,
-                            'create_group',
-                          )
-                        : Languages.translate(
-                            context,
-                            'add',
-                          ),
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                )
+          // Row(
+          //         mainAxisAlignment: MainAxisAlignment.center,
+          //         mainAxisSize: MainAxisSize.min,
+          //         children: [
+          //           SizedBox(
+          //               width: 18,
+          //               height: 18,
+          //               child: CircularProgressIndicator(
+          //                 backgroundColor: Colors.white,
+          //               )),
+          //           SizedBox(
+          //             width: 12,
+          //           ),
+          //           Text(
+          //             Languages.translate(
+          //               context,
+          //               'whaiting',
+          //             ),
+          //             style: TextStyle(
+          //               color: Colors.white,
+          //             ),
+          //           ),
+          //           SizedBox(
+          //             width: 8,
+          //           ),
+          //         ],
+          //       )
+          FlatButton(
+            onPressed: () async {
+              if (loading) {
+                return;
+              }
+              setState(() {
+                loading = true;
+              });
+              if (widget.type == 'create') {
+                await _groupsController.createGroup(
+                  group: widget.group,
+                  uids: selectedMembers..add(_authController.getUser.uid),
+                );
+                int count = 0;
+                Navigator.popUntil(context, (route) {
+                  return count++ == 2;
+                });
+              } else {
+                await _groupsController.addMemberToRoom(
+                  id_group: widget.group.id,
+                  uids: selectedMembers,
+                );
+                Navigator.pop(context);
+              }
+            },
+            child: Icon(
+              loading ? Icons.watch_later_outlined : Icons.done,
+              color: Colors.white,
+            ),
+
+            // Text(
+            //   widget.type == 'create'
+            //       ? Languages.translate(
+            //           context,
+            //           'create_group',
+            //         )
+            //       : Languages.translate(
+            //           context,
+            //           'add',
+            //         ),
+            //   style: TextStyle(
+            //     color: Colors.white,
+            //   ),
+            // ),
+          )
         ],
       ),
       body: ListView.builder(
