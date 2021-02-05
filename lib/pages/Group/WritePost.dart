@@ -54,6 +54,9 @@ class _WritePostPageState extends State<WritePostPage> {
               ),
               child: FlatButton(
                   onPressed: () {
+                    if (waiting) {
+                      return;
+                    }
                     if (_postTextController.text.isEmpty &&
                         _images.length == 0) {
                       return;
@@ -62,7 +65,7 @@ class _WritePostPageState extends State<WritePostPage> {
                     }
                   },
                   child: Icon(
-                    !waiting ? Icons.post_add : Icons.watch_later_outlined,
+                    waiting ? Icons.watch_later_outlined : Icons.post_add,
                     color: Colors.white,
                   )),
             ),
