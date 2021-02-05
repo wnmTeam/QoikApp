@@ -15,6 +15,7 @@ import 'package:stumeapp/pages/Library/BooksLibraryPage.dart';
 import 'package:stumeapp/pages/Profile/ChangePasswordPage.dart';
 import 'package:stumeapp/pages/Profile/ProfilePage.dart';
 import 'package:stumeapp/pages/RegesterLogin/RegisterLoginPage.dart';
+import 'package:stumeapp/pages/Settings/Settings.dart';
 
 import 'StartingPage.dart';
 
@@ -96,6 +97,9 @@ class RouteController {
                   group: args['group'],
                   onUpdate: args['onUpdate'],
                 ));
+
+      case '/Settings':
+        return MaterialPageRoute(builder: (_) => Settings());
     }
   }
 }

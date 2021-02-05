@@ -238,7 +238,9 @@ class _HomePageState extends State<HomePage> {
                   'setting',
                 )),
                 leading: Icon(Icons.settings_outlined),
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, "/Settings");
+                },
               ),
               Divider(),
               ListTile(
