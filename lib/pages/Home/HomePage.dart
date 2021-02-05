@@ -1,5 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/api/notification_api.dart';
@@ -11,9 +14,6 @@ import 'package:stumeapp/pages/Home/tabs/GroupsChatsTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/HomeTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/LibraryTabView.dart';
 import 'package:stumeapp/pages/Home/widgets/FABwithBottomAppBar.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
 
   _getUserInfo() async {
     DocumentSnapshot d =
-        await _authController.getUserInfo(_authController.getUser.uid);
+    await _authController.getUserInfo(_authController.getUser.uid);
     User user = User().fromMap(d.data()).setId(d.id);
     MyUser.myUser = user;
     _authController.updateUserTag(user);
@@ -107,38 +107,38 @@ class _HomePageState extends State<HomePage> {
             },
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-            child:InkWell(
-                    onTap: () {
-                      if(!loading)
-                      Navigator.of(context).pushNamed(
-                        '/ProfilePage',
-                        arguments: {
-                          'user': MyUser.myUser,
-                          'id_user': _authController.getUser.uid,
-                        },
-                      );
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: CachedNetworkImage(
-                            placeholder: (context, url) => Center(
-                              //TODO: Change the placeHolder
-                              child: Image.asset(ConstValues.userImage),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+              child:InkWell(
+                onTap: () {
+                  if(!loading)
+                    Navigator.of(context).pushNamed(
+                      '/ProfilePage',
+                      arguments: {
+                        'user': MyUser.myUser,
+                        'id_user': _authController.getUser.uid,
+                      },
+                    );
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: CachedNetworkImage(
+                        placeholder: (context, url) => Center(
+                          //TODO: Change the placeHolder
+                          child: Image.asset(ConstValues.userImage),
 //                    child: Container(),
-                            ),
-                            imageUrl: !loading && MyUser.myUser.img != null ? MyUser.myUser.img : ConstValues.userImage,
-                            fit: BoxFit.cover,
-                            width: 40,
-                            height: 40,
-                          ),
                         ),
-                      ],
+                        imageUrl: !loading && MyUser.myUser.img != null ? MyUser.myUser.img : ConstValues.userImage,
+                        fit: BoxFit.cover,
+                        width: 40,
+                        height: 40,
+                      ),
                     ),
-                  )
+                  ],
+                ),
+              )
 
           ),
         ],
@@ -157,14 +157,14 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           FABBottomAppBarItem(
-            iconData: Icons.chat_rounded,
+            iconData: Icons.group,
             text: Languages.translate(
               context,
               'groups',
             ),
           ),
           FABBottomAppBarItem(
-            iconData: Icons.group,
+            iconData: Icons.person,
             text: Languages.translate(
               context,
               'friends',
@@ -238,8 +238,7 @@ class _HomePageState extends State<HomePage> {
                   'setting',
                 )),
                 leading: Icon(Icons.settings_outlined),
-                onTap: () {
-                },
+                onTap: () {},
               ),
               Divider(),
               ListTile(
@@ -248,8 +247,7 @@ class _HomePageState extends State<HomePage> {
                   'about',
                 )),
                 leading: Icon(Icons.error_outline),
-                onTap: () {
-                },
+                onTap: () {},
               ),
               ListTile(
                 title: Text(Languages.translate(
@@ -257,8 +255,7 @@ class _HomePageState extends State<HomePage> {
                   'contact_us',
                 )),
                 leading: Icon(Icons.email_outlined),
-                onTap: () {
-                },
+                onTap: () {},
               ),
               ListTile(
                 title: Text(Languages.translate(
@@ -266,8 +263,7 @@ class _HomePageState extends State<HomePage> {
                   'faq',
                 )),
                 leading: Icon(Icons.help_outline),
-                onTap: () {
-                },
+                onTap: () {},
               ),
               Divider(),
               ListTile(
@@ -289,8 +285,8 @@ class _HomePageState extends State<HomePage> {
       body: !loading
           ? tabViews[_currentIndex]
           : Center(
-              child: CircularProgressIndicator(),
-            ),
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 
