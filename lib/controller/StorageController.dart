@@ -1,11 +1,10 @@
 import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart' as str;
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/User.dart';
-
-import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart' as str;
 
 class StorageController {
   static SharedPreferences prefs;
@@ -129,6 +128,18 @@ class StorageController {
 
   setPassword(String password) {
     return prefs.setString('password', password);
+  }
+
+  String getLang() {
+    try {
+      return prefs.getString('lang');
+    } catch (e) {
+      return 'en';
+    }
+  }
+
+  setLang(String lang) {
+    return prefs.setString('lang', lang);
   }
 
 //  void setGroup(Group group) {

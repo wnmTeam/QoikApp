@@ -287,8 +287,8 @@ class _HomePageState extends State<HomePage> {
       body: !loading
           ? tabViews[_currentIndex]
           : Center(
-        child: CircularProgressIndicator(),
-      ),
+             child: CircularProgressIndicator(),
+            ),
     );
   }
 

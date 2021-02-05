@@ -12,6 +12,8 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
+    StorageController storageController = new StorageController();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(Languages.translate(context, "setting")),
@@ -32,19 +34,32 @@ class _SettingsState extends State<Settings> {
                         ListTile(
                           title: Text("English"),
                           onTap: () {
+                            storageController.setLang('en');
                             MyAppState.myAppState.setState(() {
-                              new StorageController().setLang('en');
+                              MyAppState.locale = Locale('en');
                             });
                             Navigator.pop(context);
                           },
                         ),
                         ListTile(
                           title: Text("عربي"),
-                          onTap: () {},
+                          onTap: () {
+                            storageController.setLang('ar');
+                            MyAppState.myAppState.setState(() {
+                              MyAppState.locale = Locale('ar');
+                            });
+                            Navigator.pop(context);
+                          },
                         ),
                         ListTile(
                           title: Text("تركي"),
-                          onTap: () {},
+                          onTap: () {
+                            storageController.setLang('tr');
+                            MyAppState.myAppState.setState(() {
+                              MyAppState.locale = Locale('tr');
+                            });
+                            Navigator.pop(context);
+                          },
                         ),
                       ],
                     ),
