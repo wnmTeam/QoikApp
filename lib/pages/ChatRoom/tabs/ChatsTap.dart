@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,6 @@ import 'package:stumeapp/controller/ChatController.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/ImageView/ImageView.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 
 class ChatsTab extends StatefulWidget {
@@ -37,27 +37,36 @@ class _ChatsTabState extends State<ChatsTab>
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: chats.length,
-      itemBuilder: (con, index) {
-        if (index == 0)
-          return SizedBox(
-            height: 20,
-          );
-        else if (index == chats.length - 1) {
-          if (isLoading)
-            return Center(child: CircularProgressIndicator());
-          else if (hasMore)
-            return FlatButton(
-              onPressed: () {
-                getChats();
-              },
-              child: Text('Load More'),
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+          tooltip: "Start chat",
+          backgroundColor: ConstValues.firstColor,
+          onPressed: () {
+            //TODO: Show friends list to start chat
+          },
+          child: Icon(Icons.add)),
+      body: ListView.builder(
+        itemCount: chats.length,
+        itemBuilder: (con, index) {
+          if (index == 0)
+            return SizedBox(
+              height: 20,
             );
-          return Container();
-        }
-        return _chatBuilder(con, Group().fromMap(chats[index].data()));
-      },
+          else if (index == chats.length - 1) {
+            if (isLoading)
+              return Center(child: CircularProgressIndicator());
+            else if (hasMore)
+              return FlatButton(
+                onPressed: () {
+                  getChats();
+                },
+                child: Text('Load More'),
+              );
+            return Container();
+          }
+          return _chatBuilder(con, Group().fromMap(chats[index].data()));
+        },
+      ),
     );
   }
 

@@ -1,10 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/MyUser.dart';
-import 'package:stumeapp/Models/User.dart';
+import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/controller/ChatController.dart';
 
 class RoomsTab extends StatefulWidget {
@@ -42,37 +42,48 @@ class _RoomsTabState extends State<RoomsTab>
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: refresh,
-      child: ListView.builder(
-        itemCount: rooms.length,
-        itemBuilder: (con, index) {
-          if (index == 0)
-            return ListTile(
-              contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
-              leading: Icon(Icons.group),
-              title: Text('Create Group'),
-              onTap: () {
-                Navigator.pushNamed(context, '/CreateGroupPage');
-              },
-            );
-          else if (index == rooms.length - 1) {
-            if (isLoading)
-              return Center(child: CircularProgressIndicator());
-            else if (hasMore)
-              return FlatButton(
-                onPressed: () {
-                  getRooms();
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+          tooltip: "Create group",
+          backgroundColor: ConstValues.firstColor,
+          onPressed: () {
+            Navigator.pushNamed(context, '/CreateGroupPage');
+          },
+          child: Icon(Icons.add)),
+      body: RefreshIndicator(
+        onRefresh: refresh,
+        child: ListView.builder(
+          itemCount: rooms.length,
+          itemBuilder: (con, index) {
+            //TODO: remove first item
+            if (index == 0)
+              return ListTile(
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+                leading: Icon(Icons.group),
+                title: Text('Create Group'),
+                onTap: () {
+                  Navigator.pushNamed(context, '/CreateGroupPage');
                 },
-                child: Text('Loade More'),
               );
-            return Container();
-          }
-          return _chatBuilder(
-              con,
-              Group().fromMap(rooms[index].data())..setId(rooms[index].id),
-              index);
-        },
+            else if (index == rooms.length - 1) {
+              if (isLoading)
+                return Center(child: CircularProgressIndicator());
+              else if (hasMore)
+                return FlatButton(
+                  onPressed: () {
+                    getRooms();
+                  },
+                  child: Text('Loade More'),
+                );
+              return Container();
+            }
+            return _chatBuilder(
+                con,
+                Group().fromMap(rooms[index].data())..setId(rooms[index].id),
+                index);
+          },
+        ),
       ),
     );
   }
