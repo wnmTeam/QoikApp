@@ -247,25 +247,20 @@ class _HomePageState extends State<HomePage> {
               ),
               Divider(),
               ListTile(
-                title: Text(link[0].Text),
+                title: Text(link[0].title),
                 leading: Icon(link[0].icon),
-                onTap: () async =>
-                {
-                  if (link[0].url !=
-                      null)
+                onTap: () async => {
+                  if (link[0].url != null)
                     {
-                      await launch(
-                          link[0].url)
-                          .then((value) =>
-                          print('url  ' +
-                              link[0].url))
+                      await launch(link[0].url)
+                          .then((value) => print('url  ' + link[0].url))
                     }
                   else
                     {throw 'cant launch url'}
                 },
               ),
               ListTile(
-                title: Text(link[1].Text),
+                title: Text(link[1].title),
                 leading: Icon(link[1].icon),
                 onTap: () async =>
                 {
@@ -283,7 +278,7 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
               ListTile(
-                title: Text(link[2].Text),
+                title: Text(link[2].title),
                 leading: Icon(link[2].icon),
                 onTap: () async =>
                 {
@@ -301,7 +296,7 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
               ListTile(
-                title: Text(link[3].Text),
+                title: Text(link[3].title),
                 leading: Icon(link[3].icon),
                 onTap: () async =>
                 {
@@ -358,14 +353,14 @@ class _HomePageState extends State<HomePage> {
 
     link.add(new Link(
       icon: Icons.error_outline,
-      Text: Languages.translate(
+      title: Languages.translate(
         context,
         'about',
       ),
       url: "https://qoiqapp.com/%D8%AD%D9%88%D9%84/",
     ));
     link.add(new Link(
-      Text: Languages.translate(
+      title: Languages.translate(
         context,
         'contact_us',
       ),
@@ -373,7 +368,7 @@ class _HomePageState extends State<HomePage> {
       url: "https://qoiqapp.com/%D8%AA%D9%88%D8%A7%D8%B5%D9%84-%D9%85%D8%B9%D9%86%D8%A7/",
     ));
     link.add(new Link(
-      Text: Languages.translate(
+      title: Languages.translate(
         context,
         'faq',
       ),
@@ -381,7 +376,7 @@ class _HomePageState extends State<HomePage> {
       url: "https://qoiqapp.com/%D8%A7%D9%84%D8%A7%D8%B3%D8%A6%D9%84%D8%A9-%D8%A7%D9%84%D8%B4%D8%A7%D8%A6%D8%B9%D8%A9/",
     ));
     link.add(new Link(
-      Text: "انضم إلى فريقنا",
+      title: "انضم إلى فريقنا",
       icon: Icons.add_circle_outline,
       url: "https://qoiqapp.com/%D8%A7%D9%84%D8%A7%D8%B3%D8%A6%D9%84%D8%A9-%D8%A7%D9%84%D8%B4%D8%A7%D8%A6%D8%B9%D8%A9/",
     ));
@@ -393,8 +388,8 @@ class _HomePageState extends State<HomePage> {
 class Link {
 
   String url;
-  String Text;
+  String title;
   IconData icon;
 
-  Link({this.url, this.Text, this.icon});
+  Link({this.url, this.title, this.icon});
 }
