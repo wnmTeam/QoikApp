@@ -162,27 +162,57 @@ class _PostWidgetState extends State<PostWidget>
                 post.text.isNotEmpty
                     ? Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  child: InkWell(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0,
-                        vertical: 10,
-                      ),
-                      child: Text(
-                        post.text,
-                        maxLines: _isExbended ? 100 : 5,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Colors.grey[700],
-                          fontSize: 16,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            _isExbended = !_isExbended;
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0,
+                            vertical: 10,
+                          ),
+                          child: Text(
+                            post.text,
+                            maxLines: _isExbended ? 1000 : 5,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.grey[700],
+                              fontSize: 16,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                    onTap: () {
-                      setState(() {
-                        _isExbended = !_isExbended;
-                      });
-                    },
+                      !_isExbended ? post.text.length > 200
+                          ? InkWell(
+                        onTap: () {
+                          setState(() {
+                            _isExbended = !_isExbended;
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0,
+                            vertical: 10,
+                          ),
+                          child: Text(
+                            "عرض المزيد",
+                            style: TextStyle(
+                              color: ConstValues.firstColor,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      )
+                          : Container()
+
+                          : Container()
+                      ,
+                    ],
                   ),
                 )
                     : Container(),
