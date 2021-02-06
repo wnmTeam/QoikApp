@@ -14,7 +14,7 @@ import 'package:stumeapp/pages/Home/tabs/GroupsChatsTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/HomeTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/LibraryTabView.dart';
 import 'package:stumeapp/pages/Home/widgets/FABwithBottomAppBar.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -30,7 +30,6 @@ class _HomePageState extends State<HomePage> {
 
   AuthController _authController = AuthController();
   NotificationApi _notificationApi = NotificationApi();
-
 
   @override
   void initState() {
@@ -58,8 +57,11 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  List<Link> link = new List();
+
   @override
   Widget build(BuildContext context) {
+    ddd();
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.white,
@@ -108,9 +110,9 @@ class _HomePageState extends State<HomePage> {
           ),
           Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-              child:InkWell(
+              child: InkWell(
                 onTap: () {
-                  if(!loading)
+                  if (!loading)
                     Navigator.of(context).pushNamed(
                       '/ProfilePage',
                       arguments: {
@@ -125,12 +127,15 @@ class _HomePageState extends State<HomePage> {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: CachedNetworkImage(
-                        placeholder: (context, url) => Center(
-                          //TODO: Change the placeHolder
-                          child: Image.asset(ConstValues.userImage),
+                        placeholder: (context, url) =>
+                            Center(
+                              //TODO: Change the placeHolder
+                              child: Image.asset(ConstValues.userImage),
 //                    child: Container(),
-                        ),
-                        imageUrl: !loading && MyUser.myUser.img != null ? MyUser.myUser.img : ConstValues.userImage,
+                            ),
+                        imageUrl: !loading && MyUser.myUser.img != null
+                            ? MyUser.myUser.img
+                            : ConstValues.userImage,
                         fit: BoxFit.cover,
                         width: 40,
                         height: 40,
@@ -138,9 +143,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
-              )
-
-          ),
+              )),
         ],
       ),
       bottomNavigationBar: FABBottomAppBar(
@@ -244,35 +247,87 @@ class _HomePageState extends State<HomePage> {
               ),
               Divider(),
               ListTile(
-                title: Text(Languages.translate(
-                  context,
-                  'about',
-                )),
-                leading: Icon(Icons.error_outline),
-                onTap: () {},
+                title: Text(link[0].Text),
+                leading: Icon(link[0].icon),
+                onTap: () async =>
+                {
+                  if (link[0].url !=
+                      null)
+                    {
+                      await launch(
+                          link[0].url)
+                          .then((value) =>
+                          print('url  ' +
+                              link[0].url))
+                    }
+                  else
+                    {throw 'cant launch url'}
+                },
               ),
               ListTile(
-                title: Text(Languages.translate(
-                  context,
-                  'contact_us',
-                )),
-                leading: Icon(Icons.email_outlined),
-                onTap: () {},
+                title: Text(link[1].Text),
+                leading: Icon(link[1].icon),
+                onTap: () async =>
+                {
+                  if (link[1].url !=
+                      null)
+                    {
+                      await launch(
+                          link[1].url)
+                          .then((value) =>
+                          print('url  ' +
+                              link[1].url))
+                    }
+                  else
+                    {throw 'cant launch url'}
+                },
               ),
               ListTile(
-                title: Text(Languages.translate(
-                  context,
-                  'faq',
-                )),
-                leading: Icon(Icons.help_outline),
-                onTap: () {},
+                title: Text(link[2].Text),
+                leading: Icon(link[2].icon),
+                onTap: () async =>
+                {
+                  if (link[2].url !=
+                      null)
+                    {
+                      await launch(
+                          link[2].url)
+                          .then((value) =>
+                          print('url  ' +
+                              link[2].url))
+                    }
+                  else
+                    {throw 'cant launch url'}
+                },
               ),
+              ListTile(
+                title: Text(link[3].Text),
+                leading: Icon(link[3].icon),
+                onTap: () async =>
+                {
+                  if (link[3].url !=
+                      null)
+                    {
+                      await launch(
+                          link[3].url)
+                          .then((value) =>
+                          print('url  ' +
+                              link[3].url))
+                    }
+                  else
+                    {throw 'cant launch url'}
+                },
+              ),
+
               Divider(),
               ListTile(
-                title: Text(Languages.translate(
-                  context,
-                  'log_out',
-                ), style: TextStyle(color: Colors.red),),
+                title: Text(
+                  Languages.translate(
+                    context,
+                    'log_out',
+                  ),
+                  style: TextStyle(color: Colors.red),
+                ),
                 leading: Icon(Icons.logout, color: Colors.red),
                 onTap: () {
                   _authController.logOut();
@@ -287,8 +342,8 @@ class _HomePageState extends State<HomePage> {
       body: !loading
           ? tabViews[_currentIndex]
           : Center(
-             child: CircularProgressIndicator(),
-            ),
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 
@@ -297,4 +352,49 @@ class _HomePageState extends State<HomePage> {
       _currentIndex = index;
     });
   }
+
+  ddd() {
+    link.clear();
+
+    link.add(new Link(
+      icon: Icons.error_outline,
+      Text: Languages.translate(
+        context,
+        'about',
+      ),
+      url: "https://qoiqapp.com/%D8%AD%D9%88%D9%84/",
+    ));
+    link.add(new Link(
+      Text: Languages.translate(
+        context,
+        'contact_us',
+      ),
+      icon: Icons.email_outlined,
+      url: "https://qoiqapp.com/%D8%AA%D9%88%D8%A7%D8%B5%D9%84-%D9%85%D8%B9%D9%86%D8%A7/",
+    ));
+    link.add(new Link(
+      Text: Languages.translate(
+        context,
+        'faq',
+      ),
+      icon: Icons.help_outline,
+      url: "https://qoiqapp.com/%D8%A7%D9%84%D8%A7%D8%B3%D8%A6%D9%84%D8%A9-%D8%A7%D9%84%D8%B4%D8%A7%D8%A6%D8%B9%D8%A9/",
+    ));
+    link.add(new Link(
+      Text: "انضم إلى فريقنا",
+      icon: Icons.add_circle_outline,
+      url: "https://qoiqapp.com/%D8%A7%D9%84%D8%A7%D8%B3%D8%A6%D9%84%D8%A9-%D8%A7%D9%84%D8%B4%D8%A7%D8%A6%D8%B9%D8%A9/",
+    ));
+  }
+
+}
+
+
+class Link {
+
+  String url;
+  String Text;
+  IconData icon;
+
+  Link({this.url, this.Text, this.icon});
 }
