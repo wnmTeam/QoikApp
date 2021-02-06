@@ -1,34 +1,33 @@
 {
   "project_info": {
-    "project_number": "804244732479",
-    "firebase_url": "https://stume-b9d8e.firebaseio.com",
-    "project_id": "stume-b9d8e",
-    "storage_bucket": "stume-b9d8e.appspot.com"
+    "project_number": "298785678359",
+    "project_id": "qoiqapp-7b79a",
+    "storage_bucket": "qoiqapp-7b79a.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:804244732479:android:1415dd563a381323c2168a",
+        "mobilesdk_app_id": "1:298785678359:android:0c61457ecc1188db54a852",
         "android_client_info": {
-          "package_name": "com.abosak.stumeapp"
+          "package_name": "com.company.QoiqApp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "804244732479-7fgek2n2hmlpv3ot23dd1ft8mddk6jun.apps.googleusercontent.com",
+          "client_id": "298785678359-hired6bs2v7lpo790an5j3mirk0960e2.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDvLHG3iZtvto63oNqgzPjvLrkw5DOns7s"
+          "current_key": "AIzaSyDYjPHAvzGYtxug2Q4LvJDFemqf8Uvd1bE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "804244732479-7fgek2n2hmlpv3ot23dd1ft8mddk6jun.apps.googleusercontent.com",
+              "client_id": "298785678359-hired6bs2v7lpo790an5j3mirk0960e2.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
