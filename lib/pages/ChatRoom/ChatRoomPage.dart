@@ -374,7 +374,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                 ? _message(
                     message, true, ConstValues.accentColor, 10, 10, 10, 0)
                 : _message(
-                    message, true, ConstValues.secondColor, 0, 10, 10, 10)
+                    message, true, ConstValues.accentColor, 0, 10, 10, 10)
           ],
         ),
       );
@@ -432,25 +432,21 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                             topRight: Radius.circular(x1),
                             topLeft: Radius.circular(x4),
                           ),
-                          child: Hero(
-                            tag: message.images.length > 0
+                          child: CachedNetworkImage(
+                            placeholder: (context, url) =>
+                                Center(
+                                  child: Container(
+                                    width: size.width / 2,
+                                    height: size.width / 2,
+                                    color: Colors.grey.withOpacity(0.3),
+                                  ),
+                                ),
+                            imageUrl: message.images.length > 0
                                 ? message.images[0]
                                 : ' ',
-                            child: CachedNetworkImage(
-                              placeholder: (context, url) => Center(
-                                child: Container(
-                                  width: size.width / 2,
-                                  height: size.width / 2,
-                                  color: Colors.grey.withOpacity(0.3),
-                                ),
-                              ),
-                              imageUrl: message.images.length > 0
-                                  ? message.images[0]
-                                  : ' ',
-                              fit: BoxFit.cover,
-                              width: size.width / 2,
-                              height: size.width / 2,
-                            ),
+                            fit: BoxFit.cover,
+                            width: size.width / 2,
+                            height: size.width / 2,
                           ),
                         ),
                       ),

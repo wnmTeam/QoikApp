@@ -74,7 +74,30 @@ class _SettingsState extends State<Settings> {
           Divider(),
           ListTile(
             title: Text("Change the theme"),
-            onTap: () {},
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    scrollable: true,
+                    title: Text("Change the theme"),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ListTile(
+                          title: Text("Normal theme"),
+                          onTap: () {},
+                        ),
+                        ListTile(
+                          title: Text("Dark theme"),
+                          onTap: () {},
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
+            },
           ),
         ],
       ),

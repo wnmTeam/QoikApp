@@ -85,26 +85,26 @@ class _ChatsTabState extends State<ChatsTab>
             leading: GestureDetector(
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) =>
-                        ImageView(user.img != null ? user.img : ConstValues.userImage)));
+                    builder: (_) => ImageView(
+                        user.img != null ? user.img : ConstValues.userImage)));
               },
-              child: Hero(
-                tag: user.img != null ? user.img : ConstValues.userImage,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(57),
-                  child: CachedNetworkImage(
-                    placeholder: (context, url) => Center(
-                      //TODO: Change the placeHolder
-                      child: Image.asset(ConstValues.userImage),
+              // child: Hero(
+              //   tag: user.img != null ? user.img : ConstValues.userImage,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(57),
+                child: CachedNetworkImage(
+                  placeholder: (context, url) => Center(
+                    //TODO: Change the placeHolder
+                    child: Image.asset(ConstValues.userImage),
 //                    child: Container(),
-                    ),
-                    imageUrl: user.img != null ? user.img : ConstValues.userImage,
-                    fit: BoxFit.cover,
-                    width: 57,
+                  ),
+                  imageUrl: user.img != null ? user.img : ConstValues.userImage,
+                  fit: BoxFit.cover,
+                  width: 57,
                     height: 57,
                   ),
                 ),
-              ),
+              // ),
             ),
             title: Text(user.firstName + ' ' + user.secondName),
             subtitle: Text(Languages.translate(
