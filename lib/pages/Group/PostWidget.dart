@@ -175,12 +175,17 @@ class _PostWidgetState extends State<PostWidget>
                               },
                               onLongPress: () {
                                 Clipboard.setData(
-                                    new ClipboardData(text: post.text));
+                                        ClipboardData(text: post.text))
+                                    .then((value) {
+                                  //TODO : Translate
+                                  Toast.show('The text copied', context,
+                                      duration: Toast.LENGTH_LONG,
+                                      backgroundColor: ConstValues.firstColor,
+                                      textColor: Colors.white);
 
-                                Toast.show('The text copied', context,
-                                    duration: Toast.LENGTH_LONG,
-                                    backgroundColor: ConstValues.firstColor,
-                                    textColor: Colors.white);
+                                  // Scaffold.of(context).showSnackBar(
+                                  //     SnackBar(content:Text('The text copied')));
+                                });
                               },
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
