@@ -713,48 +713,63 @@ class _FriendWidgetState extends State<FriendWidget> {
   }
 
   Widget _friendBuilder() {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(3.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Container(
-                height: 175,
-                width: 175,
-                color: Colors.indigo[200],
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).pushNamed('/ProfilePage', arguments: {
+          'user': _user,
+          'id_user': _user.id,
+        });
+      },
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(3.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  height: 175,
+                  width: 175,
+                  color: Colors.indigo[200],
+                  child: CachedNetworkImage(
+                    imageUrl: _user.img,
+                    placeholder: (context, url) => Center(
+                      child: Image.asset(ConstValues.userImage),
+                    ),
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
-            ),
-            SizedBox(
-              height: 4,
-            ),
-            Text(
-              _user.firstName + ' ' + _user.secondName,
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.grey[700],
+              SizedBox(
+                height: 4,
               ),
-            ),
-            SizedBox(
-              width: 170,
-              height: 28,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 3.0),
-                    child: Text(
-                      _user.tag,
-                      style: TextStyle(
-                        color: Colors.grey,
+              Text(
+                _user.firstName + ' ' + _user.secondName,
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.grey[700],
+                ),
+              ),
+              SizedBox(
+                width: 170,
+                height: 28,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 3.0),
+                      child: Text(
+                        _user.tag,
+                        style: TextStyle(
+                          color: Colors.grey,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            )
-          ],
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
