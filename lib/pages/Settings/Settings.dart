@@ -27,21 +27,11 @@ class _SettingsState extends State<Settings> {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
+                    scrollable: true,
                     title: Text("Change the language"),
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        ListTile(
-                          title: Text("English"),
-                          onTap: () {
-                            //TODO: Save language code in sharedPreferences
-                            storageController.setLang('en');
-                            MyAppState.myAppState.setState(() {
-                              MyAppState.locale = Locale('en');
-                            });
-                            Navigator.pop(context);
-                          },
-                        ),
                         ListTile(
                           title: Text("عربي"),
                           onTap: () {
@@ -54,12 +44,22 @@ class _SettingsState extends State<Settings> {
                           },
                         ),
                         ListTile(
-                          title: Text("تركي"),
+                          title: Text("Türkçe"),
                           onTap: () {
-                            //TODO: Save language code in sharedPreferences
                             storageController.setLang('tr');
                             MyAppState.myAppState.setState(() {
                               MyAppState.locale = Locale('tr');
+                            });
+                            Navigator.pop(context);
+                          },
+                        ),
+                        ListTile(
+                          title: Text("English"),
+                          onTap: () {
+                            //TODO: Save language code in sharedPreferences
+                            storageController.setLang('en');
+                            MyAppState.myAppState.setState(() {
+                              MyAppState.locale = Locale('en');
                             });
                             Navigator.pop(context);
                           },
