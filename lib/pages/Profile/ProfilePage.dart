@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,7 +14,6 @@ import 'package:stumeapp/controller/FriendsController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/ImageView/ImageView.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 class ProfilePage extends StatefulWidget {
   User user;
@@ -800,6 +800,7 @@ class _AvatarState extends State<Avatar> {
               ),
             );
           },
+              //    TODO :+++++++++++++++++++++++++++++++++++++++++++++++++
           child: Hero(
             tag: widget.imagePath != null
                 ? widget.imagePath
@@ -814,9 +815,7 @@ class _AvatarState extends State<Avatar> {
                 child: widget.imagePath != null
                     ? CachedNetworkImage(
                         placeholder: (context, url) => Center(
-                          //TODO: Change the placeHolder
                           child: Image.asset(ConstValues.userImage),
-//                    child: Container(),
                         ),
                         imageUrl: widget.imagePath,
                         fit: BoxFit.cover,
