@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stumeapp/Models/Comment.dart';
 import 'package:stumeapp/Models/Group.dart';
@@ -14,6 +15,7 @@ import 'package:stumeapp/controller/PostsController.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/ImageView/ImageView.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
+import 'package:toast/toast.dart';
 
 import 'CommentWidget.dart';
 
@@ -167,21 +169,30 @@ class _PostWidgetState extends State<PostWidget>
                     children: [
                       InkWell(
                         onTap: () {
-                          setState(() {
-                            _isExbended = !_isExbended;
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0,
-                            vertical: 10,
-                          ),
-                          child: Text(
-                            post.text,
-                            maxLines: _isExbended ? 1000 : 5,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Colors.grey[700],
+                                setState(() {
+                                  _isExbended = !_isExbended;
+                                });
+                              },
+                              onLongPress: () {
+                                Clipboard.setData(
+                                    new ClipboardData(text: post.text));
+
+                                Toast.show('The text copied', context,
+                                    duration: Toast.LENGTH_LONG,
+                                    backgroundColor: ConstValues.firstColor,
+                                    textColor: Colors.white);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8.0,
+                                  vertical: 10,
+                                ),
+                                child: Text(
+                                  post.text,
+                                  maxLines: _isExbended ? 1000 : 5,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: Colors.grey[700],
                               fontSize: 16,
                             ),
                           ),
@@ -485,12 +496,12 @@ class _PostWidgetState extends State<PostWidget>
                       ClipRRect(
                         borderRadius: BorderRadius.circular(57),
                         child: CachedNetworkImage(
-                          placeholder: (context, url) => Center(
-                            //TODO: Change the placeHolder
-                            child: Image.asset(ConstValues.userImage),
+                          placeholder: (context, url) =>
+                              Center(
+                                child: Image.asset(ConstValues.userImage),
 //                    child: Container(),
-                          ),
-                          imageUrl: user.img != null ? user.img : ConstValues.userImage,
+                              ),
+                          imageUrl: MyUser.myUser.img,
                           fit: BoxFit.cover,
                           width: 40,
                           height: 40,
