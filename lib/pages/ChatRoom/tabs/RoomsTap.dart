@@ -44,7 +44,7 @@ class _RoomsTabState extends State<RoomsTab>
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-          heroTag: "createGroup",
+        heroTag: "createGroup",
           tooltip: "Create group",
           backgroundColor: ConstValues.firstColor,
           onPressed: () {
