@@ -34,6 +34,7 @@ class _SettingsState extends State<Settings> {
                         ListTile(
                           title: Text("English"),
                           onTap: () {
+                            //TODO: Save language code in sharedPreferences
                             storageController.setLang('en');
                             MyAppState.myAppState.setState(() {
                               MyAppState.locale = Locale('en');
@@ -44,6 +45,7 @@ class _SettingsState extends State<Settings> {
                         ListTile(
                           title: Text("عربي"),
                           onTap: () {
+                            //TODO: Save language code in sharedPreferences
                             storageController.setLang('ar');
                             MyAppState.myAppState.setState(() {
                               MyAppState.locale = Locale('ar');
@@ -54,6 +56,7 @@ class _SettingsState extends State<Settings> {
                         ListTile(
                           title: Text("تركي"),
                           onTap: () {
+                            //TODO: Save language code in sharedPreferences
                             storageController.setLang('tr');
                             MyAppState.myAppState.setState(() {
                               MyAppState.locale = Locale('tr');

@@ -32,6 +32,7 @@ class MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     myAppState = this;
     lang = storageController.getLang();
+    print(lang);
     locale = Locale(lang);
 
     return MaterialApp(
