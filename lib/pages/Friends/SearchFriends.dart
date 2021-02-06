@@ -1,15 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/controller/FriendsController.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-
 
 class SearchFriendsPage extends StatefulWidget {
   @override
@@ -34,162 +33,165 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {
-                if (_searchController.text.isNotEmpty) {
-                  _search();
-                }
-              })
-        ],
-        title: TextField(
-          controller: _searchController,
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: Languages.translate(
-                context,
-                'search',
-              ),
-              hintStyle: TextStyle(color: Colors.white70)),
-          onSubmitted: (value) {
-            if (value.isNotEmpty) {
-              _search();
-            }
-          },
-          style: TextStyle(color: Colors.white70),
-          textInputAction: TextInputAction.search,
+    return Hero(
+      tag: "search",
+      child: Scaffold(
+        appBar: AppBar(
+          actions: [
+            IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () {
+                  if (_searchController.text.isNotEmpty) {
+                    _search();
+                  }
+                })
+          ],
+          title: TextField(
+            controller: _searchController,
+            decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: Languages.translate(
+                  context,
+                  'search',
+                ),
+                hintStyle: TextStyle(color: Colors.white70)),
+            onSubmitted: (value) {
+              if (value.isNotEmpty) {
+                _search();
+              }
+            },
+            style: TextStyle(color: Colors.white70),
+            textInputAction: TextInputAction.search,
+          ),
         ),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(6.0),
-            child: Wrap(
-              spacing: 5,
-              children: [
-                RaisedButton(
-                  elevation: 0,
-                  onPressed: () async {
-                    String item = await _bottomSheetBuild(
-                      'universities',
-                      _authController.getUniversities(),
-                    );
-                    _search();
-                  },
-                  child: Text(
-                    _university != null ? _university : Languages.translate(
-                      context,
-                      'university',
-                    ),
-                    style: TextStyle(fontSize: 13),
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                ),
-                RaisedButton(
-                  elevation: 0,
-                  onPressed: () async {
-                    String item = await _bottomSheetBuild(
-                      'colleges',
-                      _authController.getColleges(),
-                    );
-                    _search();
-                  },
-                  child: Text(
-                    _college != null ? _college : Languages.translate(
-                      context,
-                      'college',
-                    ),
-                    style: TextStyle(fontSize: 13),
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                ),
-                RaisedButton(
-                  elevation: 0,
-                  onPressed: () async {
-                    String item = await _bottomSheetBuild('gender', null);
-                    _search();
-                  },
-                  child: Text(
-                    _gender != null ? _gender : Languages.translate(
-                      context,
-                      'gender',
-                    ),
-                    style: TextStyle(fontSize: 13),
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                ),
-                RaisedButton(
-                  elevation: 0,
-                  onPressed: () {
-                    setState(() {
-                      _college = null;
-                      _university = null;
-                      _gender = null;
-                    });
-                  },
-                  color: ConstValues.firstColor[800],
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.clear,
-                        size: 17,
-                        color: Colors.white,
-                      ),
-                      SizedBox(
-                        width: 3,
-                      ),
-                      Text(Languages.translate(
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(6.0),
+              child: Wrap(
+                spacing: 5,
+                children: [
+                  RaisedButton(
+                    elevation: 0,
+                    onPressed: () async {
+                      String item = await _bottomSheetBuild(
+                        'universities',
+                        _authController.getUniversities(),
+                      );
+                      _search();
+                    },
+                    child: Text(
+                      _university != null ? _university : Languages.translate(
                         context,
-                        'clear',
+                        'university',
                       ),
-                          style: TextStyle(
-                            color: Colors.white,
-                          )),
-                    ],
+                      style: TextStyle(fontSize: 13),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
                   ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
+                  RaisedButton(
+                    elevation: 0,
+                    onPressed: () async {
+                      String item = await _bottomSheetBuild(
+                        'colleges',
+                        _authController.getColleges(),
+                      );
+                      _search();
+                    },
+                    child: Text(
+                      _college != null ? _college : Languages.translate(
+                        context,
+                        'college',
+                      ),
+                      style: TextStyle(fontSize: 13),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: searchResults.length,
-              itemBuilder: (context, index) {
-                if (searchResults[index] == null) {
-                  if (isLoading)
-                    return Center(child: CircularProgressIndicator());
-                  else if (hasMore && searchResults.length > 1)
-                    return FlatButton(
-                        onPressed: () {
-                          getFriendRequests(_searchController.text);
-                        },
-                        child: Text(Languages.translate(
+                  RaisedButton(
+                    elevation: 0,
+                    onPressed: () async {
+                      String item = await _bottomSheetBuild('gender', null);
+                      _search();
+                    },
+                    child: Text(
+                      _gender != null ? _gender : Languages.translate(
+                        context,
+                        'gender',
+                      ),
+                      style: TextStyle(fontSize: 13),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                  ),
+                  RaisedButton(
+                    elevation: 0,
+                    onPressed: () {
+                      setState(() {
+                        _college = null;
+                        _university = null;
+                        _gender = null;
+                      });
+                    },
+                    color: ConstValues.firstColor[800],
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.clear,
+                          size: 17,
+                          color: Colors.white,
+                        ),
+                        SizedBox(
+                          width: 3,
+                        ),
+                        Text(Languages.translate(
                           context,
-                          'load_more',
-                        )));
-                  return Container();
-                }
-                return UserWidget(
-                    user: User().fromMap(searchResults[index].data())
-                      ..setId(searchResults[index].id));
-              },
+                          'clear',
+                        ),
+                            style: TextStyle(
+                              color: Colors.white,
+                            )),
+                      ],
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+            Expanded(
+              child: ListView.builder(
+                itemCount: searchResults.length,
+                itemBuilder: (context, index) {
+                  if (searchResults[index] == null) {
+                    if (isLoading)
+                      return Center(child: CircularProgressIndicator());
+                    else if (hasMore && searchResults.length > 1)
+                      return FlatButton(
+                          onPressed: () {
+                            getFriendRequests(_searchController.text);
+                          },
+                          child: Text(Languages.translate(
+                            context,
+                            'load_more',
+                          )));
+                    return Container();
+                  }
+                  return UserWidget(
+                      user: User().fromMap(searchResults[index].data())
+                        ..setId(searchResults[index].id));
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -241,10 +243,8 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
     return l;
   }
 
-  _bottomSheetBuild(
-    String type,
-    Future future,
-  ) {
+  _bottomSheetBuild(String type,
+      Future future,) {
     return showModalBottomSheet(
         context: context,
         shape: RoundedRectangleBorder(

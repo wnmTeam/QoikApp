@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    ddd();
+    getLinks();
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.white,
@@ -186,6 +186,7 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: SafeArea(
         child: FloatingActionButton(
           backgroundColor: ConstValues.firstColor,
+          heroTag: _currentIndex == 2 ? "search" : "profile",
           onPressed: () {
             if (_currentIndex == 2)
               Navigator.of(context).pushNamed('/SearchFriendsPage');
@@ -348,7 +349,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  ddd() {
+  getLinks() {
     link.clear();
 
     link.add(new Link(
