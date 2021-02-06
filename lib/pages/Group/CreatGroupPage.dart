@@ -28,99 +28,102 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(Languages.translate(
-          context,
-          'ceate_group',
-        )),
-        elevation: 0,
-        actions: [
-          Tooltip(
-            message: Languages.translate(
-              context,
-              'next',
+    return Hero(
+      tag: "createGroup",
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(Languages.translate(
+            context,
+            'ceate_group',
+          )),
+          elevation: 0,
+          actions: [
+            Tooltip(
+              message: Languages.translate(
+                context,
+                'next',
+              ),
+              child: FlatButton(
+                  onPressed: () {
+                    if (_nameController.text.trim().isEmpty) return;
+                    Navigator.pushNamed(
+                      context,
+                      '/SelectMembers',
+                      arguments: {
+                        'group': Group(
+                          name: _nameController.text,
+                          type: Group.TYPE_GROUP,
+                          img: ' ',
+                          admins: [_authController.getUser.uid],
+                        ),
+                        'type': 'create',
+                      },
+                    );
+                  },
+                  child: Icon(
+                    Icons.done,
+                    color: Colors.white,
+                  )),
             ),
-            child: FlatButton(
-                onPressed: () {
-                  if (_nameController.text.trim().isEmpty) return;
-                  Navigator.pushNamed(
-                    context,
-                    '/SelectMembers',
-                    arguments: {
-                      'group': Group(
-                        name: _nameController.text,
-                        type: Group.TYPE_GROUP,
-                        img: ' ',
-                        admins: [_authController.getUser.uid],
-                      ),
-                      'type': 'create',
-                    },
-                  );
-                },
-                child: Icon(
-                  Icons.done,
-                  color: Colors.white,
-                )),
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 30,
-              ),
-              Avatar(
-                imagePath: 'assets/user.png',
-                myProfile: true,
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              TextField(
-                controller: _nameController,
-                decoration: InputDecoration(
-                  // floatingLabelBehavior: FloatingLabelBehavior.auto,
-                  labelText: "Group name",
+          ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 30,
                 ),
-                onChanged: (value) {
-                  if (value.isNotEmpty) {}
-                },
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              RaisedButton(
-                color: ConstValues.firstColor,
-                textColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                Avatar(
+                  imagePath: 'assets/user.png',
+                  myProfile: true,
                 ),
-                onPressed: () {
-                  if (_nameController.text.trim().isEmpty) return;
-                  Navigator.pushNamed(
+                SizedBox(
+                  height: 30,
+                ),
+                TextField(
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                    // floatingLabelBehavior: FloatingLabelBehavior.auto,
+                    labelText: "Group name",
+                  ),
+                  onChanged: (value) {
+                    if (value.isNotEmpty) {}
+                  },
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                RaisedButton(
+                  color: ConstValues.firstColor,
+                  textColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  onPressed: () {
+                    if (_nameController.text.trim().isEmpty) return;
+                    Navigator.pushNamed(
+                      context,
+                      '/SelectMembers',
+                      arguments: {
+                        'group': Group(
+                          name: _nameController.text,
+                          type: Group.TYPE_GROUP,
+                          img: ' ',
+                          admins: [_authController.getUser.uid],
+                        ),
+                        'type': 'create',
+                      },
+                    );
+                  },
+                  child: Text(Languages.translate(
                     context,
-                    '/SelectMembers',
-                    arguments: {
-                      'group': Group(
-                        name: _nameController.text,
-                        type: Group.TYPE_GROUP,
-                        img: ' ',
-                        admins: [_authController.getUser.uid],
-                      ),
-                      'type': 'create',
-                    },
-                  );
-                },
-                child: Text(Languages.translate(
-                  context,
-                  'next',
-                )),
-              )
-            ],
+                    'next',
+                  )),
+                )
+              ],
+            ),
           ),
         ),
       ),

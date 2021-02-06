@@ -44,12 +44,13 @@ class _RoomsTabState extends State<RoomsTab>
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+          heroTag: "createGroup",
           tooltip: "Create group",
           backgroundColor: ConstValues.firstColor,
           onPressed: () {
             Navigator.pushNamed(context, '/CreateGroupPage');
           },
-          child: Icon(Icons.add)),
+          child: Icon(Icons.group_add_outlined)),
       body: RefreshIndicator(
         onRefresh: refresh,
         child: ListView.builder(

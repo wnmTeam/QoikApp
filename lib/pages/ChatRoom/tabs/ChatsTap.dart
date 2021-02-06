@@ -39,12 +39,13 @@ class _ChatsTabState extends State<ChatsTab>
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+          heroTag: "btn1",
           tooltip: "Start chat",
           backgroundColor: ConstValues.firstColor,
           onPressed: () {
             //TODO: Show friends list to start chat
           },
-          child: Icon(Icons.add)),
+          child: Icon(Icons.add_comment_outlined)),
       body: ListView.builder(
         itemCount: chats.length,
         itemBuilder: (con, index) {
