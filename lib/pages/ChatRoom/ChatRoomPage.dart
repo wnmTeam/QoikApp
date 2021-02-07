@@ -84,6 +84,10 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             widget.user.firstName + ' ' + widget.user.secondName,
             style: TextStyle(color: Colors.white),
           ),
+          // subtitle: Text(
+          //   widget.user.enterCount.toString(),
+          //   style: TextStyle(color: Colors.white),
+          // ),
           leading: ClipRRect(
             borderRadius: BorderRadius.circular(57),
             child: CachedNetworkImage(
@@ -353,7 +357,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
   }
 
   _messageBuilder(Message message) {
-    if (message.idOwner == _authController.getUser.uid) {
+    if (message.idOwner != _authController.getUser.uid) {
       //Start my message
       return Container(
         margin: EdgeInsets.all(8),
@@ -363,13 +367,26 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
           children: [
             Directionality.of(context) == TextDirection.ltr
                 ? _message(
-                    message, false, ConstValues.secondColor, 0, 10, 10, 10)
+                message,
+                false,
+                ConstValues.secondColor,
+                0,
+                10,
+                10,
+                10)
                 : _message(
-                    message, false, ConstValues.secondColor, 10, 10, 10, 0),
+                message,
+                false,
+                ConstValues.secondColor,
+                10,
+                10,
+                10,
+                0),
             SizedBox(
               width: 5,
             ),
-            _image(MyUser.myUser.img, true)
+            _image(widget.user.img, true),
+
           ],
         ),
       );
@@ -383,15 +400,27 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _image(widget.user.img, true),
+            _image(MyUser.myUser.img, true),
             SizedBox(
               width: 5,
             ),
             Directionality.of(context) == TextDirection.ltr
                 ? _message(
-                    message, true, ConstValues.accentColor, 10, 10, 10, 0)
+                message,
+                true,
+                ConstValues.accentColor,
+                10,
+                10,
+                10,
+                0)
                 : _message(
-                    message, true, ConstValues.accentColor, 0, 10, 10, 10)
+                message,
+                true,
+                ConstValues.accentColor,
+                0,
+                10,
+                10,
+                10)
           ],
         ),
       );
