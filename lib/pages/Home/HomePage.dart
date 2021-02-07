@@ -15,6 +15,7 @@ import 'package:stumeapp/pages/Home/tabs/HomeTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/LibraryTabView.dart';
 import 'package:stumeapp/pages/Home/widgets/FABwithBottomAppBar.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:toast/toast.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -94,6 +95,12 @@ class _HomePageState extends State<HomePage> {
 //        ),
         actions: [
           IconButton(
+            onPressed: () {
+              Toast.show("Soon", context,
+                  textColor: Colors.white,
+                  backgroundColor: ConstValues.firstColor,
+                  duration: Toast.LENGTH_LONG);
+            },
             icon: Icon(
               Icons.notifications,
               color: Colors.white,
@@ -101,7 +108,7 @@ class _HomePageState extends State<HomePage> {
           ),
           IconButton(
             icon: Icon(
-              Icons.chat,
+              CupertinoIcons.chat_bubble_2,
               color: Colors.white,
             ),
             onPressed: () {
@@ -153,28 +160,28 @@ class _HomePageState extends State<HomePage> {
         onTabSelected: _selectedTab,
         items: [
           FABBottomAppBarItem(
-            iconData: Icons.home,
+            iconData: CupertinoIcons.home,
             text: Languages.translate(
               context,
               'home',
             ),
           ),
           FABBottomAppBarItem(
-            iconData: Icons.group,
+            iconData: CupertinoIcons.group,
             text: Languages.translate(
               context,
               'groups',
             ),
           ),
           FABBottomAppBarItem(
-            iconData: Icons.person,
+            iconData: CupertinoIcons.person,
             text: Languages.translate(
               context,
               'friends',
             ),
           ),
           FABBottomAppBarItem(
-            iconData: Icons.library_books,
+            iconData: CupertinoIcons.book,
             text: Languages.translate(
               context,
               'library',
