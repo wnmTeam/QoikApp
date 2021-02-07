@@ -91,7 +91,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                 child: Image.asset(ConstValues.userImage),
 //                    child: Container(),
               ),
-              imageUrl: widget.user.img != null ? widget.user.img : ConstValues.userImage,
+              imageUrl: widget.user.img != null
+                  ? widget.user.img
+                  : ConstValues.userImage,
               fit: BoxFit.cover,
               width: 38,
               height: 38,
@@ -449,9 +451,41 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                           ),
                           child: CachedNetworkImage(
                             progressIndicatorBuilder: (context, url, progress) {
+                              int size = progress.totalSize;
+                              String strSize;
+                              if (progress.totalSize != null) {
+                                strSize = size < 1024
+                                    ? size.toStringAsFixed(2) + " B"
+                                    : size < 1048576
+                                    ? (size / 1024).toStringAsFixed(2) +
+                                    " KB"
+                                    : (size / 1048576.0)
+                                    .toStringAsFixed(2) +
+                                    " MB";
+                              } else {
+                                strSize = '';
+                              }
                               return Center(
-                                child: CircularProgressIndicator(
-                                  value: progress.progress,
+                                child: Stack(
+                                  children: [
+                                    Center(
+                                      child: CircularProgressIndicator(
+                                        value: progress.progress,
+                                      ),
+                                    ),
+                                    Positioned(
+                                      bottom: 10,
+                                      left: 0,
+                                      right: 0,
+                                      child: Align(
+                                        alignment: Alignment.bottomCenter,
+                                        child: Text(
+                                          strSize,
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               );
                             },
@@ -500,11 +534,13 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (_) =>
-                          ImageView(imageUrl != null ? imageUrl : ConstValues.userImage)));
+                          ImageView(imageUrl != null
+                              ? imageUrl
+                              : ConstValues.userImage)));
                 },
                 child: CachedNetworkImage(
                   placeholder: (context, url) => Center(
-                     child: Image.asset(ConstValues.userImage),
+                    child: Image.asset(ConstValues.userImage),
 //                    child: Container(),
                   ),
                   imageUrl: imageUrl != null ? imageUrl : ConstValues.userImage,
