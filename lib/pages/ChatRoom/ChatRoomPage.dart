@@ -214,16 +214,19 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                       if (pickedFile != null) {
                                         _images.add(File(pickedFile.path));
                                         setState(() {
-                                          chosenImages = ListView.builder(
-                                            scrollDirection: Axis.horizontal,
-                                            itemCount: _images.length,
-                                            itemBuilder: (context, index) {
-                                              return Container(
-                                                height: 100,
-                                                child:
-                                                    Image.file(_images[index]),
-                                              );
-                                            },
+                                          chosenImages = Container(
+                                            height: 100,
+                                            child: ListView.builder(
+                                              scrollDirection: Axis.horizontal,
+                                              itemCount: _images.length,
+                                              itemBuilder: (context, index) {
+                                                return Container(
+                                                  height: 100,
+                                                  child: Image.file(
+                                                      _images[index]),
+                                                );
+                                              },
+                                            ),
                                           );
                                         });
                                       }
@@ -277,17 +280,22 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                         if (pickedFile != null) {
                                           _images.add(File(pickedFile.path));
                                           setState(() {
-                                            chosenImages = ListView.builder(
-                                              scrollDirection: Axis.horizontal,
-                                              itemCount: _images.length,
-                                              itemBuilder: (context, index) {
-                                                return Container(
-                                                  height: 100,
-                                                  child: Image.file(
-                                                      _images[index]),
-                                                );
-                                              },
+                                            chosenImages = Container(
+                                              height: 100,
 
+                                              child: ListView.builder(
+                                                scrollDirection: Axis
+                                                    .horizontal,
+                                                itemCount: _images.length,
+                                                itemBuilder: (context, index) {
+                                                  return Container(
+                                                    height: 100,
+                                                    child: Image.file(
+                                                        _images[index]),
+                                                  );
+                                                },
+
+                                              ),
                                             );
                                           });
                                         }
