@@ -101,167 +101,183 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
         ),
       ),
       body: !creatingChat
-          ? Column(
+          ? Stack(
               children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    reverse: true,
-                    child: Column(
-                      children: [
-                        for (int i = messages.length - 1; i >= 0; i--)
-                          messages[i] == null
-                              ? FlatButton(
-                                  onPressed: () {
-                                    getMessages();
-                                  },
-                                  child: Text(
-                                    Languages.translate(
-                                      context,
-                                      'load_more',
-                                    ),
-                                  ),
-                                )
-                              : _messageBuilder(Message()
-                                  .fromMap(messages[i].data())
-                                  .setId(messages[i].id)),
-                        StreamBuilder(
-                          stream: getNew
-                              ? _chatController.getNewMessages(
-                                  id_chat: getChatID(),
-                                  last: first,
-                                  type: 'chats')
-                              : null,
-                          builder: (_, snapshot) {
-                            if (snapshot.hasData &&
-                                snapshot.data.docs.length > 0) {
-                              newMessages = snapshot.data.docs;
-                            }
-                            return Row(
-                              children: [
-                                Container(
-                                  width: size.width,
-                                  child: Column(
-                                    children: [
-                                      for (var message in newMessages)
-                                        _messageBuilder(Message()
-                                            .fromMap(message.data())
-                                            .setId(message.id)),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            );
-                          },
-                        ),
-                      ],
-                    ),
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: Image.asset(
+                    "assets/chat_bg.png",
+                    fit: BoxFit.fill,
                   ),
                 ),
-                Container(
-                  width: size.width,
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(35.0),
-                            boxShadow: [
-                              BoxShadow(
-                                  offset: Offset(0, 3),
-                                  blurRadius: 5,
-                                  color: Colors.grey)
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              // IconButton(
-                              //     icon: Icon(
-                              //       Icons.tag_faces,
-                              //       color: ConstValues.firstColor,
-                              //     ),
-                              //     onPressed: () {}),
-                              IconButton(
-                                icon: Icon(Icons.photo_camera,
-                                    color: ConstValues.firstColor),
-                                onPressed: () async {
-                                  _images = [];
-                                  final pickedFile =
-                                      await _storageController.getImage();
-                                  if (pickedFile != null) {
-                                    {
-                                      _images.add(File(pickedFile.path));
-                                      _chatController.addMessage(
-                                        message: Message(
-                                          idOwner: MyUser.myUser.id,
-                                          images: [],
+                Column(
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        reverse: true,
+                        child: Column(
+                          children: [
+                            for (int i = messages.length - 1; i >= 0; i--)
+                              messages[i] == null
+                                  ? FlatButton(
+                                      onPressed: () {
+                                        getMessages();
+                                      },
+                                      child: Text(
+                                        Languages.translate(
+                                          context,
+                                          'load_more',
                                         ),
-                                        images: _images,
-                                        id_receiver: widget.user.id,
-                                        id_chat: getChatID(),
-                                        type: 'chats',
-                                      );
-                                    }
-                                  }
-                                },
-                              ),
-                              Expanded(
-                                child: TextField(
-                                  maxLines: 5,
-                                  minLines: 1,
-                                  textAlign: TextAlign.start,
-                                  controller: _messageController,
-                                  enableSuggestions: true,
-                                  decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 18, horizontal: 0),
-                                    border: InputBorder.none,
-                                    hintText: Languages.translate(
-                                      context,
-                                      'type_a_message',
-                                    ),
-                                    hintStyle: TextStyle(color: Colors.grey),
-                                  ),
-                                ),
-                              ),
-
-                              // IconButton(
-                              //   icon: Icon(Icons.attach_file,
-                              //       color: ConstValues.firstColor),
-                              //   onPressed: () {},
-                              // ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      FloatingActionButton(
-                        backgroundColor: ConstValues.firstColor,
-                        onPressed: () {
-                          if (_messageController.text.trim().isEmpty) return;
-                          _chatController.addMessage(
-                            message: Message(
-                              idOwner: _authController.getUser.uid,
-                              text: _messageController.text.trim(),
+                                      ),
+                                    )
+                                  : _messageBuilder(Message()
+                                      .fromMap(messages[i].data())
+                                      .setId(messages[i].id)),
+                            StreamBuilder(
+                              stream: getNew
+                                  ? _chatController.getNewMessages(
+                                      id_chat: getChatID(),
+                                      last: first,
+                                      type: 'chats')
+                                  : null,
+                              builder: (_, snapshot) {
+                                if (snapshot.hasData &&
+                                    snapshot.data.docs.length > 0) {
+                                  newMessages = snapshot.data.docs;
+                                }
+                                return Row(
+                                  children: [
+                                    Container(
+                                      width: size.width,
+                                      child: Column(
+                                        children: [
+                                          for (var message in newMessages)
+                                            _messageBuilder(Message()
+                                                .fromMap(message.data())
+                                                .setId(message.id)),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                );
+                              },
                             ),
-                            id_receiver: widget.user.id,
-                            id_chat: getChatID(),
-                            images: [],
-                            type: 'chats',
-                          );
-                          _messageController.clear();
-                        },
-                        child: Icon(
-                          // Icons.keyboard_voice,
-                          Icons.send,
-                          color: Colors.white,
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    Container(
+                      width: size.width,
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(35.0),
+                                boxShadow: [
+                                  BoxShadow(
+                                      offset: Offset(0, 3),
+                                      blurRadius: 5,
+                                      color: Colors.grey)
+                                ],
+                              ),
+                              child: Row(
+                                children: [
+                                  // IconButton(
+                                  //     icon: Icon(
+                                  //       Icons.tag_faces,
+                                  //       color: ConstValues.firstColor,
+                                  //     ),
+                                  //     onPressed: () {}),
+                                  IconButton(
+                                    icon: Icon(Icons.photo_camera,
+                                        color: ConstValues.firstColor),
+                                    onPressed: () async {
+                                      _images = [];
+                                      final pickedFile =
+                                          await _storageController.getImage();
+                                      if (pickedFile != null) {
+                                        {
+                                          _images.add(File(pickedFile.path));
+                                          _chatController.addMessage(
+                                            message: Message(
+                                              idOwner: MyUser.myUser.id,
+                                              images: [],
+                                            ),
+                                            images: _images,
+                                            id_receiver: widget.user.id,
+                                            id_chat: getChatID(),
+                                            type: 'chats',
+                                          );
+                                        }
+                                      }
+                                    },
+                                  ),
+                                  Expanded(
+                                    child: TextField(
+                                      maxLines: 5,
+                                      minLines: 1,
+                                      textAlign: TextAlign.start,
+                                      controller: _messageController,
+                                      enableSuggestions: true,
+                                      decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 18, horizontal: 0),
+                                        border: InputBorder.none,
+                                        hintText: Languages.translate(
+                                          context,
+                                          'type_a_message',
+                                        ),
+                                        hintStyle:
+                                            TextStyle(color: Colors.grey),
+                                      ),
+                                    ),
+                                  ),
+
+                                  // IconButton(
+                                  //   icon: Icon(Icons.attach_file,
+                                  //       color: ConstValues.firstColor),
+                                  //   onPressed: () {},
+                                  // ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          FloatingActionButton(
+                            backgroundColor: ConstValues.firstColor,
+                            onPressed: () {
+                              if (_messageController.text.trim().isEmpty)
+                                return;
+                              _chatController.addMessage(
+                                message: Message(
+                                  idOwner: _authController.getUser.uid,
+                                  text: _messageController.text.trim(),
+                                ),
+                                id_receiver: widget.user.id,
+                                id_chat: getChatID(),
+                                images: [],
+                                type: 'chats',
+                              );
+                              _messageController.clear();
+                            },
+                            child: Icon(
+                              // Icons.keyboard_voice,
+                              Icons.send,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ],
             )
