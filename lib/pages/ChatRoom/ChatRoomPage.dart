@@ -53,6 +53,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
   Size size;
 
   Stream _getMessages;
+  Widget chosenImages = Container();
 
   @override
   void initState() {
@@ -174,6 +175,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                         ),
                       ),
                     ),
+                    chosenImages,
                     Container(
                       width: size.width,
                       padding: const EdgeInsets.all(8.0),
@@ -205,24 +207,44 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                     icon: Icon(Icons.photo_camera,
                                         color: ConstValues.firstColor),
                                     onPressed: () async {
-                                      _images = [];
+                                      // if(_images.isEmpty){
                                       final pickedFile =
-                                          await _storageController.getImage();
+                                          await _storageController
+                                              .getImageFromCamera();
                                       if (pickedFile != null) {
-                                        {
-                                          _images.add(File(pickedFile.path));
-                                          _chatController.addMessage(
-                                            message: Message(
-                                              idOwner: MyUser.myUser.id,
-                                              images: [],
-                                            ),
-                                            images: _images,
-                                            id_receiver: widget.user.id,
-                                            id_chat: getChatID(),
-                                            type: 'chats',
+                                        _images.add(File(pickedFile.path));
+                                        setState(() {
+                                          chosenImages = ListView.builder(
+                                            scrollDirection: Axis.horizontal,
+                                            itemCount: _images.length,
+                                            itemBuilder: (context, index) {
+                                              return Container(
+                                                height: 100,
+                                                child:
+                                                    Image.file(_images[index]),
+                                              );
+                                            },
                                           );
-                                        }
+                                        });
                                       }
+                                      // }
+                                      // else{
+                                      // setState(() {
+                                      //   x = Container();
+                                      // });
+
+                                      // _chatController.addMessage(
+                                      //   message: Message(
+                                      //     idOwner: MyUser.myUser.id,
+                                      //     images: [],
+                                      //   ),
+                                      //   images: _images,
+                                      //   id_receiver: widget.user.id,
+                                      //   id_chat: getChatID(),
+                                      //   type: 'chats',
+                                      // );
+                                      // _images = [];
+                                      // }
                                     },
                                   ),
                                   Expanded(
@@ -241,16 +263,36 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                           'type_a_message',
                                         ),
                                         hintStyle:
-                                            TextStyle(color: Colors.grey),
+                                        TextStyle(color: Colors.grey),
                                       ),
                                     ),
                                   ),
 
-                                  // IconButton(
-                                  //   icon: Icon(Icons.attach_file,
-                                  //       color: ConstValues.firstColor),
-                                  //   onPressed: () {},
-                                  // ),
+                                  IconButton(
+                                      icon: Icon(Icons.attach_file,
+                                          color: ConstValues.firstColor),
+                                      onPressed: () async {
+                                        final pickedFile =
+                                        await _storageController.getImage();
+                                        if (pickedFile != null) {
+                                          _images.add(File(pickedFile.path));
+                                          setState(() {
+                                            chosenImages = ListView.builder(
+                                              scrollDirection: Axis.horizontal,
+                                              itemCount: _images.length,
+                                              itemBuilder: (context, index) {
+                                                return Container(
+                                                  height: 100,
+                                                  child: Image.file(
+                                                      _images[index]),
+                                                );
+                                              },
+
+                                            );
+                                          });
+                                        }
+                                      }
+                                  ),
                                 ],
                               ),
                             ),
@@ -259,7 +301,40 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                           FloatingActionButton(
                             backgroundColor: ConstValues.firstColor,
                             onPressed: () {
-                              if (_messageController.text.trim().isEmpty)
+                              if (_images.isNotEmpty) {
+                                setState(() {
+                                  chosenImages = Container();
+                                });
+
+                                // for(File image in _images){
+                                //   _chatController.addMessage(
+                                //     message: Message(
+                                //       idOwner: MyUser.myUser.id,
+                                //       images: [],
+                                //     ),
+                                //     images: _images,
+                                //     id_receiver: widget.user.id,
+                                //     id_chat: getChatID(),
+                                //     type: 'chats',
+                                //   );
+                                // }
+                                // _chatController.addMessage(
+                                //   message: Message(
+                                //     idOwner: MyUser.myUser.id,
+                                //     images: [],
+                                //   ),
+                                //   images: _images,
+                                //   id_receiver: widget.user.id,
+                                //   id_chat: getChatID(),
+                                //   type: 'chats',
+                                // );
+                                // _images = [];
+                              }
+
+                              if (_messageController.text
+                                  .trim()
+                                  .isEmpty &&
+                                  _images.isEmpty)
                                 return;
                               _chatController.addMessage(
                                 message: Message(
@@ -268,9 +343,10 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                 ),
                                 id_receiver: widget.user.id,
                                 id_chat: getChatID(),
-                                images: [],
+                                images: _images,
                                 type: 'chats',
                               );
+                              _images = [];
                               _messageController.clear();
                             },
                             child: Icon(
@@ -452,6 +528,11 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                     ? CrossAxisAlignment.start
                     : CrossAxisAlignment.end,
                 children: [
+                  if (message.images != null)
+                    ddd(message.images),
+                  SizedBox(
+                    height: 4,
+                  ),
                   if (message.text != null)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -463,82 +544,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                   SizedBox(
                     height: 1,
                   ),
-                  if (message.images != null)
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => ImageView(message.images.length > 0
-                                ? message.images[0]
-                                : ' ')));
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(x1),
-                            topLeft: Radius.circular(x4),
-                          ),
-                          child: CachedNetworkImage(
-                            progressIndicatorBuilder: (context, url, progress) {
-                              int size = progress.totalSize;
-                              String strSize;
-                              if (progress.totalSize != null) {
-                                strSize = size < 1024
-                                    ? size.toStringAsFixed(2) + " B"
-                                    : size < 1048576
-                                    ? (size / 1024).toStringAsFixed(2) +
-                                    " KB"
-                                    : (size / 1048576.0)
-                                    .toStringAsFixed(2) +
-                                    " MB";
-                              } else {
-                                strSize = '';
-                              }
-                              return Center(
-                                child: Stack(
-                                  children: [
-                                    Center(
-                                      child: CircularProgressIndicator(
-                                        value: progress.progress,
-                                      ),
-                                    ),
-                                    Positioned(
-                                      bottom: 10,
-                                      left: 0,
-                                      right: 0,
-                                      child: Align(
-                                        alignment: Alignment.bottomCenter,
-                                        child: Text(
-                                          strSize,
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                            // placeholder: (context, url) =>
-                            //     Center(
-                            //       child: Container(
-                            //         width: size.width / 2,
-                            //         height: size.width / 2,
-                            //         color: Colors.grey.withOpacity(0.3),
-                            //       ),
-                            //     ),
-                            imageUrl: message.images.length > 0
-                                ? message.images[0]
-                                : ' ',
-                            fit: BoxFit.cover,
-                            width: size.width / 2,
-                            height: size.width / 2,
-                          ),
-                        ),
-                      ),
-                    ),
-                  SizedBox(
-                    height: 1,
-                  ),
+
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
@@ -577,10 +583,80 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                   width: 30,
                   height: 30,
                 ),
-              )
+        )
             : Container(
-                width: 30,
-                height: 30,
-              ),
-      );
+          width: 30,
+          height: 30,
+        ),
+  );
+
+
+  Widget ddd(List<dynamic> images) {
+    List<Widget> dd = new List();
+
+    for (String image in images) {
+      dd.add(GestureDetector(
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => ImageView(image)));
+        },
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 5),
+          child: ClipRRect(
+            child: CachedNetworkImage(
+              progressIndicatorBuilder: (context, url, progress) {
+                int size = progress.totalSize;
+                String strSize;
+                if (progress.totalSize != null) {
+                  strSize = size < 1024
+                      ? size.toStringAsFixed(2) + " B"
+                      : size < 1048576
+                      ? (size / 1024).toStringAsFixed(2) +
+                      " KB"
+                      : (size / 1048576.0)
+                      .toStringAsFixed(2) +
+                      " MB";
+                } else {
+                  strSize = '';
+                }
+                return Center(
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: CircularProgressIndicator(
+                            value: progress.progress,
+                            valueColor:
+                            AlwaysStoppedAnimation<Color>(Colors.white)
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 10,
+                        left: 0,
+                        right: 0,
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Text(
+                            strSize,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              imageUrl: image,
+              fit: BoxFit.cover,
+              width: size.width / 2,
+              height: size.width / 2,
+            ),
+          ),
+        ),
+      ));
+      dd.add(SizedBox(height: 2,));
+    }
+    return Column(
+      children: dd,
+    );
+  }
 }

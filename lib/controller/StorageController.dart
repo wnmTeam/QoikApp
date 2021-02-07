@@ -70,6 +70,10 @@ class StorageController {
     return ImagePicker().getImage(source: ImageSource.gallery);
   }
 
+  Future getImageFromCamera() {
+    return ImagePicker().getImage(source: ImageSource.camera);
+  }
+
   Future uploadPic(context, img, id_user) async {
     String url;
     str.Reference firebaseStorageRef = str.FirebaseStorage.instance
