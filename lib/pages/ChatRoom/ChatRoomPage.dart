@@ -88,7 +88,6 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             borderRadius: BorderRadius.circular(57),
             child: CachedNetworkImage(
               placeholder: (context, url) => Center(
-                //TODO: Change the placeHolder
                 child: Image.asset(ConstValues.userImage),
 //                    child: Container(),
               ),
@@ -449,14 +448,21 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                             topLeft: Radius.circular(x4),
                           ),
                           child: CachedNetworkImage(
-                            placeholder: (context, url) =>
-                                Center(
-                                  child: Container(
-                                    width: size.width / 2,
-                                    height: size.width / 2,
-                                    color: Colors.grey.withOpacity(0.3),
-                                  ),
+                            progressIndicatorBuilder: (context, url, progress) {
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  value: progress.progress,
                                 ),
+                              );
+                            },
+                            // placeholder: (context, url) =>
+                            //     Center(
+                            //       child: Container(
+                            //         width: size.width / 2,
+                            //         height: size.width / 2,
+                            //         color: Colors.grey.withOpacity(0.3),
+                            //       ),
+                            //     ),
                             imageUrl: message.images.length > 0
                                 ? message.images[0]
                                 : ' ',
@@ -498,7 +504,6 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                 },
                 child: CachedNetworkImage(
                   placeholder: (context, url) => Center(
-                    //TODO: Change the placeHolder
                      child: Image.asset(ConstValues.userImage),
 //                    child: Container(),
                   ),

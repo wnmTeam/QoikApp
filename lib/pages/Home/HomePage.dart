@@ -14,8 +14,8 @@ import 'package:stumeapp/pages/Home/tabs/GroupsChatsTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/HomeTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/LibraryTabView.dart';
 import 'package:stumeapp/pages/Home/widgets/FABwithBottomAppBar.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:toast/toast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -96,13 +96,13 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             onPressed: () {
-              Toast.show("Soon", context,
+              Toast.show("Coming soon", context,
                   textColor: Colors.white,
-                  backgroundColor: ConstValues.firstColor,
+                  backgroundColor: ConstValues.accentColor,
                   duration: Toast.LENGTH_LONG);
             },
             icon: Icon(
-              Icons.notifications,
+              CupertinoIcons.bell,
               color: Colors.white,
             ),
           ),
