@@ -7,7 +7,9 @@ import 'package:stumeapp/Models/Group.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/Models/Post.dart';
 import 'package:stumeapp/const_values.dart';
+import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/PostsController.dart';
+import 'package:stumeapp/localization.dart';
 
 import '../PostWidget.dart';
 
@@ -33,6 +35,7 @@ class _PostsTabState extends State<PostsTab>
   DocumentSnapshot lastDocument = null;
 
   PostsController _postsController = PostsController();
+  AuthController _authController = AuthController();
 
   List<DocumentSnapshot> posts = [null];
 
@@ -128,12 +131,38 @@ class _PostsTabState extends State<PostsTab>
       floatingActionButton: _isVisible
           ? FloatingActionButton(
               onPressed: () {
-                Navigator.of(context).pushNamed(
-                  '/WritePostPage',
-                  arguments: {
-                    'group': widget.group,
-                  },
-                );
+                if (!_authController.isBan())
+                  Navigator.of(context).pushNamed(
+                    '/WritePostPage',
+                    arguments: {
+                      'group': widget.group,
+                    },
+                  );
+                else
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text(Languages.translate(
+                            context,
+                            'blocked',
+                          )),
+                          actions: [
+
+                            FlatButton(
+                              onPressed: () {
+                                Navigator.pop(context,);
+                              },
+                              child: Text(
+                                Languages.translate(
+                                  context,
+                                  'ok',
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      });
               },
               backgroundColor: ConstValues.firstColor,
               child: Icon(

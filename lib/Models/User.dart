@@ -40,7 +40,7 @@ class User {
   String img;
   String email;
   String userTag;
-  bool ban;
+  DateTime ban;
 
   String tag;
 
@@ -63,7 +63,7 @@ class User {
     this.img = '',
     this.email,
     this.userTag,
-    this.ban = false,
+    this.ban,
   });
 
   Map<String, dynamic> toMap() => {
@@ -83,8 +83,8 @@ class User {
         BIO: bio,
         IMG: img,
         EMAIL: email,
-    USER_TAG: userTag,
-    BAN: ban,
+        USER_TAG: userTag,
+        BAN: ban,
       };
 
   User fromMap(map) {
@@ -105,7 +105,7 @@ class User {
     this.email = map[EMAIL];
     this.fullName = map[FULL_NAME];
     this.userTag = map[USER_TAG];
-    this.ban = map[BAN];
+    if (null != map[BAN]) this.ban = map[BAN].toDate();
     return this;
   }
 

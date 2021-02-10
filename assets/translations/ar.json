@@ -94,5 +94,9 @@
   "Verified User": "مستخدم موثوق",
   "new_passeord": "كلمة المرور الجديدة",
   "old_password": "كلمة المرور القديمة",
-  "change_password": "تعديل كلمة المرور"
+  "change_password": "تعديل كلمة المرور",
+  "ok": "حسنا",
+  "blocked": "blocked"
+
+
 }

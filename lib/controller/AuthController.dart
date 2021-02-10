@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/Models/Group.dart';
+import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/api/notification_api.dart';
 import 'package:stumeapp/controller/GroupsController.dart';
@@ -181,6 +182,9 @@ class AuthController {
     return api.recordEnter();
   }
 
+  bool isBan(){
 
+    return api.isBan();
+  }
 
 }

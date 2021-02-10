@@ -102,13 +102,13 @@ class _HomePageState extends State<HomePage> {
                   duration: Toast.LENGTH_LONG);
             },
             icon: Icon(
-              CupertinoIcons.bell,
+              CupertinoIcons.bell_solid,
               color: Colors.white,
             ),
           ),
           IconButton(
             icon: Icon(
-              CupertinoIcons.chat_bubble_2,
+              CupertinoIcons.chat_bubble_2_fill,
               color: Colors.white,
             ),
             onPressed: () {
@@ -160,33 +160,33 @@ class _HomePageState extends State<HomePage> {
         onTabSelected: _selectedTab,
         items: [
           FABBottomAppBarItem(
-            iconData: CupertinoIcons.home,
+            iconData: Icons.home,
             text: Languages.translate(
               context,
               'home',
             ),
           ),
           FABBottomAppBarItem(
-            iconData: CupertinoIcons.group,
+            iconData: Icons.chat,
             text: Languages.translate(
               context,
               'groups',
             ),
           ),
           FABBottomAppBarItem(
-            iconData: CupertinoIcons.person,
+            iconData: Icons.group,
             text: Languages.translate(
               context,
               'friends',
             ),
           ),
           FABBottomAppBarItem(
-            iconData: CupertinoIcons.book,
+            iconData: CupertinoIcons.book_solid,
             text: Languages.translate(
               context,
               'library',
             ),
-            svgIcon: 'assets/lib.svg',
+//            svgIcon: 'assets/lib.svg',
           ),
         ],
       ),

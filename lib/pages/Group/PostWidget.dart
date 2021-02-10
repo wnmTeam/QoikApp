@@ -163,12 +163,12 @@ class _PostWidgetState extends State<PostWidget>
                 ),
                 post.text.isNotEmpty
                     ? Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      InkWell(
-                        onTap: () {
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            InkWell(
+                              onTap: () {
                                 setState(() {
                                   _isExbended = !_isExbended;
                                 });
@@ -198,39 +198,38 @@ class _PostWidgetState extends State<PostWidget>
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     color: Colors.grey[700],
-                              fontSize: 16,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
-                      !_isExbended ? post.text.length > 200
-                          ? InkWell(
-                        onTap: () {
-                          setState(() {
-                            _isExbended = !_isExbended;
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0,
-                            vertical: 10,
-                          ),
-                          child: Text(
-                            "عرض المزيد",
-                            style: TextStyle(
-                              color: ConstValues.firstColor,
-                              fontSize: 16,
-                            ),
-                          ),
+                            !_isExbended
+                                ? post.text.length > 200
+                                    ? InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            _isExbended = !_isExbended;
+                                          });
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0,
+                                            vertical: 10,
+                                          ),
+                                          child: Text(
+                                            "عرض المزيد",
+                                            style: TextStyle(
+                                              color: ConstValues.firstColor,
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : Container()
+                                : Container(),
+                          ],
                         ),
                       )
-                          : Container()
-
-                          : Container()
-                      ,
-                    ],
-                  ),
-                )
                     : Container(),
                 SizedBox(
                   height: 6,
@@ -294,7 +293,7 @@ class _PostWidgetState extends State<PostWidget>
                                 id_post: widget.post.id);
 
                             DocumentSnapshot d =
-                            await _postsController.getPostChanges(
+                                await _postsController.getPostChanges(
                               id_post: widget.post.id,
                               group: widget.group,
                             );
@@ -377,7 +376,7 @@ class _PostWidgetState extends State<PostWidget>
                             );
 
                             DocumentSnapshot d =
-                            await _postsController.getPostChanges(
+                                await _postsController.getPostChanges(
                               id_post: widget.post.id,
                               group: widget.group,
                             );
@@ -463,7 +462,7 @@ class _PostWidgetState extends State<PostWidget>
                                     CommentWidget(
                                       comment: Comment()
                                           .fromMap(newComments[i].data())
-                                        ..setId(newComments[i].id),
+                                            ..setId(newComments[i].id),
                                       post: widget.post,
                                       group: widget.group,
                                       addPoint: (id) async {
@@ -501,11 +500,10 @@ class _PostWidgetState extends State<PostWidget>
                       ClipRRect(
                         borderRadius: BorderRadius.circular(57),
                         child: CachedNetworkImage(
-                          placeholder: (context, url) =>
-                              Center(
-                                child: Image.asset(ConstValues.userImage),
+                          placeholder: (context, url) => Center(
+                            child: Image.asset(ConstValues.userImage),
 //                    child: Container(),
-                              ),
+                          ),
                           imageUrl: MyUser.myUser.img,
                           fit: BoxFit.cover,
                           width: 40,
@@ -535,11 +533,39 @@ class _PostWidgetState extends State<PostWidget>
                             String text = _commentController.text;
                             if (text.isEmpty) return;
                             _commentController.clear();
-                            await _postsController.createComment(
-                              text: text,
-                              post_id: widget.post.id,
-                              group: widget.group,
-                            );
+
+                            if (!_authController.isBan())
+                              await _postsController.createComment(
+                                text: text,
+                                post_id: widget.post.id,
+                                group: widget.group,
+                              );
+                            else
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: Text(Languages.translate(
+                                        context,
+                                        'blocked',
+                                      )),
+                                      actions: [
+                                        FlatButton(
+                                          onPressed: () {
+                                            Navigator.pop(
+                                              context,
+                                            );
+                                          },
+                                          child: Text(
+                                            Languages.translate(
+                                              context,
+                                              'ok',
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  });
                           })
                     ],
                   ),

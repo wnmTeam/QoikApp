@@ -7,6 +7,7 @@ import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:stumeapp/localization.dart';
 
 
 class RoomsTab extends StatefulWidget {
@@ -45,14 +46,7 @@ class _RoomsTabState extends State<RoomsTab>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        heroTag: "createGroup",
-          tooltip: "Create group",
-          backgroundColor: ConstValues.firstColor,
-          onPressed: () {
-            Navigator.pushNamed(context, '/CreateGroupPage');
-          },
-          child: Icon(Icons.group_add_outlined)),
+
       body: RefreshIndicator(
         onRefresh: refresh,
         child: ListView.builder(
@@ -66,7 +60,33 @@ class _RoomsTabState extends State<RoomsTab>
                 leading: Icon(Icons.group),
                 title: Text('Create Group'),
                 onTap: () {
+                  if(!_authController.isBan())
                   Navigator.pushNamed(context, '/CreateGroupPage');
+                  else
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text(Languages.translate(
+                              context,
+                              'blocked',
+                            )),
+                            actions: [
+
+                              FlatButton(
+                                onPressed: () {
+                                  Navigator.pop(context,);
+                                },
+                                child: Text(
+                                  Languages.translate(
+                                    context,
+                                    'ok',
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        });
                 },
               );
             else if (index == rooms.length - 1) {

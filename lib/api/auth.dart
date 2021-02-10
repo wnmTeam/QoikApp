@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
 
 class Auth {
@@ -163,5 +164,20 @@ class Auth {
     if (last != null) return q.startAfterDocument(last).limit(limit).get();
 
     return q.limit(limit).get();
+  }
+
+  bool isBan() {
+    if (MyUser.myUser.ban == null) return false;
+
+    DateTime now = DateTime.now();
+//    DateTime def = now.subtract(now.difference(MyUser.myUser.ban));
+    Duration d = MyUser.myUser.ban.add(Duration(hours: 24)).difference(now);
+    print(
+        'hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
+    print(d);
+    if (d.isNegative) {
+      return false;
+    }
+    return true;
   }
 }

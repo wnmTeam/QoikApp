@@ -94,6 +94,8 @@
   "Verified User": "Verified User",
   "new_passeord": "New Password",
   "old_password": "Old Password",
-  "change_password": "Change Password"
+  "change_password": "Change Password",
+  "ok": "Ok",
+  "blocked": "blocked"
 
 }
