@@ -1,13 +1,16 @@
 import 'dart:core';
 import 'dart:ui';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 // import 'package:google_fonts/google_fonts.dart';
 
 class ConstValues {
 
   static Color secondColor = Color(0xffbb6377);
+
+  static Color chatFirstColor = Color(0xff7c515d);
+  static Color chatSecondColor = Color(0xFFc17b8f);
+
   static Color titleColor = Colors.cyan;
   static Color subTitleColor = Colors.black87;
   static Color textColor = Colors.black;
@@ -17,7 +20,7 @@ class ConstValues {
   static double fontSize_4 = 28;
   static double fontSize_5 = 28;
 
-static Color accentColor =  Color(0xFF8D5CD7);
+  static Color accentColor =  Color(0xFF8D5CD7);
 
   static MaterialColor firstColor = MaterialColor(0xFFE51A4B, {
     50: Color.fromRGBO(229, 26, 75, .1),
