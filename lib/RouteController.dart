@@ -44,6 +44,7 @@ class RouteController {
             builder: (_) => SelectFriendsPage(
                   group: args['group'],
                   type: args['type'],
+                  image: args['image'],
                 ));
       case '/CreateGroupPage':
         return MaterialPageRoute(builder: (_) => CreateGroupPage());

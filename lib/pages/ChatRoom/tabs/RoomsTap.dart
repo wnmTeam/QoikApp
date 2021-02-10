@@ -6,6 +6,8 @@ import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
 
 class RoomsTab extends StatefulWidget {
   @override
@@ -92,12 +94,19 @@ class _RoomsTabState extends State<RoomsTab>
   Widget _chatBuilder(BuildContext context, Group group, int index) {
     return ListTile(
         contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 14),
-        leading: Container(
-          width: 55,
-          height: 55,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(30)),
-              color: Colors.indigo[200]),
+        leading: ClipRRect(
+          borderRadius: BorderRadius.circular(57),
+          child: CachedNetworkImage(
+            placeholder: (context, url) => Center(
+              //TODO: Change the placeHolder
+              child: Image.asset(ConstValues.userImage),
+//                    child: Container(),
+            ),
+            imageUrl: group.img != null ? group.img : ConstValues.userImage,
+            fit: BoxFit.cover,
+            width: 57,
+            height: 57,
+          ),
         ),
         title: Text(group.name),
         onTap: () {

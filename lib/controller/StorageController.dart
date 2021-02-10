@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart' as str;
+import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stumeapp/Models/Group.dart';
@@ -74,6 +75,22 @@ class StorageController {
     return ImagePicker().getImage(source: ImageSource.camera);
   }
 
+  Future getDoc() async {
+    var v = await FilePicker.getFile();
+
+//    if(result != null) {
+//      PlatformFile file = result.files.first;
+//
+//      print(file.name);
+//      print(file.bytes);
+//      print(file.size);
+//      print(file.extension);
+//      print(file.path);
+//    } else {
+//      // User canceled the picker
+//    }
+  }
+
   Future uploadPic(context, img, id_user) async {
     String url;
     str.Reference firebaseStorageRef = str.FirebaseStorage.instance
@@ -107,6 +124,23 @@ class StorageController {
     return url;
   }
 
+  uploadRoomImage({
+    File img,
+    String id_room,
+  }) async {
+    String url;
+    str.Reference firebaseStorageRef = str.FirebaseStorage.instance
+        .ref()
+        .child('roomImages')
+        .child(id_room);
+    str.UploadTask uploadTask = firebaseStorageRef.putFile(img);
+    await uploadTask.then((res) async {
+      url = await res.ref.getDownloadURL();
+      return;
+    });
+    return url;
+  }
+
   uploadMessageImage(
       {String id_message,
       String nom,
@@ -119,6 +153,25 @@ class StorageController {
         .child(type + 'Images')
         .child(id_group + id_message + nom);
     str.UploadTask uploadTask = firebaseStorageRef.putFile(img);
+    await uploadTask.then((res) async {
+      url = await res.ref.getDownloadURL();
+      return;
+    });
+    return url;
+  }
+
+  uploadMessageDoc({
+    String id_message,
+    File doc,
+    String type,
+    String id_group,
+  }) async {
+    String url;
+    str.Reference firebaseStorageRef = str.FirebaseStorage.instance
+        .ref()
+        .child(type + 'Docs')
+        .child(id_group + id_message);
+    str.UploadTask uploadTask = firebaseStorageRef.putFile(doc);
     await uploadTask.then((res) async {
       url = await res.ref.getDownloadURL();
       return;

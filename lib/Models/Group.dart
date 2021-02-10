@@ -23,7 +23,7 @@ class Group {
   Group({
     this.name = '',
     this.type,
-    this.img = '',
+    this.img,
     this.members,
     this.admins,
   });
@@ -33,6 +33,7 @@ class Group {
     this.members = map[MEMBERS];
     this.admins = map[ADMINS];
     this.type = map[TYPE];
+    this.img = map[IMG];
     return this;
   }
 
@@ -41,6 +42,7 @@ class Group {
         TYPE: type,
         MEMBERS: members,
         ADMINS: admins,
+        IMG: img,
       };
 
   Group setId(String id) {

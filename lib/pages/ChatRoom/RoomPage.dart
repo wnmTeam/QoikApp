@@ -74,13 +74,16 @@ class _RoomPageState extends State<RoomPage> {
           PopupMenuButton<String>(
             onSelected: handleClick,
             itemBuilder: (BuildContext context) {
-              return {Languages.translate(
-              context,
-              'group_info',
-              ), Languages.translate(
-                context,
-                'exit_group',
-              )}.map((String choice) {
+              return {
+                Languages.translate(
+                  context,
+                  'group_info',
+                ),
+                Languages.translate(
+                  context,
+                  'exit_group',
+                )
+              }.map((String choice) {
                 return PopupMenuItem<String>(
                   value: choice,
                   child: Text(choice),
@@ -102,12 +105,21 @@ class _RoomPageState extends State<RoomPage> {
               style: TextStyle(
                 color: Colors.white,
               )),
-          leading: Container(
-            width: 38,
-            height: 38,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-                color: Colors.white),
+          leading: ClipRRect(
+            borderRadius: BorderRadius.circular(57),
+            child: CachedNetworkImage(
+              placeholder: (context, url) => Center(
+                //TODO: Change the placeHolder
+                child: Image.asset(ConstValues.userImage),
+//                    child: Container(),
+              ),
+              imageUrl: widget.group.img != null
+                  ? widget.group.img
+                  : ConstValues.userImage,
+              fit: BoxFit.cover,
+              width: 38,
+              height: 38,
+            ),
           ),
         ),
       ),
@@ -166,114 +178,117 @@ class _RoomPageState extends State<RoomPage> {
                     ),
                   ),
                 ),
-                !iamOut?
-                Container(
-                  width: size.width,
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(35.0),
-                            boxShadow: [
-                              BoxShadow(
-                                  offset: Offset(0, 3),
-                                  blurRadius: 5,
-                                  color: Colors.grey)
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              // IconButton(
-                              //     icon: Icon(
-                              //       Icons.tag_faces,
-                              //       color: ConstValues.firstColor,
-                              //     ),
-                              //     onPressed: () {}),
-                              IconButton(
-                                icon: Icon(Icons.photo_camera,
-                                    color: ConstValues.firstColor),
-                                onPressed: () async {
-                                  _images = [];
-                                  final pickedFile =
-                                      await _storageController.getImage();
-                                  if (pickedFile != null) {
-                                    {
-                                      _images.add(File(pickedFile.path));
-                                      _chatController.addMessage(
-                                        message: Message(
-                                          idOwner: MyUser.myUser.id,
-                                          images: [],
+                !iamOut
+                    ? Container(
+                        width: size.width,
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(35.0),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        offset: Offset(0, 3),
+                                        blurRadius: 5,
+                                        color: Colors.grey)
+                                  ],
+                                ),
+                                child: Row(
+                                  children: [
+                                    // IconButton(
+                                    //     icon: Icon(
+                                    //       Icons.tag_faces,
+                                    //       color: ConstValues.firstColor,
+                                    //     ),
+                                    //     onPressed: () {}),
+                                    IconButton(
+                                      icon: Icon(Icons.photo_camera,
+                                          color: ConstValues.firstColor),
+                                      onPressed: () async {
+                                        _images = [];
+                                        final pickedFile =
+                                            await _storageController.getImage();
+                                        if (pickedFile != null) {
+                                          {
+                                            _images.add(File(pickedFile.path));
+                                            _chatController.addMessage(
+                                              message: Message(
+                                                idOwner: MyUser.myUser.id,
+                                                images: [],
+                                              ),
+                                              id_receiver: widget.group.id,
+                                              images: _images,
+                                              id_chat: widget.group.id,
+                                              type: 'rooms',
+                                            );
+                                          }
+                                        }
+                                      },
+                                    ),
+                                    Expanded(
+                                      child: TextField(
+                                        maxLines: 5,
+                                        minLines: 1,
+                                        textAlign: TextAlign.start,
+                                        controller: _messageController,
+                                        enableSuggestions: true,
+                                        decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.symmetric(
+                                              vertical: 18, horizontal: 0),
+                                          border: InputBorder.none,
+                                          hintText: Languages.translate(
+                                              context, 'type_a_message'),
+                                          hintStyle:
+                                              TextStyle(color: Colors.grey),
                                         ),
-                                        id_receiver: widget.group.id,
-                                        images: _images,
-                                        id_chat: widget.group.id,
-                                        type: 'rooms',
-                                      );
-                                    }
-                                  }
-                                },
-                              ),
-                              Expanded(
-                                child: TextField(
-                                  maxLines: 5,
-                                  minLines: 1,
-                                  textAlign: TextAlign.start,
-                                  controller: _messageController,
-                                  enableSuggestions: true,
-                                  decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 18, horizontal: 0),
-                                    border: InputBorder.none,
-                                    hintText: Languages.translate(
-                                        context, 'type_a_message'),
-                                    hintStyle: TextStyle(color: Colors.grey),
-                                  ),
+                                      ),
+                                    ),
+
+                                    // IconButton(
+                                    //   icon: Icon(Icons.attach_file,
+                                    //       color: ConstValues.firstColor),
+                                    //   onPressed: () {},
+                                    // ),
+                                  ],
                                 ),
                               ),
-
-                              // IconButton(
-                              //   icon: Icon(Icons.attach_file,
-                              //       color: ConstValues.firstColor),
-                              //   onPressed: () {},
-                              // ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      FloatingActionButton(
-                        backgroundColor: ConstValues.firstColor,
-                        onPressed: () {
-                          if (_messageController.text.trim().isEmpty) return;
-                          _chatController.addMessage(
-                            message: Message(
-                              idOwner: _authController.getUser.uid,
-                              text: _messageController.text.trim(),
                             ),
-                            id_receiver: widget.group.id,
-                            images: [],
-                            id_chat: widget.group.id,
-                            type: 'rooms',
-                          );
-                          _messageController.clear();
-                        },
-                        child: Icon(
-                          // Icons.keyboard_voice,
-                          Icons.send,
-                          color: Colors.white,
+                            SizedBox(width: 10),
+                            FloatingActionButton(
+                              backgroundColor: ConstValues.firstColor,
+                              onPressed: () {
+                                if (_messageController.text.trim().isEmpty)
+                                  return;
+                                _chatController.addMessage(
+                                  message: Message(
+                                    idOwner: _authController.getUser.uid,
+                                    text: _messageController.text.trim(),
+                                  ),
+                                  id_receiver: widget.group.id,
+                                  images: [],
+                                  id_chat: widget.group.id,
+                                  type: 'rooms',
+                                );
+                                _messageController.clear();
+                              },
+                              child: Icon(
+                                // Icons.keyboard_voice,
+                                Icons.send,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                ):Text(Languages.translate(
-                  context,
-                  'cant_send_messages',
-                )),
+                      )
+                    : Text(Languages.translate(
+                        context,
+                        'cant_send_messages',
+                      )),
               ],
             )
           : Center(child: CircularProgressIndicator()),
@@ -414,9 +429,9 @@ class _RoomPageState extends State<RoomPage> {
                                     ' ' +
                                     members[message.idOwner].secondName
                                 : Languages.translate(
-                              context,
-                              'deleted_user',
-                            ),
+                                    context,
+                                    'deleted_user',
+                                  ),
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -486,16 +501,16 @@ class _RoomPageState extends State<RoomPage> {
         borderRadius: BorderRadius.circular(57),
         child: firstMessage
             ? CachedNetworkImage(
-          placeholder: (context, url) => Center(
-            //TODO: Change the placeHolder
-            child: Image.asset(ConstValues.userImage),
+                placeholder: (context, url) => Center(
+                  //TODO: Change the placeHolder
+                  child: Image.asset(ConstValues.userImage),
 //                    child: Container(),
-          ),
-          imageUrl: imageUrl != null ? imageUrl : ConstValues.userImage,
-          fit: BoxFit.cover,
-          width: 57,
-          height: 57,
-        )
+                ),
+                imageUrl: imageUrl != null ? imageUrl : ConstValues.userImage,
+                fit: BoxFit.cover,
+                width: 57,
+                height: 57,
+              )
             : Container(
                 width: 30,
                 height: 30,
@@ -503,64 +518,68 @@ class _RoomPageState extends State<RoomPage> {
       );
 
   void handleClick(String value) {
-    switch (value) {
-      case 'Group Info':
-        Navigator.pushNamed(
+    if (Languages.translate(
           context,
-          '/RoomInfoPage',
-          arguments: {'group': widget.group},
-        );
-        break;
-      case 'Exit Group':
-        showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text(Languages.translate(
-                  context,
-                  'exit_group_q',
-                )),
-                actions: [
-                  FlatButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      Languages.translate(
-                        context,
-                        'cancel',
-                      ),
-                      style: TextStyle(color: Colors.black),
+          'group_info',
+        ) ==
+        value)
+      Navigator.pushNamed(
+        context,
+        '/RoomInfoPage',
+        arguments: {'group': widget.group},
+      );
+    else if (Languages.translate(
+          context,
+          'exit_group',
+        ) ==
+        value)
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text(Languages.translate(
+                context,
+                'exit_group_q',
+              )),
+              actions: [
+                FlatButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    Languages.translate(
+                      context,
+                      'cancel',
+                    ),
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+                FlatButton(
+                  onPressed: () {
+                    Navigator.pop(context, 'delete');
+                  },
+                  child: Text(
+                    Languages.translate(
+                      context,
+                      'exit',
                     ),
                   ),
-                  FlatButton(
-                    onPressed: () {
-                      Navigator.pop(context, 'delete');
-                    },
-                    child: Text(
-                      Languages.translate(
-                        context,
-                        'exit',
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            }).then((value) async {
-          if (value == 'delete') {
-            setState(() {
-              iamOut = true;
-            });
-            _chatController.removeMemberFromRoom(
-              id_user: MyUser.myUser.id,
-              id_room: widget.group.id,
+                ),
+              ],
             );
-            widget.exitGroup();
+          }).then((value) async {
+        if (value == 'delete') {
+          setState(() {
+            iamOut = true;
+          });
+          _chatController.removeMemberFromRoom(
+            id_user: MyUser.myUser.id,
+            id_room: widget.group.id,
+          );
+          widget.exitGroup();
 
 //            Navigator.pop(context);
-          }
-        });
-        break;
-    }
+        }
+      });
   }
 }

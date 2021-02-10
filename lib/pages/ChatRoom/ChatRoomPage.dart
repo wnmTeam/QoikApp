@@ -276,28 +276,28 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                           color: ConstValues.firstColor),
                                       onPressed: () async {
                                         final pickedFile =
-                                        await _storageController.getImage();
+                                        await _storageController.getDoc();
                                         if (pickedFile != null) {
-                                          _images.add(File(pickedFile.path));
-                                          setState(() {
-                                            chosenImages = Container(
-                                              height: 100,
-
-                                              child: ListView.builder(
-                                                scrollDirection: Axis
-                                                    .horizontal,
-                                                itemCount: _images.length,
-                                                itemBuilder: (context, index) {
-                                                  return Container(
-                                                    height: 100,
-                                                    child: Image.file(
-                                                        _images[index]),
-                                                  );
-                                                },
-
-                                              ),
-                                            );
-                                          });
+//                                          _images.add(File(pickedFile.path));
+//                                          setState(() {
+//                                            chosenImages = Container(
+//                                              height: 100,
+//
+//                                              child: ListView.builder(
+//                                                scrollDirection: Axis
+//                                                    .horizontal,
+//                                                itemCount: _images.length,
+//                                                itemBuilder: (context, index) {
+//                                                  return Container(
+//                                                    height: 100,
+//                                                    child: Image.file(
+//                                                        _images[index]),
+//                                                  );
+//                                                },
+//
+//                                              ),
+//                                            );
+//                                          });
                                         }
                                       }
                                   ),

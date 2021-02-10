@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,7 +19,9 @@ class SelectFriendsPage extends StatefulWidget {
 
   String type;
 
-  SelectFriendsPage({this.group, this.type = 'create'});
+  File image;
+
+  SelectFriendsPage({this.group, this.type = 'create', this.image,});
 
   @override
   _SelectFriendsPageState createState() => _SelectFriendsPageState();
@@ -96,6 +100,7 @@ class _SelectFriendsPageState extends State<SelectFriendsPage> {
                 await _groupsController.createGroup(
                   group: widget.group,
                   uids: selectedMembers..add(_authController.getUser.uid),
+                  image: widget.image,
                 );
                 int count = 0;
                 Navigator.popUntil(context, (route) {

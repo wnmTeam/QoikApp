@@ -27,6 +27,7 @@ class ChatController {
     String id_chat,
     String id_receiver,
     List<File> images,
+    File doc,
     String type,
   }) {
     return api.addMessage(
@@ -34,6 +35,7 @@ class ChatController {
       id_chat: id_chat,
       type: type,
       images: images,
+      doc: doc,
       id_receiver: id_receiver,
     );
   }

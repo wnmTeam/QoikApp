@@ -56,6 +56,9 @@ dev_dependencies:
   # Pdf
   advance_pdf_viewer:
 
+  # File
+  file_picker: ^1.4.2
+
   # Other
   timeago: ^2.0.29
   url_launcher: ^5.7.5

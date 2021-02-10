@@ -180,4 +180,7 @@ class AuthController {
   recordEnter() {
     return api.recordEnter();
   }
+
+
+
 }

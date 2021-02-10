@@ -50,6 +50,7 @@ class ChatsApi {
     String id_receiver,
     String type,
     List<File> images,
+    File doc,
   }) async {
     WriteBatch batch = _firestore.batch();
 
@@ -71,6 +72,22 @@ class ChatsApi {
           nom: i.toString(),
         );
         await addImageToMessage(
+          type: type,
+          id_group: id_chat,
+          id_message: value.id,
+          url: url,
+        );
+      }
+
+      if(doc != null)
+      {
+        String url = await _storageController.uploadMessageDoc(
+          type: type,
+          id_group: id_chat,
+          id_message: value.id,
+          doc: doc,
+        );
+        await addDocToMessage(
           type: type,
           id_group: id_chat,
           id_message: value.id,
@@ -169,10 +186,30 @@ class ChatsApi {
     }, SetOptions(merge: true));
   }
 
+  addDocToMessage(
+      {String type, String id_group, String id_message, String url}) {
+    return _firestore
+        .collection(type)
+        .doc(id_group)
+        .collection('messages')
+        .doc(id_message)
+        .set({
+      'doc': url,
+    }, SetOptions(merge: true));
+  }
+
   removeMemberFromRoom({String id_user, String id_room}) {
     _firestore.collection('rooms').doc(id_room).set({
       'members': FieldValue.arrayRemove([id_user]),
       'admins': FieldValue.arrayRemove([id_user]),
     }, SetOptions(merge: true));
   }
+
+  setRoomImageUrl({String id_room, String url}) {
+    return _firestore
+        .collection('rooms')
+        .doc(id_room)
+        .set({'img': url}, SetOptions(merge: true));
+  }
+
 }

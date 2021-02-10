@@ -11,7 +11,6 @@ class GroupsController {
         group: group,
       );
 
-
   addMemberToRoom({uids, String id_group}) {
     return api.addMemberToRoom(
       uids: uids,
@@ -19,16 +18,19 @@ class GroupsController {
     );
   }
 
-  Future createGroup({Group group, uids}) {
+  Future createGroup({Group group, uids, image}) {
     group.members = uids;
-    return api.createGroup(group: group, uids: uids);
+    return api.createGroup(
+      group: group,
+      uids: uids,
+      image: image,
+    );
   }
-
-
 
   Future getGroupInfo({id_group}) => api.getGroupInfo(id_group: id_group);
 
   addMemberToGroup({uid, String id_group, String type, String name}) {
-    return api.addMemberToGroup(uid: uid, id_group: id_group, type: type, name: name);
+    return api.addMemberToGroup(
+        uid: uid, id_group: id_group, type: type, name: name);
   }
 }

@@ -1,14 +1,18 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/User.dart';
+import 'package:stumeapp/controller/StorageController.dart';
 
 import 'auth.dart';
 
 class GroupsApi {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final Auth auth = Auth();
+
+  StorageController _storageController = StorageController();
 
   getMyGroups({String id_user}) {
     return _firestore
@@ -41,9 +45,19 @@ class GroupsApi {
     }, SetOptions(merge: true));
   }
 
-  Future createGroup({Group group, List uids}) async {
-    var d = _firestore.collection('rooms').add(group.toMap());
-    return d;
+  Future createGroup({Group group, List uids, File image}) async {
+    var d = await _firestore.collection('rooms').add(group.toMap());
+    if (image != null) {
+      String url = await _storageController.uploadRoomImage(
+        id_room: d.id,
+        img: image,
+      );
+      print(url);
+      await addImageToRoom(
+        id_room: d.id,
+        url: url,
+      );
+    }
   }
 
   Future getGroupInfo({id_group}) {
@@ -66,5 +80,15 @@ class GroupsApi {
         {'ex': true});
 
     return batch.commit();
+  }
+
+  addImageToRoom({
+    String id_room,
+    String url,
+  }) {
+    return _firestore
+        .collection('rooms')
+        .doc(id_room)
+        .set({'img': url}, SetOptions(merge: true));
   }
 }
