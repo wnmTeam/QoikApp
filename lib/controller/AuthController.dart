@@ -104,14 +104,14 @@ class AuthController {
         last: last,
       );
 
-  search(
-      {String text,
-      int limit,
-      last,
-      String gender,
-      String college,
-      String university,
-}) {
+  search({
+    String text,
+    int limit,
+    last,
+    String gender,
+    String college,
+    String university,
+  }) {
     return api.search(
       text: text.toLowerCase(),
       limit: limit,
@@ -182,9 +182,11 @@ class AuthController {
     return api.recordEnter();
   }
 
-  bool isBan(){
-
+  bool isBan() {
     return api.isBan();
   }
 
+  getLastVersion() {
+    return api.getLastVersion();
+  }
 }

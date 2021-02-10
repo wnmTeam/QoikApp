@@ -63,6 +63,7 @@ dev_dependencies:
   timeago: ^2.0.29
   url_launcher: ^5.7.5
   toast:
+  package_info:
 
 
 

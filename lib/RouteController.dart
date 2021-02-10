@@ -51,7 +51,6 @@ class RouteController {
       case '/ChatRoomPage':
         return MaterialPageRoute(
             builder: (_) => ChatRoomPage(
-                  userId: args['id_user'],
                   user: args['user'],
                   group: args['group'],
                 ));

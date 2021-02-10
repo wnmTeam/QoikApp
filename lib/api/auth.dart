@@ -180,4 +180,8 @@ class Auth {
     }
     return true;
   }
+
+  getLastVersion() {
+    return _firestore.collection('appInfo').doc('version').get();
+  }
 }
