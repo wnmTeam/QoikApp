@@ -286,7 +286,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                               _chatController.addMessage(
                                 message: Message(
                                   idOwner: _authController.getUser.uid,
-                                  text: _messageController.text.trim(),
+                                  text: _messageController.text.trim().isEmpty
+                                      ? null
+                                      : _messageController.text.trim(),
                                 ),
                                 id_receiver: widget.user.id,
                                 id_chat: getChatID(),
@@ -474,7 +476,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                     ? CrossAxisAlignment.start
                     : CrossAxisAlignment.end,
                 children: [
-                  if (message.images != null) chatImageBuilder(message.images),
+                  if (message.images != null) chatImageBuilder(message
+                      .images, message.text != null),
                   SizedBox(
                     height: 4,
                   ),
@@ -531,7 +534,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
         ),
   );
 
-  Widget chatImageBuilder(List<dynamic> images) {
+  Widget chatImageBuilder(List<dynamic> images, bool isWithText) {
     List<Widget> dd = new List();
 
     for (String image in images) {
@@ -540,53 +543,52 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (_) => ImageView(image)));
         },
-        child: Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 5),
-            child: ClipRRect(
-              child: CachedNetworkImage(
-                progressIndicatorBuilder: (context, url, progress) {
-                  int size = progress.totalSize;
-                  String strSize;
-                  if (progress.totalSize != null) {
-                    strSize = size < 1024
-                        ? size.toStringAsFixed(2) + " B"
-                        : size < 1048576
-                        ? (size / 1024).toStringAsFixed(2) + " KB"
-                        : (size / 1048576.0).toStringAsFixed(2) + " MB";
-                  } else {
-                    strSize = '';
-                  }
-                  return Center(
-                    child: Stack(
-                      children: [
-                        Center(
-                          child: CircularProgressIndicator(
-                              value: progress.progress,
-                              valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.white)),
-                        ),
-                        Positioned(
-                          bottom: 10,
-                          left: 0,
-                          right: 0,
-                          child: Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Text(
-                              strSize,
-                              style: TextStyle(color: Colors.white),
-                            ),
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 5),
+          child: ClipRRect(
+            child: CachedNetworkImage(
+              progressIndicatorBuilder: (context, url, progress) {
+                int size = progress.totalSize;
+                String strSize;
+                if (progress.totalSize != null) {
+                  strSize = size < 1024
+                      ? size.toStringAsFixed(2) + " B"
+                      : size < 1048576
+                      ? (size / 1024).toStringAsFixed(2) + " KB"
+                      : (size / 1048576.0).toStringAsFixed(2) + " MB";
+                } else {
+                  strSize = '';
+                }
+                return Center(
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: CircularProgressIndicator(
+                            value: progress.progress,
+                            valueColor:
+                            AlwaysStoppedAnimation<Color>(Colors.white)),
+                      ),
+                      Positioned(
+                        bottom: 10,
+                        left: 0,
+                        right: 0,
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Text(
+                            strSize,
+                            style: TextStyle(color: Colors.white),
                           ),
                         ),
-                      ],
-                    ),
-                  );
-                },
-                imageUrl: image,
-                fit: BoxFit.cover,
-                width: size.width / 2,
-                height: size.width / 2,
-              ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              imageUrl: image,
+              fit: BoxFit.cover,
+              // width:isWithText?null: size.width / 2,
+              width: size.width / 2,
+              height: size.width / 2,
             ),
           ),
         ),
