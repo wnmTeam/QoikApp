@@ -237,7 +237,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                           'type_a_message',
                                         ),
                                         hintStyle:
-                                        TextStyle(color: Colors.grey),
+                                            TextStyle(color: Colors.grey),
                                       ),
                                     ),
                                   ),
@@ -479,12 +479,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                     height: 4,
                   ),
                   if (message.text != null)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        message.text,
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
+                    Text(
+                      message.text,
+                      style: TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   SizedBox(
                     height: 1,
@@ -543,51 +540,53 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (_) => ImageView(image)));
         },
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 5),
-          child: ClipRRect(
-            child: CachedNetworkImage(
-              progressIndicatorBuilder: (context, url, progress) {
-                int size = progress.totalSize;
-                String strSize;
-                if (progress.totalSize != null) {
-                  strSize = size < 1024
-                      ? size.toStringAsFixed(2) + " B"
-                      : size < 1048576
-                      ? (size / 1024).toStringAsFixed(2) + " KB"
-                      : (size / 1048576.0).toStringAsFixed(2) + " MB";
-                } else {
-                  strSize = '';
-                }
-                return Center(
-                  child: Stack(
-                    children: [
-                      Center(
-                        child: CircularProgressIndicator(
-                            value: progress.progress,
-                            valueColor:
-                            AlwaysStoppedAnimation<Color>(Colors.white)),
-                      ),
-                      Positioned(
-                        bottom: 10,
-                        left: 0,
-                        right: 0,
-                        child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Text(
-                            strSize,
-                            style: TextStyle(color: Colors.white),
+        child: Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: ClipRRect(
+              child: CachedNetworkImage(
+                progressIndicatorBuilder: (context, url, progress) {
+                  int size = progress.totalSize;
+                  String strSize;
+                  if (progress.totalSize != null) {
+                    strSize = size < 1024
+                        ? size.toStringAsFixed(2) + " B"
+                        : size < 1048576
+                        ? (size / 1024).toStringAsFixed(2) + " KB"
+                        : (size / 1048576.0).toStringAsFixed(2) + " MB";
+                  } else {
+                    strSize = '';
+                  }
+                  return Center(
+                    child: Stack(
+                      children: [
+                        Center(
+                          child: CircularProgressIndicator(
+                              value: progress.progress,
+                              valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white)),
+                        ),
+                        Positioned(
+                          bottom: 10,
+                          left: 0,
+                          right: 0,
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Text(
+                              strSize,
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-              imageUrl: image,
-              fit: BoxFit.cover,
-              width: size.width / 2,
-              height: size.width / 2,
+                      ],
+                    ),
+                  );
+                },
+                imageUrl: image,
+                fit: BoxFit.cover,
+                width: size.width / 2,
+                height: size.width / 2,
+              ),
             ),
           ),
         ),
@@ -611,12 +610,12 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
               print(_images[index].path);
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) =>
-                      ImageView.file(image: _images[index], isFile:
-                      true,)
-              ));
+                      ImageView.file(
+                        image: _images[index],
+                        isFile: true,
+                      )));
             },
-            child: Image.file(
-                _images[index]),
+            child: Image.file(_images[index]),
           ),
           // Positioned(
           //     top: 0,
