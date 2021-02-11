@@ -1,8 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 
 class ImageView extends StatefulWidget {
-  String url;
+  String url = "";
+  File image;
+
+  bool isFile = false;
+
+  ImageView.file({this.image, this.isFile});
 
   ImageView(this.url);
 
@@ -24,24 +31,26 @@ class _ImageViewState extends State<ImageView> {
       extendBodyBehindAppBar: true,
       appBar: showAppBar
           ? AppBar(
-              backgroundColor: Colors.transparent,
-            )
+        backgroundColor: Colors.transparent,
+      )
           : null,
       body: PhotoView(
         backgroundDecoration: BoxDecoration(
           color: Colors.white,
         ),
-        imageProvider: NetworkImage(url),
+        imageProvider: widget.isFile ? FileImage(widget.image) : NetworkImage(
+            url),
         enableRotation: true,
         heroAttributes: PhotoViewHeroAttributes(tag: url),
         minScale: PhotoViewComputedScale.contained,
-        errorBuilder: (context, error, stackTrace) => Center(
-          child: Icon(
-            Icons.error_outline,
-            color: Colors.red,
-            size: width / 2,
-          ),
-        ),
+        errorBuilder: (context, error, stackTrace) =>
+            Center(
+              child: Icon(
+                Icons.error_outline,
+                color: Colors.red,
+                size: width / 2,
+              ),
+            ),
         loadFailedChild: Center(
           child: Icon(
             Icons.error_outline,
