@@ -37,7 +37,8 @@ class _GroupsChatsTabState extends State<GroupsChatsTab>
       itemCount: MyUser.myUser.groups.length,
       itemBuilder: (context, index) {
         return FutureBuilder(
-          future: _groupsController.getGroupInfo(id_group: MyUser.myUser.groups[index]),
+          future: _groupsController.getGroupInfo(
+              id_group: MyUser.myUser.groups[index]),
           builder: (_, snapshot) {
             if (snapshot.hasData) {
               print(MyUser.myUser.groups[index]);
@@ -60,13 +61,18 @@ class _GroupsChatsTabState extends State<GroupsChatsTab>
     return ListTile(
       title: group.type == Group.TYPE_UNIVERSITY
           ? Text(Languages.translate(
-        context,
-        'my_university',
-      ))
-          :group.type == Group.TYPE_COLLEGE? Text(Languages.translate(
-        context,
-        'my_college',
-      )):Text(group.id),
+              context,
+              'my_university',
+            ))
+          : group.type == Group.TYPE_COLLEGE
+              ? Text(Languages.translate(
+                  context,
+                  'my_college',
+                ))
+              : Text(Languages.translate(
+                  context,
+                  group.id,
+                )),
       onTap: () {
         Navigator.of(context).pushNamed(
           '/GroupPage',
@@ -93,7 +99,9 @@ class _GroupsChatsTabState extends State<GroupsChatsTab>
             borderRadius: BorderRadius.all(Radius.circular(30)),
             color: ConstValues.firstColor[600]),
       ),
-      subtitle: group.type == Group.TYPE_MOFADALAH || group.type == 'G' ? Text('') : Text(group.name),
+      subtitle: group.type == Group.TYPE_MOFADALAH || group.type == 'G'
+          ? Text('')
+          : Text(group.name),
       contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
     );
   }

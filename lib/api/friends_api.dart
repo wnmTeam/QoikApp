@@ -1,7 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:stumeapp/Models/MyUser.dart';
+import 'package:stumeapp/Models/Notification.dart';
+import 'package:stumeapp/api/notification_api.dart';
 
 class FriendsApi {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  NotificationApi _notificationsApi = NotificationApi();
 
   getFriendRequests({int limit, DocumentSnapshot last, String id}) {
     if (last == null)
@@ -24,7 +29,7 @@ class FriendsApi {
   }
 
   sendRequestFriend({id_sender, String id_receiver}) {
-    return _firestore
+    _firestore
         .collection('users')
         .doc(id_receiver)
         .collection('friendRequests')
@@ -32,6 +37,14 @@ class FriendsApi {
         .set({
       'date': FieldValue.serverTimestamp(),
     });
+    return _notificationsApi.sendNotification(
+      Notification(
+        idSender: id_sender,
+        idReceiver: id_receiver,
+        data: null,
+        type: 'send_friend_request',
+      ),
+    );
   }
 
   getFriends({String id, int limit, DocumentSnapshot last}) {
@@ -83,7 +96,15 @@ class FriendsApi {
           'date': FieldValue.serverTimestamp(),
         });
 
-    return batch.commit();
+    batch.commit();
+    return _notificationsApi.sendNotification(
+      Notification(
+        idSender: MyUser.myUser.id,
+        idReceiver: id_requestSender,
+        data: null,
+        type: 'accept_friend_request',
+      ),
+    );
   }
 
   String getChatID(id1, id2) {

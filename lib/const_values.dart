@@ -8,8 +8,8 @@ class ConstValues {
 
   static Color secondColor = Color(0xffbb6377);
 
-  static Color chatFirstColor = Color(0xff7c515d);
-  static Color chatSecondColor = Color(0xFFc17b8f);
+  static Color chatFirstColor = Color(0xffbb6377);
+  static Color chatSecondColor = Color(0xFFFFFFFF);
 
   static Color titleColor = Colors.cyan;
   static Color subTitleColor = Colors.black87;

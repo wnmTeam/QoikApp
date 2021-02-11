@@ -50,35 +50,35 @@ class _StartingPageState extends State<StartingPage> {
     return Scaffold(
       body: !loading
           ? canGo
-              ? StreamBuilder(
-                  stream: _controller.authStream,
-                  builder: (context, snapshot) {
-                    if (snapshot.data == null)
-                      return RegisterLoginPage();
-                    else {
-                      if (!snapshot.data.emailVerified)
-                        return VerifyPage(_controller.getUser.email);
-                      print('done ');
-                      return HomePage();
-                    }
-                  })
-              : Center(
-                  child: Container(
-                    child: Column(
-                      children: [
-                        Text(
-                          'Please Update Qoiq And Try Again!',
-                          style: TextStyle(
-                              fontSize: ConstValues.fontSize_1,
-                              color: Colors.black),
-                        )
-                      ],
-                    ),
-                  ),
-                )
+          ? StreamBuilder(
+          stream: _controller.authStream,
+          builder: (context, snapshot) {
+            if (snapshot.data == null)
+              return RegisterLoginPage();
+            else {
+              if (!snapshot.data.emailVerified)
+                return VerifyPage(_controller.getUser.email);
+              print('done ');
+              return HomePage();
+            }
+          })
           : Center(
-              child: CircularProgressIndicator(),
-            ),
+        child: Container(
+          child: Column(
+            children: [
+              Text(
+                'Please Update Qoiq And Try Again!',
+                style: TextStyle(
+                    fontSize: ConstValues.fontSize_1,
+                    color: Colors.black),
+              )
+            ],
+          ),
+        ),
+      )
+          : Center(
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 }
