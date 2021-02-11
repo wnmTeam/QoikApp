@@ -177,16 +177,16 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                     chosenImages,
                     Container(
                       width: size.width,
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(2.0),
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
                             child: Container(
                               decoration: BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.circular(35.0),
+                                borderRadius: BorderRadius.circular(10.0),
                                 boxShadow: [
                                   BoxShadow(
                                       offset: Offset(0, 3),
@@ -195,6 +195,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                 ],
                               ),
                               child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   IconButton(
                                     icon: Icon(Icons.photo_camera,
@@ -229,14 +230,14 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                       enableSuggestions: true,
                                       decoration: InputDecoration(
                                         contentPadding: EdgeInsets.symmetric(
-                                            vertical: 18, horizontal: 0),
+                                            vertical: 0, horizontal: 0),
                                         border: InputBorder.none,
                                         hintText: Languages.translate(
                                           context,
                                           'type_a_message',
                                         ),
                                         hintStyle:
-                                            TextStyle(color: Colors.grey),
+                                        TextStyle(color: Colors.grey),
                                       ),
                                     ),
                                   ),
