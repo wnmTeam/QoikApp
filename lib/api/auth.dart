@@ -184,4 +184,8 @@ class Auth {
   getLastVersion() {
     return _firestore.collection('appInfo').doc('version').get();
   }
+
+  getLinks() {
+    return _firestore.collection('appInfo').doc('links').get();
+  }
 }

@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
 
   _getUserInfo() async {
     DocumentSnapshot d =
-    await _authController.getUserInfo(_authController.getUser.uid);
+        await _authController.getUserInfo(_authController.getUser.uid);
     User user = User().fromMap(d.data()).setId(d.id);
     MyUser.myUser = user;
     _authController.updateUserTag(user);
@@ -62,7 +62,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    getLinks();
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.white,
@@ -134,12 +133,11 @@ class _HomePageState extends State<HomePage> {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: CachedNetworkImage(
-                        placeholder: (context, url) =>
-                            Center(
-                              //TODO: Change the placeHolder
-                              child: Image.asset(ConstValues.userImage),
+                        placeholder: (context, url) => Center(
+                          //TODO: Change the placeHolder
+                          child: Image.asset(ConstValues.userImage),
 //                    child: Container(),
-                            ),
+                        ),
                         imageUrl: !loading && MyUser.myUser.img != null
                             ? MyUser.myUser.img
                             : ConstValues.userImage,
@@ -221,132 +219,127 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       drawer: Drawer(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              DrawerHeader(
-                child: Container(),
-              ),
-              ListTile(
-                title: Text(Languages.translate(
-                  context,
-                  'my_profile',
-                )),
-                leading: Icon(Icons.person_outline),
-                onTap: () {
-                  Navigator.of(context).pushNamed(
-                    '/ProfilePage',
-                    arguments: {
-                      'user': MyUser.myUser,
-                      'id_user': _authController.getUser.uid,
-                    },
-                  );
-                },
-              ),
-              ListTile(
-                title: Text(Languages.translate(
-                  context,
-                  'setting',
-                )),
-                leading: Icon(Icons.settings_outlined),
-                onTap: () {
-                  Navigator.pushNamed(context, "/Settings");
-                },
-              ),
-              Divider(),
-              ListTile(
-                title: Text(link[0].title),
-                leading: Icon(link[0].icon),
-                onTap: () async => {
-                  if (link[0].url != null)
-                    {
-                      await launch(link[0].url)
-                          .then((value) => print('url  ' + link[0].url))
-                    }
-                  else
-                    {throw 'cant launch url'}
-                },
-              ),
-              ListTile(
-                title: Text(link[1].title),
-                leading: Icon(link[1].icon),
-                onTap: () async =>
-                {
-                  if (link[1].url !=
-                      null)
-                    {
-                      await launch(
-                          link[1].url)
-                          .then((value) =>
-                          print('url  ' +
-                              link[1].url))
-                    }
-                  else
-                    {throw 'cant launch url'}
-                },
-              ),
-              ListTile(
-                title: Text(link[2].title),
-                leading: Icon(link[2].icon),
-                onTap: () async =>
-                {
-                  if (link[2].url !=
-                      null)
-                    {
-                      await launch(
-                          link[2].url)
-                          .then((value) =>
-                          print('url  ' +
-                              link[2].url))
-                    }
-                  else
-                    {throw 'cant launch url'}
-                },
-              ),
-              ListTile(
-                title: Text(link[3].title),
-                leading: Icon(link[3].icon),
-                onTap: () async =>
-                {
-                  if (link[3].url !=
-                      null)
-                    {
-                      await launch(
-                          link[3].url)
-                          .then((value) =>
-                          print('url  ' +
-                              link[3].url))
-                    }
-                  else
-                    {throw 'cant launch url'}
-                },
-              ),
-
-              Divider(),
-              ListTile(
-                title: Text(
-                  Languages.translate(
-                    context,
-                    'log_out',
+        child: FutureBuilder(
+            future: _authController.getLinks(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                print(snapshot.data);
+                getLinks(snapshot.data);
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      DrawerHeader(
+                        child: Container(),
+                      ),
+                      ListTile(
+                        title: Text(Languages.translate(
+                          context,
+                          'my_profile',
+                        )),
+                        leading: Icon(Icons.person_outline),
+                        onTap: () {
+                          Navigator.of(context).pushNamed(
+                            '/ProfilePage',
+                            arguments: {
+                              'user': MyUser.myUser,
+                              'id_user': _authController.getUser.uid,
+                            },
+                          );
+                        },
+                      ),
+                      ListTile(
+                        title: Text(Languages.translate(
+                          context,
+                          'setting',
+                        )),
+                        leading: Icon(Icons.settings_outlined),
+                        onTap: () {
+                          Navigator.pushNamed(context, "/Settings");
+                        },
+                      ),
+                      Divider(),
+                      ListTile(
+                        title: Text(link[0].title),
+                        leading: Icon(link[0].icon),
+                        onTap: () async => {
+                          if (link[0].url != null)
+                            {
+                              await launch(link[0].url)
+                                  .then((value) => print('url  ' + link[0].url))
+                            }
+                          else
+                            {throw 'cant launch url'}
+                        },
+                      ),
+                      ListTile(
+                        title: Text(link[1].title),
+                        leading: Icon(link[1].icon),
+                        onTap: () async => {
+                          if (link[1].url != null)
+                            {
+                              await launch(link[1].url)
+                                  .then((value) => print('url  ' + link[1].url))
+                            }
+                          else
+                            {throw 'cant launch url'}
+                        },
+                      ),
+                      ListTile(
+                        title: Text(link[2].title),
+                        leading: Icon(link[2].icon),
+                        onTap: () async => {
+                          if (link[2].url != null)
+                            {
+                              await launch(link[2].url)
+                                  .then((value) => print('url  ' + link[2].url))
+                            }
+                          else
+                            {throw 'cant launch url'}
+                        },
+                      ),
+                      ListTile(
+                        title: Text(link[3].title),
+                        leading: Icon(link[3].icon),
+                        onTap: () async => {
+                          if (link[3].url != null)
+                            {
+                              await launch(link[3].url)
+                                  .then((value) => print('url  ' + link[3].url))
+                            }
+                          else
+                            {throw 'cant launch url'}
+                        },
+                      ),
+                      Divider(),
+                      ListTile(
+                        title: Text(
+                          Languages.translate(
+                            context,
+                            'log_out',
+                          ),
+                          style: TextStyle(color: Colors.red),
+                        ),
+                        leading: Icon(Icons.logout, color: Colors.red),
+                        onTap: () {
+                          _authController.logOut();
+                        },
+                      )
+                    ],
                   ),
-                  style: TextStyle(color: Colors.red),
-                ),
-                leading: Icon(Icons.logout, color: Colors.red),
-                onTap: () {
-                  _authController.logOut();
-                },
-              )
-            ],
-          ),
-        ),
+                );
+              }
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }),
       ),
       drawerScrimColor: ConstValues.firstColor,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: !loading
           ? tabViews[_currentIndex]
           : Center(
-        child: CircularProgressIndicator(),
-      ),
+              child: CircularProgressIndicator(),
+            ),
     );
   }
 
@@ -356,7 +349,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  getLinks() {
+  getLinks(links) {
     link.clear();
 
     link.add(new Link(
@@ -365,36 +358,34 @@ class _HomePageState extends State<HomePage> {
         context,
         'about',
       ),
-      url: "https://qoiqapp.com/%D8%AD%D9%88%D9%84/",
+      url: links['about'],
     ));
+    link.add(new Link(
+        title: Languages.translate(
+          context,
+          'faq',
+        ),
+        icon: Icons.help_outline,
+        url: links['faq']));
+    link.add(new Link(
+        title: Languages.translate(
+          context,
+          'join_us',
+        ),
+        icon: Icons.add_circle_outline,
+        url: links['join_us']));
     link.add(new Link(
       title: Languages.translate(
         context,
-        'contact_us',
+        'privacy',
       ),
-      icon: Icons.email_outlined,
-      url: "https://qoiqapp.com/%D8%AA%D9%88%D8%A7%D8%B5%D9%84-%D9%85%D8%B9%D9%86%D8%A7/",
-    ));
-    link.add(new Link(
-      title: Languages.translate(
-        context,
-        'faq',
-      ),
-      icon: Icons.help_outline,
-      url: "https://qoiqapp.com/%D8%A7%D9%84%D8%A7%D8%B3%D8%A6%D9%84%D8%A9-%D8%A7%D9%84%D8%B4%D8%A7%D8%A6%D8%B9%D8%A9/",
-    ));
-    link.add(new Link(
-      title: "انضم إلى فريقنا",
-      icon: Icons.add_circle_outline,
-      url: "https://qoiqapp.com/%D8%A7%D9%84%D8%A7%D8%B3%D8%A6%D9%84%D8%A9-%D8%A7%D9%84%D8%B4%D8%A7%D8%A6%D8%B9%D8%A9/",
+      icon: Icons.privacy_tip_outlined,
+      url: links['privacy'],
     ));
   }
-
 }
 
-
 class Link {
-
   String url;
   String title;
   IconData icon;

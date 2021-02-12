@@ -189,4 +189,8 @@ class AuthController {
   getLastVersion() {
     return api.getLastVersion();
   }
+
+  getLinks() {
+    return api.getLinks();
+  }
 }
