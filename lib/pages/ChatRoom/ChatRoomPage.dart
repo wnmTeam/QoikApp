@@ -270,38 +270,42 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                             ),
                           ),
                           SizedBox(width: 10),
-                          FloatingActionButton(
-                            backgroundColor: ConstValues.firstColor,
-                            onPressed: () {
-                              if (_images.isNotEmpty) {
-                                setState(() {
-                                  chosenImages = Container();
-                                });
-                              }
-
-                              if (_messageController.text
-                                  .trim()
-                                  .isEmpty &&
-                                  _images.isEmpty) return;
-                              _chatController.addMessage(
-                                message: Message(
-                                  idOwner: _authController.getUser.uid,
-                                  text: _messageController.text.trim().isEmpty
-                                      ? null
-                                      : _messageController.text.trim(),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: Container(
+                              color: ConstValues.firstColor,
+                              child: IconButton(
+                                icon: Icon(
+                                  // Icons.keyboard_voice,
+                                  Icons.send,
+                                  color: Colors.white,
                                 ),
-                                id_receiver: widget.user.id,
-                                id_chat: getChatID(),
-                                images: _images,
-                                type: 'chats',
-                              );
-                              _images = [];
-                              _messageController.clear();
-                            },
-                            child: Icon(
-                              // Icons.keyboard_voice,
-                              Icons.send,
-                              color: Colors.white,
+                                onPressed: () {
+                                  if (_images.isNotEmpty) {
+                                    setState(() {
+                                      chosenImages = Container();
+                                    });
+                                  }
+
+                                  if (_messageController.text.trim().isEmpty &&
+                                      _images.isEmpty) return;
+                                  _chatController.addMessage(
+                                    message: Message(
+                                      idOwner: _authController.getUser.uid,
+                                      text:
+                                          _messageController.text.trim().isEmpty
+                                              ? null
+                                              : _messageController.text.trim(),
+                                    ),
+                                    id_receiver: widget.user.id,
+                                    id_chat: getChatID(),
+                                    images: _images,
+                                    type: 'chats',
+                                  );
+                                  _images = [];
+                                  _messageController.clear();
+                                },
+                              ),
                             ),
                           ),
                         ],
@@ -484,7 +488,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                   if (message.text != null)
                     Text(
                       message.text,
-                      style: TextStyle(color: Colors.white, fontSize: 16),
+                      style: TextStyle(color: Colors.black, fontSize: 16),
                     ),
                   SizedBox(
                     height: 1,
@@ -495,7 +499,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                       message.date.hour.toString() +
                           ":" +
                           message.date.minute.toString(),
-                      style: TextStyle(color: Colors.white54),
+                      style: TextStyle(color: Colors.black54),
                     ),
                   ),
                 ],
@@ -566,7 +570,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                         child: CircularProgressIndicator(
                             value: progress.progress,
                             valueColor:
-                            AlwaysStoppedAnimation<Color>(Colors.white)),
+                            AlwaysStoppedAnimation<Color>(Colors.black)),
                       ),
                       Positioned(
                         bottom: 10,
@@ -576,7 +580,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                           alignment: Alignment.bottomCenter,
                           child: Text(
                             strSize,
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: Colors.black),
                           ),
                         ),
                       ),

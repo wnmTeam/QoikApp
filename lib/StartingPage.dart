@@ -1,14 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:stumeapp/Models/MyUser.dart';
+import 'package:package_info/package_info.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/pages/Home/HomePage.dart';
 import 'package:stumeapp/pages/RegesterLogin/RegisterLoginPage.dart';
 import 'package:stumeapp/pages/RegesterLogin/VerifyPage.dart';
-import 'package:package_info/package_info.dart';
-
-import 'api/notification_api.dart';
 
 class StartingPage extends StatefulWidget {
   @override
@@ -50,35 +47,45 @@ class _StartingPageState extends State<StartingPage> {
     return Scaffold(
       body: !loading
           ? canGo
-          ? StreamBuilder(
-          stream: _controller.authStream,
-          builder: (context, snapshot) {
-            if (snapshot.data == null)
-              return RegisterLoginPage();
-            else {
-              if (!snapshot.data.emailVerified)
-                return VerifyPage(_controller.getUser.email);
-              print('done ');
-              return HomePage();
-            }
-          })
-          : Center(
-        child: Container(
-          child: Column(
-            children: [
-              Text(
-                'Please Update Qoiq And Try Again!',
-                style: TextStyle(
-                    fontSize: ConstValues.fontSize_1,
-                    color: Colors.black),
-              )
-            ],
-          ),
-        ),
-      )
-          : Center(
-        child: CircularProgressIndicator(),
-      ),
+              ? StreamBuilder(
+                  stream: _controller.authStream,
+                  builder: (context, snapshot) {
+                    if (snapshot.data == null)
+                      return RegisterLoginPage();
+                    else {
+                      if (!snapshot.data.emailVerified)
+                        return VerifyPage(_controller.getUser.email);
+                      print('done ');
+                      return HomePage();
+                    }
+                  })
+              : Center(
+                  child: Container(
+                    child: Column(
+                      children: [
+                        Text(
+                          'Please Update Qoiq And Try Again!',
+                          style: TextStyle(
+                              fontSize: ConstValues.fontSize_1,
+                              color: Colors.black),
+                        )
+                      ],
+                    ),
+                  ),
+                )
+          : Stack(
+              children: [
+                Positioned.fill(
+                  child: Image.asset(
+                    "assets/launchImage.png",
+                    fit: BoxFit.fill,
+                  ),
+                ),
+                Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ],
+            ),
     );
   }
 }
