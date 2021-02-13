@@ -271,7 +271,7 @@ class MapScreenState extends State<ProfilePage> {
                                                           ),
                                             FlatButton.icon(
                                               icon: Icon(
-                                                CupertinoIcons.bell_solid,
+                                                CupertinoIcons.chat_bubble_fill,
                                                 color: Colors.blueGrey,
                                               ),
                                               label: Text(Languages.translate(
