@@ -6,6 +6,8 @@ import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/controller/LibraryController.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 class BooksPage extends StatefulWidget {
   String category;
@@ -98,6 +100,8 @@ class BookWidget extends StatefulWidget {
 class _BookWidgetState extends State<BookWidget> {
   AuthController _authController = AuthController();
 
+  LibraryController _libraryController = LibraryController();
+
   User user;
 
   Size size;
@@ -106,9 +110,12 @@ class _BookWidgetState extends State<BookWidget> {
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
     return InkWell(
-      onTap: () {
-        Navigator.pushNamed(context, '/BookViewerPage',
-            arguments: {'id': widget.book.name});
+      onTap: () async {
+        String link = await _libraryController.getDownloadLink(
+          id: widget.book.name,
+        );
+        await launch(link)
+            .then((value) => print('url  ' + link));
       },
       child: Column(
         children: [
