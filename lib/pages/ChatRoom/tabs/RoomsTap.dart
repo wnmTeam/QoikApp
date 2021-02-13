@@ -9,7 +9,6 @@ import 'package:stumeapp/controller/ChatController.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:stumeapp/localization.dart';
 
-
 class RoomsTab extends StatefulWidget {
   @override
   _RoomsTabState createState() => _RoomsTabState();
@@ -46,7 +45,6 @@ class _RoomsTabState extends State<RoomsTab>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: RefreshIndicator(
         onRefresh: refresh,
         child: ListView.builder(
@@ -60,8 +58,8 @@ class _RoomsTabState extends State<RoomsTab>
                 leading: Icon(Icons.group),
                 title: Text('Create Group'),
                 onTap: () {
-                  if(!_authController.isBan())
-                  Navigator.pushNamed(context, '/CreateGroupPage');
+                  if (!_authController.isBan())
+                    Navigator.pushNamed(context, '/CreateGroupPage');
                   else
                     showDialog(
                         context: context,
@@ -72,10 +70,11 @@ class _RoomsTabState extends State<RoomsTab>
                               'blocked',
                             )),
                             actions: [
-
                               FlatButton(
                                 onPressed: () {
-                                  Navigator.pop(context,);
+                                  Navigator.pop(
+                                    context,
+                                  );
                                 },
                                 child: Text(
                                   Languages.translate(
