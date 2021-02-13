@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -49,7 +50,7 @@ class _HomePageState extends State<HomePage> {
 
   _getUserInfo() async {
     DocumentSnapshot d =
-        await _authController.getUserInfo(_authController.getUser.uid);
+    await _authController.getUserInfo(_authController.getUser.uid);
     User user = User().fromMap(d.data()).setId(d.id);
     MyUser.myUser = user;
     _authController.updateUserTag(user);
@@ -93,16 +94,23 @@ class _HomePageState extends State<HomePage> {
 //          ],
 //        ),
         actions: [
-          IconButton(
-            onPressed: () {
-              Toast.show("Coming soon", context,
-                  textColor: Colors.white,
-                  backgroundColor: ConstValues.accentColor,
-                  duration: Toast.LENGTH_LONG);
-            },
-            icon: Icon(
-              CupertinoIcons.bell_solid,
-              color: Colors.white,
+          Badge(
+            badgeContent: Text(
+              '3',
+              style: TextStyle(color: Colors.white),
+            ),
+            position: BadgePosition.topStart(top: 5, start: 5),
+            child: IconButton(
+              onPressed: () {
+                Toast.show("Coming soon", context,
+                    textColor: Colors.white,
+                    backgroundColor: ConstValues.accentColor,
+                    duration: Toast.LENGTH_LONG);
+              },
+              icon: Icon(
+                CupertinoIcons.bell_solid,
+                color: Colors.white,
+              ),
             ),
           ),
           IconButton(
@@ -328,8 +336,56 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               }
-              return Center(
-                child: CircularProgressIndicator(),
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    DrawerHeader(
+                      child: Container(),
+                    ),
+                    ListTile(
+                      title: Text(Languages.translate(
+                        context,
+                        'my_profile',
+                      )),
+                      leading: Icon(Icons.person_outline),
+                      onTap: () {
+                        Navigator.of(context).pushNamed(
+                          '/ProfilePage',
+                          arguments: {
+                            'user': MyUser.myUser,
+                            'id_user': _authController.getUser.uid,
+                          },
+                        );
+                      },
+                    ),
+                    ListTile(
+                      title: Text(Languages.translate(
+                        context,
+                        'setting',
+                      )),
+                      leading: Icon(Icons.settings_outlined),
+                      onTap: () {
+                        Navigator.pushNamed(context, "/Settings");
+                      },
+                    ),
+                    Divider(),
+                    CircularProgressIndicator(),
+                    Divider(),
+                    ListTile(
+                      title: Text(
+                        Languages.translate(
+                          context,
+                          'log_out',
+                        ),
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      leading: Icon(Icons.logout, color: Colors.red),
+                      onTap: () {
+                        _authController.logOut();
+                      },
+                    )
+                  ],
+                ),
               );
             }),
       ),
@@ -338,8 +394,8 @@ class _HomePageState extends State<HomePage> {
       body: !loading
           ? tabViews[_currentIndex]
           : Center(
-              child: CircularProgressIndicator(),
-            ),
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 

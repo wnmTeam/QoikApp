@@ -16,17 +16,6 @@ import 'package:stumeapp/pages/ImageView/ImageView.dart';
 import '../../const_values.dart';
 import '../../localization.dart';
 
-class ChatRoomPage extends StatefulWidget {
-  final String userId;
-  final User user;
-  Group group;
-
-  ChatRoomPage({this.userId, this.user, this.group});
-
-  @override
-  _ChatRoomPageState createState() => _ChatRoomPageState();
-}
-
 class _ChatRoomPageState extends State<ChatRoomPage> {
   var first;
 
@@ -448,9 +437,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                 true,
                 ConstValues.chatSecondColor,
                 0,
-                10,
-                10,
-                10)
+                10, 10, 10)
           ],
         ),
       );
@@ -459,57 +446,62 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
   }
 
   _message(Message message, bool isSender, Color color, double x1, double x2,
-          double x3, double x4) =>
-      Expanded(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment:
-              isSender ? CrossAxisAlignment.start : CrossAxisAlignment.end,
-          children: [
-            Container(
-              padding: EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(x1),
-                  bottomLeft: Radius.circular(x2),
-                  bottomRight: Radius.circular(x3),
-                  topLeft: Radius.circular(x4),
-                ),
-                color: color,
+      double x3, double x4) {
+    String minute = message.date.minute.toString().length < 2
+        ? "0" + message.date.minute.toString()
+        : message.date.minute.toString();
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment:
+            isSender ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+        children: [
+          Container(
+            padding: EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(x1),
+                bottomLeft: Radius.circular(x2),
+                bottomRight: Radius.circular(x3),
+                topLeft: Radius.circular(x4),
               ),
-              child: Column(
-                crossAxisAlignment: isSender
-                    ? CrossAxisAlignment.start
-                    : CrossAxisAlignment.end,
-                children: [
-                  if (message.images != null) chatImageBuilder(message
-                      .images, message.text != null),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  if (message.text != null)
-                    Text(
-                      message.text,
-                      style: TextStyle(color: Colors.black, fontSize: 16),
-                    ),
-                  SizedBox(
-                    height: 1,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
-                      message.date.hour.toString() +
-                          ":" +
-                          message.date.minute.toString(),
-                      style: TextStyle(color: Colors.black54),
-                    ),
-                  ),
-                ],
-              ),
+              color: color,
             ),
-          ],
-        ),
-      );
+            child: Column(
+              crossAxisAlignment:
+                  isSender ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+              children: [
+                if (message.images != null)
+                  chatImageBuilder(message.images, message.text != null),
+                SizedBox(
+                  height: 4,
+                ),
+                if (message.text != null)
+                  Text(
+                    message.text,
+                    style: TextStyle(
+                        color: isSender ? Colors.black : Colors.white,
+                        fontSize: 16),
+                  ),
+                SizedBox(
+                  height: 1,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Text(
+                    message.date.hour.toString() + ":" + minute,
+                    style: TextStyle(
+                      color: isSender ? Colors.black54 : Colors.white54,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   _image(String imageUrl, bool firstMessage) => ClipRRect(
         borderRadius: BorderRadius.circular(57),
@@ -518,8 +510,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             ? GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) =>
-                          ImageView(imageUrl != null
+                      builder: (_) => ImageView(imageUrl != null
                               ? imageUrl
                               : ConstValues.userImage)));
                 },
@@ -643,4 +634,15 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
       ),
     );
   }
+}
+
+class ChatRoomPage extends StatefulWidget {
+  final String userId;
+  final User user;
+  Group group;
+
+  ChatRoomPage({this.userId, this.user, this.group});
+
+  @override
+  _ChatRoomPageState createState() => _ChatRoomPageState();
 }

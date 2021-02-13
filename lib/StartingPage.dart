@@ -81,7 +81,8 @@ class _StartingPageState extends State<StartingPage> {
                     fit: BoxFit.fill,
                   ),
                 ),
-                Center(
+                Positioned(
+                  bottom: MediaQuery.of(context).size.height / 10,
                   child: CircularProgressIndicator(),
                 ),
               ],
