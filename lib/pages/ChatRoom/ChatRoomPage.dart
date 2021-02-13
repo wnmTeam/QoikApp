@@ -181,6 +181,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        textDirection: TextDirection.ltr,
                         children: [
                           Expanded(
                             child: Container(
@@ -279,6 +280,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                   // Icons.keyboard_voice,
                                   Icons.send,
                                   color: Colors.white,
+                                  textDirection: TextDirection.ltr,
                                 ),
                                 onPressed: () {
                                   if (_images.isNotEmpty) {
