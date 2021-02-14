@@ -85,7 +85,7 @@ class _ChatsTabState extends State<ChatsTab>
               // child: Hero(
               //   tag: user.img != null ? user.img : ConstValues.userImage,
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(57),
+                borderRadius: BorderRadius.circular(100),
                 child: CachedNetworkImage(
                   placeholder: (context, url) => Center(
                     //TODO: Change the placeHolder
@@ -95,8 +95,8 @@ class _ChatsTabState extends State<ChatsTab>
                   imageUrl: user.img != null ? user.img : ConstValues.userImage,
                   fit: BoxFit.cover,
                   width: 57,
-                    height: 57,
-                  ),
+                  height: 57,
+                ),
                 ),
               // ),
             ),

@@ -626,7 +626,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                           groups: groups,
                           points: 10,
                           enterCount: 0,
-                          bio: 'Hey There.. I am New User.',
+                          bio: 'Hey There.. I\'m a New User.',
                           recordDate: DateTime.now(),
                           email: _emailController.text,
                         ),
