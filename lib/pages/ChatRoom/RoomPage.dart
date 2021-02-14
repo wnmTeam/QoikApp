@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
@@ -8,9 +10,7 @@ import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/controller/StorageController.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../const_values.dart';
 import '../../localization.dart';
