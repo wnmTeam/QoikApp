@@ -127,6 +127,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
             ),
             TextFormField(
               controller: _emailController,
+              enableSuggestions: true,
               textInputAction: TextInputAction.next,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
@@ -375,6 +376,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               TextFormField(
                 controller: _firstNameController,
                 textInputAction: TextInputAction.next,
+                enableSuggestions: true,
                 decoration: InputDecoration(
                   floatingLabelBehavior: FloatingLabelBehavior.auto,
                   icon: Icon(Icons.person_outline),
@@ -399,6 +401,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               TextFormField(
                 controller: _secondNameController,
                 textInputAction: TextInputAction.next,
+                enableSuggestions: true,
                 decoration: InputDecoration(
                   floatingLabelBehavior: FloatingLabelBehavior.auto,
                   labelText: Languages.translate(
@@ -503,6 +506,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               ),
               TextFormField(
                 controller: _emailController,
+                enableSuggestions: true,
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(

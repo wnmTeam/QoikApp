@@ -76,6 +76,7 @@ class _WritePostPageState extends State<WritePostPage> {
             Container(
               color: Colors.white,
               child: TextField(
+                enableSuggestions: true,
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.all(10),
                   border: InputBorder.none,
