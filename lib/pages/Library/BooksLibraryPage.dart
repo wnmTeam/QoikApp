@@ -1,10 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Book.dart';
-
 import 'package:stumeapp/Models/User.dart';
+import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/controller/LibraryController.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -38,14 +38,12 @@ class _BooksPageState extends State<BooksPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
           widget.category,
-          style: TextStyle(color: Colors.grey[700]),
+          style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.grey[700]),
+        backgroundColor: ConstValues.firstColor,
       ),
       body: GridView.count(
           crossAxisCount: 3,
