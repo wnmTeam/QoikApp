@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/Group/tabs/MembersTabView.dart';
 import 'package:stumeapp/pages/Group/tabs/PostsTabView.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../const_values.dart';
 
@@ -72,7 +72,10 @@ class _GroupPageState extends State<GroupPage>
                         style: TextStyle(color: Colors.white),
                       )
                     : Text(
-                        widget.group.id,
+                        Languages.translate(
+                          context,
+                          widget.group.id,
+                        ),
                         style: TextStyle(color: Colors.white),
                       ),
             subtitle: widget.group.type == 'G' ||
