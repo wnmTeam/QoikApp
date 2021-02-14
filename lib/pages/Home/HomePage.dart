@@ -272,12 +272,10 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ),
                                     Text(
-                                      Languages.translate(
-                                          context,
-                                          'my_profi'
-                                              'le'),
+                                      MyUser.myUser.email,
                                       style: TextStyle(
                                         color: Colors.black45,
+                                        fontSize: width / 40,
                                       ),
                                     ),
                                   ],
