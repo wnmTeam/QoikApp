@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
 
   _getUserInfo() async {
     DocumentSnapshot d =
-    await _authController.getUserInfo(_authController.getUser.uid);
+        await _authController.getUserInfo(_authController.getUser.uid);
     User user = User().fromMap(d.data()).setId(d.id);
     MyUser.myUser = user;
     _authController.updateUserTag(user);
@@ -61,8 +61,11 @@ class _HomePageState extends State<HomePage> {
 
   List<Link> link = new List();
 
+  double width;
+
   @override
   Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.white,
@@ -76,23 +79,6 @@ class _HomePageState extends State<HomePage> {
         ),
         centerTitle: false,
         titleSpacing: 5,
-//        leading: Row(
-//          children: [
-//            IconButton(
-//              icon: Icon(Icons.menu),
-//              onPressed: () => _scaffoldKey.currentState.openDrawer(),
-//            ),
-//            IconButton(
-//              icon: Icon(
-//                Icons.notifications,
-//                color: Colors.blueGrey,
-//              ),
-//              onPressed: () {
-//                Navigator.pushNamed(context, '/ChatsPage');
-//              },
-//            ),
-//          ],
-//        ),
         actions: [
           Badge(
             badgeContent: Text(
@@ -237,43 +223,79 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     children: [
                       DrawerHeader(
-                        child: Container(),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pushNamed(
+                              '/ProfilePage',
+                              arguments: {
+                                'user': MyUser.myUser,
+                                'id_user': _authController.getUser.uid,
+                              },
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(1000),
+                                  child: CachedNetworkImage(
+                                    placeholder: (context, url) =>
+                                        Center(
+                                          child: Image.asset(
+                                              ConstValues.userImage),
+                                        ),
+                                    imageUrl:
+                                    !loading && MyUser.myUser.img != null
+                                        ? MyUser.myUser.img
+                                        : ConstValues.userImage,
+                                    fit: BoxFit.cover,
+                                    width: width / 4,
+                                    height: width / 4,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      MyUser.myUser.firstName +
+                                          ' ' +
+                                          MyUser.myUser.secondName,
+                                      style: TextStyle(
+                                        fontSize:
+                                        width / ConstValues.fontSize_1,
+                                      ),
+                                    ),
+                                    Text(
+                                      Languages.translate(
+                                          context,
+                                          'my_profi'
+                                              'le'),
+                                      style: TextStyle(
+                                        color: Colors.black45,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
-                      ListTile(
-                        title: Text(Languages.translate(
-                          context,
-                          'my_profile',
-                        )),
-                        leading: Icon(Icons.person_outline),
-                        onTap: () {
-                          Navigator.of(context).pushNamed(
-                            '/ProfilePage',
-                            arguments: {
-                              'user': MyUser.myUser,
-                              'id_user': _authController.getUser.uid,
-                            },
-                          );
-                        },
-                      ),
-                      ListTile(
-                        title: Text(Languages.translate(
-                          context,
-                          'setting',
-                        )),
-                        leading: Icon(Icons.settings_outlined),
-                        onTap: () {
-                          Navigator.pushNamed(context, "/Settings");
-                        },
-                      ),
-                      Divider(),
                       ListTile(
                         title: Text(link[0].title),
                         leading: Icon(link[0].icon),
-                        onTap: () async => {
+                        onTap: () async =>
+                        {
                           if (link[0].url != null)
                             {
-                              await launch(link[0].url)
-                                  .then((value) => print('url  ' + link[0].url))
+                              await launch(link[0].url).then(
+                                      (value) => print('url  ' + link[0].url))
                             }
                           else
                             {throw 'cant launch url'}
@@ -285,8 +307,8 @@ class _HomePageState extends State<HomePage> {
                         onTap: () async => {
                           if (link[1].url != null)
                             {
-                              await launch(link[1].url)
-                                  .then((value) => print('url  ' + link[1].url))
+                              await launch(link[1].url).then(
+                                      (value) => print('url  ' + link[1].url))
                             }
                           else
                             {throw 'cant launch url'}
@@ -298,8 +320,8 @@ class _HomePageState extends State<HomePage> {
                         onTap: () async => {
                           if (link[2].url != null)
                             {
-                              await launch(link[2].url)
-                                  .then((value) => print('url  ' + link[2].url))
+                              await launch(link[2].url).then(
+                                      (value) => print('url  ' + link[2].url))
                             }
                           else
                             {throw 'cant launch url'}
@@ -311,14 +333,24 @@ class _HomePageState extends State<HomePage> {
                         onTap: () async => {
                           if (link[3].url != null)
                             {
-                              await launch(link[3].url)
-                                  .then((value) => print('url  ' + link[3].url))
+                              await launch(link[3].url).then(
+                                      (value) => print('url  ' + link[3].url))
                             }
                           else
                             {throw 'cant launch url'}
                         },
                       ),
                       Divider(),
+                      ListTile(
+                        title: Text(Languages.translate(
+                          context,
+                          'setting',
+                        )),
+                        leading: Icon(Icons.settings_outlined),
+                        onTap: () {
+                          Navigator.pushNamed(context, "/Settings");
+                        },
+                      ),
                       ListTile(
                         title: Text(
                           Languages.translate(
@@ -340,24 +372,72 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   children: [
                     DrawerHeader(
-                      child: Container(),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pushNamed(
+                            '/ProfilePage',
+                            arguments: {
+                              'user': MyUser.myUser,
+                              'id_user': _authController.getUser.uid,
+                            },
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(1000),
+                                child: CachedNetworkImage(
+                                  placeholder: (context, url) =>
+                                      Center(
+                                        child: Image.asset(
+                                            ConstValues.userImage),
+                                      ),
+                                  imageUrl:
+                                  !loading && MyUser.myUser.img != null
+                                      ? MyUser.myUser.img
+                                      : ConstValues.userImage,
+                                  fit: BoxFit.cover,
+                                  width: width / 4,
+                                  height: width / 4,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    MyUser.myUser.firstName +
+                                        ' ' +
+                                        MyUser.myUser.secondName,
+                                    style: TextStyle(
+                                      fontSize:
+                                      width / ConstValues.fontSize_1,
+                                    ),
+                                  ),
+                                  Text(
+                                    Languages.translate(
+                                        context,
+                                        'my_profi'
+                                            'le'),
+                                    style: TextStyle(
+                                      color: Colors.black45,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
-                    ListTile(
-                      title: Text(Languages.translate(
-                        context,
-                        'my_profile',
-                      )),
-                      leading: Icon(Icons.person_outline),
-                      onTap: () {
-                        Navigator.of(context).pushNamed(
-                          '/ProfilePage',
-                          arguments: {
-                            'user': MyUser.myUser,
-                            'id_user': _authController.getUser.uid,
-                          },
-                        );
-                      },
-                    ),
+                    CircularProgressIndicator(),
+                    Divider(),
                     ListTile(
                       title: Text(Languages.translate(
                         context,
@@ -368,9 +448,6 @@ class _HomePageState extends State<HomePage> {
                         Navigator.pushNamed(context, "/Settings");
                       },
                     ),
-                    Divider(),
-                    CircularProgressIndicator(),
-                    Divider(),
                     ListTile(
                       title: Text(
                         Languages.translate(
