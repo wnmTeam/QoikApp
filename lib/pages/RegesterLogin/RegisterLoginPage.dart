@@ -37,15 +37,20 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
   bool _checkedTrueInfo = false;
 
   bool _isRegister = true;
-  bool waiting = false;
+  bool logInWaiting = false;
+  bool singUpWaiting = false;
   bool isMain = true;
 
-  Future<bool> _onBackBressed() async{
+  String logInErrorMessage = "";
+  String signUpErrorMessage = "";
+
+  Future<bool> _onBackBressed() async {
     if (!isMain)
       setState(() {
         isMain = true;
       });
-    else return true;
+    else
+      return true;
   }
 
   @override
@@ -204,57 +209,56 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 ),
               ),
             ),
-
-            // FlatButton(
-            //   padding: EdgeInsets.zero,
-            //   onPressed: () async {
-            //     showDialog(
-            //         context: context,
-            //         builder: (context) {
-            //           return ResetDialog(
-            //             resetEmailController: _resetController,
-            //             onPressed: () {
-            //               _authController.resetPassword(_resetController.text);
-            //             },
-            //           );
-            //         });
-            //   },
-            //   child: Text(
-            //     'forgot password?',
-            //     style: TextStyle(
-            //       color: Colors.indigo,
-            //     ),
-            //   ),
-            // ),
+            logInErrorMessage == ""
+                ? Container()
+                : Container(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    margin: EdgeInsets.symmetric(vertical: 10),
+                    color: Color(0xFFff0033),
+                    child: Text(
+                      logInErrorMessage,
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
             RaisedButton(
-                color: ConstValues.firstColor,
-                onPressed: () async {
-                  if (_formKey.currentState.validate()) {
-                    setState(() {
-                      waiting = true;
-                    });
-                    try {
-                      await _authController.login(
-                          _emailController.text, _passwordController.text);
-                    } on Exception catch (e) {
-                      // TODO
-                    }
-                  }
+              color: ConstValues.firstColor,
+              onPressed: () async {
+                print("_formKey.currentState ");
+                print(_formKey.currentState.validate());
+                if (_formKey.currentState.validate()) {
                   setState(() {
-                    waiting = false;
+                    logInWaiting = true;
                   });
+                  try {
+                    await _authController.login(
+                        _emailController.text, _passwordController.text);
+                  } on Exception catch (e) {
+                    print("errr");
+                    print(e);
+                    setState(() {
+                      logInErrorMessage = e.toString();
+                    });
+                    // TODO
+                  }
+                }
+                setState(() {
+                  logInWaiting = false;
+                });
                 },
-                child: !waiting
-                    ? Text(
-                        Languages.translate(
-                          context,
-                          'login',
-                        ),
-                        style: TextStyle(
-                          fontSize: width / ConstValues.fontSize_2,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
+              child: !logInWaiting
+                  ? Text(
+                Languages.translate(
+                  context,
+                  'login',
+                ),
+                style: TextStyle(
+                  fontSize: width / ConstValues.fontSize_2,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
                       )
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -281,25 +285,13 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                             ),
                           ),
                         ],
-                      ),
-                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                )),
-            // FlatButton(
-            //   padding: EdgeInsets.zero,
-            //   onPressed: () {
-            //     setState(() {
-            //       _isRegister = true;
-            //     });
-            //   },
-            //   child: Text(
-            //     "don't have an account ?",
-            //     style: TextStyle(
-            //       color: Colors.indigo,
-            //     ),
-            //   ),
-            // ),
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+            ),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -602,11 +594,21 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               SizedBox(
                 height: 15,
               ),
+              signUpErrorMessage == "" ? Container() : Container(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                margin: EdgeInsets.symmetric(vertical: 10),
+                color: Color(0xFFff0033),
+                child: Text(signUpErrorMessage,
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,),
+              ),
               RaisedButton(
                 color: ConstValues.firstColor,
                 onPressed: () async {
                   setState(() {
-                    waiting = true;
+                    singUpWaiting = true;
                   });
                   if (_formKey.currentState.validate() &&
                       _checkedTrueInfo == true) {
@@ -631,27 +633,31 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                           email: _emailController.text,
                         ),
                       );
-                    } catch (e) {}
+                    } catch (e) {
+                      setState(() {
+                        signUpErrorMessage = e.toString();
+                      });
+                    }
                   }
                   setState(() {
-                    waiting = false;
+                    singUpWaiting = false;
                   });
                 },
                 padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
-                child: !waiting
+                child: !singUpWaiting
                     ? Text(
-                        Languages.translate(
-                          context,
-                          'create_account',
-                        ),
-                        style: TextStyle(
-                          fontSize: width / ConstValues.fontSize_2,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
+                  Languages.translate(
+                    context,
+                    'create_account',
+                  ),
+                  style: TextStyle(
+                    fontSize: width / ConstValues.fontSize_2,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                       )
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.center,
