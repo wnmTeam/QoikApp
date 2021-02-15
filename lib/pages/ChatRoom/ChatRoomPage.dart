@@ -218,9 +218,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                 StreamBuilder(
                                   stream: getNew
                                       ? _chatController.getNewMessages(
-                                          id_chat: getChatID(),
+                                          id_chat: widget.group.id,
                                           last: first,
-                                          type: 'chats')
+                                          type: 'rooms')
                                       : null,
                                   builder: (_, snapshot) {
                                     if (snapshot.hasData &&
@@ -252,18 +252,17 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                         Container(
                           width: size.width,
                           padding: const EdgeInsets.all(2.0),
-                          child: widget.isRoom && iamOut
+                          child: iamOut
                               ? Text(Languages.translate(
-                                  context,
-                                  'cant_send_messages',
-                                ))
+                            context,
+                            'cant_send_messages',
+                          ))
                               : Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  textDirection: TextDirection.ltr,
-                                  children: [
-                                    Expanded(
-                                      child: Container(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            textDirection: TextDirection.ltr,
+                            children: [
+                              Expanded(
+                                child: Container(
                                         decoration: BoxDecoration(
                                           color: Colors.white,
                                           borderRadius:
@@ -389,19 +388,19 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                                 _images.isEmpty) return;
                                             _chatController.addMessage(
                                               message: Message(
-                                                idOwner:
-                                                    _authController.getUser.uid,
+                                                idOwner: _authController.getUser
+                                                    .uid,
                                                 text: _messageController.text
-                                                        .trim()
-                                                        .isEmpty
+                                                    .trim()
+                                                    .isEmpty
                                                     ? null
                                                     : _messageController.text
-                                                        .trim(),
+                                                    .trim(),
                                               ),
-                                              id_receiver: widget.user.id,
-                                              id_chat: getChatID(),
+                                              id_receiver: widget.group.id,
+                                              id_chat: widget.group.id,
                                               images: _images,
-                                              type: 'chats',
+                                              type: 'rooms',
                                             );
                                             _images = [];
                                             _messageController.clear();
