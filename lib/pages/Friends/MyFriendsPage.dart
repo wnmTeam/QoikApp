@@ -68,17 +68,15 @@ class _FriendsRequestsPageState extends State<FriendsRequestsPage> {
         //TODO:Need Test
         child: friendRequests.length < 3 ?
         Center(
-          child: Text("You don't have any friend request",
-            style: TextStyle(
-                fontSize: MediaQuery
-                    .of(context)
-                    .size
-                    .width / 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.red
-            ),
-          ),
-        )
+                child: Text(
+                  Languages.translate(context, "no_requests"),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width / 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red),
+                ),
+              )
             :
         ListView.builder(
           itemCount: friendRequests.length,
