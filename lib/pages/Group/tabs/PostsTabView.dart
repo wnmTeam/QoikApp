@@ -1,10 +1,10 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:stumeapp/Models/Group.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/Models/Post.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
@@ -171,6 +171,7 @@ class _PostsTabState extends State<PostsTab>
               ),
             )
           : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
     );
   }
 
