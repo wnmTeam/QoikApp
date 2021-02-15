@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:emoji_pick/emoji_pick.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
@@ -67,6 +68,39 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
   bool isLoadingMembers = true;
   Map members = {};
   bool iamOut = false;
+
+  double emojiHeight = 0.0;
+  List<String> _tabsname = ["Face", "Fruits", "Fruits", "Asif"];
+  List<dynamic> _tabsemoji = [
+    ["☕", "❤", "☕", "☕", "☕", "❤"],
+    ["☕", "❤", "☕", "☕", "☕", "❤", "☕", "❤", "☕", "☕", "☕", "❤"],
+    [
+      "☕",
+      "❤",
+      "☕",
+      "☕",
+      "☕",
+      "❤",
+      "☕",
+      "❤",
+      "☕",
+      "☕",
+      "☕",
+      "❤",
+      "☕",
+      "❤",
+      "☕",
+      "☕",
+      "☕",
+      "❤",
+      "☕",
+      "❤",
+      "☕",
+      "☕",
+      "☕",
+      "❤"
+    ]
+  ];
 
   @override
   void initState() {
@@ -546,16 +580,23 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                           enableSuggestions: true,
                                           decoration: InputDecoration(
                                             contentPadding:
-                                                EdgeInsets.symmetric(
-                                                    vertical: 0, horizontal: 0),
+                                            EdgeInsets.symmetric(
+                                                vertical: 0, horizontal: 0),
                                             border: InputBorder.none,
                                             hintText: Languages.translate(
                                               context,
                                               'type_a_message',
                                             ),
                                             hintStyle:
-                                                TextStyle(color: Colors.grey),
+                                            TextStyle(color: Colors.grey),
                                           ),
+                                          onTap: () {
+                                            if (emojiHeight != 0.0) {
+                                              setState(() {
+                                                emojiHeight = 0.0;
+                                              });
+                                            }
+                                          },
                                         ),
                                       ),
                                       IconButton(
@@ -585,6 +626,22 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                               });
                                             }
                                           }),
+                                      // IconButton(
+                                      //     icon: Icon(Icons.emoji_emotions_outlined,
+                                      //         color: ConstValues.firstColor),
+                                      //     onPressed: ()  {
+                                      //       if(emojiHeight == 0.0){
+                                      //         setState(() {
+                                      //           emojiHeight = 255.0;
+                                      //         });
+                                      //       }
+                                      //       else{
+                                      //         setState(() {
+                                      //           emojiHeight = 0.0;
+                                      //         });
+                                      //       }
+                                      //     }
+                                      //     ),
                                     ],
                                   ),
                                 ),
@@ -634,6 +691,28 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                               ),
                             ],
                           ),
+                        ),
+                        // EmojiPicker(
+                        //   rows: 3,
+                        //   columns: 7,
+                        //   // recommendKeywords: ["racing", "horse"],
+                        //   // numRecommended: 10,
+                        //   onEmojiSelected: (emoji, category) {
+                        //     _messageController.text += "4" ;
+                        //     print(emoji);
+                        //   },
+                        // ),
+                        // EmojiKeyboard(
+                        //   onEmojiSelected: (emoji){
+                        //     _messageController.text += "4" ;
+                        //   },
+                        // ),
+                        Emojies(
+                            tabsname: _tabsname,
+                            tabsemoji: _tabsemoji,
+                            maxheight: emojiHeight,
+                            inputtext: _messageController,
+                            bgcolor: Colors.white
                         ),
                       ],
                     ),
