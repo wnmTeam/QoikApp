@@ -694,10 +694,9 @@ class _FriendWidgetState extends State<FriendWidget> {
                   color: Colors.indigo[200],
                   child: CachedNetworkImage(
                     imageUrl: _user.img,
-                    placeholder: (context, url) =>
-                        Center(
-                          child: Image.asset(ConstValues.userImage),
-                        ),
+                    placeholder: (context, url) => Center(
+                      child: Image.asset(ConstValues.userImage),
+                    ),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -705,19 +704,26 @@ class _FriendWidgetState extends State<FriendWidget> {
               SizedBox(
                 height: 4,
               ),
-              Text(
-                _user.firstName + ' ' + _user.secondName,
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.grey[700],
+              SizedBox(
+                width: 175,
+                child: Text(
+                  _user.firstName + ' ' + _user.secondName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.grey[700],
+                  ),
                 ),
               ),
               SizedBox(
-                width: 170,
+                width: 175,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 3.0),
                   child: Text(
                     _user.tag,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       color: Colors.grey,
                     ),
