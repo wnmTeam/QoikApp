@@ -84,9 +84,9 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
         return Container();
       case 'college':
       case 'graduate':
-        return _universityCollegeBuilder();
+        return Expanded(child: _universityCollegeBuilder());
       case 'master':
-        return _masterBuilder();
+        return Expanded(child: _masterBuilder());
       default:
         return Container();
     }
@@ -808,58 +808,55 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
       );
 
   _universityCollegeBuilder() {
-    return SizedBox(
-      width: width,
-      child: Column(
-        children: [
-          ListTile(
-            onTap: () {
-              _bottomSheetBuild(
-                'universities',
-                _authController.getUniversities(),
-              );
-            },
-            contentPadding: EdgeInsets.zero,
-            title: Text(Languages.translate(
-              context,
-              'university',
-            )),
-            subtitle: Text(_university == null
-                ? Languages.translate(
-                    context,
-                    'tap_to_select',
-                  )
-                : _university),
-            leading: Icon(Icons.account_balance_outlined),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          ListTile(
-            onTap: () {
-              _bottomSheetBuild(
-                'colleges',
-                _authController.getColleges(),
-              );
-            },
-            contentPadding: EdgeInsets.zero,
-            title: Text(Languages.translate(
-              context,
-              'college',
-            )),
-            subtitle: Text(_college == null
-                ? Languages.translate(
-                    context,
-                    'tap_to_select',
-                  )
-                : _college),
-            leading: Icon(Icons.account_balance_outlined),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        ListTile(
+          onTap: () {
+            _bottomSheetBuild(
+              'universities',
+              _authController.getUniversities(),
+            );
+          },
+          contentPadding: EdgeInsets.zero,
+          title: Text(Languages.translate(
+            context,
+            'university',
+          )),
+          subtitle: Text(_university == null
+              ? Languages.translate(
+                  context,
+                  'tap_to_select',
+                )
+              : _university),
+          leading: Icon(Icons.account_balance_outlined),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        ListTile(
+          onTap: () {
+            _bottomSheetBuild(
+              'colleges',
+              _authController.getColleges(),
+            );
+          },
+          contentPadding: EdgeInsets.zero,
+          title: Text(Languages.translate(
+            context,
+            'college',
+          )),
+          subtitle: Text(_college == null
+              ? Languages.translate(
+                  context,
+                  'tap_to_select',
+                )
+              : _college),
+          leading: Icon(Icons.account_balance_outlined),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+      ],
     );
   }
 
@@ -915,28 +912,25 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
     return Column(
       children: [
         _universityCollegeBuilder(),
-        SizedBox(
-          width: width,
-          child: ListTile(
-            onTap: () {
-              _bottomSheetBuild(
-                'old',
-                _authController.getUniversities(),
-              );
-            },
-            contentPadding: EdgeInsets.zero,
-            title: Text(Languages.translate(
-              context,
-              'old_university',
-            )),
-            subtitle: Text(_oldUniversity == null
-                ? Languages.translate(
-                    context,
-                    'tap_to_select',
-                  )
-                : _oldUniversity),
-            leading: Icon(Icons.account_balance_outlined),
-          ),
+        ListTile(
+          onTap: () {
+            _bottomSheetBuild(
+              'old',
+              _authController.getUniversities(),
+            );
+          },
+          contentPadding: EdgeInsets.zero,
+          title: Text(Languages.translate(
+            context,
+            'old_university',
+          )),
+          subtitle: Text(_oldUniversity == null
+              ? Languages.translate(
+            context,
+            'tap_to_select',
+          )
+              : _oldUniversity),
+          leading: Icon(Icons.account_balance_outlined),
         ),
         SizedBox(
           height: 20,
