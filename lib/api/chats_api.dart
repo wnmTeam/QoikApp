@@ -79,8 +79,7 @@ class ChatsApi {
         );
       }
 
-      if(doc != null)
-      {
+      if (doc != null) {
         String url = await _storageController.uploadMessageDoc(
           type: type,
           id_group: id_chat,
@@ -97,13 +96,13 @@ class ChatsApi {
     });
 
     return _notificationsApi.sendNotification(
-      Notification(
-        idSender: MyUser.myUser.id,
-        idReceiver: id_receiver,
-        data: message.text,
-        type: type,
-      ),
-    );
+        Notification(
+          idSender: MyUser.myUser.id,
+          idReceiver: id_receiver,
+          data: message.text,
+          type: type,
+        ),
+        type == 'chats' ? 'chatsNotifications' : 'roomsNotifications');
   }
 
   Stream getNewMessages({
@@ -211,5 +210,4 @@ class ChatsApi {
         .doc(id_room)
         .set({'img': url}, SetOptions(merge: true));
   }
-
 }

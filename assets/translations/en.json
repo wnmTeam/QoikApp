@@ -102,5 +102,9 @@
   "privacy": "Privacy Policy and Usage",
   "join_us": "Join Us",
   "change_lang": "Change the language",
-  "no_requests": "You don't have any friend request"
+  "no_requests": "You don't have any friend request",
+  "notifications": "Notifications",
+  "accept_friend_request": "Accept Your Request Friend, Now You Are Friends.",
+  "send_friend_request": "Send You A Friend Request"
+
 }

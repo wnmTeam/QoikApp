@@ -44,6 +44,7 @@ class FriendsApi {
         data: null,
         type: 'send_friend_request',
       ),
+      'notifications',
     );
   }
 
@@ -104,6 +105,7 @@ class FriendsApi {
         data: null,
         type: 'accept_friend_request',
       ),
+      'notifications',
     );
   }
 

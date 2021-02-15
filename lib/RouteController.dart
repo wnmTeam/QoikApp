@@ -11,6 +11,7 @@ import 'package:stumeapp/pages/Group/SelectMembersPage.dart';
 import 'package:stumeapp/pages/Group/WritePost.dart';
 import 'package:stumeapp/pages/Library/BookViewerPage.dart';
 import 'package:stumeapp/pages/Library/BooksLibraryPage.dart';
+import 'package:stumeapp/pages/Notification/NotificationsPage.dart';
 import 'package:stumeapp/pages/Profile/ChangePasswordPage.dart';
 import 'package:stumeapp/pages/Profile/ProfilePage.dart';
 import 'package:stumeapp/pages/RegesterLogin/RegisterLoginPage.dart';
@@ -99,6 +100,8 @@ class RouteController {
 
       case '/Settings':
         return MaterialPageRoute(builder: (_) => Settings());
+      case '/NotificationsPage':
+        return MaterialPageRoute(builder: (_) => NotificationsPage());
     }
   }
 }

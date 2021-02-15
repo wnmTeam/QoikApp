@@ -632,6 +632,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                           bio: 'Hey There.. I\'m a New User.',
                           recordDate: DateTime.now(),
                           email: _emailController.text,
+                          userTag: 'new_user'
                         ),
                       );
                     } catch (e) {

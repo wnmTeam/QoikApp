@@ -101,6 +101,10 @@
   "Graduates And Masters": "Mezunlar & Master",
   "privacy": "Privacy Policy and Usage",
   "join_us": "Join Us",
-  "change_lang": "تغيير اللغة",
-  "no_requests": "ليس لديك طلبات صداقة"
+  "change_lang": "Change the Language",
+  "no_requests": "No Requests",
+  "notifications": "Notifications",
+  "accept_friend_request": "Accept Your Request Friend, Now You Are Friends.",
+  "send_friend_request": "Send You A Friend Request"
+
 }

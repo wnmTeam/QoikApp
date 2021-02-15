@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/Notification.dart';
 
 class NotificationApi {
@@ -50,10 +51,30 @@ class NotificationApi {
     return tokens.delete();
   }
 
-  sendNotification(Notification notification) {
+  sendNotification(Notification notification, String type,) {
     Map m = notification.toMap();
     m[Notification.DATE] = FieldValue.serverTimestamp();
 
-    return _firestore.collection('notifications').add(m);
+    return _firestore.collection(type).add(m);
+  }
+
+  getNotifications({int limit, DocumentSnapshot last}) {
+    if (last != null)
+      return _firestore
+          .collection('notifications')
+          .where(Notification.ID_RECEIVER, isEqualTo: MyUser.myUser.id)
+          .orderBy(Notification.DATE, descending: true)
+
+          .startAfterDocument(last)
+          .limit(limit)
+          .get();
+
+    return _firestore
+        .collection('notifications')
+        .where(Notification.ID_RECEIVER, isEqualTo: MyUser.myUser.id)
+        .orderBy(Notification.DATE, descending: true)
+
+        .limit(limit)
+        .get();
   }
 }

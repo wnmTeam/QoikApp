@@ -81,6 +81,7 @@ class _HomePageState extends State<HomePage> {
         titleSpacing: 5,
         actions: [
           Badge(
+            badgeColor: ConstValues.accentColor,
             badgeContent: Text(
               '3',
               style: TextStyle(color: Colors.white),
@@ -88,10 +89,7 @@ class _HomePageState extends State<HomePage> {
             position: BadgePosition.topStart(top: 5, start: 5),
             child: IconButton(
               onPressed: () {
-                Toast.show("Coming soon", context,
-                    textColor: Colors.white,
-                    backgroundColor: ConstValues.accentColor,
-                    duration: Toast.LENGTH_LONG);
+                Navigator.pushNamed(context, '/NotificationsPage');
               },
               icon: Icon(
                 CupertinoIcons.bell_solid,
