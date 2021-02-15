@@ -241,7 +241,6 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                     setState(() {
                       logInErrorMessage = e.toString();
                     });
-                    // TODO
                   }
                 }
                 setState(() {
@@ -472,6 +471,8 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 ),
               ),
               MyDropdownButton(
+                //TODO: Add translation
+                //TODO 'hight school' is incorrect
                 items: [
                   'hight school',
                   'college',
