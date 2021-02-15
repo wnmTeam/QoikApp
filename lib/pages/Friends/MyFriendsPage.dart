@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
@@ -6,14 +8,11 @@ import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
 import 'package:stumeapp/controller/FriendsController.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-
 
 class FriendsRequestsPage extends StatefulWidget {
-  String id_user;
+  final String id_user;
 
   FriendsRequestsPage({this.id_user});
 
@@ -53,6 +52,7 @@ class _FriendsRequestsPageState extends State<FriendsRequestsPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(friendRequests);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -65,7 +65,22 @@ class _FriendsRequestsPageState extends State<FriendsRequestsPage> {
       ),
       body: RefreshIndicator(
         onRefresh: refresh,
-        child: ListView.builder(
+        //TODO:Need Test
+        child: friendRequests.length < 3 ?
+        Center(
+          child: Text("You don't have any friend request",
+            style: TextStyle(
+                fontSize: MediaQuery
+                    .of(context)
+                    .size
+                    .width / 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.red
+            ),
+          ),
+        )
+            :
+        ListView.builder(
           itemCount: friendRequests.length,
           itemBuilder: (context, index) {
             if (index == 0)
