@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/localization.dart';
 
 class MyDropdownButton extends StatefulWidget {
@@ -62,8 +63,8 @@ class _MyDropdownButtonState extends State<MyDropdownButton> {
 }
 
 class ResetDialog extends StatelessWidget {
-  TextEditingController resetEmailController;
-  Function onPressed;
+  final TextEditingController resetEmailController;
+  final Function onPressed;
 
   ResetDialog({this.resetEmailController, this.onPressed});
 
@@ -74,40 +75,59 @@ class ResetDialog extends StatelessWidget {
     return Dialog(
       child: Form(
         key: _formKey,
-        child: Column(
-          children: [
-            TextFormField(
-              controller: resetEmailController,
-              decoration: InputDecoration(
-                labelText: Languages.translate(
-                  context,
-                  'reset_email',
-                ),
-                border: OutlineInputBorder(),
-              ),
-              validator: (String value) {
-                if (value.isEmpty) {
-                  return Languages.translate(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                controller: resetEmailController,
+                decoration: InputDecoration(
+                  labelText: Languages.translate(
                     context,
-                    'email_is_Requered',
-                  );
-                }
-                return null;
-              },
-            ),
-            RaisedButton(
-              onPressed: () {
-                if (_formKey.currentState.validate()) {
-                  onPressed();
-                  Navigator.of(context).pop();
-                }
-              },
-              child: Text(Languages.translate(
-                context,
-                'done',
-              )),
-            )
-          ],
+                    'reset_email',
+                  ),
+                  border: OutlineInputBorder(),
+                ),
+                validator: (String value) {
+                  if (value.isEmpty) {
+                    return Languages.translate(
+                      context,
+                      'email_is_Requered',
+                    );
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              RaisedButton(
+                onPressed: () {
+                  if (_formKey.currentState.validate()) {
+                    onPressed();
+                    Navigator.of(context).pop();
+                  }
+                },
+                color: ConstValues.firstColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                child: Text(
+                  Languages.translate(
+                    context,
+                    'done',
+                  ),
+                  style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.width /
+                        ConstValues.fontSize_2,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -151,4 +171,3 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
     );
   }
 }
-
