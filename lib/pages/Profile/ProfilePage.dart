@@ -73,498 +73,482 @@ class MapScreenState extends State<ProfilePage> {
 
     return Scaffold(
         body: !chatLoading && !friendLoading
-            ? ListView(
-                children: <Widget>[
-                  Stack(
-                    children: [
-                      Container(
-                        height: 300.0,
-                        width: size.width,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(15),
-                            bottomRight: Radius.circular(11),
-                          ),
-                          color: ConstValues.firstColor[700],
+            ? SingleChildScrollView(
+                child: Stack(
+                  children: [
+                    Container(
+                      height: 300.0,
+                      width: size.width,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(15),
+                          bottomRight: Radius.circular(11),
                         ),
-                        child: Column(
-                          children: <Widget>[
-                            SizedBox(
-                              height: 40,
-                            ),
-                            Avatar(
-                              imagePath: widget.user.img,
-                              myProfile: isMyProfile,
-                              uploadImage: uploadImage,
-                              ubdateImagerofile: (img) async {
-                                setState(() {
-                                  uploadImage = true;
-                                });
-                                String url = await _storageController.uploadPic(
-                                  context,
-                                  img,
-                                  widget.user.id,
-                                );
-                                await _authController.setImageUrl(
-                                    id_user: widget.user.id, url: url);
-                                print(url);
-                                print(widget.user.id);
+                        color: ConstValues.firstColor[700],
+                      ),
+                      child: Column(
+                        children: <Widget>[
+                          SizedBox(
+                            height: 40,
+                          ),
+                          Avatar(
+                            imagePath: widget.user.img,
+                            myProfile: isMyProfile,
+                            uploadImage: uploadImage,
+                            ubdateImagerofile: (img) async {
+                              setState(() {
+                                uploadImage = true;
+                              });
+                              String url = await _storageController.uploadPic(
+                                context,
+                                img,
+                                widget.user.id,
+                              );
+                              await _authController.setImageUrl(
+                                  id_user: widget.user.id, url: url);
+                              print(url);
+                              print(widget.user.id);
 
-                                setState(() {
-                                  uploadImage = false;
-                                });
-                              },
+                              setState(() {
+                                uploadImage = false;
+                              });
+                            },
+                          ),
+                          SizedBox(
+                            height: 12,
+                          ),
+                          Text(
+                            widget.user.firstName +
+                                ' ' +
+                                widget.user.secondName,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
                             ),
-                            SizedBox(
-                              height: 12,
-                            ),
-                            Text(
-                              widget.user.firstName +
-                                  ' ' +
-                                  widget.user.secondName,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
+                          ),
+                          uploadImage
+                              ? SizedBox(
+                                  width: size.width / 2,
+                                  child: LinearProgressIndicator())
+                              : Container(),
+                          SizedBox(
+                            height: 8,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 240),
+                      child: Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            !isMyProfile
+                                ? Card(
+                                    margin: EdgeInsets.symmetric(
+                                      vertical: 15,
+                                      horizontal: 20,
+                                    ),
+                                    elevation: 3,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 16.0,
+                                        horizontal: 8,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          isFriend
+                                              ? FlatButton.icon(
+                                                  icon: Icon(
+                                                    Icons.person_remove,
+                                                    color: Colors.blueGrey,
+                                                  ),
+                                                  label:
+                                                      Text(Languages.translate(
+                                                    context,
+                                                    'remove_friend',
+                                                  )),
+                                                  onPressed: () async {
+                                                    await _friendsController
+                                                        .deleteFriend(
+                                                      id_user1:
+                                                          MyUser.myUser.id,
+                                                      id_user2: widget.user.id,
+                                                    );
+                                                    setState(() {
+                                                      isFriend = false;
+                                                    });
+                                                  },
+                                                )
+                                              : isRequested
+                                                  ? FlatButton.icon(
+                                                      color: Colors.grey[300],
+                                                      icon: Icon(
+                                                        Icons.person_remove,
+                                                        color: Colors.blueGrey,
+                                                      ),
+                                                      label: Text(
+                                                          Languages.translate(
+                                                        context,
+                                                        'cancel_reques',
+                                                      )),
+                                                      onPressed: () async {
+                                                        await _friendsController
+                                                            .deleteFriendRequest(
+                                                          id_user:
+                                                              widget.user.id,
+                                                          id_other:
+                                                              MyUser.myUser.id,
+                                                        );
+                                                        setState(() {
+                                                          isRequested = false;
+                                                        });
+                                                      },
+                                                    )
+                                                  : isHeRequeste
+                                                      ? FlatButton.icon(
+                                                          color:
+                                                              Colors.grey[300],
+                                                          icon: Icon(
+                                                            Icons.person_add,
+                                                            color:
+                                                                Colors.blueGrey,
+                                                          ),
+                                                          label: Text(Languages
+                                                              .translate(
+                                                            context,
+                                                            'accept',
+                                                          )),
+                                                          onPressed: () async {
+                                                            await _friendsController
+                                                                .acceptRequestFriend(
+                                                              id_requestSender:
+                                                                  widget
+                                                                      .user.id,
+                                                            );
+                                                            setState(() {
+                                                              isFriend = true;
+                                                            });
+                                                          },
+                                                        )
+                                                      : FlatButton.icon(
+                                                          icon: Icon(
+                                                            Icons.person_add,
+                                                            color:
+                                                                Colors.blueGrey,
+                                                          ),
+                                                          label: Text(Languages
+                                                              .translate(
+                                                            context,
+                                                            'add_friend',
+                                                          )),
+                                                          onPressed: () async {
+                                                            await _friendsController
+                                                                .sendRequestFriend(
+                                                              id_sender:
+                                                                  _authController
+                                                                      .getUser
+                                                                      .uid,
+                                                              id_receiver:
+                                                                  widget
+                                                                      .user.id,
+                                                            );
+                                                            setState(() {
+                                                              isRequested =
+                                                                  true;
+                                                            });
+                                                          },
+                                                        ),
+                                          FlatButton.icon(
+                                            icon: Icon(
+                                              CupertinoIcons.chat_bubble_fill,
+                                              color: Colors.blueGrey,
+                                            ),
+                                            label: Text(Languages.translate(
+                                              context,
+                                              'message',
+                                            )),
+                                            onPressed: () {
+                                              Navigator.pushNamed(
+                                                  context, '/ChatRoomPage',
+                                                  arguments: {
+                                                    'group': chat,
+                                                    'user': widget.user,
+                                                  });
+                                            },
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : Container(),
+                            Card(
+                              margin: EdgeInsets.all(20),
+                              elevation: 3,
+                              child: Padding(
+                                padding: const EdgeInsets.all(6.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        Languages.translate(
+                                          context,
+                                          'personal_info',
+                                        ),
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Column(
+                                            children: [
+                                              Image.asset(
+                                                _userTagImage(),
+                                                width: 50,
+                                                height: 50,
+                                                color: ConstValues.firstColor,
+                                              ),
+                                              Text(Languages.translate(
+                                                context,
+                                                widget.user.tag,
+                                              )),
+                                            ],
+                                          ),
+                                          Column(
+                                            children: [
+                                              Text(
+                                                widget.user.points.toString(),
+                                                style: TextStyle(
+                                                  color: ConstValues.firstColor,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 45,
+                                                ),
+                                              ),
+                                              Text(Languages.translate(
+                                                context,
+                                                'points',
+                                              )),
+                                            ],
+                                          ),
+                                          Column(
+                                            children: [
+                                              SvgPicture.asset(
+                                                'assets/${widget.user.gender}.svg',
+                                                width: 42,
+                                                height: 42,
+                                                color: ConstValues.firstColor,
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Text(Languages.translate(
+                                                context,
+                                                widget.user.gender,
+                                              )),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 18,
+                                    ),
+                                    SizedBox(
+                                        width: size.width - 24,
+                                        child: ListTile(
+                                          trailing: isMyProfile
+                                              ? IconButton(
+                                                  icon: Icon(
+                                                    !_editBio
+                                                        ? Icons.edit
+                                                        : Icons.save,
+                                                  ),
+                                                  onPressed: () {
+                                                    if (_editBio) {
+                                                      _authController.updateBio(
+                                                          _bioController.text);
+                                                    }
+                                                    setState(() {
+                                                      if (_editBio) {
+                                                        MyUser.myUser.bio =
+                                                            _bioController.text;
+                                                        widget.user.bio =
+                                                            _bioController.text;
+                                                      }
+                                                      _editBio = !_editBio;
+                                                    });
+                                                  },
+                                                )
+                                              : SizedBox(
+                                                  height: 2,
+                                                  width: 2,
+                                                ),
+                                          title: Text(Languages.translate(
+                                            context,
+                                            'bio',
+                                          )),
+                                          subtitle: TextField(
+                                            maxLines: 50,
+                                            autofocus: true,
+                                            minLines: 1,
+                                            style: TextStyle(
+                                              color: Colors.grey[600],
+                                              fontSize: 14,
+                                            ),
+                                            controller: _bioController,
+                                            readOnly: !_editBio,
+                                            decoration: InputDecoration(
+                                              contentPadding: EdgeInsets.zero,
+                                              border: InputBorder.none,
+                                            ),
+                                          ),
+                                        )),
+                                    SizedBox(
+                                        width: size.width - 24,
+                                        child: ListTile(
+                                          title: Text(Languages.translate(
+                                            context,
+                                            'university',
+                                          )),
+                                          subtitle:
+                                              Text(widget.user.university),
+                                        )),
+                                    SizedBox(
+                                        width: size.width - 24,
+                                        child: ListTile(
+                                          title: Text(Languages.translate(
+                                            context,
+                                            'college',
+                                          )),
+                                          subtitle: Text(widget.user.college),
+                                        )),
+                                    isMyProfile && widget.user.email != null
+                                        ? SizedBox(
+                                            width: size.width - 24,
+                                            child: ListTile(
+                                              title: Text(Languages.translate(
+                                                context,
+                                                'email',
+                                              )),
+                                              subtitle: Text(widget.user.email),
+                                            ))
+                                        : Container(),
+                                    isMyProfile
+                                        ? SizedBox(
+                                            width: size.width - 24,
+                                            child: ListTile(
+                                              trailing: IconButton(
+                                                icon: Icon(
+                                                  Icons.edit,
+                                                ),
+                                                onPressed: () {
+                                                  Navigator.pushNamed(context,
+                                                      '/ChangePasswordPage');
+                                                },
+                                              ),
+                                              title: Text(Languages.translate(
+                                                context,
+                                                'password',
+                                              )),
+                                              subtitle: TextField(
+                                                controller: TextEditingController(
+                                                    text:
+                                                        'rrrrrrrryuiodrcfvgbh'),
+                                                obscureText: true,
+                                                readOnly: true,
+                                                decoration: InputDecoration(
+                                                  contentPadding:
+                                                      EdgeInsets.zero,
+                                                  border: InputBorder.none,
+                                                ),
+                                              ),
+                                            ))
+                                        : Container(),
+                                  ],
+                                ),
                               ),
                             ),
-                            uploadImage
-                                ? SizedBox(
-                                    width: size.width / 2,
-                                    child: LinearProgressIndicator())
-                                : Container(),
-                            SizedBox(
-                              height: 8,
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                  isMyProfile
+                                      ? Languages.translate(
+                                          context,
+                                          'my_friends',
+                                        )
+                                      : Languages.translate(
+                                          context,
+                                          'friends',
+                                        ),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18)),
                             ),
+                            FutureBuilder(
+                                future: _friendsController.getFriends(
+                                  id: widget.user.id,
+                                  limit: 8,
+                                  last: null,
+                                ),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    List friends = snapshot.data.docs;
+
+                                    print(friends);
+                                    return SizedBox(
+                                      height: 260,
+                                      child: friends.length > 0
+                                          ? ListView.builder(
+                                              padding: EdgeInsets.all(8),
+                                              scrollDirection: Axis.horizontal,
+                                              itemCount: friends.length,
+                                              itemBuilder: (context, index) {
+                                                String id = friends[index].id;
+                                                print(friends[index].data());
+                                                return FriendWidget(
+                                                  id: id,
+                                                  isMyProfile: isMyProfile,
+                                                );
+                                              },
+                                            )
+                                          : Center(
+                                              child: Text(Languages.translate(
+                                              context,
+                                              'no_friends',
+                                            ))),
+                                    );
+                                  }
+                                  return SizedBox(
+                                    height: 250,
+                                    child: Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  );
+                                }),
+                            SizedBox(
+                              height: 25,
+                            )
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 240),
-                        child: Center(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              !isMyProfile
-                                  ? Card(
-                                      margin: EdgeInsets.symmetric(
-                                        vertical: 15,
-                                        horizontal: 20,
-                                      ),
-                                      elevation: 3,
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 16.0,
-                                          horizontal: 8,
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            isFriend
-                                                ? FlatButton.icon(
-                                                    icon: Icon(
-                                                      Icons.person_remove,
-                                                      color: Colors.blueGrey,
-                                                    ),
-                                                    label: Text(
-                                                        Languages.translate(
-                                                      context,
-                                                      'remove_friend',
-                                                    )),
-                                                    onPressed: () async {
-                                                      await _friendsController
-                                                          .deleteFriend(
-                                                        id_user1:
-                                                            MyUser.myUser.id,
-                                                        id_user2:
-                                                            widget.user.id,
-                                                      );
-                                                      setState(() {
-                                                        isFriend = false;
-                                                      });
-                                                    },
-                                                  )
-                                                : isRequested
-                                                    ? FlatButton.icon(
-                                                        color: Colors.grey[300],
-                                                        icon: Icon(
-                                                          Icons.person_remove,
-                                                          color:
-                                                              Colors.blueGrey,
-                                                        ),
-                                                        label: Text(
-                                                            Languages.translate(
-                                                          context,
-                                                          'cancel_reques',
-                                                        )),
-                                                        onPressed: () async {
-                                                          await _friendsController
-                                                              .deleteFriendRequest(
-                                                            id_user:
-                                                                widget.user.id,
-                                                            id_other: MyUser
-                                                                .myUser.id,
-                                                          );
-                                                          setState(() {
-                                                            isRequested = false;
-                                                          });
-                                                        },
-                                                      )
-                                                    : isHeRequeste
-                                                        ? FlatButton.icon(
-                                                            color: Colors
-                                                                .grey[300],
-                                                            icon: Icon(
-                                                              Icons.person_add,
-                                                              color: Colors
-                                                                  .blueGrey,
-                                                            ),
-                                                            label: Text(
-                                                                Languages
-                                                                    .translate(
-                                                              context,
-                                                              'accept',
-                                                            )),
-                                                            onPressed:
-                                                                () async {
-                                                              await _friendsController
-                                                                  .acceptRequestFriend(
-                                                                id_requestSender:
-                                                                    widget.user
-                                                                        .id,
-                                                              );
-                                                              setState(() {
-                                                                isFriend = true;
-                                                              });
-                                                            },
-                                                          )
-                                                        : FlatButton.icon(
-                                                            icon: Icon(
-                                                              Icons.person_add,
-                                                              color: Colors
-                                                                  .blueGrey,
-                                                            ),
-                                                            label: Text(
-                                                                Languages
-                                                                    .translate(
-                                                              context,
-                                                              'add_friend',
-                                                            )),
-                                                            onPressed:
-                                                                () async {
-                                                              await _friendsController
-                                                                  .sendRequestFriend(
-                                                                id_sender:
-                                                                    _authController
-                                                                        .getUser
-                                                                        .uid,
-                                                                id_receiver:
-                                                                    widget.user
-                                                                        .id,
-                                                              );
-                                                              setState(() {
-                                                                isRequested =
-                                                                    true;
-                                                              });
-                                                            },
-                                                          ),
-                                            FlatButton.icon(
-                                              icon: Icon(
-                                                CupertinoIcons.chat_bubble_fill,
-                                                color: Colors.blueGrey,
-                                              ),
-                                              label: Text(Languages.translate(
-                                                context,
-                                                'message',
-                                              )),
-                                              onPressed: () {
-                                                Navigator.pushNamed(
-                                                    context, '/ChatRoomPage',
-                                                    arguments: {
-                                                      'group': chat,
-                                                      'user': widget.user,
-                                                    });
-                                              },
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  : Container(),
-                              Card(
-                                margin: EdgeInsets.all(20),
-                                elevation: 3,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(6.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          Languages.translate(
-                                            context,
-                                            'personal_info',
-                                          ),
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 8,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Column(
-                                              children: [
-                                                Image.asset(
-                                                  _userTagImage(),
-                                                  width: 50,
-                                                  height: 50,
-                                                  color: ConstValues.firstColor,
-                                                ),
-                                                Text(Languages.translate(
-                                                  context,
-                                                  widget.user.tag,
-                                                )),
-                                              ],
-                                            ),
-                                            Column(
-                                              children: [
-                                                Text(
-                                                  widget.user.points.toString(),
-                                                  style: TextStyle(
-                                                    color:
-                                                        ConstValues.firstColor,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 45,
-                                                  ),
-                                                ),
-                                                Text(Languages.translate(
-                                                  context,
-                                                  'points',
-                                                )),
-                                              ],
-                                            ),
-                                            Column(
-                                              children: [
-                                                SvgPicture.asset(
-                                                  'assets/${widget.user.gender}.svg',
-                                                  width: 42,
-                                                  height: 42,
-                                                  color: ConstValues.firstColor,
-                                                ),
-                                                SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Text(Languages.translate(
-                                                  context,
-                                                  widget.user.gender,
-                                                )),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 18,
-                                      ),
-                                      SizedBox(
-                                          width: size.width - 24,
-                                          child: ListTile(
-                                            trailing: isMyProfile
-                                                ? IconButton(
-                                                    icon: Icon(
-                                                      !_editBio
-                                                          ? Icons.edit
-                                                          : Icons.save,
-                                                    ),
-                                                    onPressed: () {
-                                                      if (_editBio) {
-                                                        _authController
-                                                            .updateBio(
-                                                                _bioController
-                                                                    .text);
-                                                      }
-                                                      setState(() {
-                                                        if (_editBio) {
-                                                          MyUser.myUser.bio =
-                                                              _bioController
-                                                                  .text;
-                                                          widget.user.bio =
-                                                              _bioController
-                                                                  .text;
-                                                        }
-                                                        _editBio = !_editBio;
-                                                      });
-                                                    },
-                                                  )
-                                                : SizedBox(
-                                                    height: 2,
-                                                    width: 2,
-                                                  ),
-                                            title: Text(Languages.translate(
-                                              context,
-                                              'bio',
-                                            )),
-                                            subtitle: TextField(
-                                              maxLines: 50,
-                                              autofocus: true,
-                                              minLines: 1,
-                                              style: TextStyle(
-                                                color: Colors.grey[600],
-                                                fontSize: 14,
-                                              ),
-                                              controller: _bioController,
-                                              readOnly: !_editBio,
-                                              decoration: InputDecoration(
-                                                contentPadding: EdgeInsets.zero,
-                                                border: InputBorder.none,
-                                              ),
-                                            ),
-                                          )),
-                                      SizedBox(
-                                          width: size.width - 24,
-                                          child: ListTile(
-                                            title: Text(Languages.translate(
-                                              context,
-                                              'university',
-                                            )),
-                                            subtitle:
-                                                Text(widget.user.university),
-                                          )),
-                                      SizedBox(
-                                          width: size.width - 24,
-                                          child: ListTile(
-                                            title: Text(Languages.translate(
-                                              context,
-                                              'college',
-                                            )),
-                                            subtitle: Text(widget.user.college),
-                                          )),
-                                      isMyProfile && widget.user.email != null
-                                          ? SizedBox(
-                                              width: size.width - 24,
-                                              child: ListTile(
-                                                title: Text(Languages.translate(
-                                                  context,
-                                                  'email',
-                                                )),
-                                                subtitle:
-                                                    Text(widget.user.email),
-                                              ))
-                                          : Container(),
-                                      isMyProfile
-                                          ? SizedBox(
-                                              width: size.width - 24,
-                                              child: ListTile(
-                                                trailing: IconButton(
-                                                  icon: Icon(
-                                                    Icons.edit,
-                                                  ),
-                                                  onPressed: () {
-                                                    Navigator.pushNamed(context,
-                                                        '/ChangePasswordPage');
-                                                  },
-                                                ),
-                                                title: Text(Languages.translate(
-                                                  context,
-                                                  'password',
-                                                )),
-                                                subtitle: TextField(
-                                                  controller: TextEditingController(
-                                                      text:
-                                                          'rrrrrrrryuiodrcfvgbh'),
-                                                  obscureText: true,
-                                                  readOnly: true,
-                                                  decoration: InputDecoration(
-                                                    contentPadding:
-                                                        EdgeInsets.zero,
-                                                    border: InputBorder.none,
-                                                  ),
-                                                ),
-                                              ))
-                                          : Container(),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                    isMyProfile
-                                        ? Languages.translate(
-                                            context,
-                                            'my_friends',
-                                          )
-                                        : Languages.translate(
-                                            context,
-                                            'friends',
-                                          ),
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18)),
-                              ),
-                              FutureBuilder(
-                                  future: _friendsController.getFriends(
-                                    id: widget.user.id,
-                                    limit: 8,
-                                    last: null,
-                                  ),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasData) {
-                                      List friends = snapshot.data.docs;
-
-                                      print(friends);
-                                      return SizedBox(
-                                        height: 260,
-                                        child: friends.length > 0
-                                            ? ListView.builder(
-                                                padding: EdgeInsets.all(8),
-                                                scrollDirection:
-                                                    Axis.horizontal,
-                                                itemCount: friends.length,
-                                                itemBuilder: (context, index) {
-                                                  String id = friends[index].id;
-                                                  print(friends[index].data());
-                                                  return FriendWidget(
-                                                    id: id,
-                                                    isMyProfile: isMyProfile,
-                                                  );
-                                                },
-                                              )
-                                            : Center(
-                                                child: Text(Languages.translate(
-                                                context,
-                                                'no_friends',
-                                              ))),
-                                      );
-                                    }
-                                    return SizedBox(
-                                      height: 250,
-                                      child: Center(
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                    );
-                                  }),
-                              SizedBox(
-                                height: 25,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               )
             : Center(child: CircularProgressIndicator()));
   }
@@ -653,8 +637,8 @@ class MapScreenState extends State<ProfilePage> {
 }
 
 class FriendWidget extends StatefulWidget {
-  String id;
-  bool isMyProfile;
+  final String id;
+  final bool isMyProfile;
 
   FriendWidget({this.id, this.isMyProfile});
 
@@ -701,6 +685,7 @@ class _FriendWidgetState extends State<FriendWidget> {
           padding: const EdgeInsets.all(3.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Center(
                 child: Container(
@@ -709,9 +694,10 @@ class _FriendWidgetState extends State<FriendWidget> {
                   color: Colors.indigo[200],
                   child: CachedNetworkImage(
                     imageUrl: _user.img,
-                    placeholder: (context, url) => Center(
-                      child: Image.asset(ConstValues.userImage),
-                    ),
+                    placeholder: (context, url) =>
+                        Center(
+                          child: Image.asset(ConstValues.userImage),
+                        ),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -728,20 +714,14 @@ class _FriendWidgetState extends State<FriendWidget> {
               ),
               SizedBox(
                 width: 170,
-                height: 28,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 3.0),
-                      child: Text(
-                        _user.tag,
-                        style: TextStyle(
-                          color: Colors.grey,
-                        ),
-                      ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 3.0),
+                  child: Text(
+                    _user.tag,
+                    style: TextStyle(
+                      color: Colors.grey,
                     ),
-                  ],
+                  ),
                 ),
               )
             ],
