@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stumeapp/Models/Comment.dart';
 import 'package:stumeapp/Models/Group.dart';
@@ -16,6 +17,7 @@ import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/ImageView/ImageView.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 import 'package:toast/toast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'CommentWidget.dart';
 
@@ -192,9 +194,20 @@ class _PostWidgetState extends State<PostWidget>
                                   horizontal: 8.0,
                                   vertical: 10,
                                 ),
-                                child: Text(
-                                  post.text,
-                                  maxLines: _isExbended ? 1000 : 5,
+                                child: Linkify(
+                                  onOpen: (link) async {
+                                    if (await canLaunch(link.url)) {
+                                      await launch(link.url);
+                                    } else {
+                                      throw 'Could not launch $link';
+                                    }
+                                  },
+                                  linkStyle: TextStyle(
+                                    color: Colors.blue,
+                                  ),
+                                  options: LinkifyOptions(humanize: false),
+                                  text: post.text,
+                                  maxLines: _isExbended ? 10000 : 5,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     color: Colors.grey[700],

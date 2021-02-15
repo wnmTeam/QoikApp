@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:stumeapp/Models/Comment.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/MyUser.dart';
@@ -12,6 +13,7 @@ import 'package:stumeapp/controller/PostsController.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 import 'package:toast/toast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../const_values.dart';
 
@@ -94,9 +96,7 @@ class _CommentWidgetState extends State<CommentWidget> {
             borderRadius: BorderRadius.circular(57),
             child: CachedNetworkImage(
               placeholder: (context, url) => Center(
-                //TODO: Change the placeHolder
                 child: Image.asset(ConstValues.userImage),
-//                    child: Container(),
               ),
               imageUrl: user.img != null ? user.img : ConstValues.userImage,
               fit: BoxFit.cover,
@@ -119,8 +119,19 @@ class _CommentWidgetState extends State<CommentWidget> {
               Row(
                 children: [
                   Expanded(
-                    child: Text(
-                      widget.comment.text,
+                    child: Linkify(
+                      onOpen: (link) async {
+                        if (await canLaunch(link.url)) {
+                          await launch(link.url);
+                        } else {
+                          throw 'Could not launch $link';
+                        }
+                      },
+                      linkStyle: TextStyle(
+                        color: Colors.blue,
+                      ),
+                      options: LinkifyOptions(humanize: false),
+                      text: widget.comment.text,
                       style: TextStyle(
                         color: Colors.grey[700],
                       ),

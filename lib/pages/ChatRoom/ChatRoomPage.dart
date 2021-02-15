@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emoji_pick/emoji_pick.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/Message.dart';
 import 'package:stumeapp/Models/MyUser.dart';
@@ -13,6 +14,7 @@ import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 import 'package:stumeapp/pages/ImageView/ImageView.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../const_values.dart';
 import '../../localization.dart';
@@ -99,7 +101,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
       "☕",
       "☕",
       "❤"
-    ]
+    ],
   ];
 
   @override
@@ -289,9 +291,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                           padding: const EdgeInsets.all(2.0),
                           child: iamOut
                               ? Text(Languages.translate(
-                            context,
-                            'cant_send_messages',
-                          ))
+                                  context,
+                                  'cant_send_messages',
+                                ))
                               : Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             textDirection: TextDirection.ltr,
@@ -308,16 +310,16 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                           blurRadius: 5,
                                           color: Colors.grey)
                                     ],
-                                        ),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: [
-                                            IconButton(
-                                              icon: Icon(Icons.photo_camera,
-                                                  color:
-                                                      ConstValues.firstColor),
-                                              onPressed: () async {
+                                  ),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.end,
+                                    children: [
+                                      IconButton(
+                                        icon: Icon(Icons.photo_camera,
+                                            color:
+                                            ConstValues.firstColor),
+                                        onPressed: () async {
                                                 final pickedFile =
                                                     await _storageController
                                                         .getImageFromCamera();
@@ -692,28 +694,12 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                             ],
                           ),
                         ),
-                        // EmojiPicker(
-                        //   rows: 3,
-                        //   columns: 7,
-                        //   // recommendKeywords: ["racing", "horse"],
-                        //   // numRecommended: 10,
-                        //   onEmojiSelected: (emoji, category) {
-                        //     _messageController.text += "4" ;
-                        //     print(emoji);
-                        //   },
-                        // ),
-                        // EmojiKeyboard(
-                        //   onEmojiSelected: (emoji){
-                        //     _messageController.text += "4" ;
-                        //   },
-                        // ),
                         Emojies(
                             tabsname: _tabsname,
                             tabsemoji: _tabsemoji,
                             maxheight: emojiHeight,
                             inputtext: _messageController,
-                            bgcolor: Colors.white
-                        ),
+                            bgcolor: Colors.white),
                       ],
                     ),
                   ],
@@ -950,11 +936,28 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                   height: 4,
                 ),
                 if (message.text != null)
-                  Text(
-                    message.text,
+                // Text(
+                //   message.text,
+                //   style: TextStyle(
+                //       color: isSender ? Colors.white : Colors.black,
+                //       fontSize: 16),
+                // ),
+                  Linkify(
+                    onOpen: (link) async {
+                      if (await canLaunch(link.url)) {
+                        await launch(link.url);
+                      } else {
+                        throw 'Could not launch $link';
+                      }
+                    },
+                    linkStyle: TextStyle(color: isSender ? Colors.blue[900] :
+                    Colors.blue,),
+                    options: LinkifyOptions(humanize: false),
+                    text: message.text,
                     style: TextStyle(
                         color: isSender ? Colors.white : Colors.black,
                         fontSize: 16),
+
                   ),
                 SizedBox(
                   height: 1,
