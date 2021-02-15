@@ -757,36 +757,24 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
       return Container(
         margin: EdgeInsets.all(8),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Directionality.of(context) == TextDirection.ltr
-                ? _message(
-                message,
-                false,
-                ConstValues.chatFirstColor,
-                0,
-                10,
-                10,
-                10)
-                : _message(
-                message,
-                false,
-                ConstValues.chatFirstColor,
-                10,
-                10,
-                10,
-                0),
-            SizedBox(
-              width: 5,
-            ),
             _image(
                 widget.isRoom
                     ? members[message.idOwner].img
                     : widget.user.img != null
-                    ? widget.user.img
-                    : ConstValues.userImage,
+                        ? widget.user.img
+                        : ConstValues.userImage,
                 true),
+            SizedBox(
+              width: 5,
+            ),
+            Directionality.of(context) == TextDirection.ltr
+                ? _message(
+                    message, false, ConstValues.chatSecondColor, 10, 10, 10, 0)
+                : _message(
+                    message, false, ConstValues.chatSecondColor, 0, 10, 10, 10),
           ],
         ),
       );
@@ -797,30 +785,30 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
       return Container(
         margin: EdgeInsets.all(8),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _image(MyUser.myUser.img, true),
-            SizedBox(
-              width: 5,
-            ),
             Directionality.of(context) == TextDirection.ltr
                 ? _message(
                 message,
                 true,
-                ConstValues.chatSecondColor,
-                10,
-                10,
-                10,
-                0)
-                : _message(
-                message,
-                true,
-                ConstValues.chatSecondColor,
+                ConstValues.chatFirstColor,
                 0,
                 10,
                 10,
                 10)
+                : _message(
+                message,
+                true,
+                ConstValues.chatFirstColor,
+                10,
+                10,
+                10,
+                0),
+            SizedBox(
+              width: 5,
+            ),
+            _image(MyUser.myUser.img, true),
           ],
         ),
       );
@@ -837,7 +825,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment:
-            isSender ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+        isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Container(
             padding: EdgeInsets.all(4),
@@ -867,7 +855,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                       'deleted_user',
                     ),
                     style: TextStyle(
-                        color: !isSender ? Colors.white : Colors.black,
+                        color: !isSender ? Colors.black : Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 13),
                   ),
@@ -884,7 +872,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                   Text(
                     message.text,
                     style: TextStyle(
-                        color: isSender ? Colors.black : Colors.white,
+                        color: isSender ? Colors.white : Colors.black,
                         fontSize: 16),
                   ),
                 SizedBox(
@@ -895,7 +883,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                   child: Text(
                     message.date.hour.toString() + ":" + minute,
                     style: TextStyle(
-                      color: isSender ? Colors.black54 : Colors.white54,
+                      color: isSender ? Colors.white54 : Colors.black54,
                     ),
                   ),
                 ),
