@@ -64,7 +64,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
 
   Stream _getMessages;
   Widget chosenImages = Container();
-  bool isLoadingMembers = false;
+  bool isLoadingMembers = true;
   Map members = {};
   bool iamOut = false;
 
@@ -129,18 +129,19 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                     )),
                 leading: ClipRRect(
                   borderRadius: BorderRadius.circular(57),
-                  child: CachedNetworkImage(
-                    placeholder: (context, url) => Center(
-                      //TODO: Change the placeHolder
-                      child: Image.asset(ConstValues.userImage),
-//                    child: Container(),
+                  child: GestureDetector(
+                    onTap: () {},
+                    child: CachedNetworkImage(
+                      placeholder: (context, url) => Center(
+                        child: Image.asset(ConstValues.userImage),
+                      ),
+                      imageUrl: widget.group != null
+                          ? widget.group.img
+                          : ConstValues.userImage,
+                      fit: BoxFit.cover,
+                      width: 38,
+                      height: 38,
                     ),
-                    imageUrl: widget.group.img != null
-                        ? widget.group.img
-                        : ConstValues.userImage,
-                    fit: BoxFit.cover,
-                    width: 38,
-                    height: 38,
                   ),
                 ),
               ),
@@ -168,7 +169,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                     placeholder: (context, url) => Center(
                       child: Image.asset(ConstValues.userImage),
                     ),
-                    imageUrl: widget.user.img != null
+                    imageUrl: widget.user != null
                         ? widget.user.img
                         : ConstValues.userImage,
                     fit: BoxFit.cover,
@@ -263,16 +264,16 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                             children: [
                               Expanded(
                                 child: Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          boxShadow: [
-                                            BoxShadow(
-                                                offset: Offset(0, 3),
-                                                blurRadius: 5,
-                                                color: Colors.grey)
-                                          ],
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius:
+                                    BorderRadius.circular(10.0),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          offset: Offset(0, 3),
+                                          blurRadius: 5,
+                                          color: Colors.grey)
+                                    ],
                                         ),
                                         child: Row(
                                           crossAxisAlignment:
@@ -388,8 +389,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                                 _images.isEmpty) return;
                                             _chatController.addMessage(
                                               message: Message(
-                                                idOwner: _authController.getUser
-                                                    .uid,
+                                                idOwner:
+                                                _authController.getUser.uid,
                                                 text: _messageController.text
                                                     .trim()
                                                     .isEmpty
@@ -761,10 +762,12 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
           children: [
             _image(
                 widget.isRoom
+                    ? members[message.idOwner] != null
                     ? members[message.idOwner].img
-                    : widget.user.img != null
-                        ? widget.user.img
-                        : ConstValues.userImage,
+                    : ConstValues.userImage
+                    : widget.user != null
+                    ? widget.user.img
+                    : ConstValues.userImage,
                 true),
             SizedBox(
               width: 5,
