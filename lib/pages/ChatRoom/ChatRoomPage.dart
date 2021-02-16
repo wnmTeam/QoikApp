@@ -65,7 +65,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
 
   Size size;
 
-  Stream _getMessages;
+  // Stream _getMessages;
   Widget chosenImages = Container();
   bool isLoadingMembers = true;
   Map members = {};
@@ -352,6 +352,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                                 textAlign: TextAlign.start,
                                                 controller: _messageController,
                                                 enableSuggestions: true,
+                                                autocorrect: true,
                                                 decoration: InputDecoration(
                                                   contentPadding:
                                                       EdgeInsets.symmetric(

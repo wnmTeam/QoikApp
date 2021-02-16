@@ -27,16 +27,17 @@ class _FriendsRequestsPageState extends State<FriendsRequestsPage> {
   DocumentSnapshot lastDocument = null;
 
   FriendsController _friendsController = FriendsController();
-  AuthController _authController = AuthController();
 
-  List<DocumentSnapshot> friendRequests = [null, null];
+  // AuthController _authController = AuthController();
+
+  List<DocumentSnapshot> friendRequests = [];
 
   Future<void> refresh() {
     setState(() {
-      friendRequests = [
-        null,
-        null,
-      ];
+      // friendRequests = [
+      //   null,
+      //   null,
+      // ];
       hasMore = true;
       lastDocument = null;
     });
@@ -65,9 +66,8 @@ class _FriendsRequestsPageState extends State<FriendsRequestsPage> {
       ),
       body: RefreshIndicator(
         onRefresh: refresh,
-        //TODO:Need Test
-        child: friendRequests.length < 3 ?
-        Center(
+        child: friendRequests.isEmpty
+            ? Center(
                 child: Text(
                   Languages.translate(context, "no_requests"),
                   textAlign: TextAlign.center,
@@ -77,36 +77,89 @@ class _FriendsRequestsPageState extends State<FriendsRequestsPage> {
                       color: Colors.red),
                 ),
               )
-            :
-        ListView.builder(
-          itemCount: friendRequests.length,
-          itemBuilder: (context, index) {
-            if (index == 0)
-              return SizedBox(
-                height: 30,
-              );
-            else if (index == friendRequests.length - 1) {
-              if (isLoading)
-                return Center(child: CircularProgressIndicator());
-              else if (hasMore)
-                return FlatButton(
-                  onPressed: () {
-                    getFriendRequests();
-                  },
-                  child: Text(Languages.translate(
-                    context,
-                    'load_more',
-                  )),
-                );
-              return Container();
-            }
-            return RequestFriendWidget(friendRequests[index].id, () {
-              setState(() {
-                friendRequests.removeAt(index);
-              });
-            });
-          },
-        ),
+            : ListView.builder(
+                itemCount: friendRequests.length,
+                itemBuilder: (context, index) {
+                  return Column(
+                    children: [
+                      index == 0
+                          ? SizedBox(
+                              height: 30,
+                            )
+                          : Container(),
+                      RequestFriendWidget(friendRequests[index].id, () {
+                        setState(() {
+                          friendRequests.removeAt(index);
+                        });
+                      }),
+                      // if (index == 0)
+                      index == friendRequests.length - 1
+                          ? isLoading
+                              ? Center(child: CircularProgressIndicator())
+                              : hasMore
+                                  ? FlatButton(
+                                      onPressed: () {
+                                        getFriendRequests();
+                                      },
+                                      child: Text(Languages.translate(
+                                        context,
+                                        'load_more',
+                                      )),
+                                    )
+                                  : Container()
+                          : Container()
+                    ],
+                  );
+                  // else
+                  // if (index == friendRequests.length - 1) {
+                  // if (isLoading)
+                  // return Column(
+                  // children: [
+                  // RequestFriendWidget(friendRequests[index].id, () {
+                  // setState(() {
+                  // friendRequests.removeAt(index);
+                  // });
+                  // }),
+                  // Center(child: CircularProgressIndicator()),
+                  // ],
+                  // );
+                  // else if (hasMore)
+                  // return Column(
+                  // children: [
+                  // RequestFriendWidget(friendRequests[index].id, () {
+                  // setState(() {
+                  // friendRequests.removeAt(index);
+                  // });
+                  // }),
+                  // FlatButton(
+                  // onPressed: () {
+                  // getFriendRequests();
+                  // },
+                  // child: Text(Languages.translate(
+                  // context,
+                  // 'load_more',
+                  // )),
+                  // ),
+                  // ],
+                  // );
+                  // return Column(
+                  // children: [
+                  // RequestFriendWidget(friendRequests[index].id, () {
+                  // setState(() {
+                  // friendRequests.removeAt(index);
+                  // });
+                  // }),
+                  // Container(),
+                  // ],
+                  // );
+                  // }
+                  // return RequestFriendWidget(friendRequests[index].id, () {
+                  // setState(() {
+                  // friendRequests.removeAt(index);
+                  // });
+                  // });
+                },
+              ),
       ),
     );
   }
@@ -176,9 +229,7 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
               borderRadius: BorderRadius.circular(57),
               child: CachedNetworkImage(
                 placeholder: (context, url) => Center(
-                  //TODO: Change the placeHolder
                   child: Image.asset(ConstValues.userImage),
-//                    child: Container(),
                 ),
                 imageUrl: user.img != null ? user.img : ConstValues.userImage,
                 fit: BoxFit.cover,
@@ -212,6 +263,9 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
                   context,
                   'send_done',
                 ));
+
+                //TODO: If this create a chat with this user, We should
+                // delete it and create it in chats widgets like whatsapp
                 await _chatsController.createChat(
                   group: Group(
                     members: [
@@ -222,14 +276,15 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
                     name: '',
                   ).setId(getChatID()),
                 );
-                Navigator.pushNamed(
-                  context,
-                  '/ProfilePage',
-                  arguments: {
-                    'id_user': user.id,
-                    'user': user,
-                  },
-                );
+
+                // Navigator.pushNamed(
+                //   context,
+                //   '/ProfilePage',
+                //   arguments: {
+                //     'id_user': user.id,
+                //     'user': user,
+                //   },
+                // );
                 widget.deleteRequest();
               },
             ),

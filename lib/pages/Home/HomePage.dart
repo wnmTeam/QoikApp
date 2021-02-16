@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,7 +14,6 @@ import 'package:stumeapp/pages/Home/tabs/GroupsChatsTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/HomeTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/LibraryTabView.dart';
 import 'package:stumeapp/pages/Home/widgets/FABwithBottomAppBar.dart';
-import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
@@ -80,21 +78,13 @@ class _HomePageState extends State<HomePage> {
         centerTitle: false,
         titleSpacing: 5,
         actions: [
-          Badge(
-            badgeColor: ConstValues.accentColor,
-            badgeContent: Text(
-              '3',
-              style: TextStyle(color: Colors.white),
-            ),
-            position: BadgePosition.topStart(top: 5, start: 5),
-            child: IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/NotificationsPage');
-              },
-              icon: Icon(
-                CupertinoIcons.bell_solid,
-                color: Colors.white,
-              ),
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, '/NotificationsPage');
+            },
+            child: Icon(
+              CupertinoIcons.bell_solid,
+              color: Colors.white,
             ),
           ),
           IconButton(
