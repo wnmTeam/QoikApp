@@ -105,6 +105,6 @@
   "no_requests": "You don't have any friend request",
   "notifications": "Notifications",
   "accept_friend_request": "Accept Your Request Friend, Now You Are Friends.",
-  "send_friend_request": "Send You A Friend Request"
-
+  "send_friend_request": "Send You A Friend Request",
+  "text_copied": "The text copied"
 }

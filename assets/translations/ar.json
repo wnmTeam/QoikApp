@@ -105,5 +105,6 @@
   "no_requests": "ليس لديك طلبات صداقة",
   "notifications": "الإشعارات",
   "accept_friend_request": "وافق على طلب الصداقة الذي أرسلته، أصبحتما صديقين الآن.",
-  "send_friend_request": "أرسل إليك طلب صداقة"
+  "send_friend_request": "أرسل إليك طلب صداقة",
+  "text_copied": "تم نسخ النص"
 }
