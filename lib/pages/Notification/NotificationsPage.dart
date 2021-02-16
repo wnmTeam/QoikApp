@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/Notification.dart' as noti;
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/api/notification_api.dart';
@@ -41,6 +43,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
   @override
   void initState() {
+    _notificationsController.resetNotificationsCount(id_user: MyUser.myUser.id);
     getFriendRequests();
     super.initState();
   }
@@ -149,44 +152,57 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
             ..setId(widget.notification.idSender);
 
           return ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-            onTap: () {
-              switch (widget.notification.type) {
-                case 'send_friend_request':
-                  Navigator.pushNamed(context, '/MyFriendsPage');
-                  break;
-                case 'accept_friend_request':
-                  Navigator.of(context).pushNamed(
+              contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+              onTap: () {
+                switch (widget.notification.type) {
+                  case 'send_friend_request':
+                    Navigator.pushNamed(context, '/MyFriendsPage');
+                    break;
+                  case 'accept_friend_request':
+                    Navigator.of(context).pushNamed(
                       '/ProfilePage',
                       arguments: {
-                      'user': user,
-                      'id_user': user.id,
-                      },);
-                  break;
-              }
-            },
-            leading: ClipRRect(
-              borderRadius: BorderRadius.circular(57),
-              child: CachedNetworkImage(
-                placeholder: (context, url) => Center(
-                  //TODO: Change the placeHolder
-                  child: Image.asset(ConstValues.userImage),
+                        'user': user,
+                        'id_user': user.id,
+                      },
+                    );
+                    break;
+                }
+              },
+              leading: ClipRRect(
+                borderRadius: BorderRadius.circular(57),
+                child: CachedNetworkImage(
+                  placeholder: (context, url) => Center(
+                    //TODO: Change the placeHolder
+                    child: Image.asset(ConstValues.userImage),
+                  ),
+                  imageUrl: user.img != null ? user.img : ConstValues.userImage,
+                  fit: BoxFit.cover,
+                  width: 50,
+                  height: 50,
                 ),
-                imageUrl: user.img != null ? user.img : ConstValues.userImage,
-                fit: BoxFit.cover,
-                width: 45,
-                height: 45,
               ),
-            ),
-            title: Text(user.firstName +
-                ' ' +
-                user.secondName +
-                " " +
-                Languages.translate(
-                  context,
-                  widget.notification.type,
-                )),
-          );
+              title: Text(user.firstName +
+                  ' ' +
+                  user.secondName +
+                  " " +
+                  Languages.translate(
+                    context,
+                    widget.notification.type,
+                  )),
+              subtitle: Row(
+                children: [
+                  Icon(
+                    CupertinoIcons.calendar_today,
+                    size: 13,
+                    color: Colors.grey[600],
+                  ),
+                  SizedBox(
+                    width: 3,
+                  ),
+                  Text(widget.notification.getStringDate),
+                ],
+              ));
         }
         return UserPlaceholder();
       },

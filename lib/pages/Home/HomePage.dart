@@ -15,6 +15,7 @@ import 'package:stumeapp/pages/Home/tabs/HomeTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/LibraryTabView.dart';
 import 'package:stumeapp/pages/Home/widgets/FABwithBottomAppBar.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:badges/badges.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -78,15 +79,42 @@ class _HomePageState extends State<HomePage> {
         centerTitle: false,
         titleSpacing: 5,
         actions: [
-          GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, '/NotificationsPage');
-            },
-            child: Icon(
-              CupertinoIcons.bell_solid,
-              color: Colors.white,
-            ),
-          ),
+          StreamBuilder(
+              stream: _notificationApi.getUnreadNotificationsCount(
+                  id_user: MyUser.myUser.id),
+              builder: (context, snapshot) {
+                print(MyUser.myUser.id);
+
+                if (snapshot.hasData && snapshot.data.data() != null) {
+                  return Badge(
+                    showBadge: snapshot.data['count'] != 0,
+                    badgeColor: ConstValues.accentColor,
+                    badgeContent: Text(
+                      snapshot.data['count'].toString(),
+                      style: TextStyle(color: Colors.white, fontSize: 10,),
+                    ),
+                    position: BadgePosition.topStart(top: 8, start: 5),
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/NotificationsPage');
+                      },
+                      icon: Icon(
+                        CupertinoIcons.bell_solid,
+                        color: Colors.white,
+                      ),
+                    ),
+                  );
+                }
+                return IconButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/NotificationsPage');
+                  },
+                  icon: Icon(
+                    CupertinoIcons.bell_solid,
+                    color: Colors.white,
+                  ),
+                );
+              }),
           IconButton(
             icon: Icon(
               CupertinoIcons.chat_bubble_2_fill,
@@ -229,15 +257,13 @@ class _HomePageState extends State<HomePage> {
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(1000),
                                   child: CachedNetworkImage(
-                                    placeholder: (context, url) =>
-                                        Center(
-                                          child: Image.asset(
-                                              ConstValues.userImage),
-                                        ),
+                                    placeholder: (context, url) => Center(
+                                      child: Image.asset(ConstValues.userImage),
+                                    ),
                                     imageUrl:
-                                    !loading && MyUser.myUser.img != null
-                                        ? MyUser.myUser.img
-                                        : ConstValues.userImage,
+                                        !loading && MyUser.myUser.img != null
+                                            ? MyUser.myUser.img
+                                            : ConstValues.userImage,
                                     fit: BoxFit.cover,
                                     width: width / 4,
                                     height: width / 4,
@@ -256,7 +282,7 @@ class _HomePageState extends State<HomePage> {
                                           MyUser.myUser.secondName,
                                       style: TextStyle(
                                         fontSize:
-                                        width / ConstValues.fontSize_1,
+                                            width / ConstValues.fontSize_1,
                                       ),
                                     ),
                                     Text(
@@ -276,12 +302,11 @@ class _HomePageState extends State<HomePage> {
                       ListTile(
                         title: Text(link[0].title),
                         leading: Icon(link[0].icon),
-                        onTap: () async =>
-                        {
+                        onTap: () async => {
                           if (link[0].url != null)
                             {
-                              await launch(link[0].url).then(
-                                      (value) => print('url  ' + link[0].url))
+                              await launch(link[0].url)
+                                  .then((value) => print('url  ' + link[0].url))
                             }
                           else
                             {throw 'cant launch url'}
@@ -293,8 +318,8 @@ class _HomePageState extends State<HomePage> {
                         onTap: () async => {
                           if (link[1].url != null)
                             {
-                              await launch(link[1].url).then(
-                                      (value) => print('url  ' + link[1].url))
+                              await launch(link[1].url)
+                                  .then((value) => print('url  ' + link[1].url))
                             }
                           else
                             {throw 'cant launch url'}
@@ -306,8 +331,8 @@ class _HomePageState extends State<HomePage> {
                         onTap: () async => {
                           if (link[2].url != null)
                             {
-                              await launch(link[2].url).then(
-                                      (value) => print('url  ' + link[2].url))
+                              await launch(link[2].url)
+                                  .then((value) => print('url  ' + link[2].url))
                             }
                           else
                             {throw 'cant launch url'}
@@ -319,8 +344,8 @@ class _HomePageState extends State<HomePage> {
                         onTap: () async => {
                           if (link[3].url != null)
                             {
-                              await launch(link[3].url).then(
-                                      (value) => print('url  ' + link[3].url))
+                              await launch(link[3].url)
+                                  .then((value) => print('url  ' + link[3].url))
                             }
                           else
                             {throw 'cant launch url'}
@@ -376,15 +401,13 @@ class _HomePageState extends State<HomePage> {
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(1000),
                                 child: CachedNetworkImage(
-                                  placeholder: (context, url) =>
-                                      Center(
-                                        child: Image.asset(
-                                            ConstValues.userImage),
-                                      ),
+                                  placeholder: (context, url) => Center(
+                                    child: Image.asset(ConstValues.userImage),
+                                  ),
                                   imageUrl:
-                                  !loading && MyUser.myUser.img != null
-                                      ? MyUser.myUser.img
-                                      : ConstValues.userImage,
+                                      !loading && MyUser.myUser.img != null
+                                          ? MyUser.myUser.img
+                                          : ConstValues.userImage,
                                   fit: BoxFit.cover,
                                   width: width / 4,
                                   height: width / 4,
@@ -402,15 +425,14 @@ class _HomePageState extends State<HomePage> {
                                         ' ' +
                                         MyUser.myUser.secondName,
                                     style: TextStyle(
-                                      fontSize:
-                                      width / ConstValues.fontSize_1,
+                                      fontSize: width / ConstValues.fontSize_1,
                                     ),
                                   ),
                                   Text(
                                     Languages.translate(
                                         context,
                                         'my_profi'
-                                            'le'),
+                                        'le'),
                                     style: TextStyle(
                                       color: Colors.black45,
                                     ),
@@ -457,8 +479,8 @@ class _HomePageState extends State<HomePage> {
       body: !loading
           ? tabViews[_currentIndex]
           : Center(
-        child: CircularProgressIndicator(),
-      ),
+              child: CircularProgressIndicator(),
+            ),
     );
   }
 

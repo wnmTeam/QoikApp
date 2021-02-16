@@ -1,3 +1,6 @@
+import 'package:timeago/timeago.dart' as timeago;
+
+
 class Notification {
   static const String ID_SENDER = 'id_sender';
   static const String ID_RECEIVER = 'id_receiver';
@@ -21,11 +24,10 @@ class Notification {
   });
 
   String get getStringDate {
-    return date.day.toString() +
-        '/' +
-        date.month.toString() +
-        '/' +
-        date.year.toString();
+    DateTime now = DateTime.now();
+    DateTime def = now.subtract(now.difference(this.date));
+
+    return timeago.format(def);
   }
 
   Map<String, dynamic> toMap() => {

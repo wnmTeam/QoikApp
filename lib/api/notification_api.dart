@@ -51,11 +51,26 @@ class NotificationApi {
     return tokens.delete();
   }
 
-  sendNotification(Notification notification, String type,) {
+  sendNotification(
+    Notification notification,
+    String type,
+  ) {
     Map m = notification.toMap();
     m[Notification.DATE] = FieldValue.serverTimestamp();
 
-    return _firestore.collection(type).add(m);
+    WriteBatch batch = _firestore.batch();
+
+    if (notification.type != 'chats' && notification.type != 'rooms')
+      batch.set(
+        _firestore
+            .collection('notificationsCount')
+            .doc(notification.idReceiver),
+        {'count': FieldValue.increment(1)},
+      );
+
+    batch.set(_firestore.collection(type).doc(), m);
+
+    return batch.commit();
   }
 
   getNotifications({int limit, DocumentSnapshot last}) {
@@ -64,7 +79,6 @@ class NotificationApi {
           .collection('notifications')
           .where(Notification.ID_RECEIVER, isEqualTo: MyUser.myUser.id)
           .orderBy(Notification.DATE, descending: true)
-
           .startAfterDocument(last)
           .limit(limit)
           .get();
@@ -73,8 +87,18 @@ class NotificationApi {
         .collection('notifications')
         .where(Notification.ID_RECEIVER, isEqualTo: MyUser.myUser.id)
         .orderBy(Notification.DATE, descending: true)
-
         .limit(limit)
         .get();
+  }
+
+  Stream getUnreadNotificationsCount({String id_user}) {
+    return _firestore.collection('notificationsCount').doc(id_user).snapshots();
+  }
+
+  Future resetNotificationsCount({String id_user}) {
+    return _firestore
+        .collection('notificationsCount')
+        .doc(id_user)
+        .set({'count': 0});
   }
 }
