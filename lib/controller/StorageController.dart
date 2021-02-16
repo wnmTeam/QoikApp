@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:firebase_storage/firebase_storage.dart' as str;
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as str;
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stumeapp/Models/Group.dart';
@@ -68,11 +68,12 @@ class StorageController {
   }
 
   Future getImage() {
-    return ImagePicker().getImage(source: ImageSource.gallery);
+    return ImagePicker()
+        .getImage(source: ImageSource.gallery, imageQuality: 50);
   }
 
   Future getImageFromCamera() {
-    return ImagePicker().getImage(source: ImageSource.camera);
+    return ImagePicker().getImage(source: ImageSource.camera, imageQuality: 50);
   }
 
   Future getDoc() async {
