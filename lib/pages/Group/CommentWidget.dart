@@ -43,6 +43,7 @@ class _CommentWidgetState extends State<CommentWidget> {
   AuthController _authController = AuthController();
 
   User user;
+  bool _isCommentExpended = false;
 
   @override
   void initState() {
@@ -79,8 +80,7 @@ class _CommentWidgetState extends State<CommentWidget> {
         onLongPress: () {
           Clipboard.setData(ClipboardData(text: widget.comment.text))
               .then((value) {
-            //TODO : Translate
-            Toast.show('The text copied', context,
+            Toast.show(Languages.translate(context, 'text_copied'), context,
                 duration: Toast.LENGTH_LONG,
                 backgroundColor: ConstValues.firstColor,
                 textColor: Colors.white);
@@ -119,21 +119,30 @@ class _CommentWidgetState extends State<CommentWidget> {
               Row(
                 children: [
                   Expanded(
-                    child: Linkify(
-                      onOpen: (link) async {
-                        if (await canLaunch(link.url)) {
-                          await launch(link.url);
-                        } else {
-                          throw 'Could not launch $link';
-                        }
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          _isCommentExpended = !_isCommentExpended;
+                        });
                       },
-                      linkStyle: TextStyle(
-                        color: Colors.blue,
-                      ),
-                      options: LinkifyOptions(humanize: false),
-                      text: widget.comment.text,
-                      style: TextStyle(
-                        color: Colors.grey[700],
+                      child: Linkify(
+                        onOpen: (link) async {
+                          if (await canLaunch(link.url)) {
+                            await launch(link.url);
+                          } else {
+                            throw 'Could not launch $link';
+                          }
+                        },
+                        linkStyle: TextStyle(
+                          color: Colors.blue,
+                        ),
+                        options: LinkifyOptions(humanize: false),
+                        text: widget.comment.text,
+                        maxLines: _isCommentExpended ? 1000 : 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.grey[700],
+                        ),
                       ),
                     ),
                   ),

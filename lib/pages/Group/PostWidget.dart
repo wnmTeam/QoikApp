@@ -49,6 +49,7 @@ class _PostWidgetState extends State<PostWidget>
   bool isLoading = false;
 
   bool _isExbended = false;
+  bool _isCommentExpended = false;
 
   TextEditingController _commentController = TextEditingController();
 
@@ -179,8 +180,10 @@ class _PostWidgetState extends State<PostWidget>
                                 Clipboard.setData(
                                         ClipboardData(text: post.text))
                                     .then((value) {
-                                  //TODO : Translate
-                                  Toast.show('The text copied', context,
+                                  Toast.show(
+                                      Languages.translate(
+                                          context, 'text_copied'),
+                                      context,
                                       duration: Toast.LENGTH_LONG,
                                       backgroundColor: ConstValues.firstColor,
                                       textColor: Colors.white);
