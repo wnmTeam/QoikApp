@@ -547,6 +547,25 @@ class MapScreenState extends State<ProfilePage> {
                         ),
                       ),
                     ),
+                    Directionality.of(context) == TextDirection.ltr
+                        ? Positioned(
+                            top: 0,
+                            left: 0,
+                            child: SafeArea(
+                              child: BackButton(
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        : Positioned(
+                            top: 0,
+                            right: 0,
+                            child: SafeArea(
+                              child: BackButton(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
                   ],
                 ),
               )
