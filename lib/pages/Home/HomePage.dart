@@ -80,10 +80,11 @@ class _HomePageState extends State<HomePage> {
         titleSpacing: 5,
         actions: [
           StreamBuilder(
-              stream: _notificationApi.getUnreadNotificationsCount(
-                  id_user: MyUser.myUser.id),
+              stream: !loading
+                  ? _notificationApi.getUnreadNotificationsCount(
+                      id_user: MyUser.myUser.id)
+                  : null,
               builder: (context, snapshot) {
-                print(MyUser.myUser.id);
 
                 if (snapshot.hasData && snapshot.data.data() != null) {
                   return Badge(
@@ -91,7 +92,10 @@ class _HomePageState extends State<HomePage> {
                     badgeColor: ConstValues.accentColor,
                     badgeContent: Text(
                       snapshot.data['count'].toString(),
-                      style: TextStyle(color: Colors.white, fontSize: 10,),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                      ),
                     ),
                     position: BadgePosition.topStart(top: 8, start: 5),
                     child: IconButton(

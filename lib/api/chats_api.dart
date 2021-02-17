@@ -63,6 +63,7 @@ class ChatsApi {
         .collection('messages')
         .add(m)
         .then((value) async {
+      await updateLastActive(id_group: id_chat, type: type);
       for (int i = 0; i < images.length; i++) {
         String url = await _storageController.uploadMessageImage(
           type: type,
@@ -132,6 +133,7 @@ class ChatsApi {
       return _firestore
           .collection('chats')
           .where(Group.MEMBERS, arrayContains: id_user)
+          .orderBy(Group.LAST_ACTIVE, descending: true)
           .startAfterDocument(last)
           .limit(limit)
           .get();
@@ -139,6 +141,7 @@ class ChatsApi {
     return _firestore
         .collection('chats')
         .where(Group.MEMBERS, arrayContains: id_user)
+        .orderBy(Group.LAST_ACTIVE, descending: true)
         .limit(limit)
         .get();
   }
@@ -209,5 +212,14 @@ class ChatsApi {
         .collection('rooms')
         .doc(id_room)
         .set({'img': url}, SetOptions(merge: true));
+  }
+
+  updateLastActive({String id_group, String type}) {
+    return _firestore.collection(type).doc(id_group).set(
+      {Group.LAST_ACTIVE: FieldValue.serverTimestamp()},
+      SetOptions(
+        merge: true,
+      ),
+    );
   }
 }

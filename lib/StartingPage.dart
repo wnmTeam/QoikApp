@@ -27,11 +27,13 @@ class _StartingPageState extends State<StartingPage> {
     String versionCode = packageInfo.buildNumber;
     print(
         'ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd');
-    print(lastV);
+    print(lastV.data()['version']);
     print(versionName);
     print(versionCode);
     setState(() {
       canGo = lastV.data()['version'] == versionCode;
+      print(canGo);
+
       loading = false;
     });
   }

@@ -156,7 +156,9 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
               onTap: () {
                 switch (widget.notification.type) {
                   case 'send_friend_request':
-                    Navigator.pushNamed(context, '/MyFriendsPage');
+                    Navigator.pushNamed(context, '/MyFriendsPage', arguments: {
+                      'id_user': user.id,
+                    });
                     break;
                   case 'accept_friend_request':
                     Navigator.of(context).pushNamed(
