@@ -63,6 +63,8 @@ class _StartingPageState extends State<StartingPage> {
               ? StreamBuilder(
                   stream: _controller.authStream,
                   builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting)
+                      return waitingWidget();
                     if (snapshot.data == null)
                       return RegisterLoginPage();
                     else {
@@ -122,25 +124,27 @@ class _StartingPageState extends State<StartingPage> {
                     ),
                   ),
                 )
-          : Stack(
-              children: [
-                Positioned.fill(
-                  child: Image.asset(
-                    "assets/launchImage.png",
-                    fit: BoxFit.fill,
-                  ),
-                ),
-                Positioned(
-                  right: 0,
-                  left: 0,
-                  bottom: MediaQuery.of(context).size.height / 10,
-                  child: Center(
-                      child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                  )),
-                ),
-              ],
-            ),
+          : waitingWidget(),
     );
   }
+
+  waitingWidget() => Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              "assets/launchImage.png",
+              fit: BoxFit.fill,
+            ),
+          ),
+          Positioned(
+            right: 0,
+            left: 0,
+            bottom: MediaQuery.of(context).size.height / 10,
+            child: Center(
+                child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            )),
+          ),
+        ],
+      );
 }
