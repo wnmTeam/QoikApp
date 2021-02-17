@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
+import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/Home/HomePage.dart';
 import 'package:stumeapp/pages/RegesterLogin/RegisterLoginPage.dart';
 import 'package:stumeapp/pages/RegesterLogin/VerifyPage.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class StartingPage extends StatefulWidget {
   @override
@@ -19,6 +23,11 @@ class _StartingPageState extends State<StartingPage> {
 
   bool loading = true;
   bool canGo = false;
+  String appUrl = "";
+  String googlePlayUrl =
+      "https://play.google.com/store/apps/details?id=com.abosak.stumeapp";
+  String appStoreUrl =
+      "https://play.google.com/store/apps/details?id=com.abosak.stumeapp";
 
   _check() async {
     var lastV = await _controller.getLastVersion();
@@ -27,9 +36,10 @@ class _StartingPageState extends State<StartingPage> {
     String versionCode = packageInfo.buildNumber;
     print(
         'ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd');
-    print(lastV);
+    print(lastV.data()['version']);
     print(versionName);
     print(versionCode);
+    print(lastV.data()['version'] == versionCode);
     setState(() {
       canGo = lastV.data()['version'] == versionCode;
       loading = false;
@@ -38,6 +48,7 @@ class _StartingPageState extends State<StartingPage> {
 
   @override
   void initState() {
+    appUrl = Platform.isAndroid ? googlePlayUrl : appStoreUrl;
     _check();
     super.initState();
   }
@@ -59,16 +70,52 @@ class _StartingPageState extends State<StartingPage> {
                       return HomePage();
                     }
                   })
-              : Center(
+              : FractionallySizedBox(
+                  widthFactor: 1,
                   child: Container(
+                    color: ConstValues.firstColor,
                     child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        //TODO: Change the image
+                        Image.asset("assets/login.png"),
                         Text(
-                          'Please Update Qoiq And Try Again!',
+                          Languages.translate(context, "update_message"),
                           style: TextStyle(
-                              fontSize: ConstValues.fontSize_1,
-                              color: Colors.black),
-                        )
+                              fontSize: ConstValues.fontSize_2,
+                              color: Colors.white),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        RaisedButton(
+                          onPressed: () async => {
+                            if (appUrl != null)
+                              {
+                                await launch(appUrl)
+                                    .then((value) => print('url  ' + appUrl))
+                              }
+                            else
+                              {throw 'cant launch url'}
+                          },
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          padding:
+                              EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+                          color: Colors.white,
+                          child: Text(
+                            Languages.translate(
+                              context,
+                              'update_app',
+                            ),
+                            style: TextStyle(
+                              color: ConstValues.firstColor,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -85,7 +132,10 @@ class _StartingPageState extends State<StartingPage> {
                   right: 0,
                   left: 0,
                   bottom: MediaQuery.of(context).size.height / 10,
-                  child: Center(child: CircularProgressIndicator()),
+                  child: Center(
+                      child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  )),
                 ),
               ],
             ),
