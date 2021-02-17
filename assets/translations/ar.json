@@ -106,5 +106,7 @@
   "notifications": "الإشعارات",
   "accept_friend_request": "وافق على طلب الصداقة الذي أرسلته، أصبحتما صديقين الآن.",
   "send_friend_request": "أرسل إليك طلب صداقة",
-  "text_copied": "تم نسخ النص"
+  "text_copied": "تم نسخ النص",
+  "update_app": "تحديث التطبيق",
+  "update_message": "من فضلك قم بتحديث التطبيق"
 }
