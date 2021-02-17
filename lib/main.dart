@@ -33,7 +33,7 @@ class MyAppState extends State<MyApp> {
     myAppState = this;
     lang = storageController.getLang();
     print(lang);
-//    locale = Locale(lang);
+    locale = Locale(lang);
 
     return MaterialApp(
       title: 'Qoiq',
