@@ -24,6 +24,8 @@ class _StartingPageState extends State<StartingPage> {
   bool loading = true;
   bool canGo = false;
   String appUrl = "";
+
+  //TODO : Get the links from the server
   String googlePlayUrl =
       "https://play.google.com/store/apps/details?id=com.abosak.stumeapp";
   String appStoreUrl =
