@@ -106,5 +106,7 @@
   "notifications": "Notifications",
   "accept_friend_request": "Accept Your Request Friend, Now You Are Friends.",
   "send_friend_request": "Send You A Friend Request",
-  "text_copied": "تم نسخ النص"
+  "text_copied": "تم نسخ النص",
+  "update_app": "تحديث التطبيق",
+  "update_message": "من فضلك قم بتحديث التطبيق"
 }
