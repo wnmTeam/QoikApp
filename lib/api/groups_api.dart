@@ -46,7 +46,9 @@ class GroupsApi {
   }
 
   Future createGroup({Group group, List uids, File image}) async {
-    var d = await _firestore.collection('rooms').add(group.toMap());
+    Map m = group.toMap();
+    m[Group.LAST_ACTIVE] = FieldValue.serverTimestamp();
+    var d = await _firestore.collection('rooms').add(m);
     if (image != null) {
       String url = await _storageController.uploadRoomImage(
         id_room: d.id,

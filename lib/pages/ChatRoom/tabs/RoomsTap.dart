@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/const_values.dart';
@@ -16,6 +17,9 @@ class RoomsTab extends StatefulWidget {
 
 class _RoomsTabState extends State<RoomsTab>
     with AutomaticKeepAliveClientMixin {
+  ScrollController _scrollController = ScrollController();
+  bool _isVisible = true;
+
   bool isLoading = false;
   bool hasMore = true;
   int documentLimit = 10;
@@ -28,7 +32,27 @@ class _RoomsTabState extends State<RoomsTab>
 
   @override
   void initState() {
-//    getRooms();
+    _scrollController.addListener(() {
+      if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (_isVisible == true) {
+          print("**** ${_isVisible} up"); //Move IO away from setState
+          setState(() {
+            _isVisible = false;
+          });
+        }
+      } else {
+        if (_scrollController.position.userScrollDirection ==
+            ScrollDirection.forward) {
+          if (_isVisible == false) {
+            print("**** ${_isVisible} down"); //Move IO away from setState
+            setState(() {
+              _isVisible = true;
+            });
+          }
+        }
+      }
+    });
     super.initState();
   }
 
@@ -45,8 +69,51 @@ class _RoomsTabState extends State<RoomsTab>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: _isVisible
+          ? FloatingActionButton(
+              onPressed: () {
+                if (!_authController.isBan())
+                  Navigator.pushNamed(context, '/CreateGroupPage');
+                else
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text(Languages.translate(
+                            context,
+                            'blocked',
+                          )),
+                          actions: [
+                            FlatButton(
+                              onPressed: () {
+                                Navigator.pop(
+                                  context,
+                                );
+                              },
+                              child: Text(
+                                Languages.translate(
+                                  context,
+                                  'ok',
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      });
+              },
+              backgroundColor: ConstValues.firstColor,
+              child: Icon(
+                Icons.person_add,
+                color: Colors.white,
+              ),
+            )
+          : null,
       body: StreamBuilder(
-        stream: _chatsController.getRooms(id_user: MyUser.myUser.id, last: lastDocument, limit: documentLimit,),
+        stream: _chatsController.getRooms(
+          id_user: MyUser.myUser.id,
+          last: lastDocument,
+          limit: documentLimit,
+        ),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             rooms = snapshot.data.docs;
@@ -57,7 +124,8 @@ class _RoomsTabState extends State<RoomsTab>
                 return _chatBuilder(
                     context,
                     Group().fromMap(rooms[index].data())
-                      ..setId(rooms[index].id), index);
+                      ..setId(rooms[index].id),
+                    index);
               },
             );
           }

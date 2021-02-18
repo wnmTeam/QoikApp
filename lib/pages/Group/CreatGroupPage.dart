@@ -190,7 +190,7 @@ class _AvatarState extends State<Avatar> {
         ),
         Center(
           child: Padding(
-            padding: const EdgeInsets.only(top: 75, right: 40),
+            padding: const EdgeInsets.only(top: 115, right: 50),
             child: InkWell(
               onTap: () async {
                 final pickedFile = await _storageController.getImage();
