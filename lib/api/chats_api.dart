@@ -134,16 +134,16 @@ class ChatsApi {
           .collection('chats')
           .where(Group.MEMBERS, arrayContains: id_user)
           .orderBy(Group.LAST_ACTIVE, descending: true)
-          .startAfterDocument(last)
-          .limit(limit)
-          .get();
+//          .startAfterDocument(last)
+//          .limit(limit)
+          .snapshots();
 
     return _firestore
         .collection('chats')
         .where(Group.MEMBERS, arrayContains: id_user)
         .orderBy(Group.LAST_ACTIVE, descending: true)
-        .limit(limit)
-        .get();
+//        .limit(limit)
+        .snapshots();
   }
 
   Future createChat({Group group}) {
@@ -157,15 +157,18 @@ class ChatsApi {
       return _firestore
           .collection('rooms')
           .where(Group.MEMBERS, arrayContains: id)
-          .startAfterDocument(last)
-          .limit(limit)
-          .get();
+          .orderBy(Group.LAST_ACTIVE, descending: true)
+//          .startAfterDocument(last)
+//          .limit(limit)
+          .snapshots();
 
     return _firestore
         .collection('rooms')
         .where(Group.MEMBERS, arrayContains: id)
-        .limit(limit)
-        .get();
+        .orderBy(Group.LAST_ACTIVE, descending: true)
+
+//        .limit(limit)
+        .snapshots();
   }
 
   getChat(chatId) {

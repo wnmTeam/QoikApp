@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
+import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
@@ -10,7 +11,6 @@ import 'package:stumeapp/controller/ChatController.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/ImageView/ImageView.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
-
 
 class ChatsTab extends StatefulWidget {
   @override
@@ -21,8 +21,8 @@ class _ChatsTabState extends State<ChatsTab>
     with AutomaticKeepAliveClientMixin {
   bool isLoading = false;
   bool hasMore = true;
-  int documentLimit = 10;
-  DocumentSnapshot lastDocument = null;
+  int documentLimit = 1;
+  DocumentSnapshot lastDocument;
 
   AuthController _authController = AuthController();
   ChatController _chatsController = ChatController();
@@ -31,34 +31,32 @@ class _ChatsTabState extends State<ChatsTab>
 
   @override
   void initState() {
-    getChats();
+//    getChats();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: StreamBuilder(
+        stream: _chatsController.getChats(id_user: MyUser.myUser.id, last: lastDocument, limit: documentLimit,),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            chats = snapshot.data.docs;
 
-      body: ListView.builder(
-        itemCount: chats.length,
-        itemBuilder: (con, index) {
-          if (index == 0)
-            return SizedBox(
-              height: 20,
+            return ListView.builder(
+              itemCount: chats.length,
+              itemBuilder: (context, index) {
+                return _chatBuilder(
+                    context,
+                    Group().fromMap(chats[index].data())
+                      ..setId(chats[index].id));
+              },
             );
-          else if (index == chats.length - 1) {
-            if (isLoading)
-              return Center(child: CircularProgressIndicator());
-            else if (hasMore)
-              return FlatButton(
-                onPressed: () {
-                  getChats();
-                },
-                child: Text('Load More'),
-              );
-            return Container();
           }
-          return _chatBuilder(con, Group().fromMap(chats[index].data()));
+          return Center(
+            child: CircularProgressIndicator(),
+          );
         },
       ),
     );
@@ -97,7 +95,7 @@ class _ChatsTabState extends State<ChatsTab>
                   width: 57,
                   height: 57,
                 ),
-                ),
+              ),
               // ),
             ),
             title: Text(user.firstName + ' ' + user.secondName),

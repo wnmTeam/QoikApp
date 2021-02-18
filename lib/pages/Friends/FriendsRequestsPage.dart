@@ -264,19 +264,6 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
                   'send_done',
                 ));
 
-                //TODO: If this create a chat with this user, We should
-                // delete it and create it in chats widgets like whatsapp
-                await _chatsController.createChat(
-                  group: Group(
-                    members: [
-                      user.id,
-                      _authController.getUser.uid,
-                    ],
-                    type: Group.TYPE_CHAT,
-                    name: '',
-                  ).setId(getChatID()),
-                );
-
                 // Navigator.pushNamed(
                 //   context,
                 //   '/ProfilePage',

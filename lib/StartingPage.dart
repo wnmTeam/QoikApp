@@ -65,8 +65,9 @@ class _StartingPageState extends State<StartingPage> {
               ? StreamBuilder(
                   stream: _controller.authStream,
                   builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting)
-                      return waitingWidget();
+                    print('fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff');
+//                    if (snapshot.connectionState == ConnectionState.waiting)
+//                      return waitingWidget();
                     if (snapshot.data == null)
                       return RegisterLoginPage();
                     else {

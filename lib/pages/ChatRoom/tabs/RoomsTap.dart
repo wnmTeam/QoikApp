@@ -28,7 +28,7 @@ class _RoomsTabState extends State<RoomsTab>
 
   @override
   void initState() {
-    getRooms();
+//    getRooms();
     super.initState();
   }
 
@@ -45,68 +45,90 @@ class _RoomsTabState extends State<RoomsTab>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: refresh,
-        child: ListView.builder(
-          itemCount: rooms.length,
-          itemBuilder: (con, index) {
-            //TODO: remove first item
-            if (index == 0)
-              return ListTile(
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 5, horizontal: 30),
-                leading: Icon(Icons.group),
-                title: Text('Create Group'),
-                onTap: () {
-                  if (!_authController.isBan())
-                    Navigator.pushNamed(context, '/CreateGroupPage');
-                  else
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text(Languages.translate(
-                              context,
-                              'blocked',
-                            )),
-                            actions: [
-                              FlatButton(
-                                onPressed: () {
-                                  Navigator.pop(
-                                    context,
-                                  );
-                                },
-                                child: Text(
-                                  Languages.translate(
-                                    context,
-                                    'ok',
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
-                        });
-                },
-              );
-            else if (index == rooms.length - 1) {
-              if (isLoading)
-                return Center(child: CircularProgressIndicator());
-              else if (hasMore)
-                return FlatButton(
-                  onPressed: () {
-                    getRooms();
-                  },
-                  child: Text('Loade More'),
-                );
-              return Container();
-            }
-            return _chatBuilder(
-                con,
-                Group().fromMap(rooms[index].data())..setId(rooms[index].id),
-                index);
-          },
-        ),
+      body: StreamBuilder(
+        stream: _chatsController.getRooms(id_user: MyUser.myUser.id, last: lastDocument, limit: documentLimit,),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            rooms = snapshot.data.docs;
+
+            return ListView.builder(
+              itemCount: rooms.length,
+              itemBuilder: (context, index) {
+                return _chatBuilder(
+                    context,
+                    Group().fromMap(rooms[index].data())
+                      ..setId(rooms[index].id), index);
+              },
+            );
+          }
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        },
       ),
+
+//      body: RefreshIndicator(
+//        onRefresh: refresh,
+//        child: ListView.builder(
+//          itemCount: rooms.length,
+//          itemBuilder: (con, index) {
+//            //TODO: remove first item
+//            if (index == 0)
+//              return ListTile(
+//                contentPadding:
+//                    EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+//                leading: Icon(Icons.group),
+//                title: Text('Create Group'),
+//                onTap: () {
+//                  if (!_authController.isBan())
+//                    Navigator.pushNamed(context, '/CreateGroupPage');
+//                  else
+//                    showDialog(
+//                        context: context,
+//                        builder: (context) {
+//                          return AlertDialog(
+//                            title: Text(Languages.translate(
+//                              context,
+//                              'blocked',
+//                            )),
+//                            actions: [
+//                              FlatButton(
+//                                onPressed: () {
+//                                  Navigator.pop(
+//                                    context,
+//                                  );
+//                                },
+//                                child: Text(
+//                                  Languages.translate(
+//                                    context,
+//                                    'ok',
+//                                  ),
+//                                ),
+//                              ),
+//                            ],
+//                          );
+//                        });
+//                },
+//              );
+//            else if (index == rooms.length - 1) {
+//              if (isLoading)
+//                return Center(child: CircularProgressIndicator());
+//              else if (hasMore)
+//                return FlatButton(
+//                  onPressed: () {
+//                    getRooms();
+//                  },
+//                  child: Text('Loade More'),
+//                );
+//              return Container();
+//            }
+//            return _chatBuilder(
+//                con,
+//                Group().fromMap(rooms[index].data())..setId(rooms[index].id),
+//                index);
+//          },
+//        ),
+//      ),
     );
   }
 
