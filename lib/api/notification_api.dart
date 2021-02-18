@@ -54,18 +54,38 @@ class NotificationApi {
   sendNotification(
     Notification notification,
     String type,
+    String id_group,
   ) {
     Map m = notification.toMap();
     m[Notification.DATE] = FieldValue.serverTimestamp();
 
     WriteBatch batch = _firestore.batch();
 
-    if (notification.type != 'chats' && notification.type != 'rooms')
+    if (notification.type == 'chats')
+      batch.set(
+        _firestore
+            .collection('chatsNotificationsCount')
+            .doc(id_group)
+            .collection('count')
+            .doc(notification.idReceiver),
+        {'count': FieldValue.increment(1)},
+        SetOptions(merge: true),
+      );
+//    else if (notification.type == 'rooms')
+//      batch.set(
+//        _firestore
+//            .collection('roomsNotificationsCount')
+//            .doc(id_group)
+//            .collection('count')
+//            .doc(notification.idReceiver),
+//        {'count': FieldValue.increment(1)},
+//      );
+    else
       batch.set(
         _firestore
             .collection('notificationsCount')
             .doc(notification.idReceiver),
-        {'count': FieldValue.increment(1)},
+        {'count': FieldValue.increment(1)},SetOptions(merge: true),
       );
 
     batch.set(_firestore.collection(type).doc(), m);
@@ -100,5 +120,25 @@ class NotificationApi {
         .collection('notificationsCount')
         .doc(id_user)
         .set({'count': 0});
+  }
+
+  void resetGroupNotificationsCount(
+      {String id_user, String id_group, String type}) {
+    _firestore
+        .collection(type)
+        .doc(id_group)
+        .collection('count')
+        .doc(id_user)
+        .set({'count': 0});
+  }
+
+  Stream getUnreadGroupNotificationsCount(
+      {String id_user, String id_group, String type}) {
+    return _firestore
+        .collection(type)
+        .doc(id_group)
+        .collection('count')
+        .doc(id_user)
+        .snapshots();
   }
 }

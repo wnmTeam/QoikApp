@@ -5,12 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
+import 'package:stumeapp/api/notification_api.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/ImageView/ImageView.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
+import 'package:badges/badges.dart';
+
 
 class ChatsTab extends StatefulWidget {
   @override
@@ -26,6 +29,7 @@ class _ChatsTabState extends State<ChatsTab>
 
   AuthController _authController = AuthController();
   ChatController _chatsController = ChatController();
+  NotificationApi _notificationController = NotificationApi();
 
   List<DocumentSnapshot> chats = [null, null];
 
@@ -39,7 +43,11 @@ class _ChatsTabState extends State<ChatsTab>
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder(
-        stream: _chatsController.getChats(id_user: MyUser.myUser.id, last: lastDocument, limit: documentLimit,),
+        stream: _chatsController.getChats(
+          id_user: MyUser.myUser.id,
+          last: lastDocument,
+          limit: documentLimit,
+        ),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             chats = snapshot.data.docs;
@@ -113,6 +121,33 @@ class _ChatsTabState extends State<ChatsTab>
                 },
               );
             },
+            trailing: StreamBuilder(
+                stream:
+                    _notificationController.getUnreadGroupNotificationsCount(
+                  id_user: MyUser.myUser.id,
+                  id_group: group.id,
+                  type: 'chatsNotificationsCount',
+                ),
+                builder: (context, snapshot) {
+                  int messageCount = 0;
+                  if (snapshot.hasData && snapshot.data.data() != null) {
+                    messageCount = snapshot.data.data()['count'];
+                    print(messageCount);
+                  }
+                  return  Badge(
+                    showBadge: messageCount != 0,
+                    badgeColor: ConstValues.accentColor,
+                    badgeContent: Text(
+                     messageCount.toString(),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                      ),
+                    ),
+                    position: BadgePosition.topStart(top: 0, start: -10),
+                    child: Container(width: 15,height: 15,),
+                  );
+                }),
           );
         }
         return UserPlaceholder();

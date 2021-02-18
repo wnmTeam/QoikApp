@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/Models/Group.dart';
-import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 
 import 'auth.dart';
@@ -38,6 +37,7 @@ class GroupsApi {
       return reference.startAfterDocument(last).limit(limit).get();
     }
   }
+
 
   addMemberToRoom({uids, String id_group}) async {
     return _firestore.collection('rooms').doc(id_group).set({

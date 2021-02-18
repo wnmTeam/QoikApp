@@ -10,6 +10,7 @@ import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/Message.dart';
 import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
+import 'package:stumeapp/api/notification_api.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
@@ -60,6 +61,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
 
   StorageController _storageController = StorageController();
 
+  NotificationApi _notificationController = NotificationApi();
+
   bool creatingChat = true;
 
   List<File> _images = [];
@@ -93,92 +96,114 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
     } else
       createChat();
 
+    updateNotificationCount(
+      id_group: widget.group.id,
+      id_user: MyUser.myUser.id,
+    );
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    updateNotificationCount(
+      id_group: widget.group.id,
+      id_user: MyUser.myUser.id,
+    );
+    super.dispose();
+  }
+
+  @override
+  void deactivate() {
+    updateNotificationCount(
+      id_group: widget.group.id,
+      id_user: MyUser.myUser.id,
+    );
+    super.deactivate();
   }
 
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: widget.isRoom
-          ? AppBar(
-              actions: <Widget>[
-                PopupMenuButton<String>(
-                  onSelected: handleClick,
-                  itemBuilder: (BuildContext context) {
-                    return {
-                      Languages.translate(
-                        context,
-                        'group_info',
-                      ),
-                      Languages.translate(
-                        context,
-                        'exit_group',
-                      )
-                    }.map((String choice) {
-                      return PopupMenuItem<String>(
-                        value: choice,
-                        child: Text(choice),
-                      );
-                    }).toList();
+        appBar: widget.isRoom
+            ? AppBar(
+                actions: <Widget>[
+                  PopupMenuButton<String>(
+                    onSelected: handleClick,
+                    itemBuilder: (BuildContext context) {
+                      return {
+                        Languages.translate(
+                          context,
+                          'group_info',
+                        ),
+                        Languages.translate(
+                          context,
+                          'exit_group',
+                        )
+                      }.map((String choice) {
+                        return PopupMenuItem<String>(
+                          value: choice,
+                          child: Text(choice),
+                        );
+                      }).toList();
+                    },
+                  ),
+                ],
+                title: ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      '/RoomInfoPage',
+                      arguments: {'group': widget.group},
+                    );
                   },
+                  title: Text(widget.group.name,
+                      style: TextStyle(
+                        color: Colors.white,
+                      )),
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(57),
+                    child: GestureDetector(
+                      onTap: () {},
+                      child: CachedNetworkImage(
+                        placeholder: (context, url) => Center(
+                          child: Image.asset(ConstValues.userImage),
+                        ),
+                        imageUrl: widget.group != null
+                            ? widget.group.img
+                            : ConstValues.userImage,
+                        fit: BoxFit.cover,
+                        width: 38,
+                        height: 38,
+                      ),
+                    ),
+                  ),
                 ),
-              ],
-              title: ListTile(
-                contentPadding: EdgeInsets.zero,
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    '/RoomInfoPage',
-                    arguments: {'group': widget.group},
-                  );
-                },
-                title: Text(widget.group.name,
-                    style: TextStyle(
-                      color: Colors.white,
-                    )),
-                leading: ClipRRect(
-                  borderRadius: BorderRadius.circular(57),
-                  child: GestureDetector(
-                    onTap: () {},
+              )
+            : AppBar(
+                title: ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  onTap: () {
+                    Navigator.of(context).pushNamed('/ProfilePage', arguments: {
+                      'user': widget.user,
+                      'id_user': widget.user.id,
+                    });
+                  },
+                  title: Text(
+                    widget.user.firstName + ' ' + widget.user.secondName,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  // subtitle: Text(
+                  //   widget.user.enterCount.toString(),
+                  //   style: TextStyle(color: Colors.white),
+                  // ),
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(57),
                     child: CachedNetworkImage(
                       placeholder: (context, url) => Center(
                         child: Image.asset(ConstValues.userImage),
                       ),
-                      imageUrl: widget.group != null
-                          ? widget.group.img
-                          : ConstValues.userImage,
-                      fit: BoxFit.cover,
-                      width: 38,
-                      height: 38,
-                    ),
-                  ),
-                ),
-              ),
-            )
-          : AppBar(
-              title: ListTile(
-                contentPadding: EdgeInsets.zero,
-                onTap: () {
-                  Navigator.of(context).pushNamed('/ProfilePage', arguments: {
-                    'user': widget.user,
-                    'id_user': widget.user.id,
-                  });
-                },
-                title: Text(
-                  widget.user.firstName + ' ' + widget.user.secondName,
-                  style: TextStyle(color: Colors.white),
-                ),
-                // subtitle: Text(
-                //   widget.user.enterCount.toString(),
-                //   style: TextStyle(color: Colors.white),
-                // ),
-                leading: ClipRRect(
-                  borderRadius: BorderRadius.circular(57),
-                  child: CachedNetworkImage(
-                    placeholder: (context, url) => Center(
-                      child: Image.asset(ConstValues.userImage),
-                    ),
                       imageUrl: widget.user != null
                           ? widget.user.img
                           : ConstValues.userImage,
@@ -862,11 +887,11 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             _image(
                 widget.isRoom
                     ? members[message.idOwner] != null
-                    ? members[message.idOwner].img
-                    : ConstValues.userImage
+                        ? members[message.idOwner].img
+                        : ConstValues.userImage
                     : widget.user != null
-                    ? widget.user.img
-                    : ConstValues.userImage,
+                        ? widget.user.img
+                        : ConstValues.userImage,
                 true),
             SizedBox(
               width: 5,
@@ -891,21 +916,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
           children: [
             Directionality.of(context) == TextDirection.ltr
                 ? _message(
-                message,
-                true,
-                ConstValues.chatFirstColor,
-                0,
-                10,
-                10,
-                10)
+                    message, true, ConstValues.chatFirstColor, 0, 10, 10, 10)
                 : _message(
-                message,
-                true,
-                ConstValues.chatFirstColor,
-                10,
-                10,
-                10,
-                0),
+                    message, true, ConstValues.chatFirstColor, 10, 10, 10, 0),
             SizedBox(
               width: 5,
             ),
@@ -926,7 +939,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment:
-        isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Container(
             padding: EdgeInsets.all(4),
@@ -945,37 +958,37 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
               children: [
                 widget.isRoom
                     ? Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Text(
-                    members[message.idOwner] != null
-                        ? members[message.idOwner].firstName +
-                        ' ' +
-                        members[message.idOwner].secondName
-                        : Languages.translate(
-                      context,
-                      'deleted_user',
-                    ),
-                    style: TextStyle(
-                        color: !isSender ? Colors.black : Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13),
-                  ),
-                )
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          members[message.idOwner] != null
+                              ? members[message.idOwner].firstName +
+                                  ' ' +
+                                  members[message.idOwner].secondName
+                              : Languages.translate(
+                                  context,
+                                  'deleted_user',
+                                ),
+                          style: TextStyle(
+                              color: !isSender ? Colors.black : Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13),
+                        ),
+                      )
                     : SizedBox(
-                  width: 1,
-                ),
+                        width: 1,
+                      ),
                 if (message.images != null)
                   chatImageBuilder(message.images, message.text != null),
                 SizedBox(
                   height: 4,
                 ),
                 if (message.text != null)
-                // Text(
-                //   message.text,
-                //   style: TextStyle(
-                //       color: isSender ? Colors.white : Colors.black,
-                //       fontSize: 16),
-                // ),
+                  // Text(
+                  //   message.text,
+                  //   style: TextStyle(
+                  //       color: isSender ? Colors.white : Colors.black,
+                  //       fontSize: 16),
+                  // ),
                   Linkify(
                     onOpen: (link) async {
                       if (await canLaunch(link.url)) {
@@ -984,14 +997,14 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                         throw 'Could not launch $link';
                       }
                     },
-                    linkStyle: TextStyle(color: isSender ? Colors.blue[900] :
-                    Colors.blue,),
+                    linkStyle: TextStyle(
+                      color: isSender ? Colors.blue[900] : Colors.blue,
+                    ),
                     options: LinkifyOptions(humanize: false),
                     text: message.text,
                     style: TextStyle(
                         color: isSender ? Colors.white : Colors.black,
                         fontSize: 16),
-
                   ),
                 SizedBox(
                   height: 1,
@@ -1020,10 +1033,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             ? GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) =>
-                          ImageView(imageUrl != null
-                              ? imageUrl
-                              : ConstValues.userImage)));
+                      builder: (_) => ImageView(imageUrl != null
+                          ? imageUrl
+                          : ConstValues.userImage)));
                 },
                 child: CachedNetworkImage(
                   placeholder: (context, url) => Center(
@@ -1035,12 +1047,12 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                   width: 30,
                   height: 30,
                 ),
-        )
+              )
             : Container(
-          width: 30,
-          height: 30,
-        ),
-  );
+                width: 30,
+                height: 30,
+              ),
+      );
 
   Widget chatImageBuilder(List<dynamic> images, bool isWithText) {
     List<Widget> dd = new List();
@@ -1062,8 +1074,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                   strSize = size < 1024
                       ? size.toStringAsFixed(2) + " B"
                       : size < 1048576
-                      ? (size / 1024).toStringAsFixed(2) + " KB"
-                      : (size / 1048576.0).toStringAsFixed(2) + " MB";
+                          ? (size / 1024).toStringAsFixed(2) + " KB"
+                          : (size / 1048576.0).toStringAsFixed(2) + " MB";
                 } else {
                   strSize = '';
                 }
@@ -1074,7 +1086,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                         child: CircularProgressIndicator(
                             value: progress.progress,
                             valueColor:
-                            AlwaysStoppedAnimation<Color>(Colors.black)),
+                                AlwaysStoppedAnimation<Color>(Colors.black)),
                       ),
                       Positioned(
                         bottom: 10,
@@ -1119,8 +1131,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             onTap: () {
               print(_images[index].path);
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) =>
-                      ImageView.file(
+                  builder: (_) => ImageView.file(
                         image: _images[index],
                         isFile: true,
                       )));
@@ -1148,9 +1159,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
 
   void handleClick(String value) {
     if (Languages.translate(
-      context,
-      'group_info',
-    ) ==
+          context,
+          'group_info',
+        ) ==
         value)
       Navigator.pushNamed(
         context,
@@ -1158,9 +1169,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
         arguments: {'group': widget.group},
       );
     else if (Languages.translate(
-      context,
-      'exit_group',
-    ) ==
+          context,
+          'exit_group',
+        ) ==
         value)
       showDialog(
           context: context,
@@ -1218,8 +1229,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
         members[id] = MyUser.myUser;
       else {
         var d = await _authController.getUserInfo(id);
-        User user = User().fromMap(d.data())
-          ..setId(d.id);
+        User user = User().fromMap(d.data())..setId(d.id);
         members[user.id] = user;
       }
     }
@@ -1227,5 +1237,14 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
     setState(() {
       isLoadingMembers = false;
     });
+  }
+
+  void updateNotificationCount({String id_group, String id_user}) {
+    _notificationController.resetGroupNotificationsCount(
+        id_user: id_user,
+        id_group: id_group,
+        type: widget.isRoom
+            ? 'roomsNotificationsCount'
+            : 'chatsNotificationsCount');
   }
 }

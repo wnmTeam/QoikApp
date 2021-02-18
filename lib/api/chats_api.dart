@@ -103,7 +103,8 @@ class ChatsApi {
           data: message.text,
           type: type,
         ),
-        type == 'chats' ? 'chatsNotifications' : 'roomsNotifications');
+        type == 'chats' ? 'chatsNotifications' : 'roomsNotifications',
+        id_chat);
   }
 
   Stream getNewMessages({
