@@ -609,16 +609,13 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               RaisedButton(
                 color: ConstValues.firstColor,
                 onPressed: () async {
-                  print("_degree " + _degree);
-                  print("_college " + _college);
-                  print("_university " + _university);
-                  print(_degree != 'hight school'
-                      && (_college == 'not selected'
-                          || _university == 'not selected'));
-                  if (_degree != 'hight school'
-                      && (_college == 'not selected'
-                          || _university == 'not selected')
-                  ) {
+                  if (!_formKey.currentState.validate()) {
+                    return;
+                  }
+
+                  if (_degree != 'hight school' &&
+                      (_college == 'not selected' ||
+                          _university == 'not selected')) {
                     Toast.show(
                         Languages.translate(context, "Please_Chose_degree"),
                         context,
@@ -631,8 +628,8 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                   setState(() {
                     singUpWaiting = true;
                   });
-                  if (_formKey.currentState.validate() &&
-                      _checkedTrueInfo == true) {
+                  if (/*_formKey.currentState.validate() &&*/
+                  _checkedTrueInfo == true) {
                     try {
                       List groups = setGroups();
                       _authController.createAccount(
