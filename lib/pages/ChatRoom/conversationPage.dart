@@ -251,7 +251,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                               ),
                                             ),
                                           )
-                                        : _messageBuilder(Message()
+                                        : _messageRowBuilder(Message()
                                             .fromMap(messages[i].data())
                                             .setId(messages[i].id)),
                                   StreamBuilder(
@@ -277,7 +277,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                             child: Column(
                                               children: [
                                                 for (var message in newMessages)
-                                                  _messageBuilder(Message()
+                                                  _messageRowBuilder(Message()
                                                       .fromMap(message.data())
                                                       .setId(message.id)),
                                               ],
@@ -875,7 +875,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
     return l[0] + l[1];
   }
 
-  _messageBuilder(Message message) {
+  _messageRowBuilder(Message message) {
     if (message.idOwner != _authController.getUser.uid) {
       //Start other's  message
       return Container(
@@ -884,23 +884,35 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _image(
+            _senderImage(
                 widget.isRoom
                     ? members[message.idOwner] != null
-                        ? members[message.idOwner].img
-                        : ConstValues.userImage
+                    ? members[message.idOwner].img
+                    : ConstValues.userImage
                     : widget.user != null
-                        ? widget.user.img
-                        : ConstValues.userImage,
+                    ? widget.user.img
+                    : ConstValues.userImage,
                 true),
             SizedBox(
               width: 5,
             ),
             Directionality.of(context) == TextDirection.ltr
-                ? _message(
-                    message, false, ConstValues.chatSecondColor, 10, 10, 10, 0)
-                : _message(
-                    message, false, ConstValues.chatSecondColor, 0, 10, 10, 10),
+                ? _messageBuilder(
+                message,
+                false,
+                ConstValues.chatSecondColor,
+                10,
+                10,
+                10,
+                0)
+                : _messageBuilder(
+                message,
+                false,
+                ConstValues.chatSecondColor,
+                0,
+                10,
+                10,
+                10),
           ],
         ),
       );
@@ -915,14 +927,26 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Directionality.of(context) == TextDirection.ltr
-                ? _message(
-                    message, true, ConstValues.chatFirstColor, 0, 10, 10, 10)
-                : _message(
-                    message, true, ConstValues.chatFirstColor, 10, 10, 10, 0),
+                ? _messageBuilder(
+                message,
+                true,
+                ConstValues.chatFirstColor,
+                0,
+                10,
+                10,
+                10)
+                : _messageBuilder(
+                message,
+                true,
+                ConstValues.chatFirstColor,
+                10,
+                10,
+                10,
+                0),
             SizedBox(
               width: 5,
             ),
-            _image(MyUser.myUser.img, true),
+            _senderImage(MyUser.myUser.img, true),
           ],
         ),
       );
@@ -930,16 +954,19 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
     }
   }
 
-  _message(Message message, bool isSender, Color color, double x1, double x2,
+  _messageBuilder(Message message, bool isSender, Color color, double x1,
+      double x2,
       double x3, double x4) {
-    String minute = message.date.minute.toString().length < 2
+    String minute = message.date.minute
+        .toString()
+        .length < 2
         ? "0" + message.date.minute.toString()
         : message.date.minute.toString();
     return Expanded(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment:
-            isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        crossAxisAlignment: isSender
+            ? CrossAxisAlignment.end
+            : CrossAxisAlignment.start,
         children: [
           Container(
             padding: EdgeInsets.all(4),
@@ -956,68 +983,53 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
               crossAxisAlignment:
                   isSender ? CrossAxisAlignment.start : CrossAxisAlignment.end,
               children: [
-                widget.isRoom
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(
-                          members[message.idOwner] != null
-                              ? members[message.idOwner].firstName +
-                                  ' ' +
-                                  members[message.idOwner].secondName
-                              : Languages.translate(
-                                  context,
-                                  'deleted_user',
-                                ),
-                          style: TextStyle(
-                              color: !isSender ? Colors.black : Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 13),
-                        ),
-                      )
-                    : SizedBox(
-                        width: 1,
-                      ),
-                if (message.images != null)
-                  chatImageBuilder(message.images, message.text != null),
+                //The sender name
+                widget.isRoom ? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Text(
+                    members[message.idOwner] != null
+                        ? members[message.idOwner].firstName +
+                        ' ' +
+                        members[message.idOwner].secondName
+                        : Languages.translate(
+                      context,
+                      'deleted_user',
+                    ),
+                    style: TextStyle(
+                        color: !isSender ? Colors.black : Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13),
+                  ),
+                ) : SizedBox(),
+                //The images
+                if (message.images != null) chatImageBuilder(
+                    message.images, message.text != null),
                 SizedBox(
                   height: 4,
                 ),
-                if (message.text != null)
-                  // Text(
-                  //   message.text,
-                  //   style: TextStyle(
-                  //       color: isSender ? Colors.white : Colors.black,
-                  //       fontSize: 16),
-                  // ),
-                  Linkify(
-                    onOpen: (link) async {
-                      if (await canLaunch(link.url)) {
-                        await launch(link.url);
-                      } else {
-                        throw 'Could not launch $link';
-                      }
-                    },
-                    linkStyle: TextStyle(
-                      color: isSender ? Colors.blue[900] : Colors.blue,
-                    ),
-                    options: LinkifyOptions(humanize: false),
-                    text: message.text,
-                    style: TextStyle(
-                        color: isSender ? Colors.white : Colors.black,
-                        fontSize: 16),
-                  ),
+                //The text
+                if (message.text != null) messageTextBuilder(
+                    message.text, isSender),
                 SizedBox(
                   height: 1,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Text(
-                    message.date.hour.toString() + ":" + minute,
-                    style: TextStyle(
-                      color: isSender ? Colors.white54 : Colors.black54,
+                //The message time
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // isSender? Icon(Icons.done,
+                    // color: Colors.white54,):SizedBox(),
+                    // SizedBox(width: 2,),
+                    Text(
+                      message.date.hour.toString() + ":" + minute,
+                      style: TextStyle(
+                        color: isSender ? Colors.white54 : Colors.black54,
+                        fontSize: 14,
+                      ),
                     ),
-                  ),
+                  ],
                 ),
+
               ],
             ),
           ),
@@ -1026,17 +1038,19 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
     );
   }
 
-  _image(String imageUrl, bool firstMessage) => ClipRRect(
+  _senderImage(String imageUrl, bool firstMessage) =>
+      ClipRRect(
         borderRadius: BorderRadius.circular(57),
         //TODO hide images
         child: firstMessage
             ? GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => ImageView(imageUrl != null
-                          ? imageUrl
-                          : ConstValues.userImage)));
-                },
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) =>
+                    ImageView(imageUrl != null
+                        ? imageUrl
+                        : ConstValues.userImage)));
+          },
                 child: CachedNetworkImage(
                   placeholder: (context, url) => Center(
                     child: Image.asset(ConstValues.userImage),
@@ -1119,6 +1133,26 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
     }
     return Column(
       children: dd,
+    );
+  }
+
+  Widget messageTextBuilder(String text, bool isSender) {
+    return Linkify(
+      onOpen: (link) async {
+        if (await canLaunch(link.url)) {
+          await launch(link.url);
+        } else {
+          throw 'Could not launch $link';
+        }
+      },
+      linkStyle: TextStyle(
+        color: isSender ? Colors.blue[900] : Colors.blue,
+      ),
+      options: LinkifyOptions(humanize: false),
+      text: text,
+      style: TextStyle(
+          color: isSender ? Colors.white : Colors.black,
+          fontSize: 16),
     );
   }
 
