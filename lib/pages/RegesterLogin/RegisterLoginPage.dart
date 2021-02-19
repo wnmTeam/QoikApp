@@ -5,6 +5,7 @@ import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/localization.dart';
+import 'package:toast/toast.dart';
 
 import 'Widgets.dart';
 
@@ -30,10 +31,10 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
 
   int _value = 1;
   String _gender = 'male';
-  String _degree;
-  String _college;
-  String _university;
-  String _oldUniversity;
+  String _degree = 'hight school';
+  String _college = 'not selected';
+  String _university = 'not selected';
+  String _oldUniversity = 'not selected';
   bool _checkedTrueInfo = false;
 
   bool _isRegister = true;
@@ -44,7 +45,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
   String logInErrorMessage = "";
   String signUpErrorMessage = "";
 
-  Future<bool> _onBackBressed() async {
+  Future<bool> _onBackPressed() async {
     if (!isMain)
       setState(() {
         isMain = true;
@@ -58,7 +59,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
     width = MediaQuery.of(context).size.width;
 
     return WillPopScope(
-      onWillPop: _onBackBressed,
+      onWillPop: _onBackPressed,
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: Colors.white,
@@ -492,10 +493,10 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               SizedBox(
                 height: 20,
               ),
-              Row(
-                children: [
-                  _degreeInfoBuild(),
-                ],
+              SizedBox(
+                child:
+                _degreeInfoBuild(),
+
               ),
               TextFormField(
                 controller: _emailController,
@@ -608,6 +609,25 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               RaisedButton(
                 color: ConstValues.firstColor,
                 onPressed: () async {
+                  print("_degree " + _degree);
+                  print("_college " + _college);
+                  print("_university " + _university);
+                  print(_degree != 'hight school'
+                      && (_college == 'not selected'
+                          || _university == 'not selected'));
+                  if (_degree != 'hight school'
+                      && (_college == 'not selected'
+                          || _university == 'not selected')
+                  ) {
+                    Toast.show(
+                        Languages.translate(context, "Please_Chose_degree"),
+                        context,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        duration: Toast.LENGTH_LONG,
+                        gravity: Toast.CENTER);
+                    return;
+                  }
                   setState(() {
                     singUpWaiting = true;
                   });
@@ -619,20 +639,20 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                         _emailController.text,
                         _passwordController.text,
                         User(
-                          firstName: _firstNameController.text,
-                          secondName: _secondNameController.text,
-                          degree: _degree,
-                          gender: _gender,
-                          university: _university,
-                          college: _college,
-                          oldUniversity: _oldUniversity,
-                          groups: groups,
-                          points: 10,
-                          enterCount: 0,
-                          bio: 'Hey There.. I\'m a New User.',
-                          recordDate: DateTime.now(),
-                          email: _emailController.text,
-                          userTag: 'new_user'
+                            firstName: _firstNameController.text,
+                            secondName: _secondNameController.text,
+                            degree: _degree,
+                            gender: _gender,
+                            university: _university,
+                            college: _college,
+                            oldUniversity: _oldUniversity,
+                            groups: groups,
+                            points: 10,
+                            enterCount: 0,
+                            bio: 'Hey There.. I\'m a New User.',
+                            recordDate: DateTime.now(),
+                            email: _emailController.text,
+                            userTag: 'new_user'
                         ),
                       );
                     } catch (e) {
