@@ -657,6 +657,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                       );
                     } catch (e) {
                       setState(() {
+                        print(e.toString());
                         signUpErrorMessage = e.toString();
                       });
                     }

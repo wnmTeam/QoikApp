@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     _currentIndex = 1;
     _getUserInfo();
-    _notificationApi.requestNotificationPermissions();
+    _notificationApi.requestNotificationPermissions(context);
     _notificationApi.saveDeviceToken(_authController.getUser.uid);
     _authController.recordEnter();
     tabViews = [
