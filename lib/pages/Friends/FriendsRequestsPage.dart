@@ -34,10 +34,8 @@ class _FriendsRequestsPageState extends State<FriendsRequestsPage> {
 
   Future<void> refresh() {
     setState(() {
-      // friendRequests = [
-      //   null,
-      //   null,
-      // ];
+       friendRequests = [
+       ];
       hasMore = true;
       lastDocument = null;
     });
@@ -74,7 +72,7 @@ class _FriendsRequestsPageState extends State<FriendsRequestsPage> {
                   style: TextStyle(
                       fontSize: MediaQuery.of(context).size.width / 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.red),
+                      color: Colors.grey),
                 ),
               )
             : ListView.builder(
@@ -183,8 +181,9 @@ class _FriendsRequestsPageState extends State<FriendsRequestsPage> {
     )
         .then((value) {
       print('reqs');
+      print(value.docs.length);
       setState(() {
-        friendRequests.insertAll(friendRequests.length - 1, value.docs);
+        friendRequests.addAll( value.docs);
         isLoading = false;
 
         if (value.docs.length < documentLimit)
