@@ -63,7 +63,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
 
   NotificationApi _notificationController = NotificationApi();
 
-  bool creatingChat = true;
+  bool creatingChat = false;
 
   List<File> _images = [];
 
@@ -84,22 +84,24 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
   @override
   void initState() {
     if (widget.group != null) {
-      setState(() {
-        creatingChat = false;
-      });
       if (widget.isRoom) {
         getMembers();
         getRoomMessages();
       } else {
         getMessages();
       }
-    } else
+    } else {
+      setState(() {
+        creatingChat = true;
+      });
       createChat();
+    }
 
-    updateNotificationCount(
-      id_group: widget.group.id,
-      id_user: MyUser.myUser.id,
-    );
+    if (widget.group != null)
+      updateNotificationCount(
+        id_group: widget.group.id,
+        id_user: MyUser.myUser.id,
+      );
     super.initState();
   }
 
@@ -257,9 +259,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                   StreamBuilder(
                                     stream: getNew
                                         ? _chatController.getNewMessages(
-                                            id_chat: widget.isRoom
-                                                ? widget.group.id
-                                                : getChatID(),
+                                            id_chat: widget.group.id,
                                             last: first,
                                             type: widget.isRoom
                                                 ? 'rooms'
@@ -784,6 +784,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
       widget.group = group;
       creatingChat = false;
     });
+    getMessages();
   }
 
   getMessages() async {
@@ -887,32 +888,20 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             _senderImage(
                 widget.isRoom
                     ? members[message.idOwner] != null
-                    ? members[message.idOwner].img
-                    : ConstValues.userImage
+                        ? members[message.idOwner].img
+                        : ConstValues.userImage
                     : widget.user != null
-                    ? widget.user.img
-                    : ConstValues.userImage,
+                        ? widget.user.img
+                        : ConstValues.userImage,
                 true),
             SizedBox(
               width: 5,
             ),
             Directionality.of(context) == TextDirection.ltr
                 ? _messageBuilder(
-                message,
-                false,
-                ConstValues.chatSecondColor,
-                10,
-                10,
-                10,
-                0)
+                    message, false, ConstValues.chatSecondColor, 10, 10, 10, 0)
                 : _messageBuilder(
-                message,
-                false,
-                ConstValues.chatSecondColor,
-                0,
-                10,
-                10,
-                10),
+                    message, false, ConstValues.chatSecondColor, 0, 10, 10, 10),
           ],
         ),
       );
@@ -928,21 +917,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
           children: [
             Directionality.of(context) == TextDirection.ltr
                 ? _messageBuilder(
-                message,
-                true,
-                ConstValues.chatFirstColor,
-                0,
-                10,
-                10,
-                10)
+                    message, true, ConstValues.chatFirstColor, 0, 10, 10, 10)
                 : _messageBuilder(
-                message,
-                true,
-                ConstValues.chatFirstColor,
-                10,
-                10,
-                10,
-                0),
+                    message, true, ConstValues.chatFirstColor, 10, 10, 10, 0),
             SizedBox(
               width: 5,
             ),
@@ -955,18 +932,14 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
   }
 
   _messageBuilder(Message message, bool isSender, Color color, double x1,
-      double x2,
-      double x3, double x4) {
-    String minute = message.date.minute
-        .toString()
-        .length < 2
+      double x2, double x3, double x4) {
+    String minute = message.date.minute.toString().length < 2
         ? "0" + message.date.minute.toString()
         : message.date.minute.toString();
     return Expanded(
       child: Column(
-        crossAxisAlignment: isSender
-            ? CrossAxisAlignment.end
-            : CrossAxisAlignment.start,
+        crossAxisAlignment:
+            isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Container(
             padding: EdgeInsets.all(4),
@@ -984,32 +957,34 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                   isSender ? CrossAxisAlignment.start : CrossAxisAlignment.end,
               children: [
                 //The sender name
-                widget.isRoom ? Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Text(
-                    members[message.idOwner] != null
-                        ? members[message.idOwner].firstName +
-                        ' ' +
-                        members[message.idOwner].secondName
-                        : Languages.translate(
-                      context,
-                      'deleted_user',
-                    ),
-                    style: TextStyle(
-                        color: !isSender ? Colors.black : Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13),
-                  ),
-                ) : SizedBox(),
+                widget.isRoom
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          members[message.idOwner] != null
+                              ? members[message.idOwner].firstName +
+                                  ' ' +
+                                  members[message.idOwner].secondName
+                              : Languages.translate(
+                                  context,
+                                  'deleted_user',
+                                ),
+                          style: TextStyle(
+                              color: !isSender ? Colors.black : Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13),
+                        ),
+                      )
+                    : SizedBox(),
                 //The images
-                if (message.images != null) chatImageBuilder(
-                    message.images, message.text != null),
+                if (message.images != null)
+                  chatImageBuilder(message.images, message.text != null),
                 SizedBox(
                   height: 4,
                 ),
                 //The text
-                if (message.text != null) messageTextBuilder(
-                    message.text, isSender),
+                if (message.text != null)
+                  messageTextBuilder(message.text, isSender),
                 SizedBox(
                   height: 1,
                 ),
@@ -1029,7 +1004,6 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                     ),
                   ],
                 ),
-
               ],
             ),
           ),
@@ -1038,19 +1012,17 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
     );
   }
 
-  _senderImage(String imageUrl, bool firstMessage) =>
-      ClipRRect(
+  _senderImage(String imageUrl, bool firstMessage) => ClipRRect(
         borderRadius: BorderRadius.circular(57),
         //TODO hide images
         child: firstMessage
             ? GestureDetector(
-          onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) =>
-                    ImageView(imageUrl != null
-                        ? imageUrl
-                        : ConstValues.userImage)));
-          },
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => ImageView(imageUrl != null
+                          ? imageUrl
+                          : ConstValues.userImage)));
+                },
                 child: CachedNetworkImage(
                   placeholder: (context, url) => Center(
                     child: Image.asset(ConstValues.userImage),
@@ -1151,8 +1123,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
       options: LinkifyOptions(humanize: false),
       text: text,
       style: TextStyle(
-          color: isSender ? Colors.white : Colors.black,
-          fontSize: 16),
+          color: isSender ? Colors.white : Colors.black, fontSize: 16),
     );
   }
 
