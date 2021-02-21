@@ -796,7 +796,7 @@ class _AvatarState extends State<Avatar> {
               ),
             );
           },
-              //    TODO :+++++++++++++++++++++++++++++++++++++++++++++++++
+          //    TODO :+++++++++++++++++++++++++++++++++++++++++++++++++
           child: Hero(
             tag: widget.imagePath != null
                 ? widget.imagePath

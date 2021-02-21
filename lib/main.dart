@@ -29,11 +29,17 @@ class MyAppState extends State<MyApp> {
   static Locale locale;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    setLanguage();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context){
     myAppState = this;
-    lang = storageController.getLang();
-    print(lang);
-    locale = Locale(lang);
+//    lang = storageController.getLang();
+//    print(lang);
+//    locale = Locale(lang);
 
     return MaterialApp(
       title: 'Qoiq',
@@ -65,5 +71,12 @@ class MyAppState extends State<MyApp> {
       initialRoute: '/StartingPage',
       onGenerateRoute: RouteController.getRoute,
     );
+  }
+
+  void setLanguage() async{
+    await storageController.createPreferences();
+    lang = storageController.getLang();
+    print(lang);
+    locale = Locale(lang);
   }
 }
