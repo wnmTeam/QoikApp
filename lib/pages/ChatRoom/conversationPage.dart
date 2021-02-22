@@ -1,5 +1,8 @@
 import 'dart:io';
 
+// import 'package:audioplayer/audioplayer.dart';
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emoji_pick/emoji_pick.dart';
@@ -81,6 +84,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
   List<String> _tabsName = Emoji.TABS_NAMES;
   List<dynamic> _tabsEmoji = Emoji.TABS_EMOJI;
 
+  AudioPlayer audioPlayer = AudioPlayer();
+
   @override
   void initState() {
     if (widget.group != null) {
@@ -111,6 +116,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
       id_group: widget.group.id,
       id_user: MyUser.myUser.id,
     );
+    audioPlayer.dispose();
     super.dispose();
   }
 
@@ -217,7 +223,6 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                 ),
               ),
         body:
-            // widget.isRoom ?
             widget.isRoom && !isLoading && !isLoadingMembers || !creatingChat
                 ? Stack(
                     children: [
@@ -450,42 +455,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                               color: Colors.white,
                                               textDirection: TextDirection.ltr,
                                             ),
-                                            onPressed: () {
-                                              if (_images.isNotEmpty) {
-                                                setState(() {
-                                                  chosenImages = Container();
-                                                });
-                                              }
-
-                                              if (_messageController.text
-                                                      .trim()
-                                                      .isEmpty &&
-                                                  _images.isEmpty) return;
-                                              _chatController.addMessage(
-                                                message: Message(
-                                                  idOwner: _authController
-                                                      .getUser.uid,
-                                                  text: _messageController.text
-                                                          .trim()
-                                                          .isEmpty
-                                                      ? null
-                                                      : _messageController.text
-                                                          .trim(),
-                                                ),
-                                                id_receiver: widget.isRoom
-                                                    ? widget.group.id
-                                                    : widget.user.id,
-                                                id_chat: widget.isRoom
-                                                    ? widget.group.id
-                                                    : getChatID(),
-                                                images: _images,
-                                                type: widget.isRoom
-                                                    ? 'rooms'
-                                                    : 'chats',
-                                              );
-                                              _images = [];
-                                              _messageController.clear();
-                                            },
+                                            onPressed: sendMessage,
                                           ),
                                         ),
                                       ),
@@ -1252,4 +1222,48 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             ? 'roomsNotificationsCount'
             : 'chatsNotificationsCount');
   }
+
+  sendMessage() {
+    if (_images.isNotEmpty) {
+      setState(() {
+        chosenImages = Container();
+      });
+    }
+
+    if (_messageController.text
+        .trim()
+        .isEmpty &&
+        _images.isEmpty) return;
+    _chatController.addMessage(
+      message: Message(
+        idOwner: _authController
+            .getUser.uid,
+        text: _messageController.text
+            .trim()
+            .isEmpty
+            ? null
+            : _messageController.text
+            .trim(),
+      ),
+      id_receiver: widget.isRoom
+          ? widget.group.id
+          : widget.user.id,
+      id_chat: widget.isRoom
+          ? widget.group.id
+          : getChatID(),
+      images: _images,
+      type: widget.isRoom
+          ? 'rooms'
+          : 'chats',
+    );
+    _images = [];
+    _messageController.clear();
+    playLocalAsset();
+  }
+
+  Future<AudioPlayer> playLocalAsset() async {
+    AudioCache cache = new AudioCache();
+    return await cache.play("hat.wav");
+  }
+
 }
