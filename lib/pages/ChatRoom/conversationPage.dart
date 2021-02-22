@@ -1,8 +1,5 @@
 import 'dart:io';
 
-// import 'package:audioplayer/audioplayer.dart';
-import 'package:audioplayers/audio_cache.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emoji_pick/emoji_pick.dart';
@@ -13,6 +10,7 @@ import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/Message.dart';
 import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
+import 'package:stumeapp/Sounds.dart';
 import 'package:stumeapp/api/notification_api.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
@@ -84,7 +82,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
   List<String> _tabsName = Emoji.TABS_NAMES;
   List<dynamic> _tabsEmoji = Emoji.TABS_EMOJI;
 
-  AudioPlayer audioPlayer = AudioPlayer();
+  Sounds sounds = Sounds();
 
   @override
   void initState() {
@@ -116,7 +114,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
       id_group: widget.group.id,
       id_user: MyUser.myUser.id,
     );
-    audioPlayer.dispose();
+    sounds.dispose();
     super.dispose();
   }
 
@@ -1248,22 +1246,14 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
       id_receiver: widget.isRoom
           ? widget.group.id
           : widget.user.id,
-      id_chat: widget.isRoom
-          ? widget.group.id
-          : getChatID(),
+      id_chat: widget.isRoom ? widget.group.id : getChatID(),
       images: _images,
-      type: widget.isRoom
-          ? 'rooms'
-          : 'chats',
+      type: widget.isRoom ? 'rooms' : 'chats',
     );
     _images = [];
     _messageController.clear();
-    playLocalAsset();
+    sounds.sendMessageSound();
   }
 
-  Future<AudioPlayer> playLocalAsset() async {
-    AudioCache cache = new AudioCache();
-    return await cache.play("hat.wav");
-  }
 
 }

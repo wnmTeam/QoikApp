@@ -10,6 +10,7 @@ import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/Post.dart';
 import 'package:stumeapp/Models/User.dart';
+import 'package:stumeapp/Sounds.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/PostsController.dart';
@@ -63,6 +64,13 @@ class _PostWidgetState extends State<PostWidget>
   Future _getUser;
 
   bool tag = true;
+  Sounds sounds = Sounds();
+
+  @override
+  void dispose() {
+    sounds.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -548,14 +556,14 @@ class _PostWidgetState extends State<PostWidget>
                             String text = _commentController.text;
                             if (text.isEmpty) return;
                             _commentController.clear();
-
-                            if (!_authController.isBan())
-                              await _postsController.createComment(
-                                text: text,
-                                post_id: widget.post.id,
-                                group: widget.group,
-                              );
-                            else
+                            if (!_authController.isBan()) {
+                            await _postsController.createComment(
+                              text: text,
+                              post_id: widget.post.id,
+                              group: widget.group,
+                            );
+                            sounds.commentSound();
+                          } else
                               showDialog(
                                   context: context,
                                   builder: (context) {
@@ -581,7 +589,8 @@ class _PostWidgetState extends State<PostWidget>
                                       ],
                                     );
                                   });
-                          })
+                          },
+                      ),
                     ],
                   ),
               ],

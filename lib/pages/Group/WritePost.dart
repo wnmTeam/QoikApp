@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
+import 'package:stumeapp/Sounds.dart';
 import 'package:stumeapp/controller/PostsController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 import 'package:stumeapp/localization.dart';
@@ -27,6 +28,14 @@ class _WritePostPageState extends State<WritePostPage> {
   bool waiting = false;
 
   Size size;
+  Sounds sounds = Sounds();
+
+  @override
+  void dispose() {
+    sounds.dispose();
+
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -35,8 +44,9 @@ class _WritePostPageState extends State<WritePostPage> {
 
   @override
   Widget build(BuildContext context) {
-
-    size = MediaQuery.of(context).size;
+    size = MediaQuery
+        .of(context)
+        .size;
 
     return Scaffold(
         appBar: AppBar(
@@ -64,8 +74,11 @@ class _WritePostPageState extends State<WritePostPage> {
                       _sendPost(_postTextController.text);
                     }
                   },
-                  child: Icon(
-                    waiting ? Icons.watch_later_outlined : Icons.post_add,
+                  child: waiting ? Icon(
+                    Icons.watch_later_outlined,
+                    color: Colors.white,
+                  ) : Icon(
+                    Icons.post_add,
                     color: Colors.white,
                   )),
             ),
@@ -214,6 +227,9 @@ class _WritePostPageState extends State<WritePostPage> {
       waiting = true;
     });
     await _postsController.createPost(text, _images, widget.group.id);
+    sounds.postSound();
     Navigator.of(context).pop();
   }
+
+
 }
