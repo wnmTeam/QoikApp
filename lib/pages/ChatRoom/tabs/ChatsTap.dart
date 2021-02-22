@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,7 +13,6 @@ import 'package:stumeapp/controller/ChatController.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/ImageView/ImageView.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
-import 'package:badges/badges.dart';
 
 
 class ChatsTab extends StatefulWidget {
@@ -94,9 +94,7 @@ class _ChatsTabState extends State<ChatsTab>
                 borderRadius: BorderRadius.circular(100),
                 child: CachedNetworkImage(
                   placeholder: (context, url) => Center(
-                    //TODO: Change the placeHolder
                     child: Image.asset(ConstValues.userImage),
-//                    child: Container(),
                   ),
                   imageUrl: user.img != null ? user.img : ConstValues.userImage,
                   fit: BoxFit.cover,
@@ -123,7 +121,7 @@ class _ChatsTabState extends State<ChatsTab>
             },
             trailing: StreamBuilder(
                 stream:
-                    _notificationController.getUnreadGroupNotificationsCount(
+                _notificationController.getUnreadGroupNotificationsCount(
                   id_user: MyUser.myUser.id,
                   id_group: group.id,
                   type: 'chatsNotificationsCount',
@@ -138,7 +136,7 @@ class _ChatsTabState extends State<ChatsTab>
                     showBadge: messageCount != 0,
                     badgeColor: ConstValues.accentColor,
                     badgeContent: Text(
-                     messageCount.toString(),
+                      messageCount.toString(),
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 15,

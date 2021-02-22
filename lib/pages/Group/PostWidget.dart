@@ -257,7 +257,6 @@ class _PostWidgetState extends State<PostWidget>
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (_) => ImageView(widget.post.images[0])));
                     },
-                    //    TODO :+++++++++++++++++++++++++++++++++++++++++++++++++
                     child: Hero(
                       tag: widget.post.images[0],
                       child: CachedNetworkImage(
@@ -607,9 +606,7 @@ class _PostWidgetState extends State<PostWidget>
         borderRadius: BorderRadius.circular(57),
         child: CachedNetworkImage(
           placeholder: (context, url) => Center(
-            //TODO: Change the placeHolder
             child: Image.asset(ConstValues.userImage),
-//                    child: Container(),
           ),
           imageUrl: user.img != null ? user.img : ConstValues.userImage,
           fit: BoxFit.cover,

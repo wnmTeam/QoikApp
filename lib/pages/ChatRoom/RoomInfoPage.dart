@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/MyUser.dart';
@@ -7,7 +8,6 @@ import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 
 class RoomInfoPage extends StatefulWidget {
@@ -43,20 +43,20 @@ class _RoomInfoPageState extends State<RoomInfoPage> {
       ),
       floatingActionButton: isAdmin
           ? FloatingActionButton(
-              backgroundColor: ConstValues.firstColor,
-              child: Icon(Icons.person_add),
-              onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  '/SelectMembers',
-                  arguments: {
-                    'group': widget.group,
-                    'type': 'add',
-                  },
-                );
-                widget.onUpdate();
-              },
-            )
+        backgroundColor: ConstValues.firstColor,
+        child: Icon(Icons.person_add),
+        onPressed: () {
+          Navigator.pushNamed(
+            context,
+            '/SelectMembers',
+            arguments: {
+              'group': widget.group,
+              'type': 'add',
+            },
+          );
+          widget.onUpdate();
+        },
+      )
           : null,
       body: ListView.builder(
         itemCount: widget.group.members.length,
@@ -116,9 +116,9 @@ class _RoomInfoPageState extends State<RoomInfoPage> {
                                                 'delete',
                                               )),
                                               content: Text(Languages.translate(
-                                                    context,
-                                                    'delete',
-                                                  ) +
+                                                context,
+                                                'delete',
+                                              ) +
                                                   " " +
                                                   user.firstName +
                                                   ' ' +
@@ -190,9 +190,9 @@ class _RoomInfoPageState extends State<RoomInfoPage> {
                         Text(user.firstName + ' ' + user.secondName),
                         widget.group.admins.contains(user.id)
                             ? Icon(
-                                Icons.star,
-                                color: Colors.grey,
-                              )
+                          Icons.star,
+                          color: Colors.grey,
+                        )
                             : Container(),
                       ],
                     ),
@@ -204,9 +204,7 @@ class _RoomInfoPageState extends State<RoomInfoPage> {
                       borderRadius: BorderRadius.circular(57),
                       child: CachedNetworkImage(
                         placeholder: (context, url) => Center(
-                          //TODO: Change the placeHolder
                           child: Image.asset(ConstValues.userImage),
-//                    child: Container(),
                         ),
                         imageUrl: user.img != null ? user.img : ConstValues.userImage,
                         fit: BoxFit.cover,

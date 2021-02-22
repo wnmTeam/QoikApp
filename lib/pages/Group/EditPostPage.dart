@@ -32,13 +32,11 @@ class _EditPostPageState extends State<EditPostPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        //todo: translation
-        title: Text("Post editing"),
+        title: Text(Languages.translate(context, "Post_editing")),
         centerTitle: true,
         actions: [
           Tooltip(
-            //todo: translation
-            message: "Save",
+            message: Languages.translate(context, "save"),
             child: FlatButton(
                 onPressed: () async {
                   if (loading) return;

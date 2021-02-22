@@ -77,7 +77,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
 
   double emojiHeight = 0.0;
 
-  bool showEmoji = true;
+  bool showEmoji = false;
   List<String> _tabsName = Emoji.TABS_NAMES;
   List<dynamic> _tabsEmoji = Emoji.TABS_EMOJI;
 

@@ -242,9 +242,7 @@ class _UserWidgetState extends State<UserWidget> {
                 borderRadius: BorderRadius.circular(57),
                 child: CachedNetworkImage(
                   placeholder: (context, url) => Center(
-                    //TODO: Change the placeHolder
                     child: Image.asset(ConstValues.userImage),
-//                    child: Container(),
                   ),
                   imageUrl: user.img != null ? user.img : ConstValues.userImage,
                   fit: BoxFit.cover,

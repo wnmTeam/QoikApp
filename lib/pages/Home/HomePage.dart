@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,7 +16,6 @@ import 'package:stumeapp/pages/Home/tabs/HomeTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/LibraryTabView.dart';
 import 'package:stumeapp/pages/Home/widgets/FABwithBottomAppBar.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:badges/badges.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
 
   _getUserInfo() async {
     DocumentSnapshot d =
-        await _authController.getUserInfo(_authController.getUser.uid);
+    await _authController.getUserInfo(_authController.getUser.uid);
     User user = User().fromMap(d.data()).setId(d.id);
     MyUser.myUser = user;
     _authController.updateUserTag(user);
@@ -82,10 +82,9 @@ class _HomePageState extends State<HomePage> {
           StreamBuilder(
               stream: !loading
                   ? _notificationApi.getUnreadNotificationsCount(
-                      id_user: MyUser.myUser.id)
+                  id_user: MyUser.myUser.id)
                   : null,
               builder: (context, snapshot) {
-
                 if (snapshot.hasData && snapshot.data.data() != null) {
                   return Badge(
                     showBadge: snapshot.data['count'] != 0,
@@ -148,9 +147,7 @@ class _HomePageState extends State<HomePage> {
                       borderRadius: BorderRadius.circular(20),
                       child: CachedNetworkImage(
                         placeholder: (context, url) => Center(
-                          //TODO: Change the placeHolder
                           child: Image.asset(ConstValues.userImage),
-//                    child: Container(),
                         ),
                         imageUrl: !loading && MyUser.myUser.img != null
                             ? MyUser.myUser.img
@@ -265,9 +262,9 @@ class _HomePageState extends State<HomePage> {
                                       child: Image.asset(ConstValues.userImage),
                                     ),
                                     imageUrl:
-                                        !loading && MyUser.myUser.img != null
-                                            ? MyUser.myUser.img
-                                            : ConstValues.userImage,
+                                    !loading && MyUser.myUser.img != null
+                                        ? MyUser.myUser.img
+                                        : ConstValues.userImage,
                                     fit: BoxFit.cover,
                                     width: width / 4,
                                     height: width / 4,
@@ -286,7 +283,7 @@ class _HomePageState extends State<HomePage> {
                                           MyUser.myUser.secondName,
                                       style: TextStyle(
                                         fontSize:
-                                            width / ConstValues.fontSize_1,
+                                        width / ConstValues.fontSize_1,
                                       ),
                                     ),
                                     Text(
@@ -409,9 +406,9 @@ class _HomePageState extends State<HomePage> {
                                     child: Image.asset(ConstValues.userImage),
                                   ),
                                   imageUrl:
-                                      !loading && MyUser.myUser.img != null
-                                          ? MyUser.myUser.img
-                                          : ConstValues.userImage,
+                                  !loading && MyUser.myUser.img != null
+                                      ? MyUser.myUser.img
+                                      : ConstValues.userImage,
                                   fit: BoxFit.cover,
                                   width: width / 4,
                                   height: width / 4,
@@ -436,7 +433,7 @@ class _HomePageState extends State<HomePage> {
                                     Languages.translate(
                                         context,
                                         'my_profi'
-                                        'le'),
+                                            'le'),
                                     style: TextStyle(
                                       color: Colors.black45,
                                     ),
@@ -483,8 +480,8 @@ class _HomePageState extends State<HomePage> {
       body: !loading
           ? tabViews[_currentIndex]
           : Center(
-              child: CircularProgressIndicator(),
-            ),
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 

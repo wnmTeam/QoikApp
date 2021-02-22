@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,6 @@ import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:stumeapp/localization.dart';
 
 class RoomsTab extends StatefulWidget {
@@ -71,42 +71,42 @@ class _RoomsTabState extends State<RoomsTab>
     return Scaffold(
       floatingActionButton: _isVisible
           ? FloatingActionButton(
-              onPressed: () {
-                if (!_authController.isBan())
-                  Navigator.pushNamed(context, '/CreateGroupPage');
-                else
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Text(Languages.translate(
+        onPressed: () {
+          if (!_authController.isBan())
+            Navigator.pushNamed(context, '/CreateGroupPage');
+          else
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text(Languages.translate(
+                      context,
+                      'blocked',
+                    )),
+                    actions: [
+                      FlatButton(
+                        onPressed: () {
+                          Navigator.pop(
                             context,
-                            'blocked',
-                          )),
-                          actions: [
-                            FlatButton(
-                              onPressed: () {
-                                Navigator.pop(
-                                  context,
-                                );
-                              },
-                              child: Text(
-                                Languages.translate(
-                                  context,
-                                  'ok',
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      });
-              },
-              backgroundColor: ConstValues.firstColor,
-              child: Icon(
-                Icons.person_add,
-                color: Colors.white,
-              ),
-            )
+                          );
+                        },
+                        child: Text(
+                          Languages.translate(
+                            context,
+                            'ok',
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                });
+        },
+        backgroundColor: ConstValues.firstColor,
+        child: Icon(
+          Icons.person_add,
+          color: Colors.white,
+        ),
+      )
           : null,
       body: StreamBuilder(
         stream: _chatsController.getRooms(
@@ -140,7 +140,6 @@ class _RoomsTabState extends State<RoomsTab>
 //        child: ListView.builder(
 //          itemCount: rooms.length,
 //          itemBuilder: (con, index) {
-//            //TODO: remove first item
 //            if (index == 0)
 //              return ListTile(
 //                contentPadding:
@@ -207,9 +206,7 @@ class _RoomsTabState extends State<RoomsTab>
           borderRadius: BorderRadius.circular(57),
           child: CachedNetworkImage(
             placeholder: (context, url) => Center(
-              //TODO: Change the placeHolder
               child: Image.asset(ConstValues.userImage),
-//                    child: Container(),
             ),
             imageUrl: group.img != null ? group.img : ConstValues.userImage,
             fit: BoxFit.cover,
