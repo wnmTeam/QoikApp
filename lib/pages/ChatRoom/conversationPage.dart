@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -83,6 +84,10 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
   List<dynamic> _tabsEmoji = Emoji.TABS_EMOJI;
 
   Sounds sounds = Sounds();
+  static const _MAX_VALUE = 0x100000000;
+  final _random = Random();
+
+  Color nextColor() => Color(_random.nextInt(_MAX_VALUE));
 
   @override
   void initState() {
@@ -938,7 +943,10 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                   'deleted_user',
                                 ),
                           style: TextStyle(
-                              color: !isSender ? Colors.black : Colors.white,
+                              // color: !isSender ? Colors.black : Colors.white,
+                              color: !isSender
+                                  ? members["nameColor"]
+                                  : Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 13),
                         ),
@@ -1202,9 +1210,11 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
         members[id] = MyUser.myUser;
       else {
         var d = await _authController.getUserInfo(id);
-        User user = User().fromMap(d.data())..setId(d.id);
+        User user = User().fromMap(d.data())
+          ..setId(d.id);
         members[user.id] = user;
       }
+      members["nameColor"] = Color(_random.nextInt(_MAX_VALUE));
     }
 
     setState(() {
