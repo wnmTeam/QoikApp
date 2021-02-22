@@ -39,6 +39,8 @@ class _SettingsState extends State<Settings> {
                             MyAppState.myAppState.setState(() {
                               MyAppState.locale = Locale('ar');
                             });
+                            print('ffffffffffffffffffffffffffffffffffffff');
+                            print(storageController.getLang());
                             Navigator.pop(context);
                           },
                         ),

@@ -2,25 +2,36 @@ import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/MyUser.dart';
-import 'package:stumeapp/Models/Notification.dart';
+import 'package:stumeapp/Models/Notification.dart' as noti;
 
 class NotificationApi {
   final FirebaseMessaging fbm = FirebaseMessaging();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  requestNotificationPermissions() async {
+  requestNotificationPermissions(context) async {
     fbm.requestNotificationPermissions();
-    fbm.configure(onMessage: (msg) {
-      print(msg);
-      return;
-    }, onLaunch: (msg) {
-      print(msg);
-      return;
-    }, onResume: (msg) {
-      print(msg);
-      return;
-    });
+    fbm.configure(
+      onMessage: (msg) {
+        print(msg);
+        return;
+      },
+      onLaunch: (msg) {
+        print(msg);
+        String page = msg['page'];
+
+        switch(page){
+        }
+
+        Navigator.pushNamed(context, '');
+        return;
+      },
+      onResume: (msg) {
+        print(msg);
+        return;
+      },
+    );
   }
 
   saveDeviceToken(uid) async {
@@ -52,12 +63,12 @@ class NotificationApi {
   }
 
   sendNotification(
-    Notification notification,
+      noti.Notification notification,
     String type,
     String id_group,
   ) {
     Map m = notification.toMap();
-    m[Notification.DATE] = FieldValue.serverTimestamp();
+    m[noti.Notification.DATE] = FieldValue.serverTimestamp();
 
     WriteBatch batch = _firestore.batch();
 
@@ -85,7 +96,8 @@ class NotificationApi {
         _firestore
             .collection('notificationsCount')
             .doc(notification.idReceiver),
-        {'count': FieldValue.increment(1)},SetOptions(merge: true),
+        {'count': FieldValue.increment(1)},
+        SetOptions(merge: true),
       );
 
     batch.set(_firestore.collection(type).doc(), m);
@@ -97,16 +109,16 @@ class NotificationApi {
     if (last != null)
       return _firestore
           .collection('notifications')
-          .where(Notification.ID_RECEIVER, isEqualTo: MyUser.myUser.id)
-          .orderBy(Notification.DATE, descending: true)
+          .where(noti.Notification.ID_RECEIVER, isEqualTo: MyUser.myUser.id)
+          .orderBy(noti.Notification.DATE, descending: true)
           .startAfterDocument(last)
           .limit(limit)
           .get();
 
     return _firestore
         .collection('notifications')
-        .where(Notification.ID_RECEIVER, isEqualTo: MyUser.myUser.id)
-        .orderBy(Notification.DATE, descending: true)
+        .where(noti.Notification.ID_RECEIVER, isEqualTo: MyUser.myUser.id)
+        .orderBy(noti.Notification.DATE, descending: true)
         .limit(limit)
         .get();
   }

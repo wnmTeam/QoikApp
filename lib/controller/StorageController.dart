@@ -17,6 +17,7 @@ class StorageController {
 
   createPreferences() async {
     if (prefs == null) prefs = await SharedPreferences.getInstance();
+    return;
   }
 
   String getString(String name) {
@@ -190,7 +191,8 @@ class StorageController {
 
   String getLang() {
     try {
-      return prefs.getString('lang');
+      String lang = prefs.getString('lang');
+      return lang;
     } catch (e) {
       return 'en';
     }
