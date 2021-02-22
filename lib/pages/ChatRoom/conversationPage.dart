@@ -1210,11 +1210,10 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
         members[id] = MyUser.myUser;
       else {
         var d = await _authController.getUserInfo(id);
-        User user = User().fromMap(d.data())
-          ..setId(d.id);
+        User user = User().fromMap(d.data())..setId(d.id);
         members[user.id] = user;
       }
-      members["nameColor"] = Color(_random.nextInt(_MAX_VALUE));
+      members["nameColor"] = Color(_random.nextInt(0x1000000)).withAlpha(0xff);
     }
 
     setState(() {
