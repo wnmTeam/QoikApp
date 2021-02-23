@@ -259,26 +259,7 @@ class _PostWidgetState extends State<PostWidget>
                   height: 6,
                 ),
                 if (widget.post.images != null && widget.post.images.length > 0)
-                  GestureDetector(
-                    onTap: () {
-                      print("------------------------");
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) => ImageView(widget.post.images[0])));
-                    },
-                    child: Hero(
-                      tag: widget.post.images[0],
-                      child: CachedNetworkImage(
-                        placeholder: (context, url) => Center(
-                          child: Container(
-                            width: size.width,
-                            height: size.width - 100,
-                            color: Colors.grey[200],
-                          ),
-                        ),
-                        imageUrl: widget.post.images[0],
-                      ),
-                    ),
-                  ),
+                  imagesBuilder(widget.post.images),
                 if (widget.post.images != null && widget.post.images.length > 0)
                   SizedBox(
                     height: 6,
@@ -712,4 +693,40 @@ class _PostWidgetState extends State<PostWidget>
     );
     if (d.data() != null) widget.updatePost(d);
   }
+
+  Widget imagesBuilder(List<dynamic> images) {
+    List<Widget> dd = new List();
+
+    for (String image in images) {
+      dd.add(GestureDetector(
+        onTap: () {
+          print("------------------------");
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => ImageView(image)));
+        },
+        child: Hero(
+          tag: image,
+          child: CachedNetworkImage(
+            placeholder: (context, url) =>
+                Center(
+                  child: Container(
+                    width: size.width,
+                    height: size.width - 100,
+                    color: Colors.grey[200],
+                  ),
+                ),
+            imageUrl: image,
+          ),
+        ),
+      ));
+      dd.add(SizedBox(
+        height: 2,
+      ));
+    }
+    return Column(
+      children: dd,
+    );
+  }
+
+
 }

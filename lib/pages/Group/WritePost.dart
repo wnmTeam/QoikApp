@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Sounds.dart';
+import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/PostsController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 import 'package:stumeapp/localization.dart';
@@ -29,6 +30,7 @@ class _WritePostPageState extends State<WritePostPage> {
 
   Size size;
   Sounds sounds = Sounds();
+  bool multiImages = false;
 
   @override
   void dispose() {
@@ -145,81 +147,91 @@ class _WritePostPageState extends State<WritePostPage> {
                   onPressed: () async {
                     final pickedFile = await _storageController.getImage();
                     if (pickedFile != null) {
-                      {
-                        setState(() {
-                          _images.clear();
-                          _images.add(File(pickedFile.path));
-                        });
-                      }
-                    }
-                  },
-                  label: Text("Change the image",),
-                ),
-              ],
-            ),
-
-            // RaisedButton(
-            //   onPressed: () async {
-            //     final pickedFile = await _storageController.getImage();
-            //     if (pickedFile != null) {
-            //       {
-            //         setState(() {
-            //           _images.add(File(pickedFile.path));
-            //         });
-            //       }
-            //     }
-            //   },
-            //   color: Colors.indigo,
-            //   child: Text(
-            //     Languages.translate(
-            //       context,
-            //       'chose_image',
-            //     ),
-            //     style: TextStyle(
-            //       color: Colors.white,
-            //     ),
-            //   ),
-            // ),
-            // RaisedButton(
-            //   onPressed: () {
-            //     _sendPost(_postTextController.text);
-            //   },
-            //   color: Colors.indigo,
-            //   child: !waiting?Text(
-            //     Languages.translate(
-            //       context,
-            //       'post',
-            //     ),
-            //     style: TextStyle(
-            //       color: Colors.white,
-            //     ),
-            //   ):Row(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     mainAxisSize: MainAxisSize.min,
-            //     children: [
-            //       SizedBox(
-            //           width: 18,
-            //           height: 18,
-            //           child: CircularProgressIndicator(backgroundColor: Colors.white,)),
-            //       SizedBox(
-            //         width: 12,
-            //       ),
-            //       Text(
-            //         Languages.translate(
-            //           context,
-            //           'whaiting',
-            //         ),
-            //         style: TextStyle(
-            //           fontSize: size.width / ConstValues.fontSize_2,
-            //           color: Colors.white,
-            //           fontWeight: FontWeight.bold,
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // )
-          ],
-        ));
+                          {
+                            setState(() {
+                              if (!multiImages) {
+                                _images.clear();
+                              }
+                              _images.add(File(pickedFile.path));
+                            });
+                          }
+                        }
+                      },
+                      label: Text(
+                        multiImages
+                            ? Languages.translate(context, "add_image")
+                            : Languages.translate(context, "change_image"),
+                      ),
+                    ),
+              // TextButton.icon(
+              //   icon: Icon(Icons.camera_alt),
+              //
+              //   onPressed: () async {
+              //     final pickedFile = await _storageController.getImage();
+              //     if (pickedFile != null) {
+              //       {
+              //         setState(() {
+              //           _images.add(File(pickedFile.path));
+              //         });
+              //       }
+              //     }
+              //   },
+              //   label: Text(
+              //     Languages.translate(
+              //       context,
+              //       'chose_image',
+              //     ),
+              //
+              //   ),
+              // ),
+              TextButton.icon(
+                icon: Icon(Icons.post_add),
+                onPressed: () {
+                  if (_postTextController.text.isEmpty && _images.length == 0) {
+                    return;
+                  } else {
+                    _sendPost(_postTextController.text);
+                  }
+                },
+                label: !waiting
+                    ? Text(
+                        Languages.translate(
+                          context,
+                          'post',
+                        ),
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: CircularProgressIndicator(
+                                backgroundColor: Colors.white,
+                              )),
+                          SizedBox(
+                            width: 12,
+                          ),
+                          Text(
+                            Languages.translate(
+                              context,
+                              'whaiting',
+                            ),
+                            style: TextStyle(
+                              fontSize: size.width / ConstValues.fontSize_2,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   void _sendPost(String text) async {
