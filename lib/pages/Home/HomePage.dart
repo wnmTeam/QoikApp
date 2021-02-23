@@ -285,7 +285,8 @@ class _HomePageState extends State<HomePage> {
               if (snapshot.hasData) {
                 print(snapshot.data);
                 getLinks(snapshot.data);
-                return SingleChildScrollView(
+              }
+              return SingleChildScrollView(
                   child: Column(
                     children: [
                       DrawerHeader(
@@ -349,58 +350,73 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
-                      ListTile(
-                        title: Text(link[0].title),
-                        leading: Icon(link[0].icon),
-                        onTap: () async => {
-                          if (link[0].url != null)
+                      snapshot.hasData ?
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ListTile(
+                            title: Text(link[0].title),
+                            leading: Icon(link[0].icon),
+                            onTap: () async =>
                             {
-                              await launch(link[0].url)
-                                  .then((value) => print('url  ' + link[0].url))
-                            }
-                          else
-                            {throw 'cant launch url'}
-                        },
-                      ),
-                      ListTile(
-                        title: Text(link[1].title),
-                        leading: Icon(link[1].icon),
-                        onTap: () async => {
-                          if (link[1].url != null)
+                              if (link[0].url != null)
+                                {
+                                  await launch(link[0].url)
+                                      .then((value) =>
+                                      print('url  ' + link[0].url))
+                                }
+                              else
+                                {throw 'cant launch url'}
+                            },
+                          ),
+                          ListTile(
+                            title: Text(link[1].title),
+                            leading: Icon(link[1].icon),
+                            onTap: () async =>
                             {
-                              await launch(link[1].url)
-                                  .then((value) => print('url  ' + link[1].url))
-                            }
-                          else
-                            {throw 'cant launch url'}
-                        },
-                      ),
-                      ListTile(
-                        title: Text(link[2].title),
-                        leading: Icon(link[2].icon),
-                        onTap: () async => {
-                          if (link[2].url != null)
+                              if (link[1].url != null)
+                                {
+                                  await launch(link[1].url)
+                                      .then((value) =>
+                                      print('url  ' + link[1].url))
+                                }
+                              else
+                                {throw 'cant launch url'}
+                            },
+                          ),
+                          ListTile(
+                            title: Text(link[2].title),
+                            leading: Icon(link[2].icon),
+                            onTap: () async =>
                             {
-                              await launch(link[2].url)
-                                  .then((value) => print('url  ' + link[2].url))
-                            }
-                          else
-                            {throw 'cant launch url'}
-                        },
-                      ),
-                      ListTile(
-                        title: Text(link[3].title),
-                        leading: Icon(link[3].icon),
-                        onTap: () async => {
-                          if (link[3].url != null)
+                              if (link[2].url != null)
+                                {
+                                  await launch(link[2].url)
+                                      .then((value) =>
+                                      print('url  ' + link[2].url))
+                                }
+                              else
+                                {throw 'cant launch url'}
+                            },
+                          ),
+                          ListTile(
+                            title: Text(link[3].title),
+                            leading: Icon(link[3].icon),
+                            onTap: () async =>
                             {
-                              await launch(link[3].url)
-                                  .then((value) => print('url  ' + link[3].url))
-                            }
-                          else
-                            {throw 'cant launch url'}
-                        },
-                      ),
+                              if (link[3].url != null)
+                                {
+                                  await launch(link[3].url)
+                                      .then((value) =>
+                                      print('url  ' + link[3].url))
+                                }
+                              else
+                                {throw 'cant launch url'}
+                            },
+                          ),
+                        ],
+                      ) :
+                      CircularProgressIndicator(),
                       Divider(),
                       ListTile(
                         title: Text(Languages.translate(
@@ -428,100 +444,6 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 );
-              }
-              return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    DrawerHeader(
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pushNamed(
-                            '/ProfilePage',
-                            arguments: {
-                              'user': MyUser.myUser,
-                              'id_user': _authController.getUser.uid,
-                            },
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(1000),
-                                child: CachedNetworkImage(
-                                  placeholder: (context, url) => Center(
-                                    child: Image.asset(ConstValues.userImage),
-                                  ),
-                                  imageUrl:
-                                      !loading && MyUser.myUser.img != null
-                                          ? MyUser.myUser.img
-                                          : ConstValues.userImage,
-                                  fit: BoxFit.cover,
-                                  width: width / 4,
-                                  height: width / 4,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    MyUser.myUser.firstName +
-                                        ' ' +
-                                        MyUser.myUser.secondName,
-                                    style: TextStyle(
-                                      fontSize: width / ConstValues.fontSize_1,
-                                    ),
-                                  ),
-                                  Text(
-                                    Languages.translate(
-                                        context,
-                                        'my_profi'
-                                        'le'),
-                                    style: TextStyle(
-                                      color: Colors.black45,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    CircularProgressIndicator(),
-                    Divider(),
-                    ListTile(
-                      title: Text(Languages.translate(
-                        context,
-                        'setting',
-                      )),
-                      leading: Icon(Icons.settings_outlined),
-                      onTap: () {
-                        Navigator.pushNamed(context, "/Settings");
-                      },
-                    ),
-                    ListTile(
-                      title: Text(
-                        Languages.translate(
-                          context,
-                          'log_out',
-                        ),
-                        style: TextStyle(color: Colors.red),
-                      ),
-                      leading: Icon(Icons.logout, color: Colors.red),
-                      onTap: () {
-                        _authController.logOut();
-                      },
-                    )
-                  ],
-                ),
-              );
             }),
       ),
       drawerScrimColor: ConstValues.firstColor,
