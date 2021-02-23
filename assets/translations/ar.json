@@ -68,7 +68,7 @@
   "new_post": "منشور جديد",
   "write_post": "اكتب موضوعاً للمناقشة..",
   "chose_image": "اختر صورة",
-  "post": "منشور",
+  "post": "نشر",
   "send_done": "تم الإرسال",
   "none": "لا شيء",
   "clear": "مسح الكل",
@@ -110,5 +110,7 @@
   "update_app": "تحديث التطبيق",
   "update_message": "من فضلك قم بتحديث التطبيق",
   "Please_Chose_degree": "اختر درجتك العلمية",
-  "Post_editing": "تعديل المنشور"
+  "Post_editing": "تعديل المنشور",
+  "add_image": "إضافة صورة",
+  "change_image": "تغيير الصورة"
 }
