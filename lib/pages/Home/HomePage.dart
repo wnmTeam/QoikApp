@@ -68,14 +68,12 @@ class _HomePageState extends State<HomePage> {
     width = MediaQuery.of(context).size.width;
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: ConstValues.firstColor,
         title: SvgPicture.asset(
           'assets/logo.svg',
           // width: 24,
           height: 36,
-          color: Colors.white,
+          color: ConstValues.iconsColor,
         ),
         centerTitle: false,
         titleSpacing: 5,

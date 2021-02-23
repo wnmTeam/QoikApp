@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 class ConstValues {
 
   static Color secondColor = Color(0xffbb6377);
+  static Color iconsColor = Color(0xffffffff);
 
   static Color chatFirstColor = Color(0xffbb6377);
   static Color chatSecondColor = Color(0xFFFFFFFF);
