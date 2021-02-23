@@ -49,7 +49,7 @@ class MyAppState extends State<MyApp> {
       showSemanticsDebugger: false,
 
       theme: ThemeData(
-        primarySwatch: ConstValues.titleColor,
+        primarySwatch: ConstValues.firstColor,
         accentColor: Color(0xFF8D5CD7),
         backgroundColor: Colors.white,
         textButtonTheme: TextButtonThemeData(style: ButtonStyle()),
@@ -58,7 +58,8 @@ class MyAppState extends State<MyApp> {
           headline6: TextStyle(),
         ),
         buttonColor: ConstValues.firstColor,
-        dialogBackgroundColor: ConstValues.firstColor,
+
+        dialogBackgroundColor: Colors.white,
 
         //canvasColor is the drawer backgroundColor
         canvasColor: Colors.white,
