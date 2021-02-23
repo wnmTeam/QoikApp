@@ -52,7 +52,6 @@ class _SelectFriendsPageState extends State<SelectFriendsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
           Languages.translate(

@@ -1,14 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:stumeapp/Models/Group.dart';
-import 'package:stumeapp/Models/User.dart';
-import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/ChatRoom/tabs/ChatsTap.dart';
 import 'package:stumeapp/pages/ChatRoom/tabs/RoomsTap.dart';
-import 'package:stumeapp/pages/Group/tabs/MembersTabView.dart';
-import 'package:stumeapp/pages/Group/tabs/PostsTabView.dart';
 
 class ChatsPage extends StatefulWidget {
   @override
@@ -44,9 +39,7 @@ class _ChatsPageState extends State<ChatsPage>
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: ConstValues.firstColor,
           title: TabBar(
             indicatorColor: Colors.white70,
             indicatorPadding: EdgeInsets.symmetric(horizontal: 30),
