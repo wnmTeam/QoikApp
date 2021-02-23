@@ -32,9 +32,9 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
   int _value = 1;
   String _gender = 'male';
   String _degree = 'hight school';
-  String _college;
-  String _university;
-  String _oldUniversity;
+  String _college = 'not selected';
+  String _university = 'not selected';
+  String _oldUniversity = 'not selected';
   bool _checkedTrueInfo = false;
 
   bool _isRegister = true;
@@ -55,23 +55,6 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
   }
 
   @override
-  void initState() {
-    _college = Languages.translate(
-      context,
-      'not selected',
-    );
-    _university = Languages.translate(
-      context,
-      'not selected',
-    );
-    _oldUniversity = Languages.translate(
-      context,
-      'not selected',
-    );
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
 
@@ -83,15 +66,15 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
         body: isMain
             ? _main()
             : SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    children: [
-                      _isRegister ? _registerForm() : _loginForm(),
-                    ],
-                  ),
-                ),
-              ),
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              children: [
+                _isRegister ? _registerForm() : _loginForm(),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -111,643 +94,687 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
   }
 
   _loginForm() => Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image.asset(
-              'assets/login.png',
+    key: _formKey,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Image.asset(
+          'assets/login.png',
+        ),
+        SizedBox(
+          height: 12,
+        ),
+        Text(
+          Languages.translate(
+            context,
+            'welcome_back',
+          ),
+          style: TextStyle(
+            fontSize: width / ConstValues.fontSize_1,
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+        SizedBox(
+          height: 12,
+        ),
+        Text(
+          Languages.translate(
+            context,
+            'login_statment',
+          ),
+          style: TextStyle(
+            color: Color.fromARGB(150, 0, 0, 0),
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+        SizedBox(
+          height: 40,
+        ),
+        TextFormField(
+          controller: _emailController,
+          enableSuggestions: true,
+          textInputAction: TextInputAction.next,
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(
+            floatingLabelBehavior: FloatingLabelBehavior.auto,
+            icon: Icon(Icons.email_outlined),
+            labelText: Languages.translate(
+              context,
+              'email',
             ),
-            SizedBox(
-              height: 12,
+          ),
+          validator: (String value) {
+            if (value.isEmpty) {
+              return Languages.translate(
+                context,
+                'email_is_Requered',
+              );
+            }
+            return null;
+          },
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        TextFormField(
+          controller: _passwordController,
+          textInputAction: TextInputAction.done,
+          obscureText: true,
+          keyboardType: TextInputType.visiblePassword,
+          decoration: InputDecoration(
+            icon: Icon(Icons.lock_open),
+            labelText: Languages.translate(
+              context,
+              'password',
             ),
-            Text(
+          ),
+          validator: (String value) {
+            if (value.isEmpty) {
+              return Languages.translate(
+                context,
+                'password_is_Requered',
+              );
+            }
+            return null;
+          },
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: FlatButton(
+            onPressed: () async {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return ResetDialog(
+                      resetEmailController: _resetController,
+                      onPressed: () {
+                        _authController
+                            .resetPassword(_resetController.text);
+                      },
+                    );
+                  });
+            },
+            child: Text(
               Languages.translate(
                 context,
-                'welcome_back',
-              ),
-              style: TextStyle(
-                fontSize: width / ConstValues.fontSize_1,
-                fontWeight: FontWeight.w900,
-              ),
-            ),
-            SizedBox(
-              height: 12,
-            ),
-            Text(
-              Languages.translate(
-                context,
-                'login_statment',
+                'forgut_password',
               ),
               style: TextStyle(
                 color: Color.fromARGB(150, 0, 0, 0),
                 fontWeight: FontWeight.normal,
               ),
             ),
-            SizedBox(
-              height: 40,
+          ),
+        ),
+        logInErrorMessage == ""
+            ? Container()
+            : Container(
+          padding: EdgeInsets.symmetric(vertical: 10),
+          margin: EdgeInsets.symmetric(vertical: 10),
+          color: Color(0xFFff0033),
+          child: Text(
+            logInErrorMessage,
+            style: TextStyle(
+              color: Colors.white,
             ),
-            TextFormField(
-              controller: _emailController,
-              enableSuggestions: true,
-              textInputAction: TextInputAction.next,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                floatingLabelBehavior: FloatingLabelBehavior.auto,
-                icon: Icon(Icons.email_outlined),
-                labelText: Languages.translate(
-                  context,
-                  'email',
-                ),
-              ),
-              validator: (String value) {
-                if (value.isEmpty) {
-                  return Languages.translate(
-                    context,
-                    'email_is_Requered',
-                  );
-                }
-                return null;
-              },
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            TextFormField(
-              controller: _passwordController,
-              textInputAction: TextInputAction.done,
-              obscureText: true,
-              keyboardType: TextInputType.visiblePassword,
-              decoration: InputDecoration(
-                icon: Icon(Icons.lock_open),
-                labelText: Languages.translate(
-                  context,
-                  'password',
-                ),
-              ),
-              validator: (String value) {
-                if (value.isEmpty) {
-                  return Languages.translate(
-                    context,
-                    'password_is_Requered',
-                  );
-                }
-                return null;
-              },
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: FlatButton(
-                onPressed: () async {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return ResetDialog(
-                          resetEmailController: _resetController,
-                          onPressed: () {
-                            _authController
-                                .resetPassword(_resetController.text);
-                          },
-                        );
-                      });
-                },
-                child: Text(
-                  Languages.translate(
-                    context,
-                    'forgut_password',
-                  ),
-                  style: TextStyle(
-                    color: Color.fromARGB(150, 0, 0, 0),
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              ),
-            ),
-            logInErrorMessage == ""
-                ? Container()
-                : Container(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    margin: EdgeInsets.symmetric(vertical: 10),
-                    color: Color(0xFFff0033),
-                    child: Text(
-                      logInErrorMessage,
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-            RaisedButton(
-              color: ConstValues.firstColor,
-              onPressed: () async {
-                print("_formKey.currentState ");
-                print(_formKey.currentState.validate());
-                if (_formKey.currentState.validate()) {
-                  setState(() {
-                    logInWaiting = true;
-                  });
-                  try {
-                    await _authController.login(
-                        _emailController.text, _passwordController.text);
-                  } on Exception catch (e) {
-                    print("errr");
-                    print(e);
-                    setState(() {
-                      logInErrorMessage = e.toString();
-                    });
-                  }
-                }
+            textAlign: TextAlign.center,
+          ),
+        ),
+        RaisedButton(
+          color: ConstValues.firstColor,
+          onPressed: () async {
+            print("_formKey.currentState ");
+            print(_formKey.currentState.validate());
+            if (_formKey.currentState.validate()) {
+              setState(() {
+                logInWaiting = true;
+              });
+              try {
+                await _authController.login(
+                    _emailController.text, _passwordController.text);
+              } on Exception catch (e) {
+                print("errr");
+                print(e);
                 setState(() {
-                  logInWaiting = false;
+                  logInErrorMessage = e.toString();
+                });
+              }
+            }
+            setState(() {
+              logInWaiting = false;
+            });
+          },
+          child: !logInWaiting
+              ? Text(
+            Languages.translate(
+              context,
+              'login',
+            ),
+            style: TextStyle(
+              fontSize: width / ConstValues.fontSize_2,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          )
+              : Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                  width: 18,
+                  height: 18,
+                  child: CircularProgressIndicator(
+                    backgroundColor: Colors.white,
+                  )),
+              SizedBox(
+                width: 12,
+              ),
+              Text(
+                Languages.translate(
+                  context,
+                  'whaiting',
+                ),
+                style: TextStyle(
+                  fontSize: width / ConstValues.fontSize_2,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+        ),
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              Languages.translate(
+                context,
+                'dont_have_account',
+              ),
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            FlatButton(
+              onPressed: () {
+                setState(() {
+                  _isRegister = true;
                 });
               },
-              child: !logInWaiting
-                  ? Text(
-                      Languages.translate(
-                        context,
-                        'login',
-                      ),
-                      style: TextStyle(
-                        fontSize: width / ConstValues.fontSize_2,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SizedBox(
-                            width: 18,
-                            height: 18,
-                            child: CircularProgressIndicator(
-                              backgroundColor: Colors.white,
-                            )),
-                        SizedBox(
-                          width: 12,
-                        ),
-                        Text(
-                          Languages.translate(
-                            context,
-                            'whaiting',
-                          ),
-                          style: TextStyle(
-                            fontSize: width / ConstValues.fontSize_2,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0),
+              child: Text(
+                Languages.translate(
+                  context,
+                  'create_account',
+                ),
+                style: TextStyle(
+                  color: ConstValues.firstColor,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+          ],
+        ),
+      ],
+    ),
+  );
+
+  _registerForm() => Form(
+    key: _formKey,
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Image.asset('assets/signUp.png'),
+          SizedBox(
+            height: 12,
+          ),
+          Text(
+            Languages.translate(
+              context,
+              'signup_statment',
+            ),
+            style: TextStyle(
+              fontSize: width / ConstValues.fontSize_1,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            Languages.translate(
+              context,
+              'signup_statment1',
+            ),
+            style: TextStyle(
+              color: Color.fromARGB(150, 0, 0, 0),
+              fontWeight: FontWeight.normal,
+            ),
+          ),
+          SizedBox(
+            height: 40,
+          ),
+          TextFormField(
+            controller: _firstNameController,
+            textInputAction: TextInputAction.next,
+            enableSuggestions: true,
+            decoration: InputDecoration(
+              floatingLabelBehavior: FloatingLabelBehavior.auto,
+              icon: Icon(Icons.person_outline),
+              labelText: Languages.translate(
+                context,
+                'first_name',
+              ),
+            ),
+            validator: (String value) {
+              if (value.isEmpty) {
+                return Languages.translate(
+                  context,
+                  'field_requered',
+                );
+              }
+              return null;
+            },
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          TextFormField(
+            controller: _secondNameController,
+            textInputAction: TextInputAction.next,
+            enableSuggestions: true,
+            decoration: InputDecoration(
+              floatingLabelBehavior: FloatingLabelBehavior.auto,
+              labelText: Languages.translate(
+                context,
+                'second_name',
+              ),
+              icon: Icon(Icons.person_outline),
+            ),
+            validator: (String value) {
+              if (value.isEmpty) {
+                return Languages.translate(
+                  context,
+                  'field_requered',
+                );
+              }
+              return null;
+            },
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          SizedBox(
+            height: 80,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                Row(
+                  children: [
+                    Radio(
+                      activeColor: ConstValues.firstColor,
+                      value: 1,
+                      groupValue: _value,
+                      onChanged: (i) {
+                        setState(() {
+                          _value = i;
+                          _gender = 'male';
+                        });
+                      },
+                    ),
+                    Text(
+                      Languages.translate(
+                        context,
+                        'male',
+                      ),
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Radio(
+                      activeColor: ConstValues.firstColor,
+                      value: 2,
+                      groupValue: _value,
+                      onChanged: (i) {
+                        setState(() {
+                          _value = i;
+                          _gender = 'female';
+                        });
+                      },
+                    ),
+                    Text(
+                      Languages.translate(
+                        context,
+                        'female',
+                      ),
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          MyDropdownButton(
+            //TODO: Add translation
+            //TODO 'hight school' is incorrect
+            items: [
+              'hight school',
+              'college',
+              'master',
+              'graduate',
+            ],
+            onSelected: (_selected) {
+              setState(() {
+                _degree = _selected;
+              });
+            },
+            label: Languages.translate(
+              context,
+              'degree',
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          SizedBox(
+            child:
+            _degreeInfoBuild(),
+
+          ),
+          TextFormField(
+            controller: _emailController,
+            enableSuggestions: true,
+            textInputAction: TextInputAction.next,
+            keyboardType: TextInputType.emailAddress,
+            decoration: InputDecoration(
+              floatingLabelBehavior: FloatingLabelBehavior.auto,
+              icon: Icon(Icons.email_outlined),
+              labelText: Languages.translate(
+                context,
+                'email',
+              ),
+            ),
+            validator: (String value) {
+              if (value.isEmpty) {
+                return Languages.translate(
+                  context,
+                  'email_is_Requered',
+                );
+              }
+              return null;
+            },
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          TextFormField(
+            controller: _passwordController,
+            textInputAction: TextInputAction.next,
+            keyboardType: TextInputType.visiblePassword,
+            obscureText: true,
+            decoration: InputDecoration(
+              icon: Icon(Icons.lock_open),
+              labelText: Languages.translate(
+                context,
+                'password',
+              ),
+            ),
+            validator: (String value) {
+              if (value.isEmpty) {
+                return Languages.translate(
+                  context,
+                  'password_is_Requered',
+                );
+              }
+              return null;
+            },
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          TextFormField(
+            controller: _coPasswordController,
+            textInputAction: TextInputAction.done,
+            keyboardType: TextInputType.visiblePassword,
+            obscureText: true,
+            decoration: InputDecoration(
+              icon: Icon(Icons.lock_open),
+              labelText: Languages.translate(
+                context,
+                'confirm_password',
+              ),
+            ),
+            validator: (String value) {
+              if (value.isEmpty) {
+                return Languages.translate(
+                  context,
+                  'field_requered',
+                );
+              } else if (value != _passwordController.text)
+                return Languages.translate(
+                  context,
+                  'wrong_password',
+                );
+              return null;
+            },
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          CheckboxListTile(
+            activeColor: ConstValues.firstColor,
+            contentPadding: EdgeInsets.zero,
+            title: Text(Languages.translate(
+              context,
+              'info_true',
+            )),
+            value: _checkedTrueInfo,
+            onChanged: (newValue) {
+              setState(() {
+                _checkedTrueInfo = newValue;
+              });
+            },
+            controlAffinity: ListTileControlAffinity.leading,
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          signUpErrorMessage == "" ? Container() : Container(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            margin: EdgeInsets.symmetric(vertical: 10),
+            color: Color(0xFFff0033),
+            child: Text(signUpErrorMessage,
+              style: TextStyle(
+                color: Colors.white,
+              ),
+              textAlign: TextAlign.center,),
+          ),
+          RaisedButton(
+            color: ConstValues.firstColor,
+            onPressed: () async {
+              if (!_formKey.currentState.validate()) {
+                return;
+              }
+
+              if (_degree != 'hight school' &&
+                  (_college == 'not selected' ||
+                      _university == 'not selected')) {
+                Toast.show(
+                    Languages.translate(context, "Please_Chose_degree"),
+                    context,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    duration: Toast.LENGTH_LONG,
+                    gravity: Toast.CENTER);
+                return;
+              }
+              setState(() {
+                singUpWaiting = true;
+              });
+              if (/*_formKey.currentState.validate() &&*/
+              _checkedTrueInfo == true) {
+                try {
+                  List groups = setGroups();
+                  _authController.createAccount(
+                    _emailController.text,
+                    _passwordController.text,
+                    User(
+                        firstName: _firstNameController.text,
+                        secondName: _secondNameController.text,
+                        degree: _degree,
+                        gender: _gender,
+                        university: _university,
+                        college: _college,
+                        oldUniversity: _oldUniversity,
+                        groups: groups,
+                        points: 10,
+                        enterCount: 0,
+                        bio: 'Hey There.. I\'m a New User.',
+                        recordDate: DateTime.now(),
+                        email: _emailController.text,
+                        userTag: 'new_user'
+                    ),
+                  );
+                } catch (e) {
+                  setState(() {
+                    print(e.toString());
+                    signUpErrorMessage = e.toString();
+                  });
+                }
+              }
+              setState(() {
+                singUpWaiting = false;
+              });
+            },
+            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            child: !singUpWaiting
+                ? Text(
+              Languages.translate(
+                context,
+                'create_account',
+              ),
+              style: TextStyle(
+                fontSize: width / ConstValues.fontSize_2,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            )
+                : Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: CircularProgressIndicator(
+                      backgroundColor: Colors.white,
+                    )),
+                SizedBox(
+                  width: 12,
+                ),
                 Text(
                   Languages.translate(
                     context,
-                    'dont_have_account',
+                    'whaiting',
                   ),
                   style: TextStyle(
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-                FlatButton(
-                  onPressed: () {
-                    setState(() {
-                      _isRegister = true;
-                    });
-                  },
-                  child: Text(
-                    Languages.translate(
-                      context,
-                      'create_account',
-                    ),
-                    style: TextStyle(
-                      color: ConstValues.firstColor,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    fontSize: width / ConstValues.fontSize_2,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
             ),
-          ],
-        ),
-      );
-
-  _registerForm() => Form(
-        key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image.asset('assets/signUp.png'),
-              SizedBox(
-                height: 12,
-              ),
+            children: [
               Text(
                 Languages.translate(
                   context,
-                  'signup_statment',
+                  'have_account',
                 ),
                 style: TextStyle(
-                  fontSize: width / ConstValues.fontSize_1,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                Languages.translate(
-                  context,
-                  'signup_statment1',
-                ),
-                style: TextStyle(
-                  color: Color.fromARGB(150, 0, 0, 0),
                   fontWeight: FontWeight.normal,
                 ),
               ),
-              SizedBox(
-                height: 40,
-              ),
-              TextFormField(
-                controller: _firstNameController,
-                textInputAction: TextInputAction.next,
-                enableSuggestions: true,
-                decoration: InputDecoration(
-                  floatingLabelBehavior: FloatingLabelBehavior.auto,
-                  icon: Icon(Icons.person_outline),
-                  labelText: Languages.translate(
-                    context,
-                    'first_name',
-                  ),
-                ),
-                validator: (String value) {
-                  if (value.isEmpty) {
-                    return Languages.translate(
-                      context,
-                      'field_requered',
-                    );
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              TextFormField(
-                controller: _secondNameController,
-                textInputAction: TextInputAction.next,
-                enableSuggestions: true,
-                decoration: InputDecoration(
-                  floatingLabelBehavior: FloatingLabelBehavior.auto,
-                  labelText: Languages.translate(
-                    context,
-                    'second_name',
-                  ),
-                  icon: Icon(Icons.person_outline),
-                ),
-                validator: (String value) {
-                  if (value.isEmpty) {
-                    return Languages.translate(
-                      context,
-                      'field_requered',
-                    );
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              SizedBox(
-                height: 80,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Row(
-                      children: [
-                        Radio(
-                          activeColor: ConstValues.firstColor,
-                          value: 1,
-                          groupValue: _value,
-                          onChanged: (i) {
-                            setState(() {
-                              _value = i;
-                              _gender = 'male';
-                            });
-                          },
-                        ),
-                        Text(
-                          Languages.translate(
-                            context,
-                            'male',
-                          ),
-                          style: TextStyle(
-                            fontSize: 18,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Radio(
-                          activeColor: ConstValues.firstColor,
-                          value: 2,
-                          groupValue: _value,
-                          onChanged: (i) {
-                            setState(() {
-                              _value = i;
-                              _gender = 'female';
-                            });
-                          },
-                        ),
-                        Text(
-                          Languages.translate(
-                            context,
-                            'female',
-                          ),
-                          style: TextStyle(
-                            fontSize: 18,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              MyDropdownButton(
-                //TODO: Add translation
-                //TODO 'hight school' is incorrect
-                items: [
-                  'hight school',
-                  'college',
-                  'master',
-                  'graduate',
-                ],
-                onSelected: (_selected) {
+              FlatButton(
+                onPressed: () {
                   setState(() {
-                    _degree = _selected;
+                    _isRegister = false;
                   });
                 },
-                label: Languages.translate(
-                  context,
-                  'degree',
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              SizedBox(
-                child: _degreeInfoBuild(),
-              ),
-              TextFormField(
-                controller: _emailController,
-                enableSuggestions: true,
-                textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  floatingLabelBehavior: FloatingLabelBehavior.auto,
-                  icon: Icon(Icons.email_outlined),
-                  labelText: Languages.translate(
+                child: Text(
+                  Languages.translate(
                     context,
-                    'email',
+                    'login',
+                  ),
+                  style: TextStyle(
+                    color: ConstValues.firstColor,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                validator: (String value) {
-                  if (value.isEmpty) {
-                    return Languages.translate(
-                      context,
-                      'email_is_Requered',
-                    );
-                  }
-                  return null;
-                },
               ),
-              SizedBox(
-                height: 20,
-              ),
-              TextFormField(
-                controller: _passwordController,
-                textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.visiblePassword,
-                obscureText: true,
-                decoration: InputDecoration(
-                  icon: Icon(Icons.lock_open),
-                  labelText: Languages.translate(
-                    context,
-                    'password',
-                  ),
-                ),
-                validator: (String value) {
-                  if (value.isEmpty) {
-                    return Languages.translate(
-                      context,
-                      'password_is_Requered',
-                    );
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              TextFormField(
-                controller: _coPasswordController,
-                textInputAction: TextInputAction.done,
-                keyboardType: TextInputType.visiblePassword,
-                obscureText: true,
-                decoration: InputDecoration(
-                  icon: Icon(Icons.lock_open),
-                  labelText: Languages.translate(
-                    context,
-                    'confirm_password',
-                  ),
-                ),
-                validator: (String value) {
-                  if (value.isEmpty) {
-                    return Languages.translate(
-                      context,
-                      'field_requered',
-                    );
-                  } else if (value != _passwordController.text)
-                    return Languages.translate(
-                      context,
-                      'wrong_password',
-                    );
-                  return null;
-                },
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              CheckboxListTile(
-                activeColor: ConstValues.firstColor,
-                contentPadding: EdgeInsets.zero,
-                title: Text(Languages.translate(
-                  context,
-                  'info_true',
-                )),
-                value: _checkedTrueInfo,
-                onChanged: (newValue) {
-                  setState(() {
-                    _checkedTrueInfo = newValue;
-                  });
-                },
-                controlAffinity: ListTileControlAffinity.leading,
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              signUpErrorMessage == ""
-                  ? Container()
-                  : Container(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      margin: EdgeInsets.symmetric(vertical: 10),
-                      color: Color(0xFFff0033),
-                      child: Text(
-                        signUpErrorMessage,
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-              RaisedButton(
-                color: ConstValues.firstColor,
-                onPressed: () async {
-                  if (!_formKey.currentState.validate()) {
-                    return;
-                  }
+            ],
+          ),
+        ],
+      ),
+    ),
+  );
 
-                  if (_degree != 'hight school' &&
-                      (_college ==
-                              Languages.translate(
-                                context,
-                                'not selected',
-                              ) ||
-                          _university == '')) {
-                    Toast.show(
-                        Languages.translate(context, "Please_Chose_degree"),
-                        context,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                        duration: Toast.LENGTH_LONG,
-                        gravity: Toast.CENTER);
-                    return;
-                  }
+  _main() => Container(
+    child: Stack(
+      children: [
+        Positioned.fill(
+          child: Image.asset(
+            "assets/launchImage.png",
+            fit: BoxFit.fill,
+          ),
+        ),
+        Positioned(
+          bottom: 75,
+          right: 0,
+          left: 0,
+          child: Column(
+            children: [
+              RaisedButton(
+                onPressed: () {
                   setState(() {
-                    singUpWaiting = true;
-                  });
-                  if (/*_formKey.currentState.validate() &&*/
-                      _checkedTrueInfo == true) {
-                    try {
-                      List groups = setGroups();
-                      _authController.createAccount(
-                        _emailController.text,
-                        _passwordController.text,
-                        User(
-                            firstName: _firstNameController.text,
-                            secondName: _secondNameController.text,
-                            degree: _degree,
-                            gender: _gender,
-                            university: _university,
-                            college: _college,
-                            oldUniversity: _oldUniversity,
-                            groups: groups,
-                            points: 10,
-                            enterCount: 0,
-                            bio: 'Hey There.. I\'m a New User.',
-                            recordDate: DateTime.now(),
-                            email: _emailController.text,
-                            userTag: 'new_user'),
-                      );
-                    } catch (e) {
-                      setState(() {
-                        print(e.toString());
-                        signUpErrorMessage = e.toString();
-                      });
-                    }
-                  }
-                  setState(() {
-                    singUpWaiting = false;
+                    isMain = false;
+                    _isRegister = false;
                   });
                 },
-                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
-                child: !singUpWaiting
-                    ? Text(
-                        Languages.translate(
-                          context,
-                          'create_account',
-                        ),
-                        style: TextStyle(
-                          fontSize: width / ConstValues.fontSize_2,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(
-                              width: 18,
-                              height: 18,
-                              child: CircularProgressIndicator(
-                                backgroundColor: Colors.white,
-                              )),
-                          SizedBox(
-                            width: 12,
-                          ),
-                          Text(
-                            Languages.translate(
-                              context,
-                              'whaiting',
-                            ),
-                            style: TextStyle(
-                              fontSize: width / ConstValues.fontSize_2,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    Languages.translate(
-                      context,
-                      'have_account',
-                    ),
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  FlatButton(
-                    onPressed: () {
-                      setState(() {
-                        _isRegister = false;
-                      });
-                    },
+                color: Colors.white,
+                child: Container(
+                  width: 200,
+                  height: 60,
+                  child: Center(
                     child: Text(
                       Languages.translate(
                         context,
@@ -755,97 +782,49 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                       ),
                       style: TextStyle(
                         color: ConstValues.firstColor,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
                       ),
                     ),
                   ),
-                ],
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              RaisedButton(
+                onPressed: () {
+                  setState(() {
+                    isMain = false;
+                    _isRegister = true;
+                  });
+                },
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                color: Colors.white,
+                child: Container(
+                  width: 200,
+                  height: 60,
+                  child: Center(
+                    child: Text(
+                      Languages.translate(
+                        context,
+                        'create_account',
+                      ),
+                      style: TextStyle(
+                        color: ConstValues.firstColor,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
         ),
-      );
-
-  _main() => Container(
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: Image.asset(
-                "assets/launchImage.png",
-                fit: BoxFit.fill,
-              ),
-            ),
-            Positioned(
-              bottom: 75,
-              right: 0,
-              left: 0,
-              child: Column(
-                children: [
-                  RaisedButton(
-                    onPressed: () {
-                      setState(() {
-                        isMain = false;
-                        _isRegister = false;
-                      });
-                    },
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                    color: Colors.white,
-                    child: Container(
-                      width: 200,
-                      height: 60,
-                      child: Center(
-                        child: Text(
-                          Languages.translate(
-                            context,
-                            'login',
-                          ),
-                          style: TextStyle(
-                            color: ConstValues.firstColor,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  RaisedButton(
-                    onPressed: () {
-                      setState(() {
-                        isMain = false;
-                        _isRegister = true;
-                      });
-                    },
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                    color: Colors.white,
-                    child: Container(
-                      width: 200,
-                      height: 60,
-                      child: Center(
-                        child: Text(
-                          Languages.translate(
-                            context,
-                            'create_account',
-                          ),
-                          style: TextStyle(
-                            color: ConstValues.firstColor,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
+      ],
+    ),
+  );
 
   _universityCollegeBuilder() {
     return Column(
@@ -864,9 +843,9 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
           )),
           subtitle: Text(_university == null
               ? Languages.translate(
-                  context,
-                  'tap_to_select',
-                )
+            context,
+            'tap_to_select',
+          )
               : _university),
           leading: Icon(Icons.account_balance_outlined),
         ),
@@ -887,9 +866,9 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
           )),
           subtitle: Text(_college == null
               ? Languages.translate(
-                  context,
-                  'tap_to_select',
-                )
+            context,
+            'tap_to_select',
+          )
               : _college),
           leading: Icon(Icons.account_balance_outlined),
         ),
@@ -901,9 +880,9 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
   }
 
   _bottomSheetBuild(
-    String type,
-    Future future,
-  ) {
+      String type,
+      Future future,
+      ) {
     showModalBottomSheet(
         context: context,
         shape: RoundedRectangleBorder(
@@ -966,9 +945,9 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
           )),
           subtitle: Text(_oldUniversity == null
               ? Languages.translate(
-                  context,
-                  'tap_to_select',
-                )
+            context,
+            'tap_to_select',
+          )
               : _oldUniversity),
           leading: Icon(Icons.account_balance_outlined),
         ),

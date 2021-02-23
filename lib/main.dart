@@ -35,7 +35,7 @@ class MyAppState extends State<MyApp> {
   }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     myAppState = this;
 //    lang = storageController.getLang();
 //    print(lang);
@@ -86,12 +86,13 @@ class MyAppState extends State<MyApp> {
     );
   }
 
-  void setLanguage() async{
+  void setLanguage() async {
     await storageController.createPreferences();
     lang = storageController.getLang();
     print(lang);
-    setState(() {
-      locale = Locale(lang);
-    });
+    if (lang != null)
+      setState(() {
+        locale = Locale(lang);
+      });
   }
 }

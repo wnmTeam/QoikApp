@@ -193,14 +193,14 @@ class NotificationApi {
   }
 
   subscribeToTopic(String topic) {
-    _formatTopic(topic);
+    topic = _formatTopic(topic);
 
     print(topic);
     return fbm.subscribeToTopic(topic);
   }
 
   unsubscribeFromTopic(String topic) {
-    _formatTopic(topic);
+    topic = _formatTopic(topic);
 
     print(topic);
 
