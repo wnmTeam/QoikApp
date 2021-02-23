@@ -8,6 +8,7 @@ import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/Post.dart';
 import 'package:stumeapp/Models/User.dart';
+import 'package:stumeapp/Sounds.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/PostsController.dart';
 import 'package:stumeapp/localization.dart';
@@ -44,6 +45,14 @@ class _CommentWidgetState extends State<CommentWidget> {
 
   User user;
   bool _isCommentExpended = false;
+
+  Sounds sounds = Sounds();
+
+  @override
+  void dispose() {
+    sounds.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -223,6 +232,11 @@ class _CommentWidgetState extends State<CommentWidget> {
                               id_post: widget.post.id,
                               id_comment: widget.comment.id,
                             );
+                            if (widget.comment.isLiked) {
+                              sounds.likeSound();
+                            } else {
+                              sounds.disLikeSound();
+                            }
                           },
                         );
                       }),
