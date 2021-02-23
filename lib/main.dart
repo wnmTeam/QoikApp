@@ -47,9 +47,21 @@ class MyAppState extends State<MyApp> {
       debugShowMaterialGrid: false,
       showPerformanceOverlay: false,
       showSemanticsDebugger: false,
+
       theme: ThemeData(
-        primarySwatch: ConstValues.firstColor,
+        primarySwatch: ConstValues.titleColor,
         accentColor: Color(0xFF8D5CD7),
+        backgroundColor: Colors.white,
+        textButtonTheme: TextButtonThemeData(style: ButtonStyle()),
+        scaffoldBackgroundColor: Colors.white,
+        textTheme: TextTheme(
+          headline6: TextStyle(),
+        ),
+        buttonColor: ConstValues.firstColor,
+        dialogBackgroundColor: ConstValues.firstColor,
+
+        //canvasColor is the drawer backgroundColor
+        canvasColor: Colors.white,
       ),
 
       // darkTheme: ThemeData(
