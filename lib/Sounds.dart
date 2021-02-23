@@ -14,6 +14,16 @@ class Sounds {
     return await cache.play("hat.wav");
   }
 
+  Future<AudioPlayer> likeSound() async {
+    AudioCache cache = new AudioCache();
+    return await cache.play("hat.wav");
+  }
+
+  Future<AudioPlayer> disLikeSound() async {
+    // AudioCache cache = new AudioCache();
+    // return await cache.play("hat.wav");
+  }
+
   Future<AudioPlayer> postSound() async {
     AudioCache cache = new AudioCache();
     return await cache.play("hat.wav");

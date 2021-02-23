@@ -301,7 +301,15 @@ class _PostWidgetState extends State<PostWidget>
                               id_post: widget.post.id,
                               group: widget.group,
                             );
-                            if (d.data() != null) widget.updatePost(d);
+                            if (d.data() != null) {
+                              widget.updatePost(d);
+
+                              if (widget.post.isLiked) {
+                                sounds.likeSound();
+                              } else {
+                                sounds.disLikeSound();
+                              }
+                            }
                           },
                           color: widget.post.getIsLiked
                               ? ConstValues.firstColor[100]
