@@ -32,9 +32,9 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
   int _value = 1;
   String _gender = 'male';
   String _degree = 'hight school';
-  String _college = 'not selected';
-  String _university = 'not selected';
-  String _oldUniversity = 'not selected';
+  String _college;
+  String _university;
+  String _oldUniversity;
   bool _checkedTrueInfo = false;
 
   bool _isRegister = true;
@@ -52,6 +52,23 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
       });
     else
       return true;
+  }
+
+  @override
+  void initState() {
+    _college = Languages.translate(
+      context,
+      'not selected',
+    );
+    _university = Languages.translate(
+      context,
+      'not selected',
+    );
+    _oldUniversity = Languages.translate(
+      context,
+      'not selected',
+    );
+    super.initState();
   }
 
   @override
@@ -247,51 +264,50 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 setState(() {
                   logInWaiting = false;
                 });
-                },
+              },
               child: !logInWaiting
                   ? Text(
-                Languages.translate(
-                  context,
-                  'login',
-                ),
-                style: TextStyle(
-                  fontSize: width / ConstValues.fontSize_2,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-                      )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(
-                              width: 18,
-                              height: 18,
-                              child: CircularProgressIndicator(
-                                backgroundColor: Colors.white,
-                              )),
-                          SizedBox(
-                            width: 12,
+                      Languages.translate(
+                        context,
+                        'login',
+                      ),
+                      style: TextStyle(
+                        fontSize: width / ConstValues.fontSize_2,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(
+                              backgroundColor: Colors.white,
+                            )),
+                        SizedBox(
+                          width: 12,
+                        ),
+                        Text(
+                          Languages.translate(
+                            context,
+                            'whaiting',
                           ),
-                          Text(
-                            Languages.translate(
-                              context,
-                              'whaiting',
-                            ),
-                            style: TextStyle(
-                              fontSize: width / ConstValues.fontSize_2,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          style: TextStyle(
+                            fontSize: width / ConstValues.fontSize_2,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
                           ),
-                        ],
-              ),
+                        ),
+                      ],
+                    ),
               padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.0),
               ),
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -494,9 +510,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 height: 20,
               ),
               SizedBox(
-                child:
-                _degreeInfoBuild(),
-
+                child: _degreeInfoBuild(),
               ),
               TextFormField(
                 controller: _emailController,
@@ -596,16 +610,20 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               SizedBox(
                 height: 15,
               ),
-              signUpErrorMessage == "" ? Container() : Container(
-                padding: EdgeInsets.symmetric(vertical: 10),
-                margin: EdgeInsets.symmetric(vertical: 10),
-                color: Color(0xFFff0033),
-                child: Text(signUpErrorMessage,
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                  textAlign: TextAlign.center,),
-              ),
+              signUpErrorMessage == ""
+                  ? Container()
+                  : Container(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      margin: EdgeInsets.symmetric(vertical: 10),
+                      color: Color(0xFFff0033),
+                      child: Text(
+                        signUpErrorMessage,
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
               RaisedButton(
                 color: ConstValues.firstColor,
                 onPressed: () async {
@@ -614,8 +632,12 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                   }
 
                   if (_degree != 'hight school' &&
-                      (_college == 'not selected' ||
-                          _university == 'not selected')) {
+                      (_college ==
+                              Languages.translate(
+                                context,
+                                'not selected',
+                              ) ||
+                          _university == '')) {
                     Toast.show(
                         Languages.translate(context, "Please_Chose_degree"),
                         context,
@@ -629,7 +651,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                     singUpWaiting = true;
                   });
                   if (/*_formKey.currentState.validate() &&*/
-                  _checkedTrueInfo == true) {
+                      _checkedTrueInfo == true) {
                     try {
                       List groups = setGroups();
                       _authController.createAccount(
@@ -649,8 +671,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                             bio: 'Hey There.. I\'m a New User.',
                             recordDate: DateTime.now(),
                             email: _emailController.text,
-                            userTag: 'new_user'
-                        ),
+                            userTag: 'new_user'),
                       );
                     } catch (e) {
                       setState(() {
@@ -669,15 +690,15 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 ),
                 child: !singUpWaiting
                     ? Text(
-                  Languages.translate(
-                    context,
-                    'create_account',
-                  ),
-                  style: TextStyle(
-                    fontSize: width / ConstValues.fontSize_2,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
+                        Languages.translate(
+                          context,
+                          'create_account',
+                        ),
+                        style: TextStyle(
+                          fontSize: width / ConstValues.fontSize_2,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
                       )
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -812,8 +833,8 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                             'create_account',
                           ),
                           style: TextStyle(
-                              color: ConstValues.firstColor,
-                              fontSize: 20,
+                            color: ConstValues.firstColor,
+                            fontSize: 20,
                           ),
                         ),
                       ),
@@ -945,9 +966,9 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
           )),
           subtitle: Text(_oldUniversity == null
               ? Languages.translate(
-            context,
-            'tap_to_select',
-          )
+                  context,
+                  'tap_to_select',
+                )
               : _oldUniversity),
           leading: Icon(Icons.account_balance_outlined),
         ),
@@ -965,7 +986,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
       case 'college':
       case 'graduate':
         g.addAll([
-          _university + '|' + _college,
+          _university + '.' + _college,
           _college,
           'Graduates And Masters',
           Group.TYPE_MOFADALAH,
@@ -978,9 +999,9 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
         break;
       case 'master':
         g.addAll([
-          _university + '|' + _college,
+          _university + '.' + _college,
           _college,
-          _oldUniversity + '|' + _college,
+          _oldUniversity + '.' + _college,
           'Graduates And Masters',
           Group.TYPE_MOFADALAH,
         ]);

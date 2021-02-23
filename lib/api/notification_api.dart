@@ -194,18 +194,22 @@ class NotificationApi {
 
   subscribeToTopic(String topic) {
     _formatTopic(topic);
+
+    print(topic);
     return fbm.subscribeToTopic(topic);
   }
 
   unsubscribeFromTopic(String topic) {
     _formatTopic(topic);
+
+    print(topic);
+
     return fbm.unsubscribeFromTopic(topic);
   }
 
   String _formatTopic(String topic) {
     print(topic);
     topic = topic.replaceAll(RegExp(" "), '.');
-    print(topic);
     return topic;
   }
 }
