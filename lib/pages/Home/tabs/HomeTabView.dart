@@ -5,12 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:stumeapp/Models/Group.dart';
-import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/Post.dart';
-import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/PostsController.dart';
-import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/Group/PostWidget.dart';
 
 class HomeTab extends StatefulWidget {
@@ -99,80 +96,82 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: refresh,
-        child: ListView.builder(
-          controller: _scrollController,
-          itemCount: posts.length,
-          itemBuilder: (context, index) {
-            if (index == posts.length - 1) {
-              if (isLoading) return Center(child: CircularProgressIndicator());
-              return Container(height: 30,);
-            }
-            return PostWidget(
-              post: Post().fromMap(posts[index].data())..setId(posts[index].id),
+    return RefreshIndicator(
+      onRefresh: refresh,
+      child: ListView.builder(
+        controller: _scrollController,
+        itemCount: posts.length,
+        itemBuilder: (context, index) {
+          if (index == posts.length - 1) {
+            if (isLoading) return Center(child: CircularProgressIndicator());
+            return Container(
+              height: 30,
+            );
+          }
+          return PostWidget(
+            post: Post().fromMap(posts[index].data())..setId(posts[index].id),
               group: widget.group,
               deletePost: () {
                 setState(() {
                   posts.removeAt(index);
                 });
               },
-              updatePost: (d) {
-                setState(() {
-                  posts[index] = d;
-                });
-              },
-            );
-          },
-        ),
+            updatePost: (d) {
+              setState(() {
+                posts[index] = d;
+              });
+            },
+          );
+        },
       ),
-      floatingActionButton: _isVisible && MyUser.myUser.userTag == 'admin'
-          ? FloatingActionButton(
-              onPressed: () {
-                if (!_authController.isBan())
-                  Navigator.of(context).pushNamed(
-                    '/WritePostPage',
-                    arguments: {
-                      'group': widget.group,
-                    },
-                  );
-                else
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Text(Languages.translate(
-                            context,
-                            'blocked',
-                          )),
-                          actions: [
-                            FlatButton(
-                              onPressed: () {
-                                Navigator.pop(
-                                  context,
-                                );
-                              },
-                              child: Text(
-                                Languages.translate(
-                                  context,
-                                  'ok',
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      });
-              },
-              backgroundColor: ConstValues.firstColor,
-              child: Icon(
-                Icons.edit,
-                color: Colors.white,
-              ),
-            )
-          : null,
-      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
     );
+    // floatingActionButton:
+    // _isVisible && MyUser.myUser.userTag == 'admin' ?
+    // FloatingActionButton(
+    //         onPressed: () {
+    //           if (!_authController.isBan())
+    //             Navigator.of(context).pushNamed(
+    //               '/WritePostPage',
+    //               arguments: {
+    //                 'group': widget.group,
+    //               },
+    //             );
+    //           else
+    //             showDialog(
+    //                 context: context,
+    //                 builder: (context) {
+    //                   return AlertDialog(
+    //                     title: Text(Languages.translate(
+    //                       context,
+    //                       'blocked',
+    //                     )),
+    //                     actions: [
+    //                       FlatButton(
+    //                         onPressed: () {
+    //                           Navigator.pop(
+    //                             context,
+    //                           );
+    //                         },
+    //                         child: Text(
+    //                           Languages.translate(
+    //                             context,
+    //                             'ok',
+    //                           ),
+    //                         ),
+    //                       ),
+    //                     ],
+    //                   );
+    //                 });
+    //         },
+    //         backgroundColor: ConstValues.firstColor,
+    //         child: Icon(
+    //           Icons.edit,
+    //           color: Colors.white,
+    //         ),
+    //       )
+    //     : null,
+    // floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+
   }
 
   getPosts() async {

@@ -201,17 +201,60 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       floatingActionButton: SafeArea(
-        child: FloatingActionButton(
-          backgroundColor: ConstValues.firstColor,
-          heroTag: _currentIndex == 2 ? "search" : "profile",
-          onPressed: () {
-            if (_currentIndex == 2)
-              Navigator.of(context).pushNamed('/SearchFriendsPage');
-            else if (_currentIndex == 1)
-              Navigator.of(context).pushNamed(
-                '/ProfilePage',
-                arguments: {
-                  'user': MyUser.myUser,
+        child: _currentIndex == 0 && MyUser.myUser.userTag == 'admin'
+            ? FloatingActionButton(
+                onPressed: () {
+                  if (!_authController.isBan())
+                    Navigator.of(context).pushNamed(
+                      '/WritePostPage',
+                      arguments: {
+                        'group': Group()..setId('homeGroup'),
+                      },
+                    );
+                  else
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text(Languages.translate(
+                              context,
+                              'blocked',
+                            )),
+                            actions: [
+                              FlatButton(
+                                onPressed: () {
+                                  Navigator.pop(
+                                    context,
+                                  );
+                                },
+                                child: Text(
+                                  Languages.translate(
+                                    context,
+                                    'ok',
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        });
+                },
+                backgroundColor: ConstValues.firstColor,
+                child: Icon(
+                  Icons.edit,
+                  color: Colors.white,
+                ),
+              )
+            : FloatingActionButton(
+                backgroundColor: ConstValues.firstColor,
+                heroTag: _currentIndex == 2 ? "search" : "profile",
+                onPressed: () {
+                  if (_currentIndex == 2)
+                    Navigator.of(context).pushNamed('/SearchFriendsPage');
+                  else if (_currentIndex == 1)
+                    Navigator.of(context).pushNamed(
+                      '/ProfilePage',
+                      arguments: {
+                        'user': MyUser.myUser,
                   'id_user': _authController.getUser.uid
                 },
               );

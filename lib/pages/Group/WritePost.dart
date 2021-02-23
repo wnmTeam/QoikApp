@@ -30,7 +30,7 @@ class _WritePostPageState extends State<WritePostPage> {
 
   Size size;
   Sounds sounds = Sounds();
-  bool multiImages = false;
+  bool multiImages = true;
 
   @override
   void dispose() {
