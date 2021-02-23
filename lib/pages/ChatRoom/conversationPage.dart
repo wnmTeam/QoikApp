@@ -93,6 +93,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
   void initState() {
     if (widget.group != null) {
       if (widget.isRoom) {
+        _notificationController.subscribeToTopic(widget.group.id);
         getMembers();
         getRoomMessages();
       } else {
@@ -1193,6 +1194,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
           setState(() {
             iamOut = true;
           });
+          _notificationController.unsubscribeFromTopic(widget.group.id);
           _chatController.removeMemberFromRoom(
             id_user: MyUser.myUser.id,
             id_room: widget.group.id,

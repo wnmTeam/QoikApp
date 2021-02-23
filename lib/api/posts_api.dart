@@ -8,9 +8,12 @@ import 'package:stumeapp/Models/Post.dart';
 import 'package:stumeapp/api/auth.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 
+import 'notification_api.dart';
+
 class PostsApi {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final StorageController _storageController = StorageController();
+  NotificationApi _notificationApi = NotificationApi();
 
   Auth auth = Auth();
 
@@ -88,6 +91,8 @@ class PostsApi {
         .doc(post_id)
         .collection('comments');
     await reference.add(comment.toMap());
+    await _notificationApi.subscribeToTopic(id_group + post_id);
+
 
     return _firestore
         .collection('groups')
@@ -239,6 +244,8 @@ class PostsApi {
           .doc(id_user)
           .delete();
 
+      await _notificationApi.unsubscribeFromTopic(group.id + id_post);
+
       return _firestore
           .collection('groups')
           .doc(group.id)
@@ -259,6 +266,7 @@ class PostsApi {
       'exists': 1,
     });
     print(id_post);
+    await _notificationApi.subscribeToTopic(group.id + id_post);
 
     return _firestore
         .collection('groups')

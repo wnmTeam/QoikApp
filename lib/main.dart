@@ -77,6 +77,8 @@ class MyAppState extends State<MyApp> {
     await storageController.createPreferences();
     lang = storageController.getLang();
     print(lang);
-    locale = Locale(lang);
+    setState(() {
+      locale = Locale(lang);
+    });
   }
 }
