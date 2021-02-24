@@ -34,8 +34,7 @@ class _FriendsRequestsPageState extends State<FriendsRequestsPage> {
 
   Future<void> refresh() {
     setState(() {
-       friendRequests = [
-       ];
+      friendRequests = [];
       hasMore = true;
       lastDocument = null;
     });
@@ -183,7 +182,7 @@ class _FriendsRequestsPageState extends State<FriendsRequestsPage> {
       print('reqs');
       print(value.docs.length);
       setState(() {
-        friendRequests.addAll( value.docs);
+        friendRequests.addAll(value.docs);
         isLoading = false;
 
         if (value.docs.length < documentLimit)
@@ -238,7 +237,12 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
             ),
             title: Text(user.firstName + ' ' + user.secondName),
             subtitle: Text(
-              user.university + ' | ' + user.college,
+              user.degree != 'hight school'
+                  ? user.university + ' | ' + user.college
+                  : Languages.translate(
+                      context,
+                      'high school',
+                    ),
               style: TextStyle(
                 fontSize: 12,
               ),

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/Models/Comment.dart';
 import 'package:stumeapp/Models/Group.dart';
+import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/Post.dart';
 import 'package:stumeapp/api/auth.dart';
 import 'package:stumeapp/controller/StorageController.dart';
@@ -82,8 +83,7 @@ class PostsApi {
     }, SetOptions(merge: true));
   }
 
-  Future createComment(
-      {Comment comment, Post post, String id_group}) async {
+  Future createComment({Comment comment, Post post, String id_group}) async {
     CollectionReference reference;
     reference = _firestore
         .collection('groups')
@@ -104,18 +104,19 @@ class PostsApi {
         'notifications',
         id_group: id_group,
         id_post: post.id);
-    _notificationApi.sendNotification(
-        noti.Notification(
-          type: 'commentMyPost',
-          data: comment.text != null ? comment.text : ' ',
-          idSender: comment.idOwner,
-          idReceiver: post.idOwner,
-          idGroup: id_group,
-          idPost: post.id,
-        ),
-        'notifications',
-        id_group: id_group,
-        id_post: post.id);
+    if (post.idOwner != MyUser.myUser.id)
+      _notificationApi.sendNotification(
+          noti.Notification(
+            type: 'commentMyPost',
+            data: comment.text != null ? comment.text : ' ',
+            idSender: comment.idOwner,
+            idReceiver: post.idOwner,
+            idGroup: id_group,
+            idPost: post.id,
+          ),
+          'notifications',
+          id_group: id_group,
+          id_post: post.id);
 
     return _firestore
         .collection('groups')
@@ -447,6 +448,7 @@ class PostsApi {
         .collection('groups')
         .doc(id_group)
         .collection('posts')
-        .doc(id_post).get();
+        .doc(id_post)
+        .get();
   }
 }

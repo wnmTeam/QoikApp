@@ -10,7 +10,6 @@ import 'package:stumeapp/controller/FriendsController.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
-
 class FriendsTab extends StatefulWidget {
   @override
   _FriendsTabState createState() => _FriendsTabState();
@@ -189,10 +188,12 @@ class _UserWidgetState extends State<UserWidget> {
               ),
               title: Text(user.firstName + ' ' + user.secondName),
               subtitle: Text(
-                user.university + ' | ' + user.college,
-                style: TextStyle(
-                  fontSize: 12,
-                ),
+                user.degree != 'hight school'
+                    ? user.university + ' | ' + user.college
+                    : Languages.translate(
+                        context,
+                        'high school',
+                      ),
               ),
             );
           }
