@@ -418,25 +418,27 @@ class MapScreenState extends State<ProfilePage> {
                                             ),
                                           ),
                                         )),
-                                    SizedBox(
-                                        width: size.width - 24,
-                                        child: ListTile(
-                                          title: Text(Languages.translate(
-                                            context,
-                                            'university',
+                                    if (widget.user.university != null)
+                                      SizedBox(
+                                          width: size.width - 24,
+                                          child: ListTile(
+                                            title: Text(Languages.translate(
+                                              context,
+                                              'university',
+                                            )),
+                                            subtitle:
+                                                Text(widget.user.university),
                                           )),
-                                          subtitle:
-                                              Text(widget.user.university),
-                                        )),
-                                    SizedBox(
-                                        width: size.width - 24,
-                                        child: ListTile(
-                                          title: Text(Languages.translate(
-                                            context,
-                                            'college',
+                                    if (widget.user.college != null)
+                                      SizedBox(
+                                          width: size.width - 24,
+                                          child: ListTile(
+                                            title: Text(Languages.translate(
+                                              context,
+                                              'college',
+                                            )),
+                                            subtitle: Text(widget.user.college),
                                           )),
-                                          subtitle: Text(widget.user.college),
-                                        )),
                                     isMyProfile && widget.user.email != null
                                         ? SizedBox(
                                             width: size.width - 24,

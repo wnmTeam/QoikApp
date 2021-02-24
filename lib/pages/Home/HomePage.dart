@@ -35,6 +35,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    super.initState();
     _currentIndex = 1;
     _getUserInfo();
     _notificationApi.requestNotificationPermissions(context);
