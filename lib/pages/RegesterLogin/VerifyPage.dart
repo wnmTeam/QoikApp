@@ -19,6 +19,7 @@ class VerifyPage extends StatelessWidget {
     width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
+        //TODO : translation
         title: Text("Email Verification"),
       ),
       body: WillPopScope(
@@ -31,17 +32,29 @@ class VerifyPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                //TODO : translation
                 Text(
-                  'Verify message sent to\n$email',
+                  'Verify message sent to',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: width / ConstValues.fontSize_1 - 1,
                   ),
                 ),
                 SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  '$email',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: width / ConstValues.fontSize_1 - 5,
+                  ),
+                ),
+                SizedBox(
                   height: 20,
                 ),
                 RaisedButton(
+                  //TODO : translation
                   child: Text(
                     'Verified',
                     style: TextStyle(
@@ -67,6 +80,7 @@ class VerifyPage extends StatelessWidget {
                   onPressed: () {
                     _authController.sendEmailVerification();
                   },
+                  //TODO : translation
                   child: Text(
                     'send verify again',
                     style: TextStyle(color: ConstValues.firstColor),
