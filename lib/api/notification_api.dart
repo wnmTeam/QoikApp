@@ -102,12 +102,14 @@ class NotificationApi {
 
   sendNotification(
     noti.Notification notification,
-    String type,
+    String type, {
     String id_group,
-  ) {
+    String id_post,
+  }) {
     Map m = notification.toMap();
     m[noti.Notification.DATE] = FieldValue.serverTimestamp();
-
+    print('MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM');
+    print(m);
     WriteBatch batch = _firestore.batch();
 
     if (notification.type == 'chats')
@@ -210,6 +212,7 @@ class NotificationApi {
   String _formatTopic(String topic) {
     print(topic);
     topic = topic.replaceAll(RegExp(" "), '.');
+    topic = topic.replaceAll(RegExp("[ÜĞŞÇÖIüğışçö]"), '.');
     return topic;
   }
 }

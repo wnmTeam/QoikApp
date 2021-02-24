@@ -44,8 +44,7 @@ class FriendsApi {
           data: null,
           type: 'send_friend_request',
         ),
-        'notifications',
-        null);
+        'notifications',);
   }
 
   getFriends({String id, int limit, DocumentSnapshot last}) {
@@ -105,8 +104,7 @@ class FriendsApi {
           data: null,
           type: 'accept_friend_request',
         ),
-        'notifications',
-        null);
+        'notifications',);
   }
 
   String getChatID(id1, id2) {

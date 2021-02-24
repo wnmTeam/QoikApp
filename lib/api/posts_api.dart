@@ -9,6 +9,7 @@ import 'package:stumeapp/api/auth.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 
 import 'notification_api.dart';
+import 'package:stumeapp/Models/Notification.dart' as noti;
 
 class PostsApi {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -82,23 +83,45 @@ class PostsApi {
   }
 
   Future createComment(
-      {Comment comment, String post_id, String id_group}) async {
+      {Comment comment, Post post, String id_group}) async {
     CollectionReference reference;
     reference = _firestore
         .collection('groups')
         .doc(id_group)
         .collection('posts')
-        .doc(post_id)
+        .doc(post.id)
         .collection('comments');
     await reference.add(comment.toMap());
-    await _notificationApi.subscribeToTopic(id_group + post_id);
-
+    await _notificationApi.subscribeToTopic(id_group + post.id);
+    _notificationApi.sendNotification(
+        noti.Notification(
+          type: 'commetPost',
+          data: comment.text != null ? comment.text : ' ',
+          idSender: comment.idOwner,
+          idGroup: id_group,
+          idPost: post.id,
+        ),
+        'notifications',
+        id_group: id_group,
+        id_post: post.id);
+    _notificationApi.sendNotification(
+        noti.Notification(
+          type: 'commentMyPost',
+          data: comment.text != null ? comment.text : ' ',
+          idSender: comment.idOwner,
+          idReceiver: post.idOwner,
+          idGroup: id_group,
+          idPost: post.id,
+        ),
+        'notifications',
+        id_group: id_group,
+        id_post: post.id);
 
     return _firestore
         .collection('groups')
         .doc(id_group)
         .collection('posts')
-        .doc(post_id)
+        .doc(post.id)
         .update({'commentCount': FieldValue.increment(1)});
   }
 
@@ -417,5 +440,13 @@ class PostsApi {
         .collection('comments')
         .doc(id_comment)
         .get();
+  }
+
+  getPost({String id_group, String id_post}) {
+    return _firestore
+        .collection('groups')
+        .doc(id_group)
+        .collection('posts')
+        .doc(id_post).get();
   }
 }

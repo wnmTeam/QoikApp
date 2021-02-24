@@ -4,7 +4,6 @@ import 'package:stumeapp/Models/Post.dart';
 import 'package:stumeapp/pages/Group/PostWidget.dart';
 
 class PostPage extends StatefulWidget {
-
   Post post;
   Group group;
 
@@ -21,7 +20,13 @@ class _PostPageState extends State<PostPage> {
       appBar: AppBar(
         title: Text(''),
       ),
-      body: PostWidget(post: widget.post,),
+      body: SingleChildScrollView(
+        child:
+          PostWidget(
+            post: widget.post,
+            group: widget.group,
+          ),
+      ),
     );
   }
 }

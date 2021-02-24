@@ -7,6 +7,7 @@ import 'package:stumeapp/pages/Friends/SearchFriends.dart';
 import 'package:stumeapp/pages/Group/CreatGroupPage.dart';
 import 'package:stumeapp/pages/Group/EditPostPage.dart';
 import 'package:stumeapp/pages/Group/GroupPage.dart';
+import 'package:stumeapp/pages/Group/PostPage.dart';
 import 'package:stumeapp/pages/Group/SelectMembersPage.dart';
 import 'package:stumeapp/pages/Group/WritePost.dart';
 import 'package:stumeapp/pages/Library/BookViewerPage.dart';
@@ -102,6 +103,12 @@ class RouteController {
         return MaterialPageRoute(builder: (_) => Settings());
       case '/NotificationsPage':
         return MaterialPageRoute(builder: (_) => NotificationsPage());
+      case '/PostPage':
+        return MaterialPageRoute(
+            builder: (_) => PostPage(
+                  group: args['group'],
+                  post: args['post'],
+                ));
     }
   }
 }

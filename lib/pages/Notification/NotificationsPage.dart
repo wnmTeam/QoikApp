@@ -2,14 +2,17 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/Notification.dart' as noti;
+import 'package:stumeapp/Models/Post.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/api/notification_api.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
 import 'package:stumeapp/controller/FriendsController.dart';
+import 'package:stumeapp/controller/PostsController.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
@@ -112,6 +115,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
     )
         .then((value) {
       print('noti');
+      print(value.docs);
       setState(() {
         notifications.insertAll(notifications.length - 1, value.docs);
         isLoading = false;
@@ -141,6 +145,7 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
 
   FriendsController _friendsController = FriendsController();
   ChatController _chatsController = ChatController();
+  PostsController _postsControler = PostsController();
 
   @override
   Widget build(BuildContext context) {
@@ -150,10 +155,11 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
         if (snapshot.hasData) {
           user = User().fromMap(snapshot.data)
             ..setId(widget.notification.idSender);
+          print(widget.notification.type);
 
           return ListTile(
               contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-              onTap: () {
+              onTap: () async {
                 switch (widget.notification.type) {
                   case 'send_friend_request':
                     Navigator.pushNamed(context, '/MyFriendsPage', arguments: {
@@ -166,6 +172,19 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
                       arguments: {
                         'user': user,
                         'id_user': user.id,
+                      },
+                    );
+                    break;
+                  case 'commentMyPost':
+                    var d = await _postsControler.getPost(
+                      id_group: widget.notification.idGroup,
+                      id_post: widget.notification.idPost,
+                    );
+                    Navigator.of(context).pushNamed(
+                      '/PostPage',
+                      arguments: {
+                        'post': Post().fromMap(d.data())..setId(d.id),
+                        'group': Group().setId(widget.notification.idGroup),
                       },
                     );
                     break;

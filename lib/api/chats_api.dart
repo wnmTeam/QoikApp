@@ -104,7 +104,7 @@ class ChatsApi {
           type: type,
         ),
         type == 'chats' ? 'chatsNotifications' : 'roomsNotifications',
-        id_chat);
+        id_group: id_chat);
   }
 
   Stream getNewMessages({

@@ -548,7 +548,7 @@ class _PostWidgetState extends State<PostWidget>
                             if (!_authController.isBan()) {
                             await _postsController.createComment(
                               text: text,
-                              post_id: widget.post.id,
+                              post: widget.post,
                               group: widget.group,
                             );
                             sounds.commentSound();
