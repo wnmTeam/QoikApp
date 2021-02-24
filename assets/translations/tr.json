@@ -116,5 +116,7 @@
   "high school": "High School",
   "master": "Master",
   "graduate": "Graduate",
-  "commentMyPost": "قام بالتعليق على منشورك"
+  "commentMyPost": "قام بالتعليق على منشورك.",
+  "client_comments_posts": "Comment On The Post You Are interest."
+
 }

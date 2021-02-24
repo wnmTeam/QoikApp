@@ -109,12 +109,14 @@
   "text_copied": "The text copied",
   "update_app": "Update",
   "update_message": "Please Update Qoiq And Try Again!",
-  "Please_Chose_degree": "Please, Chose your degree",
+  "Please_Chose_degree": "Please, Chose your degree.",
   "Post_editing": "Post editing",
   "add_image": "Add image",
   "change_image": "Change the image",
   "high school": "High School",
   "master": "Master",
   "graduate": "Graduate",
-  "commentMyPost": "Comment On Your Post"
+  "commentMyPost": "Comment On Your Post.",
+  "client_comments_posts": "Comment On The Post You Are interest."
+
 }

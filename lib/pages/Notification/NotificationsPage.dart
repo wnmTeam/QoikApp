@@ -175,6 +175,19 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
                       },
                     );
                     break;
+                  case 'client_comments_posts':
+                    var d = await _postsControler.getPost(
+                      id_group: widget.notification.idGroup,
+                      id_post: widget.notification.idPost,
+                    );
+                    Navigator.of(context).pushNamed(
+                      '/PostPage',
+                      arguments: {
+                        'post': Post().fromMap(d.data())..setId(d.id),
+                        'group': Group().setId(widget.notification.idGroup),
+                      },
+                    );
+                    break;
                   case 'commentMyPost':
                     var d = await _postsControler.getPost(
                       id_group: widget.notification.idGroup,
