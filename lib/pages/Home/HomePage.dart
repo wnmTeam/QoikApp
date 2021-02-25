@@ -155,6 +155,7 @@ class _HomePageState extends State<HomePage> {
                   : null,
               builder: (context, snapshot) {
                 if (snapshot.hasData && snapshot.data.data() != null) {
+                  // TODO add sound here
                   return Badge(
                     showBadge: snapshot.data['count'] != 0,
                     badgeColor: ConstValues.accentColor,
