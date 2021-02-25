@@ -10,6 +10,7 @@ import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/api/notification_api.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
+import 'package:stumeapp/controller/ChatController.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/Home/tabs/FriendsTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/GroupsChatsTabView.dart';
@@ -17,6 +18,8 @@ import 'package:stumeapp/pages/Home/tabs/HomeTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/LibraryTabView.dart';
 import 'package:stumeapp/pages/Home/widgets/FABwithBottomAppBar.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 
 class HomePage extends StatefulWidget {
   @override
@@ -32,13 +35,22 @@ class _HomePageState extends State<HomePage> {
 
   AuthController _authController = AuthController();
   NotificationApi _notificationApi = NotificationApi();
+  ChatController chatsController = ChatController();
+  final FirebaseMessaging fbm = FirebaseMessaging();
+
+
+  String getChatID(id) {
+    List l = [id, MyUser.myUser.id];
+    l.sort();
+
+    return l[0] + l[1];
+  }
 
   @override
   void initState() {
     super.initState();
     _currentIndex = 1;
     _getUserInfo();
-    _notificationApi.requestNotificationPermissions(context);
     _notificationApi.saveDeviceToken(_authController.getUser.uid);
     _authController.recordEnter();
     tabViews = [
@@ -47,6 +59,63 @@ class _HomePageState extends State<HomePage> {
       FriendsTab(),
       LibraryTab(),
     ];
+
+    fbm.requestNotificationPermissions();
+    fbm.configure(
+      onMessage: (msg) {
+        print(msg);
+        return;
+      },
+      onLaunch: (msg) {
+        print(msg);
+        String type = msg['data']['type'];
+        String id_sender = msg['data']['id_sender'];
+
+        switch (type) {
+          case 'chats':
+            var d = chatsController.getChat(getChatID(id_sender));
+
+//            Navigator.pushNamed(context, '/ChatRoomPage', arguments: {
+//              'group': null,
+//              'user': User().fromMap(d.data()),
+//            });
+        break;
+        case 'rooms':
+        break;
+        default:
+        Navigator.pushNamed(
+        context,
+        '/NotificationsPage',
+        );
+        }
+        return;
+      },
+      onResume: (msg) {
+        print(msg);
+        String type = msg['data']['type'];
+        String id_sender = msg['data']['id_sender'];
+
+        switch (type) {
+          case 'chats':
+//            var d = _authController.getUserInfo(id_sender);
+
+//            Navigator.pushNamed(context, '/ChatRoomPage', arguments: {
+//              'group': null,
+//              'user': User().fromMap(d.data())..setId(d.id),
+//            });
+            break;
+          case 'rooms':
+            break;
+          default:
+            Navigator.pushNamed(
+              context,
+              '/NotificationsPage',
+            );
+        }
+        return;
+      },
+    );
+
   }
 
   _getUserInfo() async {

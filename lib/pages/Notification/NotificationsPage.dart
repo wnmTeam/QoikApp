@@ -180,6 +180,8 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
                       id_group: widget.notification.idGroup,
                       id_post: widget.notification.idPost,
                     );
+                    print('oooooooooooooooooooooooooooooooooooooooo');
+                    print(d.data());
                     Navigator.of(context).pushNamed(
                       '/PostPage',
                       arguments: {

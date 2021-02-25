@@ -95,7 +95,7 @@ class PostsApi {
     await _notificationApi.subscribeToTopic(id_group + post.id);
     _notificationApi.sendNotification(
         noti.Notification(
-          type: 'commetPost',
+          type: 'commentPost',
           data: comment.text != null ? comment.text : ' ',
           idSender: comment.idOwner,
           idGroup: id_group,
@@ -105,25 +105,27 @@ class PostsApi {
         id_group: id_group,
         id_post: post.id);
     if (post.idOwner != MyUser.myUser.id)
-      _notificationApi.sendNotification(
-          noti.Notification(
-            type: 'commentMyPost',
-            data: comment.text != null ? comment.text : ' ',
-            idSender: comment.idOwner,
-            idReceiver: post.idOwner,
-            idGroup: id_group,
-            idPost: post.id,
-          ),
-          'notifications',
-          id_group: id_group,
-          id_post: post.id);
+     {
+       _notificationApi.sendNotification(
+           noti.Notification(
+             type: 'commentMyPost',
+             data: comment.text != null ? comment.text : ' ',
+             idSender: comment.idOwner,
+             idReceiver: post.idOwner,
+             idGroup: id_group,
+             idPost: post.id,
+           ),
+           'notifications',
+           id_group: id_group,
+           id_post: post.id);
 
-    return _firestore
-        .collection('groups')
-        .doc(id_group)
-        .collection('posts')
-        .doc(post.id)
-        .update({'commentCount': FieldValue.increment(1)});
+       return _firestore
+           .collection('groups')
+           .doc(id_group)
+           .collection('posts')
+           .doc(post.id)
+           .update({'commentCount': FieldValue.increment(1)});
+     }
   }
 
   Future<QuerySnapshot> getComments({
