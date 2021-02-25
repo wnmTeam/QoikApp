@@ -117,6 +117,7 @@
   "master": "Master",
   "graduate": "Graduate",
   "commentMyPost": "Comment On Your Post.",
-  "client_comments_posts": "Comment On The Post You Are interest."
+  "client_comments_posts": "Comment On The Post You Are interest.",
+  "admin": "Admin"
 
 }

@@ -537,15 +537,15 @@ class _PostWidgetState extends State<PostWidget>
                         ),
                       ),
                       IconButton(
-                          icon: Icon(
-                            Icons.send,
-                            color: ConstValues.firstColor,
-                          ),
-                          onPressed: () async {
-                            String text = _commentController.text;
-                            if (text.isEmpty) return;
-                            _commentController.clear();
-                            if (!_authController.isBan()) {
+                        icon: Icon(
+                          Icons.send,
+                          color: ConstValues.firstColor,
+                        ),
+                        onPressed: () async {
+                          String text = _commentController.text;
+                          if (text.isEmpty) return;
+                          _commentController.clear();
+                          if (!_authController.isBan()) {
                             await _postsController.createComment(
                               text: text,
                               post: widget.post,
@@ -553,32 +553,32 @@ class _PostWidgetState extends State<PostWidget>
                             );
                             sounds.commentSound();
                           } else
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: Text(Languages.translate(
-                                        context,
-                                        'blocked',
-                                      )),
-                                      actions: [
-                                        FlatButton(
-                                          onPressed: () {
-                                            Navigator.pop(
-                                              context,
-                                            );
-                                          },
-                                          child: Text(
-                                            Languages.translate(
-                                              context,
-                                              'ok',
-                                            ),
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text(Languages.translate(
+                                      context,
+                                      'blocked',
+                                    )),
+                                    actions: [
+                                      FlatButton(
+                                        onPressed: () {
+                                          Navigator.pop(
+                                            context,
+                                          );
+                                        },
+                                        child: Text(
+                                          Languages.translate(
+                                            context,
+                                            'ok',
                                           ),
                                         ),
-                                      ],
-                                    );
-                                  });
-                          },
+                                      ),
+                                    ],
+                                  );
+                                });
+                        },
                       ),
                     ],
                   ),
@@ -656,10 +656,15 @@ class _PostWidgetState extends State<PostWidget>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            Languages.translate(
-              context,
-              user.tag,
-            ),
+            user.userTag == 'admin'
+                ? Languages.translate(
+                    context,
+                    user.userTag,
+                  )
+                : Languages.translate(
+                    context,
+                    user.tag,
+                  ),
             style: TextStyle(fontSize: 12),
           ),
           Padding(
@@ -709,20 +714,19 @@ class _PostWidgetState extends State<PostWidget>
       dd.add(GestureDetector(
         onTap: () {
           print("------------------------");
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (_) => ImageView(image)));
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => ImageView(image)));
         },
         child: Hero(
           tag: image,
           child: CachedNetworkImage(
-            placeholder: (context, url) =>
-                Center(
-                  child: Container(
-                    width: size.width,
-                    height: size.width - 100,
-                    color: Colors.grey[200],
-                  ),
-                ),
+            placeholder: (context, url) => Center(
+              child: Container(
+                width: size.width,
+                height: size.width - 100,
+                color: Colors.grey[200],
+              ),
+            ),
             imageUrl: image,
           ),
         ),
@@ -735,6 +739,4 @@ class _PostWidgetState extends State<PostWidget>
       children: dd,
     );
   }
-
-
 }

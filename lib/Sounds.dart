@@ -6,7 +6,7 @@ class Sounds {
 
   Future<AudioPlayer> sendMessageSound() async {
     AudioCache cache = new AudioCache();
-    return await cache.play("message_out.wav");
+    return await cache.play("message_in.wav");
   }
 
   Future<AudioPlayer> inMessageSound() async {
@@ -26,12 +26,12 @@ class Sounds {
 
   Future<AudioPlayer> commentSound() async {
     AudioCache cache = new AudioCache();
-    return await cache.play("comment.ogg");
+    return await cache.play("message_in.wav");
   }
 
   Future<AudioPlayer> postSound() async {
     AudioCache cache = new AudioCache();
-    return await cache.play("post.wav");
+    return await cache.play("like.ogg");
   }
 
   dispose() {

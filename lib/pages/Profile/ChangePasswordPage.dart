@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 import 'package:stumeapp/localization.dart';
+import 'package:stumeapp/pages/RegesterLogin/RegisterLoginPage.dart';
+import 'package:toast/toast.dart';
 
 class ChangePasswordPage extends StatefulWidget {
   @override
@@ -16,6 +19,10 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   final TextEditingController _newPasswordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  bool updating = false;
+
+  double width;
+
   String password;
 
   @override
@@ -26,14 +33,16 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
   @override
   Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(Languages.translate(
-          context,
-          'change_password',
-        ), style: TextStyle(color: Colors.grey[500]),),
-        iconTheme: IconThemeData(color: Colors.grey[600]),
+        title: Text(
+          Languages.translate(
+            context,
+            'change_password',
+          ),
+        ),
       ),
       body: Form(
         key: _formKey,
@@ -45,6 +54,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             TextFormField(
               controller: _passwordController,
               textInputAction: TextInputAction.next,
+              obscureText: true,
               keyboardType: TextInputType.visiblePassword,
               decoration: InputDecoration(
                 icon: Icon(Icons.lock_open),
@@ -59,10 +69,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     context,
                     'password_is_Requered',
                   );
-                } else if (value != password) return Languages.translate(
-                  context,
-                  'wrong_password',
-                );
+                } else if (value != password)
+                  return Languages.translate(
+                    context,
+                    'wrong_password',
+                  );
                 return null;
               },
             ),
@@ -72,6 +83,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             TextFormField(
               controller: _newPasswordController,
               textInputAction: TextInputAction.done,
+              obscureText: true,
               keyboardType: TextInputType.visiblePassword,
               decoration: InputDecoration(
                 icon: Icon(Icons.lock_open),
@@ -91,19 +103,73 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               },
             ),
             SizedBox(
-              height: 15,
+              height: 40,
             ),
             RaisedButton(
-              onPressed: ()async {
+              onPressed: () async {
                 if (_formKey.currentState.validate()) {
-                  await _authController.updatePassword(_newPasswordController.text);
+                  setState(() {
+                    updating = true;
+                  });
+                  try {
+                    await _authController.login(_authController.getUser.email,
+                        _passwordController.text);
+                    await _authController
+                        .updatePassword(_newPasswordController.text);
+                    _authController.logOut();
+                    int count = 0;
+                    Navigator.popUntil(context, (route) {
+                      return count++ == 2;
+                    });
+                  } catch (e) {
+                    Toast.show("Fail", context,
+                        backgroundColor: Colors.grey,
+                        textColor: Colors.white,
+                        duration: Toast.LENGTH_LONG,
+                        gravity: Toast.CENTER);
+                  }
+                  setState(() {
+                    updating = false;
+                  });
+
                   print('login done');
                 }
               },
-              child: Text(Languages.translate(
-                context,
-                'save',
-              )),
+              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              child: !updating
+                  ? Text(Languages.translate(
+                      context,
+                      'save',
+                    ))
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(
+                              backgroundColor: Colors.white,
+                            )),
+                        SizedBox(
+                          width: 12,
+                        ),
+                        Text(
+                          Languages.translate(
+                            context,
+                            'whaiting',
+                          ),
+                          style: TextStyle(
+                            fontSize: width / ConstValues.fontSize_2,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
             )
           ],
         ),

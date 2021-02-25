@@ -117,5 +117,7 @@
   "master": "ماستر",
   "graduate": "متخرج",
   "commentMyPost": "قام بالتعليق على منشورك.",
-  "client_comments_posts": "قام بالتعليق على منشور تتابعه."
+  "client_comments_posts": "قام بالتعليق على منشور تتابعه.",
+  "admin": "مسؤول"
+
 }

@@ -14,8 +14,6 @@ class RegisterLoginPage extends StatefulWidget {
   _RegisterLoginPageState createState() => _RegisterLoginPageState();
 }
 
-double width;
-
 class _RegisterLoginPageState extends State<RegisterLoginPage> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -28,6 +26,8 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
   final TextEditingController _resetController = TextEditingController();
 
   AuthController _authController = AuthController();
+
+  double width;
 
   int _value = 1;
   String _gender = 'male';
@@ -58,12 +58,12 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
 
-    return WillPopScope(
-      onWillPop: _onBackPressed,
-      child: Scaffold(
-        key: scaffoldKey,
-        backgroundColor: Colors.white,
-        body: isMain
+    return Scaffold(
+      key: scaffoldKey,
+      backgroundColor: Colors.white,
+      body: WillPopScope(
+        onWillPop: _onBackPressed,
+        child: isMain
             ? _main()
             : SingleChildScrollView(
                 child: Padding(
@@ -85,9 +85,9 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
         return Container();
       case 'college':
       case 'graduate':
-        return Expanded(child: _universityCollegeBuilder());
+        return _universityCollegeBuilder();
       case 'master':
-        return Expanded(child: _masterBuilder());
+        return _masterBuilder();
       default:
         return Container();
     }
@@ -524,9 +524,11 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               SizedBox(
                 height: 20,
               ),
-              SizedBox(
-                child: _degreeInfoBuild(),
-              ),
+//              SizedBox(
+//                width: width,
+//                child:
+              _degreeInfoBuild(),
+//              ),
               TextFormField(
                 controller: _emailController,
                 enableSuggestions: true,
@@ -646,7 +648,9 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                     return;
                   }
 
-                  if (_degree == null || _college == null || _university == null) {
+                  if ((_degree == null) ||
+                      (_degree != 'high school' &&
+                          (_college == null || _university == null))) {
                     Toast.show(
                         Languages.translate(context, "Please_Chose_degree"),
                         context,

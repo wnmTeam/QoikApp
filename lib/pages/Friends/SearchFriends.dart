@@ -82,10 +82,12 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
                       _search();
                     },
                     child: Text(
-                      _university != null ? _university : Languages.translate(
-                        context,
-                        'university',
-                      ),
+                      _university != null
+                          ? _university
+                          : Languages.translate(
+                              context,
+                              'university',
+                            ),
                       style: TextStyle(fontSize: 13),
                     ),
                     shape: RoundedRectangleBorder(
@@ -102,10 +104,12 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
                       _search();
                     },
                     child: Text(
-                      _college != null ? _college : Languages.translate(
-                        context,
-                        'college',
-                      ),
+                      _college != null
+                          ? _college
+                          : Languages.translate(
+                              context,
+                              'college',
+                            ),
                       style: TextStyle(fontSize: 13),
                     ),
                     shape: RoundedRectangleBorder(
@@ -119,10 +123,12 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
                       _search();
                     },
                     child: Text(
-                      _gender != null ? _gender : Languages.translate(
-                        context,
-                        'gender',
-                      ),
+                      _gender != null
+                          ? _gender
+                          : Languages.translate(
+                              context,
+                              'gender',
+                            ),
                       style: TextStyle(fontSize: 13),
                     ),
                     shape: RoundedRectangleBorder(
@@ -150,10 +156,11 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
                         SizedBox(
                           width: 3,
                         ),
-                        Text(Languages.translate(
-                          context,
-                          'clear',
-                        ),
+                        Text(
+                            Languages.translate(
+                              context,
+                              'clear',
+                            ),
                             style: TextStyle(
                               color: Colors.white,
                             )),
@@ -243,8 +250,10 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
     return l;
   }
 
-  _bottomSheetBuild(String type,
-      Future future,) {
+  _bottomSheetBuild(
+    String type,
+    Future future,
+  ) {
     return showModalBottomSheet(
         context: context,
         shape: RoundedRectangleBorder(
@@ -303,10 +312,12 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
                   itemBuilder: (context, index) {
                     String item = items[index];
                     return ListTile(
-                      title: Text(null != item ? item : Languages.translate(
-                        context,
-                        'none',
-                      )),
+                      title: Text(null != item
+                          ? item
+                          : Languages.translate(
+                              context,
+                              'none',
+                            )),
                       onTap: () {
                         setState(() {
                           if (type == 'colleges')
@@ -373,11 +384,13 @@ class _UserWidgetState extends State<UserWidget> {
               },
               leading: ClipRRect(
                 borderRadius: BorderRadius.circular(57),
-                child:CachedNetworkImage(
+                child: CachedNetworkImage(
                   placeholder: (context, url) => Center(
                     child: Image.asset(ConstValues.userImage),
                   ),
-                  imageUrl: widget.user.img != null ? widget.user.img : ConstValues.userImage,
+                  imageUrl: widget.user.img != null
+                      ? widget.user.img
+                      : ConstValues.userImage,
                   fit: BoxFit.cover,
                   width: 57,
                   height: 57,
@@ -385,7 +398,12 @@ class _UserWidgetState extends State<UserWidget> {
               ),
               title: Text(widget.user.firstName + ' ' + widget.user.secondName),
               subtitle: Text(
-                widget.user.university + ' | ' + widget.user.college,
+                widget.user.degree != 'hight school'
+                    ? widget.user.university + ' | ' + widget.user.college
+                    : Languages.translate(
+                        context,
+                        'high school',
+                      ),
                 style: TextStyle(
                   fontSize: 12,
                 ),

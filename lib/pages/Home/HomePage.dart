@@ -20,7 +20,6 @@ import 'package:stumeapp/pages/Home/widgets/FABwithBottomAppBar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -37,7 +36,6 @@ class _HomePageState extends State<HomePage> {
   NotificationApi _notificationApi = NotificationApi();
   ChatController chatsController = ChatController();
   final FirebaseMessaging fbm = FirebaseMessaging();
-
 
   String getChatID(id) {
     List l = [id, MyUser.myUser.id];
@@ -75,18 +73,18 @@ class _HomePageState extends State<HomePage> {
           case 'chats':
             var d = chatsController.getChat(getChatID(id_sender));
 
-//            Navigator.pushNamed(context, '/ChatRoomPage', arguments: {
-//              'group': null,
-//              'user': User().fromMap(d.data()),
-//            });
-        break;
-        case 'rooms':
-        break;
-        default:
-        Navigator.pushNamed(
-        context,
-        '/NotificationsPage',
-        );
+            Navigator.pushNamed(context, '/ChatRoomPage', arguments: {
+              'group': Group().fromMap(d.data())..setId(d.id),
+              'user': User().fromMap(d.data()),
+            });
+            break;
+          case 'rooms':
+            break;
+          default:
+            Navigator.pushNamed(
+              context,
+              '/NotificationsPage',
+            );
         }
         return;
       },
@@ -97,12 +95,12 @@ class _HomePageState extends State<HomePage> {
 
         switch (type) {
           case 'chats':
-//            var d = _authController.getUserInfo(id_sender);
+            var d = chatsController.getChat(getChatID(id_sender));
 
-//            Navigator.pushNamed(context, '/ChatRoomPage', arguments: {
-//              'group': null,
-//              'user': User().fromMap(d.data())..setId(d.id),
-//            });
+            Navigator.pushNamed(context, '/ChatRoomPage', arguments: {
+              'group': Group().fromMap(d.data())..setId(d.id),
+              'user': User().fromMap(d.data()),
+            });
             break;
           case 'rooms':
             break;
@@ -115,7 +113,6 @@ class _HomePageState extends State<HomePage> {
         return;
       },
     );
-
   }
 
   _getUserInfo() async {

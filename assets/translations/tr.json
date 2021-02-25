@@ -117,6 +117,8 @@
   "master": "Yüksek lisans",
   "graduate": "Mezun",
   "commentMyPost": "Gönderinizde bir yorum yapıldı.",
-  "client_comments_posts": "Takip ettiğiniz gönderinde bir yorum yapıldı"
+  "client_comments_posts": "Takip ettiğiniz gönderinde bir yorum yapıldı",
+  "admin": "Admin"
+
 
 }

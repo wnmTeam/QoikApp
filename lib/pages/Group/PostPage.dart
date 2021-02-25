@@ -21,11 +21,18 @@ class _PostPageState extends State<PostPage> {
         title: Text(''),
       ),
       body: SingleChildScrollView(
-        child:
-          PostWidget(
-            post: widget.post,
-            group: widget.group,
-          ),
+        child: PostWidget(
+          post: widget.post,
+          group: widget.group,
+          updatePost: (d) {
+            setState(() {
+              widget.post = Post().fromMap(d.data())..setId(d.id);
+            });
+          },
+          deletePost: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
     );
   }
