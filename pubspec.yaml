@@ -63,15 +63,14 @@ dev_dependencies:
   timeago: ^2.0.29
   url_launcher: ^5.7.5
   toast:
+  package_info:
+  badges: ^1.1.6
 
   # Emoji keyBoard
   emoji_pick: ^0.1.0
 
   # Text to link
   flutter_linkify: ^4.0.2
-
-  package_info:
-  badges: ^1.1.6
 
   # Sound effect
   audioplayers: ^0.13.2
@@ -92,12 +91,7 @@ flutter:
   assets:
     - assets/
     - assets/translations/
-    - assets/message_out.wav
-    - assets/message_in.wav
-    - assets/post.wav
-    - assets/like.ogg
-    - assets/disLike.wav
-    - assets/comment.ogg
+    - assets/sounds/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

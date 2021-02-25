@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Sounds.dart';
-import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/PostsController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 import 'package:stumeapp/localization.dart';
@@ -89,33 +88,32 @@ class _WritePostPageState extends State<WritePostPage> {
         body: ListView(
           children: [
             Container(
-              color: Colors.white,
-              child: TextField(
-                enableSuggestions: true,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(10),
-                  border: InputBorder.none,
-                  hintText: Languages.translate(
-                    context,
-                    'write_post',
-                  ),
+              color: Colors.white10,
+            child: TextField(
+              enableSuggestions: true,
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.all(10),
+                border: InputBorder.none,
+                hintText: Languages.translate(
+                  context,
+                  'write_post',
                 ),
-                controller: _postTextController,
+              ),
+              controller: _postTextController,
                 maxLines: 17,
               ),
             ),
             Wrap(
               children: [
                 for (File img in _images)
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      child: Image.file(
-                        img,
-                        fit: BoxFit.cover,
-                      ),
+                  Container(
+                    margin: EdgeInsets.only(left: 4, right: 4, bottom: 4, top:
+                    4),
+                    width: 150,
+                    height: 150,
+                    child: Image.file(
+                      img,
+                      fit: BoxFit.cover,
                     ),
                   ),
               ],
@@ -174,60 +172,60 @@ class _WritePostPageState extends State<WritePostPage> {
               //           _images.add(File(pickedFile.path));
               //         });
               //       }
-              //     }
-              //   },
-              //   label: Text(
-              //     Languages.translate(
-              //       context,
-              //       'chose_image',
-              //     ),
-              //
-              //   ),
-              // ),
-              TextButton.icon(
-                icon: Icon(Icons.post_add),
-                onPressed: () {
-                  if (_postTextController.text.isEmpty && _images.length == 0) {
-                    return;
-                  } else {
-                    _sendPost(_postTextController.text);
-                  }
-                },
-                label: !waiting
-                    ? Text(
-                        Languages.translate(
-                          context,
-                          'post',
-                        ),
-                      )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(
-                              width: 18,
-                              height: 18,
-                              child: CircularProgressIndicator(
-                                backgroundColor: Colors.white,
-                              )),
-                          SizedBox(
-                            width: 12,
-                          ),
-                          Text(
-                            Languages.translate(
-                              context,
-                              'whaiting',
-                            ),
-                            style: TextStyle(
-                              fontSize: size.width / ConstValues.fontSize_2,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-              ),
-            ],
+                //     }
+                //   },
+                //   label: Text(
+                //     Languages.translate(
+                //       context,
+                //       'chose_image',
+                //     ),
+                //
+                //   ),
+                // ),
+                // TextButton.icon(
+                //   icon: Icon(Icons.post_add),
+                //   onPressed: () {
+                //     if (_postTextController.text.isEmpty && _images.length == 0) {
+                //       return;
+                //     } else {
+                //       _sendPost(_postTextController.text);
+                //     }
+                //   },
+                //   label: !waiting
+                //       ? Text(
+                //           Languages.translate(
+                //             context,
+                //             'post',
+                //           ),
+                //         )
+                //       : Row(
+                //           mainAxisAlignment: MainAxisAlignment.center,
+                //           mainAxisSize: MainAxisSize.min,
+                //           children: [
+                //             SizedBox(
+                //                 width: 18,
+                //                 height: 18,
+                //                 child: CircularProgressIndicator(
+                //                   backgroundColor: Colors.white,
+                //                 )),
+                //             SizedBox(
+                //               width: 12,
+                //             ),
+                //             Text(
+                //               Languages.translate(
+                //                 context,
+                //                 'whaiting',
+                //               ),
+                //               style: TextStyle(
+                //                 fontSize: size.width / ConstValues.fontSize_2,
+                //                 color: Colors.white,
+                //                 fontWeight: FontWeight.bold,
+                //               ),
+                //             ),
+                //           ],
+                //         ),
+                // ),
+              ],
           ),
         ],
       ),

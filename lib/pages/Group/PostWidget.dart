@@ -27,13 +27,14 @@ class PostWidget extends StatefulWidget {
   Group group;
   Function deletePost;
   Function updatePost;
+  bool canOpenPost;
 
-  PostWidget({
-    this.post,
-    this.group,
-    this.deletePost,
-    this.updatePost,
-  });
+  PostWidget(
+      {this.post,
+      this.group,
+      this.deletePost,
+      this.updatePost,
+      this.canOpenPost = true});
 
   @override
   _PostWidgetState createState() => _PostWidgetState();
@@ -593,23 +594,31 @@ class _PostWidgetState extends State<PostWidget>
   _userWidget() {
     return ListTile(
       onTap: () {
-        Navigator.pushNamed(
-          context,
-          '/ProfilePage',
-          arguments: {'id_user': widget.post.idOwner, 'user': user},
-        );
+        if (widget.canOpenPost) {
+          Navigator.of(context).pushNamed(
+            '/PostPage',
+            arguments: {
+              'post': widget.post,
+              'group': widget.group,
+            },
+          );
+        }
       },
       contentPadding: EdgeInsets.zero,
-      leading: ClipRRect(
-        borderRadius: BorderRadius.circular(57),
-        child: CachedNetworkImage(
-          placeholder: (context, url) => Center(
-            child: Image.asset(ConstValues.userImage),
+      leading: GestureDetector(
+        onTap: openProfile,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(57),
+          child: CachedNetworkImage(
+            placeholder: (context, url) =>
+                Center(
+                  child: Image.asset(ConstValues.userImage),
+                ),
+            imageUrl: user.img != null ? user.img : ConstValues.userImage,
+            fit: BoxFit.cover,
+            width: 55,
+            height: 55,
           ),
-          imageUrl: user.img != null ? user.img : ConstValues.userImage,
-          fit: BoxFit.cover,
-          width: 55,
-          height: 55,
         ),
       ),
       title: Row(
@@ -676,6 +685,14 @@ class _PostWidgetState extends State<PostWidget>
           ),
         ],
       ),
+    );
+  }
+
+  openProfile() {
+    Navigator.pushNamed(
+      context,
+      '/ProfilePage',
+      arguments: {'id_user': widget.post.idOwner, 'user': user},
     );
   }
 

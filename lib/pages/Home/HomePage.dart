@@ -1,12 +1,14 @@
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
+import 'package:stumeapp/Sounds.dart';
 import 'package:stumeapp/api/notification_api.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
@@ -18,7 +20,6 @@ import 'package:stumeapp/pages/Home/tabs/HomeTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/LibraryTabView.dart';
 import 'package:stumeapp/pages/Home/widgets/FABwithBottomAppBar.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -42,6 +43,14 @@ class _HomePageState extends State<HomePage> {
     l.sort();
 
     return l[0] + l[1];
+  }
+
+  Sounds sounds = Sounds();
+
+  @override
+  void dispose() {
+    sounds.dispose();
+    super.dispose();
   }
 
   @override
@@ -153,6 +162,8 @@ class _HomePageState extends State<HomePage> {
               builder: (context, snapshot) {
                 if (snapshot.hasData && snapshot.data.data() != null) {
                   // TODO add sound here
+                  // sounds.notificationSound();
+
                   return Badge(
                     showBadge: snapshot.data['count'] != 0,
                     badgeColor: ConstValues.accentColor,
