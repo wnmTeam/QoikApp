@@ -34,6 +34,11 @@ class Sounds {
     return await cache.play("post.wav");
   }
 
+  Future<AudioPlayer> notificationSound() async {
+    AudioCache cache = new AudioCache();
+    return await cache.play("notification.ogg");
+  }
+
   dispose() {
     audioPlayer.dispose();
   }

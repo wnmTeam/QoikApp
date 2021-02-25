@@ -92,12 +92,14 @@ flutter:
   assets:
     - assets/
     - assets/translations/
-    - assets/message_out.wav
-    - assets/message_in.wav
-    - assets/post.wav
-    - assets/like.ogg
-    - assets/disLike.wav
-    - assets/comment.ogg
+    - assets/sounds/
+  #    - assets/message_out.wav
+  #    - assets/message_in.wav
+  #    - assets/post.wav
+  #    - assets/like.ogg
+  #    - assets/disLike.wav
+  #    - assets/comment.ogg
+  #    - assets/notification.ogg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
