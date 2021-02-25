@@ -18,6 +18,7 @@ class _PostPageState extends State<PostPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        //TODO Add title
         title: Text(''),
       ),
       body: SingleChildScrollView(
