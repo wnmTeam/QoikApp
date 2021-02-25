@@ -24,8 +24,9 @@ class _PostPageState extends State<PostPage> {
         child:
           PostWidget(
             post: widget.post,
-            group: widget.group,
-          ),
+          group: widget.group,
+          canOpenPost: false,
+        ),
       ),
     );
   }
