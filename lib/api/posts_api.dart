@@ -92,7 +92,7 @@ class PostsApi {
         .doc(post.id)
         .collection('comments');
     await reference.add(comment.toMap());
-    await _notificationApi.subscribeToTopic(id_group + post.id);
+
     _notificationApi.sendNotification(
         noti.Notification(
           type: 'commentPost',
@@ -106,6 +106,7 @@ class PostsApi {
         id_post: post.id);
     if (post.idOwner != MyUser.myUser.id)
      {
+       await _notificationApi.subscribeToTopic(id_group + post.id);
        _notificationApi.sendNotification(
            noti.Notification(
              type: 'commentMyPost',
@@ -119,13 +120,14 @@ class PostsApi {
            id_group: id_group,
            id_post: post.id);
 
-       return _firestore
-           .collection('groups')
-           .doc(id_group)
-           .collection('posts')
-           .doc(post.id)
-           .update({'commentCount': FieldValue.increment(1)});
+
      }
+    return _firestore
+        .collection('groups')
+        .doc(id_group)
+        .collection('posts')
+        .doc(post.id)
+        .update({'commentCount': FieldValue.increment(1)});
   }
 
   Future<QuerySnapshot> getComments({
