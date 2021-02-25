@@ -111,12 +111,12 @@
   "update_message": "Lütfen, Uygulamayı güncelle",
   "Please_Chose_degree": "Eğitim seviyeni seç",
   "Post_editing": "Gönderi Düzenle",
-  "add_image": "إضافة صورة",
-  "change_image": "تغيير الصورة",
-  "high school": "High School",
-  "master": "Master",
-  "graduate": "Graduate",
-  "commentMyPost": "قام بالتعليق على منشورك.",
-  "client_comments_posts": "Comment On The Post You Are interest."
+  "add_image": "Resim ekle",
+  "change_image": "Resim değiştir",
+  "high school": "Lise",
+  "master": "Yüksek lisans",
+  "graduate": "Mezun",
+  "commentMyPost": "Gönderinizde bir yorum yapıldı.",
+  "client_comments_posts": "Takip ettiğiniz gönderinde bir yorum yapıldı"
 
 }
