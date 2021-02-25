@@ -471,6 +471,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 ),
               ),
               MyDropdownButton(
+                //TODO: Add translation
                 items: [
                   Languages.translate(
                     context,

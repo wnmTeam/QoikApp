@@ -4,13 +4,11 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/Models/Comment.dart';
 import 'package:stumeapp/Models/Group.dart';
-import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/Post.dart';
 import 'package:stumeapp/api/auth.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 
 import 'notification_api.dart';
-import 'package:stumeapp/Models/Notification.dart' as noti;
 
 class PostsApi {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -83,50 +81,24 @@ class PostsApi {
     }, SetOptions(merge: true));
   }
 
-  Future createComment({Comment comment, Post post, String id_group}) async {
+  Future createComment(
+      {Comment comment, String post_id, String id_group}) async {
     CollectionReference reference;
     reference = _firestore
         .collection('groups')
         .doc(id_group)
         .collection('posts')
-        .doc(post.id)
+        .doc(post_id)
         .collection('comments');
     await reference.add(comment.toMap());
-
-    _notificationApi.sendNotification(
-        noti.Notification(
-          type: 'commentPost',
-          data: comment.text != null ? comment.text : ' ',
-          idSender: comment.idOwner,
-          idGroup: id_group,
-          idPost: post.id,
-        ),
-        'notifications',
-        id_group: id_group,
-        id_post: post.id);
-    if (post.idOwner != MyUser.myUser.id)
-     {
-       await _notificationApi.subscribeToTopic(id_group + post.id);
-       _notificationApi.sendNotification(
-           noti.Notification(
-             type: 'commentMyPost',
-             data: comment.text != null ? comment.text : ' ',
-             idSender: comment.idOwner,
-             idReceiver: post.idOwner,
-             idGroup: id_group,
-             idPost: post.id,
-           ),
-           'notifications',
-           id_group: id_group,
-           id_post: post.id);
+    await _notificationApi.subscribeToTopic(id_group + post_id);
 
 
-     }
     return _firestore
         .collection('groups')
         .doc(id_group)
         .collection('posts')
-        .doc(post.id)
+        .doc(post_id)
         .update({'commentCount': FieldValue.increment(1)});
   }
 
@@ -444,15 +416,6 @@ class PostsApi {
         .doc(id_post)
         .collection('comments')
         .doc(id_comment)
-        .get();
-  }
-
-  getPost({String id_group, String id_post}) {
-    return _firestore
-        .collection('groups')
-        .doc(id_group)
-        .collection('posts')
-        .doc(id_post)
         .get();
   }
 }

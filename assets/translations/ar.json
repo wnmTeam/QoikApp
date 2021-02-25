@@ -96,7 +96,7 @@
   "old_password": "كلمة المرور القديمة",
   "change_password": "تعديل كلمة المرور",
   "ok": "حسنا",
-  "blocked": "تم حظرك مدة 24 ساعة.",
+  "blocked": "blocked",
   "mofadalah": "المفاضلات والمنح الدراسية",
   "Graduates And Masters": "الخريجون والماستر",
   "privacy": "سياسة الخصوصية والاستخدام",
@@ -105,7 +105,7 @@
   "no_requests": "ليس لديك طلبات صداقة",
   "notifications": "الإشعارات",
   "accept_friend_request": "وافق على طلب الصداقة الذي أرسلته، أصبحتما صديقين الآن.",
-  "send_friend_request": "أرسل إليك طلب صداقة.",
+  "send_friend_request": "أرسل إليك طلب صداقة",
   "text_copied": "تم نسخ النص",
   "update_app": "تحديث التطبيق",
   "update_message": "من فضلك قم بتحديث التطبيق",
@@ -115,9 +115,5 @@
   "change_image": "تغيير الصورة",
   "high school": "المدرسة الثانوية",
   "master": "ماستر",
-  "graduate": "متخرج",
-  "commentMyPost": "قام بالتعليق على منشورك.",
-  "client_comments_posts": "قام بالتعليق على منشور تتابعه.",
-  "admin": "مسؤول"
-
+  "graduate": "متخرج"
 }

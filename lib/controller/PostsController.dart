@@ -28,7 +28,7 @@ class PostsController {
     );
   }
 
-  Future<void> createComment({String text, Post post, Group group}) {
+  Future<void> createComment({String text, String post_id, Group group}) {
     api.createComment(
       comment: Comment(
         text: text,
@@ -36,7 +36,7 @@ class PostsController {
         likeCount: 0,
         date: DateTime.now(),
       ),
-      post: post,
+      post_id: post_id,
       id_group: group.id,
     );
   }
@@ -135,9 +135,5 @@ class PostsController {
       id_post: id_post,
       id_comment: id_comment,
     );
-  }
-
-  getPost({String id_group, String id_post}) {
-    return api.getPost(id_group: id_group, id_post: id_post);
   }
 }
