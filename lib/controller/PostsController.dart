@@ -28,7 +28,7 @@ class PostsController {
     );
   }
 
-  Future<void> createComment({String text, String post_id, Group group}) {
+  Future<void> createComment({String text, Post post, Group group}) {
     api.createComment(
       comment: Comment(
         text: text,
@@ -36,7 +36,7 @@ class PostsController {
         likeCount: 0,
         date: DateTime.now(),
       ),
-      post_id: post_id,
+      post: post,
       id_group: group.id,
     );
   }
@@ -61,9 +61,9 @@ class PostsController {
       );
 
   getPostChanges({String id_post, Group group}) => api.getPostChanges(
-        id_post: id_post,
-        group: group,
-      );
+    id_post: id_post,
+    group: group,
+  );
 
   Future getMorePostInfo({Post post, Group group}) async {
     DocumentSnapshot d = await auth.getUserInfo(post.idOwner);
@@ -90,7 +90,7 @@ class PostsController {
       );
 
   isLikeComment(
-          {String id_user, Group group, String id_post, String id_comment}) =>
+      {String id_user, Group group, String id_post, String id_comment}) =>
       api.isLikeComment(
         group: group,
         id_post: id_post,
@@ -135,5 +135,9 @@ class PostsController {
       id_post: id_post,
       id_comment: id_comment,
     );
+  }
+
+  getPost({String id_group, String id_post}) {
+    return api.getPost(id_group: id_group, id_post: id_post);
   }
 }

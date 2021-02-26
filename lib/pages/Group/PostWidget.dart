@@ -27,14 +27,13 @@ class PostWidget extends StatefulWidget {
   Group group;
   Function deletePost;
   Function updatePost;
-  bool canOpenPost;
 
-  PostWidget(
-      {this.post,
-      this.group,
-      this.deletePost,
-      this.updatePost,
-      this.canOpenPost = true});
+  PostWidget({
+    this.post,
+    this.group,
+    this.deletePost,
+    this.updatePost,
+  });
 
   @override
   _PostWidgetState createState() => _PostWidgetState();
@@ -175,86 +174,86 @@ class _PostWidgetState extends State<PostWidget>
                 ),
                 post.text.isNotEmpty
                     ? Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  _isExbended = !_isExbended;
-                                });
-                              },
-                              onLongPress: () {
-                                Clipboard.setData(
-                                        ClipboardData(text: post.text))
-                                    .then((value) {
-                                  Toast.show(
-                                      Languages.translate(
-                                          context, 'text_copied'),
-                                      context,
-                                      duration: Toast.LENGTH_LONG,
-                                      backgroundColor: ConstValues.firstColor,
-                                      textColor: Colors.white);
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            _isExbended = !_isExbended;
+                          });
+                        },
+                        onLongPress: () {
+                          Clipboard.setData(
+                              ClipboardData(text: post.text))
+                              .then((value) {
+                            Toast.show(
+                                Languages.translate(
+                                    context, 'text_copied'),
+                                context,
+                                duration: Toast.LENGTH_LONG,
+                                backgroundColor: ConstValues.firstColor,
+                                textColor: Colors.white);
 
-                                  // Scaffold.of(context).showSnackBar(
-                                  //     SnackBar(content:Text('The text copied')));
-                                });
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8.0,
-                                  vertical: 10,
-                                ),
-                                child: Linkify(
-                                  onOpen: (link) async {
-                                    if (await canLaunch(link.url)) {
-                                      await launch(link.url);
-                                    } else {
-                                      throw 'Could not launch $link';
-                                    }
-                                  },
-                                  linkStyle: TextStyle(
-                                    color: Colors.blue,
-                                  ),
-                                  options: LinkifyOptions(humanize: false),
-                                  text: post.text,
-                                  maxLines: _isExbended ? 10000 : 5,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: Colors.grey[700],
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
+                            // Scaffold.of(context).showSnackBar(
+                            //     SnackBar(content:Text('The text copied')));
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0,
+                            vertical: 10,
+                          ),
+                          child: Linkify(
+                            onOpen: (link) async {
+                              if (await canLaunch(link.url)) {
+                                await launch(link.url);
+                              } else {
+                                throw 'Could not launch $link';
+                              }
+                            },
+                            linkStyle: TextStyle(
+                              color: Colors.blue,
                             ),
-                            !_isExbended
-                                ? post.text.length > 200
-                                    ? InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            _isExbended = !_isExbended;
-                                          });
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0,
-                                            vertical: 10,
-                                          ),
-                                          child: Text(
-                                            "عرض المزيد",
-                                            style: TextStyle(
-                                              color: ConstValues.firstColor,
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                    : Container()
-                                : Container(),
-                          ],
+                            options: LinkifyOptions(humanize: false),
+                            text: post.text,
+                            maxLines: _isExbended ? 10000 : 5,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.grey[700],
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                      !_isExbended
+                          ? post.text.length > 200
+                          ? InkWell(
+                        onTap: () {
+                          setState(() {
+                            _isExbended = !_isExbended;
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0,
+                            vertical: 10,
+                          ),
+                          child: Text(
+                            "عرض المزيد",
+                            style: TextStyle(
+                              color: ConstValues.firstColor,
+                              fontSize: 16,
+                            ),
+                          ),
                         ),
                       )
+                          : Container()
+                          : Container(),
+                    ],
+                  ),
+                )
                     : Container(),
                 SizedBox(
                   height: 6,
@@ -298,7 +297,7 @@ class _PostWidgetState extends State<PostWidget>
                                 id_post: widget.post.id);
 
                             DocumentSnapshot d =
-                                await _postsController.getPostChanges(
+                            await _postsController.getPostChanges(
                               id_post: widget.post.id,
                               group: widget.group,
                             );
@@ -389,7 +388,7 @@ class _PostWidgetState extends State<PostWidget>
                             );
 
                             DocumentSnapshot d =
-                                await _postsController.getPostChanges(
+                            await _postsController.getPostChanges(
                               id_post: widget.post.id,
                               group: widget.group,
                             );
@@ -475,7 +474,7 @@ class _PostWidgetState extends State<PostWidget>
                                     CommentWidget(
                                       comment: Comment()
                                           .fromMap(newComments[i].data())
-                                            ..setId(newComments[i].id),
+                                        ..setId(newComments[i].id),
                                       post: widget.post,
                                       group: widget.group,
                                       addPoint: (id) async {
@@ -549,7 +548,7 @@ class _PostWidgetState extends State<PostWidget>
                           if (!_authController.isBan()) {
                             await _postsController.createComment(
                               text: text,
-                              post_id: widget.post.id,
+                              post: widget.post,
                               group: widget.group,
                             );
                             sounds.commentSound();
@@ -594,31 +593,23 @@ class _PostWidgetState extends State<PostWidget>
   _userWidget() {
     return ListTile(
       onTap: () {
-        if (widget.canOpenPost) {
-          Navigator.of(context).pushNamed(
-            '/PostPage',
-            arguments: {
-              'post': widget.post,
-              'group': widget.group,
-            },
-          );
-        }
+        Navigator.pushNamed(
+          context,
+          '/ProfilePage',
+          arguments: {'id_user': widget.post.idOwner, 'user': user},
+        );
       },
       contentPadding: EdgeInsets.zero,
-      leading: GestureDetector(
-        onTap: openProfile,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(57),
-          child: CachedNetworkImage(
-            placeholder: (context, url) =>
-                Center(
-                  child: Image.asset(ConstValues.userImage),
-                ),
-            imageUrl: user.img != null ? user.img : ConstValues.userImage,
-            fit: BoxFit.cover,
-            width: 55,
-            height: 55,
+      leading: ClipRRect(
+        borderRadius: BorderRadius.circular(57),
+        child: CachedNetworkImage(
+          placeholder: (context, url) => Center(
+            child: Image.asset(ConstValues.userImage),
           ),
+          imageUrl: user.img != null ? user.img : ConstValues.userImage,
+          fit: BoxFit.cover,
+          width: 55,
+          height: 55,
         ),
       ),
       title: Row(
@@ -667,19 +658,13 @@ class _PostWidgetState extends State<PostWidget>
           Text(
             user.userTag == 'admin'
                 ? Languages.translate(
-                          context,
-                          user.userTag,
-                        ) ==
-                        null
-                    ? "Error"
-                    : Languages.translate(
-                        context,
-                        user.userTag,
-                      )
+              context,
+              user.userTag,
+            )
                 : Languages.translate(
-                    context,
-                    user.tag,
-                  ),
+              context,
+              user.tag,
+            ),
             style: TextStyle(fontSize: 12),
           ),
           Padding(
@@ -691,14 +676,6 @@ class _PostWidgetState extends State<PostWidget>
           ),
         ],
       ),
-    );
-  }
-
-  openProfile() {
-    Navigator.pushNamed(
-      context,
-      '/ProfilePage',
-      arguments: {'id_user': widget.post.idOwner, 'user': user},
     );
   }
 

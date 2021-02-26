@@ -38,14 +38,13 @@ class FriendsApi {
       'date': FieldValue.serverTimestamp(),
     });
     return _notificationsApi.sendNotification(
-        Notification(
-          idSender: id_sender,
-          idReceiver: id_receiver,
-          data: null,
-          type: 'send_friend_request',
-        ),
-        'notifications',
-        null);
+      Notification(
+        idSender: id_sender,
+        idReceiver: id_receiver,
+        data: null,
+        type: 'send_friend_request',
+      ),
+      'notifications',);
   }
 
   getFriends({String id, int limit, DocumentSnapshot last}) {
@@ -99,14 +98,13 @@ class FriendsApi {
 
     batch.commit();
     return _notificationsApi.sendNotification(
-        Notification(
-          idSender: MyUser.myUser.id,
-          idReceiver: id_requestSender,
-          data: null,
-          type: 'accept_friend_request',
-        ),
-        'notifications',
-        null);
+      Notification(
+        idSender: MyUser.myUser.id,
+        idReceiver: id_requestSender,
+        data: null,
+        type: 'accept_friend_request',
+      ),
+      'notifications',);
   }
 
   String getChatID(id1, id2) {

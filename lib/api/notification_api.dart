@@ -14,6 +14,63 @@ class NotificationApi {
 
 //  AuthController _authController = AuthController();
 
+  requestNotificationPermissions(context) async {
+    fbm.requestNotificationPermissions();
+    fbm.configure(
+      onMessage: (msg) {
+        print(msg);
+        return;
+      },
+      onLaunch: (msg) {
+        print(msg);
+        String type = msg['data']['type'];
+        String id_sender = msg['data']['id_sender'];
+
+        switch (type) {
+          case 'chats':
+//            var d = _authController.getUserInfo(id_sender);
+
+//            Navigator.pushNamed(context, '/ChatRoomPage', arguments: {
+//              'group': null,
+//              'user': User().fromMap(d.data()),
+//            });
+            break;
+          case 'rooms':
+            break;
+          default:
+            Navigator.pushNamed(
+              context,
+              '/NotificationsPage',
+            );
+        }
+        return;
+      },
+      onResume: (msg) {
+        print(msg);
+        String type = msg['data']['type'];
+        String id_sender = msg['data']['id_sender'];
+
+        switch (type) {
+          case 'chats':
+//            var d = _authController.getUserInfo(id_sender);
+
+//            Navigator.pushNamed(context, '/ChatRoomPage', arguments: {
+//              'group': null,
+//              'user': User().fromMap(d.data())..setId(d.id),
+//            });
+            break;
+          case 'rooms':
+            break;
+          default:
+            Navigator.pushNamed(
+              context,
+              '/NotificationsPage',
+            );
+        }
+        return;
+      },
+    );
+  }
 //  requestNotificationPermissions(context) async {
 //    fbm.requestNotificationPermissions();
 //    fbm.configure(
@@ -101,13 +158,15 @@ class NotificationApi {
   }
 
   sendNotification(
-    noti.Notification notification,
-    String type,
-    String id_group,
-  ) {
+      noti.Notification notification,
+      String type, {
+        String id_group,
+        String id_post,
+      }) {
     Map m = notification.toMap();
     m[noti.Notification.DATE] = FieldValue.serverTimestamp();
-
+    print('MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM');
+    print(m);
     WriteBatch batch = _firestore.batch();
 
     if (notification.type == 'chats')
@@ -120,7 +179,7 @@ class NotificationApi {
         {'count': FieldValue.increment(1)},
         SetOptions(merge: true),
       );
-        else if (notification.type == 'commentPost');
+    else if (notification.type == 'commentPost');
 
 //    else if (notification.type == 'rooms')
 //      batch.set(
@@ -212,6 +271,8 @@ class NotificationApi {
   String _formatTopic(String topic) {
     print(topic);
     topic = topic.replaceAll(RegExp(" "), '.');
+    topic = topic.replaceAll(RegExp("[ÜĞŞÇÖIüğışçö]"), '.');
     return topic;
   }
 }
+

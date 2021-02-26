@@ -27,17 +27,17 @@ class ChatsApi {
     if (last == null) {
       return reference
           .orderBy(
-            'date',
-            descending: true,
-          )
+        'date',
+        descending: true,
+      )
           .limit(limit)
           .get();
     } else {
       return reference
           .orderBy(
-            'date',
-            descending: true,
-          )
+        'date',
+        descending: true,
+      )
           .startAfterDocument(last)
           .limit(limit)
           .get();
@@ -104,7 +104,7 @@ class ChatsApi {
           type: type,
         ),
         type == 'chats' ? 'chatsNotifications' : 'roomsNotifications',
-        id_chat);
+        id_group: id_chat);
   }
 
   Stream getNewMessages({

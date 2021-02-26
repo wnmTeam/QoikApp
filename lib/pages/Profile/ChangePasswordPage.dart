@@ -141,35 +141,35 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               ),
               child: !updating
                   ? Text(Languages.translate(
-                      context,
-                      'save',
-                    ))
+                context,
+                'save',
+              ))
                   : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SizedBox(
-                            width: 18,
-                            height: 18,
-                            child: CircularProgressIndicator(
-                              backgroundColor: Colors.white,
-                            )),
-                        SizedBox(
-                          width: 12,
-                        ),
-                        Text(
-                          Languages.translate(
-                            context,
-                            'whaiting',
-                          ),
-                          style: TextStyle(
-                            fontSize: width / ConstValues.fontSize_2,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(
+                        backgroundColor: Colors.white,
+                      )),
+                  SizedBox(
+                    width: 12,
+                  ),
+                  Text(
+                    Languages.translate(
+                      context,
+                      'whaiting',
                     ),
+                    style: TextStyle(
+                      fontSize: width / ConstValues.fontSize_2,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
             )
           ],
         ),

@@ -1,14 +1,12 @@
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
-import 'package:stumeapp/Sounds.dart';
 import 'package:stumeapp/api/notification_api.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
@@ -20,6 +18,7 @@ import 'package:stumeapp/pages/Home/tabs/HomeTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/LibraryTabView.dart';
 import 'package:stumeapp/pages/Home/widgets/FABwithBottomAppBar.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -43,14 +42,6 @@ class _HomePageState extends State<HomePage> {
     l.sort();
 
     return l[0] + l[1];
-  }
-
-  Sounds sounds = Sounds();
-
-  @override
-  void dispose() {
-    sounds.dispose();
-    super.dispose();
   }
 
   @override
@@ -126,7 +117,7 @@ class _HomePageState extends State<HomePage> {
 
   _getUserInfo() async {
     DocumentSnapshot d =
-        await _authController.getUserInfo(_authController.getUser.uid);
+    await _authController.getUserInfo(_authController.getUser.uid);
     User user = User().fromMap(d.data()).setId(d.id);
     MyUser.myUser = user;
     _authController.updateUserTag(user);
@@ -157,13 +148,11 @@ class _HomePageState extends State<HomePage> {
           StreamBuilder(
               stream: !loading
                   ? _notificationApi.getUnreadNotificationsCount(
-                      id_user: MyUser.myUser.id)
+                  id_user: MyUser.myUser.id)
                   : null,
               builder: (context, snapshot) {
                 if (snapshot.hasData && snapshot.data.data() != null) {
                   // TODO add sound here
-                  // sounds.notificationSound();
-
                   return Badge(
                     showBadge: snapshot.data['count'] != 0,
                     badgeColor: ConstValues.accentColor,
@@ -280,83 +269,83 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: SafeArea(
         child: _currentIndex == 0 && MyUser.myUser.userTag == 'admin'
             ? FloatingActionButton(
-                onPressed: () {
-                  if (!_authController.isBan())
-                    Navigator.of(context).pushNamed(
-                      '/WritePostPage',
-                      arguments: {
-                        'group': Group()..setId('homeGroup'),
-                      },
-                    );
-                  else
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text(Languages.translate(
+          onPressed: () {
+            if (!_authController.isBan())
+              Navigator.of(context).pushNamed(
+                '/WritePostPage',
+                arguments: {
+                  'group': Group()..setId('homeGroup'),
+                },
+              );
+            else
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text(Languages.translate(
+                        context,
+                        'blocked',
+                      )),
+                      actions: [
+                        FlatButton(
+                          onPressed: () {
+                            Navigator.pop(
                               context,
-                              'blocked',
-                            )),
-                            actions: [
-                              FlatButton(
-                                onPressed: () {
-                                  Navigator.pop(
-                                    context,
-                                  );
-                                },
-                                child: Text(
-                                  Languages.translate(
-                                    context,
-                                    'ok',
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
-                        });
-                },
-                backgroundColor: ConstValues.firstColor,
-                child: Icon(
-                  Icons.edit,
-                  color: Colors.white,
-                ),
-              )
-            : FloatingActionButton(
-                backgroundColor: ConstValues.firstColor,
-                heroTag: _currentIndex == 2 ? "search" : "profile",
-                onPressed: () {
-                  if (_currentIndex == 2)
-                    Navigator.of(context).pushNamed('/SearchFriendsPage');
-                  else if (_currentIndex == 0) {
-                    if (MyUser.myUser.userTag == 'admin')
-                      Navigator.of(context).pushNamed(
-                        '/WritePostPage',
-                        arguments: {
-                          'group': Group()..setId('homeGroup'),
-                        },
-                      );
-                    else
-                      Navigator.of(context).pushNamed(
-                        '/ProfilePage',
-                        arguments: {
-                          'user': MyUser.myUser,
-                          'id_user': _authController.getUser.uid,
-                        },
-                      );
-                  } else
-                    Navigator.of(context).pushNamed(
-                      '/ProfilePage',
-                      arguments: {
-                        'user': MyUser.myUser,
-                        'id_user': _authController.getUser.uid,
-                      },
+                            );
+                          },
+                          child: Text(
+                            Languages.translate(
+                              context,
+                              'ok',
+                            ),
+                          ),
+                        ),
+                      ],
                     );
+                  });
+          },
+          backgroundColor: ConstValues.firstColor,
+          child: Icon(
+            Icons.edit,
+            color: Colors.white,
+          ),
+        )
+            : FloatingActionButton(
+          backgroundColor: ConstValues.firstColor,
+          heroTag: _currentIndex == 2 ? "search" : "profile",
+          onPressed: () {
+            if (_currentIndex == 2)
+              Navigator.of(context).pushNamed('/SearchFriendsPage');
+            else if (_currentIndex == 0) {
+              if (MyUser.myUser.userTag == 'admin')
+                Navigator.of(context).pushNamed(
+                  '/WritePostPage',
+                  arguments: {
+                    'group': Group()..setId('homeGroup'),
+                  },
+                );
+              else
+                Navigator.of(context).pushNamed(
+                  '/ProfilePage',
+                  arguments: {
+                    'user': MyUser.myUser,
+                    'id_user': _authController.getUser.uid,
+                  },
+                );
+            } else
+              Navigator.of(context).pushNamed(
+                '/ProfilePage',
+                arguments: {
+                  'user': MyUser.myUser,
+                  'id_user': _authController.getUser.uid,
                 },
-                child: Icon(
-                  _currentIndex == 2 ? Icons.add : Icons.person,
-                  color: Colors.white,
-                ),
-              ),
+              );
+          },
+          child: Icon(
+            _currentIndex == 2 ? Icons.add : Icons.person,
+            color: Colors.white,
+          ),
+        ),
       ),
       drawer: Drawer(
         child: FutureBuilder(
@@ -392,9 +381,9 @@ class _HomePageState extends State<HomePage> {
                                     child: Image.asset(ConstValues.userImage),
                                   ),
                                   imageUrl:
-                                      !loading && MyUser.myUser.img != null
-                                          ? MyUser.myUser.img
-                                          : ConstValues.userImage,
+                                  !loading && MyUser.myUser.img != null
+                                      ? MyUser.myUser.img
+                                      : ConstValues.userImage,
                                   fit: BoxFit.cover,
                                   width: width / 4,
                                   height: width / 4,
@@ -431,62 +420,62 @@ class _HomePageState extends State<HomePage> {
                     ),
                     snapshot.hasData
                         ? Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              ListTile(
-                                title: Text(link[0].title),
-                                leading: Icon(link[0].icon),
-                                onTap: () async => {
-                                  if (link[0].url != null)
-                                    {
-                                      await launch(link[0].url).then((value) =>
-                                          print('url  ' + link[0].url))
-                                    }
-                                  else
-                                    {throw 'cant launch url'}
-                                },
-                              ),
-                              ListTile(
-                                title: Text(link[1].title),
-                                leading: Icon(link[1].icon),
-                                onTap: () async => {
-                                  if (link[1].url != null)
-                                    {
-                                      await launch(link[1].url).then((value) =>
-                                          print('url  ' + link[1].url))
-                                    }
-                                  else
-                                    {throw 'cant launch url'}
-                                },
-                              ),
-                              ListTile(
-                                title: Text(link[2].title),
-                                leading: Icon(link[2].icon),
-                                onTap: () async => {
-                                  if (link[2].url != null)
-                                    {
-                                      await launch(link[2].url).then((value) =>
-                                          print('url  ' + link[2].url))
-                                    }
-                                  else
-                                    {throw 'cant launch url'}
-                                },
-                              ),
-                              ListTile(
-                                title: Text(link[3].title),
-                                leading: Icon(link[3].icon),
-                                onTap: () async => {
-                                  if (link[3].url != null)
-                                    {
-                                      await launch(link[3].url).then((value) =>
-                                          print('url  ' + link[3].url))
-                                    }
-                                  else
-                                    {throw 'cant launch url'}
-                                },
-                              ),
-                            ],
-                          )
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ListTile(
+                          title: Text(link[0].title),
+                          leading: Icon(link[0].icon),
+                          onTap: () async => {
+                            if (link[0].url != null)
+                              {
+                                await launch(link[0].url).then((value) =>
+                                    print('url  ' + link[0].url))
+                              }
+                            else
+                              {throw 'cant launch url'}
+                          },
+                        ),
+                        ListTile(
+                          title: Text(link[1].title),
+                          leading: Icon(link[1].icon),
+                          onTap: () async => {
+                            if (link[1].url != null)
+                              {
+                                await launch(link[1].url).then((value) =>
+                                    print('url  ' + link[1].url))
+                              }
+                            else
+                              {throw 'cant launch url'}
+                          },
+                        ),
+                        ListTile(
+                          title: Text(link[2].title),
+                          leading: Icon(link[2].icon),
+                          onTap: () async => {
+                            if (link[2].url != null)
+                              {
+                                await launch(link[2].url).then((value) =>
+                                    print('url  ' + link[2].url))
+                              }
+                            else
+                              {throw 'cant launch url'}
+                          },
+                        ),
+                        ListTile(
+                          title: Text(link[3].title),
+                          leading: Icon(link[3].icon),
+                          onTap: () async => {
+                            if (link[3].url != null)
+                              {
+                                await launch(link[3].url).then((value) =>
+                                    print('url  ' + link[3].url))
+                              }
+                            else
+                              {throw 'cant launch url'}
+                          },
+                        ),
+                      ],
+                    )
                         : CircularProgressIndicator(),
                     Divider(),
                     ListTile(
@@ -522,8 +511,8 @@ class _HomePageState extends State<HomePage> {
       body: !loading
           ? tabViews[_currentIndex]
           : Center(
-              child: CircularProgressIndicator(),
-            ),
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 
