@@ -667,9 +667,15 @@ class _PostWidgetState extends State<PostWidget>
           Text(
             user.userTag == 'admin'
                 ? Languages.translate(
-                    context,
-                    user.userTag,
-                  )
+                          context,
+                          user.userTag,
+                        ) ==
+                        null
+                    ? "Error"
+                    : Languages.translate(
+                        context,
+                        user.userTag,
+                      )
                 : Languages.translate(
                     context,
                     user.tag,
