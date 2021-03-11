@@ -123,6 +123,7 @@ class MapScreenState extends State<ProfilePage> {
                                 widget.user.secondName,
                             style: TextStyle(
                               fontSize: 24,
+                              color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -748,6 +749,11 @@ class _FriendWidgetState extends State<FriendWidget> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
+                      color: Theme.of(context)
+                          .textTheme
+                          .bodyText2
+                          .color
+                          .withOpacity(0.5),
                     ),
                   ),
                 ),
@@ -761,16 +767,15 @@ class _FriendWidgetState extends State<FriendWidget> {
 }
 
 class Avatar extends StatefulWidget {
-  String imagePath;
-  bool myProfile;
-  Function ubdateImagerofile;
-  bool uploadImage;
+  final String imagePath;
+  final bool myProfile;
+  final Function ubdateImagerofile;
+  final bool uploadImage;
 
-  Avatar(
-      {this.imagePath,
-      this.myProfile,
-      this.ubdateImagerofile,
-      this.uploadImage});
+  Avatar({this.imagePath,
+    this.myProfile,
+    this.ubdateImagerofile,
+    this.uploadImage});
 
   @override
   _AvatarState createState() => _AvatarState();
@@ -863,6 +868,9 @@ class _AvatarState extends State<Avatar> {
                         padding: const EdgeInsets.all(7.0),
                         child: Icon(
                           Icons.camera_alt,
+                          color: Theme
+                              .of(context)
+                              .primaryColor,
                         ),
                       ),
                     ),
