@@ -74,6 +74,46 @@ class _SettingsState extends State<Settings> {
             },
           ),
           Divider(),
+          ListTile(
+            title: Text(Languages.translate(context, "change_theme")),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    scrollable: true,
+                    title: Text(Languages.translate(context, "change_theme")),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ListTile(
+                          title:
+                              Text(Languages.translate(context, "light_theme")),
+                          onTap: () async {
+                            await storageController.setTheme('light');
+
+                            MyAppState.myAppState.setState(() {
+                              MyAppState.isDark = false;
+                            });
+                          },
+                        ),
+                        ListTile(
+                          title:
+                              Text(Languages.translate(context, "dark_theme")),
+                          onTap: () async {
+                            await storageController.setTheme('dark');
+                            MyAppState.myAppState.setState(() {
+                              MyAppState.isDark = true;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
+            },
+          ),
           // ToggleButtons(
           //     children: [
           //       ListTile(
@@ -93,34 +133,6 @@ class _SettingsState extends State<Settings> {
           // ),
 
 
-          //TODO: Change The Theme
-          // ListTile(
-          //   title: Text("Change the theme"),
-          //   onTap: () {
-          //     showDialog(
-          //       context: context,
-          //       builder: (context) {
-          //         return AlertDialog(
-          //           scrollable: true,
-          //           title: Text("Change the theme"),
-          //           content: Column(
-          //             mainAxisSize: MainAxisSize.min,
-          //             children: [
-          //               ListTile(
-          //                 title: Text("Normal theme"),
-          //                 onTap: () {},
-          //               ),
-          //               ListTile(
-          //                 title: Text("Dark theme"),
-          //                 onTap: () {},
-          //               ),
-          //             ],
-          //           ),
-          //         );
-          //       },
-          //     );
-          //   },
-          // ),
         ],
       ),
     );

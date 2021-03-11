@@ -202,6 +202,19 @@ class StorageController {
     return prefs.setString('lang', lang);
   }
 
+  String getTheme() {
+    try {
+      String theme = prefs.getString('theme');
+      return theme;
+    } catch (e) {
+      return 'light';
+    }
+  }
+
+  setTheme(String theme) {
+    return prefs.setString('theme', theme);
+  }
+
 //  void setGroup(Group group) {
 //    prefs.setString('groupName.', value)
 //  }
