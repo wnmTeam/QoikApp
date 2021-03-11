@@ -330,9 +330,8 @@ class _PostWidgetState extends State<PostWidget>
                                   width: 20,
                                   height: 20,
                                   color: widget.post.getIsLiked
-                                      ? Theme
-                                      .of(context)
-                                      .cardColor : ConstValues.secondColor,
+                                      ? Colors.white
+                                      : ConstValues.secondColor,
                                 ),
                                 SizedBox(
                                   width: 6,
@@ -340,9 +339,8 @@ class _PostWidgetState extends State<PostWidget>
                                 Text(post.likeCount.toString(),
                                   style: TextStyle(
                                     color: widget.post.getIsLiked
-                                        ? Theme
-                                        .of(context)
-                                        .cardColor : ConstValues.secondColor,
+                                        ? Colors.white : ConstValues
+                                        .secondColor,
                                   ),
                                 ),
                               ],
@@ -430,18 +428,16 @@ class _PostWidgetState extends State<PostWidget>
                               children: [
                                 Icon(
                                   Icons.add_box,
-                                  color: widget.post.getIsFollowed ? Theme
-                                      .of(context)
-                                      .cardColor : ConstValues.secondColor,
+                                  color: widget.post.getIsFollowed ? Colors
+                                      .white : ConstValues.secondColor,
                                 ),
                                 SizedBox(
                                   width: 6,
                                 ),
                                 Text(post.followCount.toString(),
                                   style: TextStyle(
-                                    color: widget.post.getIsFollowed ? Theme
-                                        .of(context)
-                                        .cardColor : ConstValues.secondColor,
+                                    color: widget.post.getIsFollowed ? Colors
+                                        .white : ConstValues.secondColor,
                                   ),),
                               ],
                             ),

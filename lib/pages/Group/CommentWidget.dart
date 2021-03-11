@@ -219,9 +219,8 @@ class _CommentWidgetState extends State<CommentWidget> {
                                 ) + ' ',
                                 style: TextStyle(
                                   color: widget.comment.isLiked
-                                      ? Theme
-                                      .of(context)
-                                      .cardColor : ConstValues.secondColor,
+                                      ? Colors.white
+                                      : ConstValues.secondColor,
                                   fontSize: 15,
                                 ),
                               ),
