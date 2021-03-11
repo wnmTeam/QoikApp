@@ -3,14 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Book.dart';
 import 'package:stumeapp/Models/User.dart';
-import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/LibraryController.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
 class BooksPage extends StatefulWidget {
-  String category;
+  final String category;
 
   BooksPage({this.category});
 
@@ -41,9 +40,7 @@ class _BooksPageState extends State<BooksPage> {
       appBar: AppBar(
         title: Text(
           widget.category,
-          style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: ConstValues.firstColor,
       ),
       body: GridView.count(
           crossAxisCount: 3,

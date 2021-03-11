@@ -84,7 +84,7 @@ class MapScreenState extends State<ProfilePage> {
                           bottomLeft: Radius.circular(15),
                           bottomRight: Radius.circular(11),
                         ),
-                        color: ConstValues.firstColor[700],
+                        color: Theme.of(context).primaryColor.withOpacity(0.9),
                       ),
                       child: Column(
                         children: <Widget>[
@@ -122,7 +122,6 @@ class MapScreenState extends State<ProfilePage> {
                                 ' ' +
                                 widget.user.secondName,
                             style: TextStyle(
-                              color: Colors.white,
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
                             ),
@@ -164,7 +163,6 @@ class MapScreenState extends State<ProfilePage> {
                                               ? FlatButton.icon(
                                                   icon: Icon(
                                                     Icons.person_remove,
-                                                    color: Colors.blueGrey,
                                                   ),
                                                   label:
                                                       Text(Languages.translate(
@@ -185,10 +183,8 @@ class MapScreenState extends State<ProfilePage> {
                                                 )
                                               : isRequested
                                                   ? FlatButton.icon(
-                                                      color: Colors.grey[300],
                                                       icon: Icon(
                                                         Icons.person_remove,
-                                                        color: Colors.blueGrey,
                                                       ),
                                                       label: Text(
                                                           Languages.translate(
@@ -210,12 +206,10 @@ class MapScreenState extends State<ProfilePage> {
                                                     )
                                                   : isHeRequeste
                                                       ? FlatButton.icon(
-                                                          color:
-                                                              Colors.grey[300],
+
                                                           icon: Icon(
                                                             Icons.person_add,
-                                                            color:
-                                                                Colors.blueGrey,
+
                                                           ),
                                                           label: Text(Languages
                                                               .translate(
@@ -237,8 +231,7 @@ class MapScreenState extends State<ProfilePage> {
                                                       : FlatButton.icon(
                                                           icon: Icon(
                                                             Icons.person_add,
-                                                            color:
-                                                                Colors.blueGrey,
+
                                                           ),
                                                           label: Text(Languages
                                                               .translate(
@@ -265,7 +258,6 @@ class MapScreenState extends State<ProfilePage> {
                                           FlatButton.icon(
                                             icon: Icon(
                                               CupertinoIcons.chat_bubble_fill,
-                                              color: Colors.blueGrey,
                                             ),
                                             label: Text(Languages.translate(
                                               context,
@@ -321,7 +313,9 @@ class MapScreenState extends State<ProfilePage> {
                                                 _userTagImage(),
                                                 width: 50,
                                                 height: 50,
-                                                color: ConstValues.firstColor,
+                                                color: Theme
+                                                    .of(context)
+                                                    .primaryColor,
                                               ),
                                               Text(Languages.translate(
                                                 context,
@@ -334,7 +328,9 @@ class MapScreenState extends State<ProfilePage> {
                                               Text(
                                                 widget.user.points.toString(),
                                                 style: TextStyle(
-                                                  color: ConstValues.firstColor,
+                                                  color: Theme
+                                                      .of(context)
+                                                      .primaryColor,
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 45,
                                                 ),
@@ -348,10 +344,13 @@ class MapScreenState extends State<ProfilePage> {
                                           Column(
                                             children: [
                                               SvgPicture.asset(
-                                                'assets/${widget.user.gender}.svg',
+                                                'assets/${widget.user
+                                                    .gender}.svg',
                                                 width: 42,
                                                 height: 42,
-                                                color: ConstValues.firstColor,
+                                                color: Theme
+                                                    .of(context)
+                                                    .primaryColor,
                                               ),
                                               SizedBox(
                                                 height: 10,
@@ -407,7 +406,12 @@ class MapScreenState extends State<ProfilePage> {
                                             autofocus: true,
                                             minLines: 1,
                                             style: TextStyle(
-                                              color: Colors.grey[600],
+                                              color: Theme
+                                                  .of(context)
+                                                  .textTheme
+                                                  .bodyText2
+                                                  .color
+                                                  .withOpacity(0.6),
                                               fontSize: 14,
                                             ),
                                             controller: _bioController,
@@ -555,7 +559,6 @@ class MapScreenState extends State<ProfilePage> {
                             left: 0,
                             child: SafeArea(
                               child: BackButton(
-                                color: Colors.white,
                               ),
                             ),
                           )
@@ -564,7 +567,6 @@ class MapScreenState extends State<ProfilePage> {
                             right: 0,
                             child: SafeArea(
                               child: BackButton(
-                                color: Colors.white,
                               ),
                             ),
                           ),
@@ -712,12 +714,13 @@ class _FriendWidgetState extends State<FriendWidget> {
                 child: Container(
                   height: 175,
                   width: 175,
-                  color: Colors.indigo[200],
+                  color: Colors.indigo[900],
                   child: CachedNetworkImage(
                     imageUrl: _user.img,
-                    placeholder: (context, url) => Center(
-                      child: Image.asset(ConstValues.userImage),
-                    ),
+                    placeholder: (context, url) =>
+                        Center(
+                          child: Image.asset(ConstValues.userImage),
+                        ),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -733,7 +736,6 @@ class _FriendWidgetState extends State<FriendWidget> {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 18,
-                    color: Colors.grey[700],
                   ),
                 ),
               ),
@@ -746,7 +748,6 @@ class _FriendWidgetState extends State<FriendWidget> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: Colors.grey,
                     ),
                   ),
                 ),
@@ -805,7 +806,6 @@ class _AvatarState extends State<Avatar> {
                     ? _image
                     : "",
             child: CircleAvatar(
-              backgroundColor: Colors.white,
               radius: 75,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(100),
@@ -854,14 +854,15 @@ class _AvatarState extends State<Avatar> {
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.grey[400],
+                        color: Theme
+                            .of(context)
+                            .backgroundColor,
                         shape: BoxShape.circle,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(7.0),
                         child: Icon(
                           Icons.camera_alt,
-                          color: Colors.white,
                         ),
                       ),
                     ),

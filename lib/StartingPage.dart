@@ -44,6 +44,8 @@ class _StartingPageState extends State<StartingPage> {
     print(lastV.data()['version'] == versionCode);
     setState(() {
       canGo = lastV.data()['version'] == versionCode;
+      //TODO
+      canGo = true;
       print(canGo);
 
       loading = false;
@@ -80,7 +82,7 @@ class _StartingPageState extends State<StartingPage> {
               : FractionallySizedBox(
                   widthFactor: 1,
                   child: Container(
-                    color: ConstValues.firstColor,
+                    color: Theme.of(context).primaryColor,
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -118,7 +120,9 @@ class _StartingPageState extends State<StartingPage> {
                               'update_app',
                             ),
                             style: TextStyle(
-                              color: ConstValues.firstColor,
+                              color: Theme
+                                  .of(context)
+                                  .primaryColor,
                               fontSize: 16,
                             ),
                           ),

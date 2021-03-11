@@ -7,10 +7,8 @@ import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/Group/tabs/MembersTabView.dart';
 import 'package:stumeapp/pages/Group/tabs/PostsTabView.dart';
 
-import '../../const_values.dart';
-
 class GroupPage extends StatefulWidget {
-  Group group;
+  final Group group;
 
   GroupPage(this.group);
 
@@ -47,10 +45,10 @@ class _GroupPageState extends State<GroupPage>
 
   @override
   Widget build(BuildContext context) {
+    print(Theme.of(context).primaryTextTheme.headline6);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: Colors.white,
         appBar: AppBar(
           title: ListTile(
             contentPadding: EdgeInsets.zero,
@@ -61,28 +59,45 @@ class _GroupPageState extends State<GroupPage>
                       context,
                       'my_university',
                     ),
-                    style: TextStyle(color: Colors.white),
+                    style: Theme.of(context)
+                        .textTheme
+                        .copyWith(subtitle1: TextStyle(color: Colors.white))
+                        .subtitle1,
                   )
                 : widget.group.type == Group.TYPE_COLLEGE
-                    ? Text(
-                        Languages.translate(
-                          context,
-                          'my_college',
-                        ),
-                        style: TextStyle(color: Colors.white),
-                      )
-                    : Text(
-                        Languages.translate(
-                          context,
-                          widget.group.id,
-                        ),
-                        style: TextStyle(color: Colors.white),
-                      ),
+                ? Text(
+              Languages.translate(
+                context,
+                'my_college',
+              ),
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .copyWith(subtitle1: TextStyle(color: Colors.white))
+                  .subtitle1,
+            )
+                : Text(
+              Languages.translate(
+                context,
+                widget.group.id,
+              ),
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .copyWith(subtitle1: TextStyle(color: Colors.white))
+                  .subtitle1,
+            ),
             subtitle: widget.group.type == 'G' ||
-                    widget.group.type == Group.TYPE_MOFADALAH
+                widget.group.type == Group.TYPE_MOFADALAH
                 ? null
-                : Text(widget.group.name,
-                    style: TextStyle(color: Colors.white70)),
+                : Text(
+              widget.group.name,
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .copyWith(caption: TextStyle(color: Colors.white))
+                  .caption,
+            ),
             leading: Container(
               width: 38,
               height: 38,
@@ -91,7 +106,9 @@ class _GroupPageState extends State<GroupPage>
                 children: [
                   SvgPicture.asset(
                     'assets/col.svg',
-                    color: ConstValues.firstColor[700],
+                    color: Theme
+                        .of(context)
+                        .primaryColor,
                     width: 20,
                     height: 20,
                   ),
@@ -103,17 +120,16 @@ class _GroupPageState extends State<GroupPage>
               ),
             ),
           ),
-          backgroundColor: ConstValues.firstColor,
           bottom: TabBar(
             indicatorColor: Colors.white70,
             indicatorPadding: EdgeInsets.symmetric(horizontal: 30),
             controller: _tabController,
             tabs: [
               Tab(
-//                icon: Icon(
-//                  Icons.chat,
-//                  color: Colors.indigo,
-//                ),
+                // icon: Icon(
+                //   Icons.chat,
+                //   color: Colors.indigo,
+                // ),
                 child: Text(
                   Languages.translate(
                     context,

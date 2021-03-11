@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -18,7 +19,6 @@ import 'package:stumeapp/pages/Home/tabs/HomeTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/LibraryTabView.dart';
 import 'package:stumeapp/pages/Home/widgets/FABwithBottomAppBar.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -155,7 +155,7 @@ class _HomePageState extends State<HomePage> {
                   // TODO add sound here
                   return Badge(
                     showBadge: snapshot.data['count'] != 0,
-                    badgeColor: ConstValues.accentColor,
+                    badgeColor: Theme.of(context).accentColor,
                     badgeContent: Text(
                       snapshot.data['count'].toString(),
                       style: TextStyle(
@@ -230,7 +230,9 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       bottomNavigationBar: FABBottomAppBar(
-        backgroundColor: ConstValues.firstColor,
+        backgroundColor: Theme
+            .of(context)
+            .primaryColor,
         notchedShape: CircularNotchedRectangle(),
         selectedColor: Colors.white,
         onTabSelected: _selectedTab,
@@ -304,14 +306,18 @@ class _HomePageState extends State<HomePage> {
                     );
                   });
           },
-          backgroundColor: ConstValues.firstColor,
+          backgroundColor: Theme
+              .of(context)
+              .primaryColor,
           child: Icon(
             Icons.edit,
             color: Colors.white,
           ),
         )
             : FloatingActionButton(
-          backgroundColor: ConstValues.firstColor,
+          backgroundColor: Theme
+              .of(context)
+              .primaryColor,
           heroTag: _currentIndex == 2 ? "search" : "profile",
           onPressed: () {
             if (_currentIndex == 2)
@@ -321,7 +327,8 @@ class _HomePageState extends State<HomePage> {
                 Navigator.of(context).pushNamed(
                   '/WritePostPage',
                   arguments: {
-                    'group': Group()..setId('homeGroup'),
+                    'group': Group()
+                      ..setId('homeGroup'),
                   },
                 );
               else
@@ -407,7 +414,12 @@ class _HomePageState extends State<HomePage> {
                                   Text(
                                     MyUser.myUser.email,
                                     style: TextStyle(
-                                      color: Colors.black45,
+                                      color: Theme
+                                          .of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          .color
+                                          .withAlpha(150),
                                       fontSize: width / 40,
                                     ),
                                   ),
@@ -506,7 +518,9 @@ class _HomePageState extends State<HomePage> {
               );
             }),
       ),
-      drawerScrimColor: ConstValues.firstColor,
+      drawerScrimColor: Theme
+          .of(context)
+          .primaryColor,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: !loading
           ? tabViews[_currentIndex]

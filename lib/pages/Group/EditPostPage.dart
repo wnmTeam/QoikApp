@@ -56,7 +56,6 @@ class _EditPostPageState extends State<EditPostPage> {
                 },
                 child: Icon(
                   loading ? Icons.watch_later_outlined : Icons.save,
-                  color: Colors.white,
                 )),
           ),
         ],
@@ -67,7 +66,7 @@ class _EditPostPageState extends State<EditPostPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              color: Colors.white,
+              // color: Colors.white,
               child: TextField(
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.all(10),

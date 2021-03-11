@@ -333,20 +333,22 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                                 CrossAxisAlignment.end,
                                             children: [
                                               IconButton(
-                                                icon: Icon(Icons.photo_camera,
-                                                    color:
-                                                        ConstValues.firstColor),
-                                                onPressed: () async {
-                                                  final pickedFile =
-                                                      await _storageController
-                                                          .getImageFromCamera();
-                                                  if (pickedFile != null) {
-                                                    _images.add(
-                                                        File(pickedFile.path));
-                                                    setState(() {
-                                                      chosenImages = Container(
-                                                        height: 150,
-                                                        child: ListView.builder(
+                                                icon: Icon(
+                                              Icons.photo_camera,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                            ),
+                                            onPressed: () async {
+                                              final pickedFile =
+                                                  await _storageController
+                                                      .getImageFromCamera();
+                                              if (pickedFile != null) {
+                                                _images
+                                                    .add(File(pickedFile.path));
+                                                setState(() {
+                                                  chosenImages = Container(
+                                                    height: 150,
+                                                    child: ListView.builder(
                                                           scrollDirection:
                                                               Axis.horizontal,
                                                           itemCount:
@@ -395,12 +397,13 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                               ),
                                               IconButton(
                                                   icon: Icon(Icons.attach_file,
-                                                      color: ConstValues
-                                                          .firstColor),
+                                                    color: Theme
+                                                        .of(context)
+                                                        .primaryColor,),
                                                   onPressed: () async {
                                                     final pickedFile =
-                                                        await _storageController
-                                                            .getImage();
+                                                    await _storageController
+                                                        .getImage();
                                                     if (pickedFile != null) {
                                                       _images.add(File(
                                                           pickedFile.path));
@@ -428,10 +431,11 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                               if (showEmoji)
                                                 IconButton(
                                                     icon: Icon(
-                                                        Icons
-                                                            .emoji_emotions_outlined,
-                                                        color: ConstValues
-                                                            .firstColor),
+                                                      Icons
+                                                          .emoji_emotions_outlined,
+                                                      color: Theme
+                                                          .of(context)
+                                                          .primaryColor,),
                                                     onPressed: () {
                                                       if (emojiHeight == 0.0) {
                                                         setState(() {
@@ -452,7 +456,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                         borderRadius:
                                             BorderRadius.circular(100),
                                         child: Container(
-                                          color: ConstValues.firstColor,
+                                          color: Theme
+                                              .of(context)
+                                              .primaryColor,
                                           child: IconButton(
                                             icon: Icon(
                                               Icons.send,
@@ -579,9 +585,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
         //                           crossAxisAlignment: CrossAxisAlignment.end,
         //                           children: [
         //                             IconButton(
-        //                               icon: Icon(Icons.photo_camera,
-        //                                   color: ConstValues.firstColor),
-        //                               onPressed: () async {
+      //                               icon: Icon(Icons.photo_camera,
+      //                                   color: Theme.of(context).primaryColor,),
+      //                               onPressed: () async {
         //                                 final pickedFile =
         //                                     await _storageController
         //                                         .getImageFromCamera();
@@ -634,9 +640,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
         //                               ),
         //                             ),
         //                             IconButton(
-        //                                 icon: Icon(Icons.attach_file,
-        //                                     color: ConstValues.firstColor),
-        //                                 onPressed: () async {
+      //                                 icon: Icon(Icons.attach_file,
+      //                                     color: Theme.of(context).primaryColor,),
+      //                                 onPressed: () async {
         //                                   final pickedFile =
         //                                       await _storageController
         //                                           .getImage();
@@ -663,9 +669,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
         //                             if (showEmoji)
         //                               IconButton(
         //                                   icon: Icon(
-        //                                       Icons.emoji_emotions_outlined,
-        //                                       color: ConstValues.firstColor),
-        //                                   onPressed: () {
+      //                                       Icons.emoji_emotions_outlined,
+      //                                       color: Theme.of(context).primaryColor,),
+      //                                   onPressed: () {
         //                                     if (emojiHeight == 0.0) {
         //                                       setState(() {
         //                                         emojiHeight = 255.0;
@@ -683,9 +689,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
         //                     SizedBox(width: 10),
         //                     ClipRRect(
         //                       borderRadius: BorderRadius.circular(100),
-        //                       child: Container(
-        //                         color: ConstValues.firstColor,
-        //                         child: IconButton(
+      //                       child: Container(
+      //                         color: Theme.of(context).primaryColor,,
+      //                         child: IconButton(
         //                           icon: Icon(
         //                             Icons.send,
         //                             color: Colors.white,

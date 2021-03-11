@@ -134,7 +134,7 @@ class _ChatsTabState extends State<ChatsTab>
                   }
                   return  Badge(
                     showBadge: messageCount != 0,
-                    badgeColor: ConstValues.accentColor,
+                    badgeColor: Theme.of(context).accentColor,
                     badgeContent: Text(
                       messageCount.toString(),
                       style: TextStyle(
@@ -143,7 +143,10 @@ class _ChatsTabState extends State<ChatsTab>
                       ),
                     ),
                     position: BadgePosition.topStart(top: 0, start: -10),
-                    child: Container(width: 15,height: 15,),
+                    child: Container(
+                      width: 15,
+                      height: 15,
+                    ),
                   );
                 }),
           );

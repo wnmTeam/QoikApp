@@ -54,7 +54,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
           Languages.translate(
@@ -230,7 +229,6 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
                   Icon(
                     CupertinoIcons.calendar_today,
                     size: 13,
-                    color: Colors.grey[600],
                   ),
                   SizedBox(
                     width: 3,

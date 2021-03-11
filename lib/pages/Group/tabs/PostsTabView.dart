@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/Post.dart';
-import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/PostsController.dart';
 import 'package:stumeapp/localization.dart';
@@ -164,7 +163,7 @@ class _PostsTabState extends State<PostsTab>
                         );
                       });
               },
-              backgroundColor: ConstValues.firstColor,
+              backgroundColor: Theme.of(context).primaryColor,
               child: Icon(
                 Icons.edit,
                 color: Colors.white,

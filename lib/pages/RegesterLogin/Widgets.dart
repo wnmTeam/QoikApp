@@ -109,7 +109,7 @@ class ResetDialog extends StatelessWidget {
                     Navigator.of(context).pop();
                   }
                 },
-                color: ConstValues.firstColor,
+                color: Theme.of(context).primaryColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),

@@ -66,6 +66,8 @@ class _PostWidgetState extends State<PostWidget>
   bool tag = true;
   Sounds sounds = Sounds();
 
+  Color buttonsColor;
+
   @override
   void dispose() {
     sounds.dispose();
@@ -103,6 +105,8 @@ class _PostWidgetState extends State<PostWidget>
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
+    buttonsColor = Colors.grey[200];
+
     return _postBuilder(widget.post);
   }
 
@@ -139,7 +143,6 @@ class _PostWidgetState extends State<PostWidget>
       margin: EdgeInsets.symmetric(horizontal: 3, vertical: 4),
       child: Card(
         elevation: 3,
-        color: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
@@ -165,10 +168,7 @@ class _PostWidgetState extends State<PostWidget>
                       return UserPlaceholder();
 //                    return CircularProgressIndicator();
                     }),
-                Container(
-                  height: 1,
-                  color: Colors.grey[200],
-                ),
+                Divider(),
                 SizedBox(
                   height: 10,
                 ),
@@ -189,12 +189,14 @@ class _PostWidgetState extends State<PostWidget>
                               ClipboardData(text: post.text))
                               .then((value) {
                             Toast.show(
-                                Languages.translate(
-                                    context, 'text_copied'),
-                                context,
-                                duration: Toast.LENGTH_LONG,
-                                backgroundColor: ConstValues.firstColor,
-                                textColor: Colors.white);
+                              Languages.translate(
+                                  context, 'text_copied'),
+                              context,
+                              duration: Toast.LENGTH_LONG,
+                              backgroundColor: Theme
+                                  .of(context)
+                                  .primaryColor,
+                            );
 
                             // Scaffold.of(context).showSnackBar(
                             //     SnackBar(content:Text('The text copied')));
@@ -220,10 +222,7 @@ class _PostWidgetState extends State<PostWidget>
                             text: post.text,
                             maxLines: _isExbended ? 10000 : 5,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Colors.grey[700],
-                              fontSize: 16,
-                            ),
+
                           ),
                         ),
                       ),
@@ -243,7 +242,9 @@ class _PostWidgetState extends State<PostWidget>
                           child: Text(
                             "عرض المزيد",
                             style: TextStyle(
-                              color: ConstValues.firstColor,
+                              color: Theme
+                                  .of(context)
+                                  .primaryColor,
                               fontSize: 16,
                             ),
                           ),
@@ -312,24 +313,38 @@ class _PostWidgetState extends State<PostWidget>
                             }
                           },
                           color: widget.post.getIsLiked
-                              ? ConstValues.firstColor[100]
-                              : Colors.grey[100],
+                              ? Theme
+                              .of(context)
+                              .primaryColor
+                              .withOpacity(0.7)
+                              : buttonsColor,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(25)),
                           child: Container(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SvgPicture.asset(
                                   'assets/like.svg',
                                   width: 20,
                                   height: 20,
-                                  color: ConstValues.secondColor,
+                                  color: widget.post.getIsLiked
+                                      ? Theme
+                                      .of(context)
+                                      .cardColor : ConstValues.secondColor,
                                 ),
                                 SizedBox(
                                   width: 6,
                                 ),
-                                Text(post.likeCount.toString()),
+                                Text(post.likeCount.toString(),
+                                  style: TextStyle(
+                                    color: widget.post.getIsLiked
+                                        ? Theme
+                                        .of(context)
+                                        .cardColor : ConstValues.secondColor,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -345,7 +360,7 @@ class _PostWidgetState extends State<PostWidget>
                         });
                         _loadComments();
                       },
-                      color: Colors.grey[100],
+                      color: buttonsColor,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25)),
                       child: Container(
@@ -359,7 +374,9 @@ class _PostWidgetState extends State<PostWidget>
                             SizedBox(
                               width: 6,
                             ),
-                            Text(post.commentCount.toString()),
+                            Text(post.commentCount.toString(),
+                              style: TextStyle(color: ConstValues.secondColor,
+                              ),),
                           ],
                         ),
                       ),
@@ -399,8 +416,12 @@ class _PostWidgetState extends State<PostWidget>
                               });
                           },
                           color: widget.post.getIsFollowed
-                              ? ConstValues.firstColor[100]
-                              : Colors.grey[100],
+                              ? Theme
+                              .of(context)
+                              .primaryColor
+                              .withOpacity(0.7)
+                              : buttonsColor
+                              .withOpacity(0.8),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(25)),
                           child: Container(
@@ -409,12 +430,19 @@ class _PostWidgetState extends State<PostWidget>
                               children: [
                                 Icon(
                                   Icons.add_box,
-                                  color: ConstValues.secondColor,
+                                  color: widget.post.getIsFollowed ? Theme
+                                      .of(context)
+                                      .cardColor : ConstValues.secondColor,
                                 ),
                                 SizedBox(
                                   width: 6,
                                 ),
-                                Text(post.followCount.toString()),
+                                Text(post.followCount.toString(),
+                                  style: TextStyle(
+                                    color: widget.post.getIsFollowed ? Theme
+                                        .of(context)
+                                        .cardColor : ConstValues.secondColor,
+                                  ),),
                               ],
                             ),
                           ),
@@ -539,7 +567,9 @@ class _PostWidgetState extends State<PostWidget>
                       IconButton(
                         icon: Icon(
                           Icons.send,
-                          color: ConstValues.firstColor,
+                          color: Theme
+                              .of(context)
+                              .primaryColor,
                         ),
                         onPressed: () async {
                           String text = _commentController.text;

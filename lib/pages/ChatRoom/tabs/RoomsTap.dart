@@ -91,22 +91,22 @@ class _RoomsTabState extends State<RoomsTab>
                           );
                         },
                         child: Text(
-                          Languages.translate(
-                            context,
-                            'ok',
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                });
-        },
-        backgroundColor: ConstValues.firstColor,
-        child: Icon(
-          Icons.person_add,
-          color: Colors.white,
-        ),
-      )
+                                Languages.translate(
+                                  context,
+                                  'ok',
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      });
+              },
+              backgroundColor: Theme.of(context).primaryColor,
+              child: Icon(
+                Icons.person_add,
+                color: Colors.white,
+              ),
+            )
           : null,
       body: StreamBuilder(
         stream: _chatsController.getRooms(

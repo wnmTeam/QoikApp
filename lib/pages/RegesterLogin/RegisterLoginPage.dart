@@ -60,7 +60,6 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
 
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: Colors.white,
       body: WillPopScope(
         onWillPop: _onBackPressed,
         child: isMain
@@ -124,7 +123,6 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
             'login_statment',
           ),
           style: TextStyle(
-            color: Color.fromARGB(150, 0, 0, 0),
             fontWeight: FontWeight.normal,
           ),
         ),
@@ -204,7 +202,6 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 'forgut_password',
               ),
               style: TextStyle(
-                color: Color.fromARGB(150, 0, 0, 0),
                 fontWeight: FontWeight.normal,
               ),
             ),
@@ -214,18 +211,18 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
             ? Container()
             : Container(
           padding: EdgeInsets.symmetric(vertical: 10),
-          margin: EdgeInsets.symmetric(vertical: 10),
-          color: Color(0xFFff0033),
-          child: Text(
-            logInErrorMessage,
-            style: TextStyle(
-              color: Colors.white,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
+                    margin: EdgeInsets.symmetric(vertical: 10),
+                    color: Theme.of(context).errorColor,
+                    child: Text(
+                      logInErrorMessage,
+                      style: TextStyle(),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
         RaisedButton(
-          color: ConstValues.firstColor,
+          color: Theme
+              .of(context)
+              .primaryColor,
           onPressed: () async {
             print("_formKey.currentState ");
             print(_formKey.currentState.validate());
@@ -256,7 +253,6 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
             ),
             style: TextStyle(
               fontSize: width / ConstValues.fontSize_2,
-              color: Colors.white,
               fontWeight: FontWeight.bold,
             ),
           )
@@ -268,7 +264,6 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                   width: 18,
                   height: 18,
                   child: CircularProgressIndicator(
-                    backgroundColor: Colors.white,
                   )),
               SizedBox(
                 width: 12,
@@ -280,7 +275,6 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 ),
                 style: TextStyle(
                   fontSize: width / ConstValues.fontSize_2,
-                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -315,7 +309,9 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                   'create_account',
                 ),
                 style: TextStyle(
-                  color: ConstValues.firstColor,
+                  color: Theme
+                      .of(context)
+                      .primaryColor,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -357,7 +353,6 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               'signup_statment1',
             ),
             style: TextStyle(
-              color: Color.fromARGB(150, 0, 0, 0),
               fontWeight: FontWeight.normal,
             ),
           ),
@@ -422,7 +417,9 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 Row(
                   children: [
                     Radio(
-                      activeColor: ConstValues.firstColor,
+                      activeColor: Theme
+                          .of(context)
+                          .primaryColor,
                       value: 1,
                       groupValue: _value,
                       onChanged: (i) {
@@ -446,7 +443,9 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 Row(
                   children: [
                     Radio(
-                      activeColor: ConstValues.firstColor,
+                      activeColor: Theme
+                          .of(context)
+                          .primaryColor,
                       value: 2,
                       groupValue: _value,
                       onChanged: (i) {
@@ -610,7 +609,9 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
             height: 15,
           ),
           CheckboxListTile(
-            activeColor: ConstValues.firstColor,
+            activeColor: Theme
+                .of(context)
+                .primaryColor,
             contentPadding: EdgeInsets.zero,
             title: Text(Languages.translate(
               context,
@@ -632,17 +633,20 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               : Container(
             padding: EdgeInsets.symmetric(vertical: 10),
             margin: EdgeInsets.symmetric(vertical: 10),
-            color: Color(0xFFff0033),
+            color: Theme
+                .of(context)
+                .errorColor,
             child: Text(
               signUpErrorMessage,
               style: TextStyle(
-                color: Colors.white,
               ),
               textAlign: TextAlign.center,
             ),
           ),
           RaisedButton(
-            color: ConstValues.firstColor,
+            color: Theme
+                .of(context)
+                .primaryColor,
             onPressed: () async {
               if (!_formKey.currentState.validate()) {
                 return;
@@ -654,8 +658,9 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 Toast.show(
                     Languages.translate(context, "Please_Chose_degree"),
                     context,
-                    backgroundColor: Colors.red,
-                    textColor: Colors.white,
+                    backgroundColor: Theme
+                        .of(context)
+                        .errorColor,
                     duration: Toast.LENGTH_LONG,
                     gravity: Toast.CENTER);
                 return;
@@ -709,7 +714,6 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               ),
               style: TextStyle(
                 fontSize: width / ConstValues.fontSize_2,
-                color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
             )
@@ -721,7 +725,6 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                     width: 18,
                     height: 18,
                     child: CircularProgressIndicator(
-                      backgroundColor: Colors.white,
                     )),
                 SizedBox(
                   width: 12,
@@ -733,7 +736,6 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                   ),
                   style: TextStyle(
                     fontSize: width / ConstValues.fontSize_2,
-                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -767,7 +769,9 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                     'login',
                   ),
                   style: TextStyle(
-                    color: ConstValues.firstColor,
+                    color: Theme
+                        .of(context)
+                        .primaryColor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -815,7 +819,9 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                         'login',
                       ),
                       style: TextStyle(
-                        color: ConstValues.firstColor,
+                        color: Theme
+                            .of(context)
+                            .primaryColor,
                         fontSize: 20,
                       ),
                     ),
@@ -846,7 +852,9 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                         'create_account',
                       ),
                       style: TextStyle(
-                        color: ConstValues.firstColor,
+                        color: Theme
+                            .of(context)
+                            .primaryColor,
                         fontSize: 20,
                       ),
                     ),

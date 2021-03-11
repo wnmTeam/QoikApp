@@ -48,27 +48,137 @@ class MyAppState extends State<MyApp> {
       showPerformanceOverlay: false,
       showSemanticsDebugger: false,
 
+      // theme: ThemeData(
+      //   primarySwatch: ConstValues.firstColor,
+      //   accentColor: Color(0xFF8D5CD7),
+      //   backgroundColor: Colors.white,
+      //   textButtonTheme: TextButtonThemeData(style: ButtonStyle()),
+      //   scaffoldBackgroundColor: Colors.white,
+      //   textTheme: TextTheme(
+      //     headline6: TextStyle(),
+      //   ),
+      //   buttonColor: ConstValues.firstColor,
+      //
+      //   dialogBackgroundColor: Colors.white,
+      //
+      //   //canvasColor is the drawer backgroundColor
+      //   canvasColor: Colors.white,
+      //
+      //
+      // ),
       theme: ThemeData(
+        brightness: Brightness.light,
+
         primarySwatch: ConstValues.firstColor,
-        accentColor: Color(0xFF8D5CD7),
-        backgroundColor: Colors.white,
-        textButtonTheme: TextButtonThemeData(style: ButtonStyle()),
-        scaffoldBackgroundColor: Colors.white,
-        textTheme: TextTheme(
-          headline6: TextStyle(),
-        ),
+        primaryColor: ConstValues.firstColor,
         buttonColor: ConstValues.firstColor,
 
+        accentColor: Colors.yellowAccent,
+
+        backgroundColor: Colors.white,
+        scaffoldBackgroundColor: Colors.white,
         dialogBackgroundColor: Colors.white,
+        cardColor: Colors.white,
 
         //canvasColor is the drawer backgroundColor
         canvasColor: Colors.white,
+
+        iconTheme: IconThemeData(color: Colors.white),
+        textTheme: TextTheme(
+          // button: TextStyle(color: Colors.red,),
+          // headline1: TextStyle(color: Colors.indigo),
+          // headline2: TextStyle(color: Colors.deepPurple),
+          // headline3: TextStyle(color: Colors.brown),
+          // headline4: TextStyle(color: Colors.deepOrange),
+          // headline5: TextStyle(color: Colors.teal),
+          // headline6: TextStyle(color: Colors.lime),
+          // subtitle2: TextStyle(color: Colors.red,),
+          // overline: TextStyle(color: Colors.blue,),
+
+          //For drawer text and ...
+          bodyText1: TextStyle(
+            color: Colors.black,
+          ),
+
+          //For normal text (post, comment, ...) and ...
+          bodyText2: TextStyle(
+            color: Colors.black,
+          ),
+
+          //For listTile title and ...
+          subtitle1: TextStyle(
+            color: Colors.black,
+          ),
+
+          //For listTile subtitle and ...
+          caption: TextStyle(
+            color: Colors.black54,
+          ),
+        ),
+
+        textButtonTheme: TextButtonThemeData(style: ButtonStyle()),
+        buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.normal),
       ),
 
-      // darkTheme: ThemeData(
-      //   primarySwatch: Colors.red,
-      //   accentColor: Colors.redAccent,
-      // ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+
+        primarySwatch: Colors.blueGrey,
+        primaryColor: Colors.blueGrey,
+        buttonColor: Colors.blueGrey,
+
+        accentColor: Colors.yellowAccent,
+        backgroundColor: Colors.grey,
+        textButtonTheme: TextButtonThemeData(style: ButtonStyle()),
+        scaffoldBackgroundColor: Colors.grey,
+
+        dialogBackgroundColor: Colors.grey,
+        cardColor: Colors.grey[600],
+        buttonTheme: ButtonThemeData(
+            textTheme: ButtonTextTheme.normal, buttonColor: Colors.red),
+        textTheme: TextTheme(
+          button: TextStyle(
+            color: Colors.red,
+          ),
+
+          headline1: TextStyle(color: Colors.indigo),
+          headline2: TextStyle(color: Colors.deepPurple),
+          headline3: TextStyle(color: Colors.brown),
+          headline4: TextStyle(color: Colors.deepOrange),
+          headline5: TextStyle(color: Colors.teal),
+          headline6: TextStyle(color: Colors.lime),
+
+          subtitle2: TextStyle(
+            color: Colors.red,
+          ),
+
+          overline: TextStyle(
+            color: Colors.blue,
+          ),
+
+          //For drawer text and ...
+          bodyText1: TextStyle(
+            color: Colors.white,
+          ),
+
+          //For normal text (post, comment, ...) and ...
+          bodyText2: TextStyle(
+            color: Colors.white,
+          ),
+
+          //For listTile title and ...
+          subtitle1: TextStyle(
+            color: Colors.white,
+          ),
+
+          //For listTile subtitle and ...
+          caption: TextStyle(
+            color: Colors.white60,
+          ),
+        ),
+        //canvasColor is the drawer backgroundColor
+        canvasColor: Colors.grey,
+      ),
       locale: locale,
       supportedLocales: [
         Locale('ar'),

@@ -85,7 +85,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                   height: 30,
                 ),
                 RaisedButton(
-                  color: ConstValues.firstColor,
+                  color: Theme.of(context).primaryColor,
                   textColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),

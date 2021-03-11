@@ -43,18 +43,18 @@ class _RoomInfoPageState extends State<RoomInfoPage> {
       ),
       floatingActionButton: isAdmin
           ? FloatingActionButton(
-        backgroundColor: ConstValues.firstColor,
-        child: Icon(Icons.person_add),
-        onPressed: () {
-          Navigator.pushNamed(
-            context,
-            '/SelectMembers',
-            arguments: {
-              'group': widget.group,
-              'type': 'add',
-            },
-          );
-          widget.onUpdate();
+        backgroundColor: Theme.of(context).primaryColor,
+              child: Icon(Icons.person_add),
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  '/SelectMembers',
+                  arguments: {
+                    'group': widget.group,
+                    'type': 'add',
+                  },
+                );
+                widget.onUpdate();
         },
       )
           : null,

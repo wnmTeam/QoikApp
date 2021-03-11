@@ -144,7 +144,7 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
                         _gender = null;
                       });
                     },
-                    color: ConstValues.firstColor[800],
+                    color: Theme.of(context).primaryColor,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [

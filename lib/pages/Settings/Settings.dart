@@ -10,6 +10,8 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+  List<bool> isSelected = [true, true, true];
+
   @override
   Widget build(BuildContext context) {
     StorageController storageController = new StorageController();
@@ -71,8 +73,27 @@ class _SettingsState extends State<Settings> {
               );
             },
           ),
+          Divider(),
+          // ToggleButtons(
+          //     children: [
+          //       ListTile(
+          //         leading: Icon(isSelected[0]? Icons.toggle_on:Icons.toggle_off),
+          //         title: Text('Main notification'),
+          //       ),
+          //
+          //       Icon(isSelected[1]? Icons.toggle_on:Icons.toggle_off),
+          //       Icon(isSelected[2]? Icons.toggle_on:Icons.toggle_off),
+          //     ],
+          //   onPressed: (int index) {
+          //     setState(() {
+          //       isSelected[index] = !isSelected[index];
+          //     });
+          //   },
+          //     isSelected: isSelected
+          // ),
+
+
           //TODO: Change The Theme
-          // Divider(),
           // ListTile(
           //   title: Text("Change the theme"),
           //   onTap: () {

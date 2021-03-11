@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
-import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/GroupsController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
@@ -96,8 +95,9 @@ class _GroupsChatsTabState extends State<GroupsChatsTab>
           ],
         ),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(30)),
-            color: ConstValues.firstColor[600]),
+          borderRadius: BorderRadius.all(Radius.circular(30)),
+          color: Theme.of(context).primaryColor,
+        ),
       ),
       subtitle: group.type == Group.TYPE_MOFADALAH || group.type == 'G'
           ? Text('')

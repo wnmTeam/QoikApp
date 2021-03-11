@@ -89,10 +89,12 @@ class _CommentWidgetState extends State<CommentWidget> {
         onLongPress: () {
           Clipboard.setData(ClipboardData(text: widget.comment.text))
               .then((value) {
-            Toast.show(Languages.translate(context, 'text_copied'), context,
-                duration: Toast.LENGTH_LONG,
-                backgroundColor: ConstValues.firstColor,
-                textColor: Colors.white);
+            Toast.show(
+              Languages.translate(context, 'text_copied'),
+              context,
+              duration: Toast.LENGTH_LONG,
+              backgroundColor: Theme.of(context).primaryColor,
+            );
 
             // Scaffold.of(context).showSnackBar(
             //     SnackBar(content:Text('The text copied')));
@@ -149,9 +151,9 @@ class _CommentWidgetState extends State<CommentWidget> {
                         text: widget.comment.text,
                         maxLines: _isCommentExpended ? 1000 : 3,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Colors.grey[700],
-                        ),
+                        // style: TextStyle(
+                        //   color: Colors.grey[700],
+                        // ),
                       ),
                     ),
                   ),
@@ -215,13 +217,22 @@ class _CommentWidgetState extends State<CommentWidget> {
                                   context,
                                   'like',
                                 ) + ' ',
-                                style: TextStyle(fontSize: 15),
+                                style: TextStyle(
+                                  color: widget.comment.isLiked
+                                      ? Theme
+                                      .of(context)
+                                      .cardColor : ConstValues.secondColor,
+                                  fontSize: 15,
+                                ),
                               ),
                             ),
                             decoration: BoxDecoration(
                               color: widget.comment.isLiked
-                                  ? ConstValues.firstColor[100]
-                                  : Colors.grey[100],
+                                  ? Theme
+                                  .of(context)
+                                  .primaryColor
+                                  .withOpacity(0.7)
+                                  : Colors.grey[200],
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ),
@@ -261,7 +272,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                         ),
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.grey[100],
+                        // color: Colors.grey[100],
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),

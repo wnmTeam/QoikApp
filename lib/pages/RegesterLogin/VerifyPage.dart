@@ -63,7 +63,7 @@ class VerifyPage extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  color: ConstValues.firstColor,
+                  color: Theme.of(context).primaryColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
                   ),
@@ -83,7 +83,9 @@ class VerifyPage extends StatelessWidget {
                   //TODO : translation
                   child: Text(
                     'send verify again',
-                    style: TextStyle(color: ConstValues.firstColor),
+                    style: TextStyle(color: Theme
+                        .of(context)
+                        .primaryColor,),
                   ),
                 )
               ],
