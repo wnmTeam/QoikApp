@@ -73,7 +73,7 @@ class MyAppState extends State<MyApp> {
         primaryColor: ConstValues.firstColor,
         buttonColor: ConstValues.firstColor,
 
-        accentColor: Colors.yellowAccent,
+        accentColor: Colors.blueAccent,
 
         backgroundColor: Colors.white,
         scaffoldBackgroundColor: Colors.white,
@@ -84,8 +84,14 @@ class MyAppState extends State<MyApp> {
         canvasColor: Colors.white,
 
         iconTheme: IconThemeData(color: Colors.white),
+
+        buttonTheme: ButtonThemeData(
+            textTheme: ButtonTextTheme.normal, buttonColor: Colors.white),
+
         textTheme: TextTheme(
-          // button: TextStyle(color: Colors.red,),
+          button: TextStyle(
+            color: Colors.white,
+          ),
           // headline1: TextStyle(color: Colors.indigo),
           // headline2: TextStyle(color: Colors.deepPurple),
           // headline3: TextStyle(color: Colors.brown),
@@ -117,7 +123,6 @@ class MyAppState extends State<MyApp> {
         ),
 
         textButtonTheme: TextButtonThemeData(style: ButtonStyle()),
-        buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.normal),
       ),
 
       darkTheme: ThemeData(

@@ -85,7 +85,7 @@ class ResetDialog extends StatelessWidget {
                 decoration: InputDecoration(
                   labelText: Languages.translate(
                     context,
-                    'reset_email',
+                    'email',
                   ),
                   border: OutlineInputBorder(),
                 ),

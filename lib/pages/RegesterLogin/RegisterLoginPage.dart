@@ -65,15 +65,15 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
         child: isMain
             ? _main()
             : SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              children: [
-                _isRegister ? _registerForm() : _loginForm(),
-              ],
-            ),
-          ),
-        ),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    children: [
+                      _isRegister ? _registerForm() : _loginForm(),
+                    ],
+                  ),
+                ),
+              ),
       ),
     );
   }
@@ -211,18 +211,24 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
             ? Container()
             : Container(
           padding: EdgeInsets.symmetric(vertical: 10),
-                    margin: EdgeInsets.symmetric(vertical: 10),
-                    color: Theme.of(context).errorColor,
-                    child: Text(
-                      logInErrorMessage,
-                      style: TextStyle(),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+          margin: EdgeInsets.symmetric(vertical: 10),
+          color: Theme
+              .of(context)
+              .errorColor,
+          child: Text(
+            logInErrorMessage,
+            style: TextStyle(color: Colors.white),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        SizedBox(
+          height: 30,
+        ),
         RaisedButton(
           color: Theme
               .of(context)
               .primaryColor,
+          textColor: Colors.white,
           onPressed: () async {
             print("_formKey.currentState ");
             print(_formKey.currentState.validate());
@@ -263,8 +269,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               SizedBox(
                   width: 18,
                   height: 18,
-                  child: CircularProgressIndicator(
-                  )),
+                  child: CircularProgressIndicator()),
               SizedBox(
                 width: 12,
               ),
@@ -284,6 +289,9 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30.0),
           ),
+        ),
+        SizedBox(
+          height: 20,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -638,8 +646,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 .errorColor,
             child: Text(
               signUpErrorMessage,
-              style: TextStyle(
-              ),
+              style: TextStyle(color: Colors.white),
               textAlign: TextAlign.center,
             ),
           ),
@@ -647,6 +654,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
             color: Theme
                 .of(context)
                 .primaryColor,
+            textColor: Colors.white,
             onPressed: () async {
               if (!_formKey.currentState.validate()) {
                 return;
@@ -724,8 +732,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 SizedBox(
                     width: 18,
                     height: 18,
-                    child: CircularProgressIndicator(
-                    )),
+                    child: CircularProgressIndicator()),
                 SizedBox(
                   width: 12,
                 ),
@@ -783,90 +790,91 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
     ),
   );
 
-  _main() => Container(
-    child: Stack(
-      children: [
-        Positioned.fill(
-          child: Image.asset(
-            "assets/launchImage.png",
-            fit: BoxFit.fill,
-          ),
-        ),
-        Positioned(
-          bottom: 75,
-          right: 0,
-          left: 0,
-          child: Column(
-            children: [
-              RaisedButton(
-                onPressed: () {
-                  setState(() {
-                    isMain = false;
-                    _isRegister = false;
-                  });
-                },
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                color: Colors.white,
-                child: Container(
-                  width: 200,
-                  height: 60,
-                  child: Center(
-                    child: Text(
-                      Languages.translate(
-                        context,
-                        'login',
-                      ),
-                      style: TextStyle(
-                        color: Theme
-                            .of(context)
-                            .primaryColor,
-                        fontSize: 20,
+  _main() =>
+      Container(
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Image.asset(
+                "assets/launchImage.png",
+                fit: BoxFit.fill,
+              ),
+            ),
+            Positioned(
+              bottom: 75,
+              right: 0,
+              left: 0,
+              child: Column(
+                children: [
+                  RaisedButton(
+                    onPressed: () {
+                      setState(() {
+                        isMain = false;
+                        _isRegister = false;
+                      });
+                    },
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    color: Colors.white,
+                    child: Container(
+                      width: 200,
+                      height: 60,
+                      child: Center(
+                        child: Text(
+                          Languages.translate(
+                            context,
+                            'login',
+                          ),
+                          style: TextStyle(
+                            color: Theme
+                                .of(context)
+                                .primaryColor,
+                            fontSize: 20,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              RaisedButton(
-                onPressed: () {
-                  setState(() {
-                    isMain = false;
-                    _isRegister = true;
-                  });
-                },
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                color: Colors.white,
-                child: Container(
-                  width: 200,
-                  height: 60,
-                  child: Center(
-                    child: Text(
-                      Languages.translate(
-                        context,
-                        'create_account',
-                      ),
-                      style: TextStyle(
-                        color: Theme
-                            .of(context)
-                            .primaryColor,
-                        fontSize: 20,
+                  SizedBox(
+                    height: 20,
+                  ),
+                  RaisedButton(
+                    onPressed: () {
+                      setState(() {
+                        isMain = false;
+                        _isRegister = true;
+                      });
+                    },
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    color: Colors.white,
+                    child: Container(
+                      width: 200,
+                      height: 60,
+                      child: Center(
+                        child: Text(
+                          Languages.translate(
+                            context,
+                            'create_account',
+                          ),
+                          style: TextStyle(
+                            color: Theme
+                                .of(context)
+                                .primaryColor,
+                            fontSize: 20,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      ],
-    ),
-  );
+      );
 
   _universityCollegeBuilder() {
     return Column(
@@ -921,10 +929,8 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
     );
   }
 
-  _bottomSheetBuild(
-      String type,
-      Future future,
-      ) {
+  _bottomSheetBuild(String type,
+      Future future,) {
     showModalBottomSheet(
         context: context,
         shape: RoundedRectangleBorder(
