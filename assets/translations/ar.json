@@ -118,6 +118,8 @@
   "graduate": "متخرج",
   "commentMyPost": "قام بالتعليق على منشورك.",
   "client_comments_posts": "قام بالتعليق على منشور تتابعه.",
-  "admin": "مسؤول"
-
+  "admin": "مسؤول",
+  "change_theme": "تغيير الثيم",
+  "light_theme": "الثيم النهاري",
+  "dark_theme": "الثيم الليلي"
 }

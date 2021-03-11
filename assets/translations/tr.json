@@ -118,7 +118,8 @@
   "graduate": "Mezun",
   "commentMyPost": "Gönderinizde bir yorum yapıldı.",
   "client_comments_posts": "Takip ettiğiniz gönderinde bir yorum yapıldı",
-  "admin": "Admin"
-
-
+  "admin": "Admin",
+  "change_theme": "Change the theme",
+  "light_theme": "Light theme",
+  "dark_theme": "Dark theme"
 }
