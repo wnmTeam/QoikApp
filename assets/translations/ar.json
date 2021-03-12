@@ -125,5 +125,8 @@
   "chat_rooms_notifications": "إشعارات الدردشات والمجموعات",
   "groups_notifications": "إشعارات المجموعات",
   "home_notifications": "إشعارات الواجهة الرئيسية",
-  "email_verification": "تأكيد البريد الإلكتروني"
+  "email_verification": "تأكيد البريد الإلكتروني",
+  "verif_sent": "رسالة التأكيد أرسلت إلى",
+  "verified": "تم التأكيد",
+  "send_verify_again": "إعادة الإرسال"
 }

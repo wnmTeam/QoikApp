@@ -5,25 +5,23 @@ import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/localization.dart';
 
 class VerifyPage extends StatelessWidget {
-  String email;
+  final String email;
 
-  AuthController _authController = AuthController();
+  final AuthController _authController = AuthController();
 
   VerifyPage(this.email) {
     _authController.sendEmailVerification();
   }
 
-  double width;
-
   @override
   Widget build(BuildContext context) {
-    width = MediaQuery.of(context).size.width;
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: Text(Languages.translate(context, "email_verification")),
       ),
       body: WillPopScope(
-        onWillPop: ()async{
+        onWillPop: () async {
           _authController.logOut();
           return false;
         },
@@ -32,9 +30,7 @@ class VerifyPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                //TODO : translation
-                Text(
-                  'Verify message sent to',
+                Text(Languages.translate(context, "verif_sent"),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: width / ConstValues.fontSize_1 - 1,
@@ -54,9 +50,7 @@ class VerifyPage extends StatelessWidget {
                   height: 20,
                 ),
                 RaisedButton(
-                  //TODO : translation
-                  child: Text(
-                    'Verified',
+                  child: Text(Languages.translate(context, "verified"),
                     style: TextStyle(
                       fontSize: width / ConstValues.fontSize_2,
                       color: Colors.white,
@@ -80,9 +74,7 @@ class VerifyPage extends StatelessWidget {
                   onPressed: () {
                     _authController.sendEmailVerification();
                   },
-                  //TODO : translation
-                  child: Text(
-                    'send verify again',
+                  child: Text(Languages.translate(context, "send_verify_again"),
                     style: TextStyle(color: Theme
                         .of(context)
                         .primaryColor,),
