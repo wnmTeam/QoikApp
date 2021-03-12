@@ -34,16 +34,15 @@ class _StartingPageState extends State<StartingPage> {
   _check() async {
     var lastV = await _controller.getLastVersion();
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    String versionName = packageInfo.version;
-    String versionCode = packageInfo.buildNumber;
-    print(
-        'ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd');
-    print(lastV.data()['version']);
-    print(versionName);
-    print(versionCode);
-    print(lastV.data()['version'] == versionCode);
+    // String version = packageInfo.version;
+    String buildNumber = packageInfo.buildNumber;
+
+    print("buildNumber From Firebase " + lastV.data()['version']);
+    // print("version "+version);
+    print("buildNumber " + buildNumber);
+    print(lastV.data()['version'] == buildNumber);
     setState(() {
-      canGo = lastV.data()['version'] == versionCode;
+      canGo = lastV.data()['version'] == buildNumber;
       //TODO
       canGo = true;
       print(canGo);
