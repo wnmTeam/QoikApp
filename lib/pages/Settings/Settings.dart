@@ -40,18 +40,19 @@ class _SettingsState extends State<Settings> {
                       children: [
                         ListTile(
                           title: Text("عربي"),
+                          selected: storageController.getLang() == 'ar',
                           onTap: () async {
                             await storageController.setLang('ar');
                             MyAppState.myAppState.setState(() {
                               MyAppState.locale = Locale('ar');
                             });
-                            print('ffffffffffffffffffffffffffffffffffffff');
                             print(storageController.getLang());
                             Navigator.pop(context);
                           },
                         ),
                         ListTile(
                           title: Text("Türkçe"),
+                          selected: storageController.getLang() == 'tr',
                           onTap: () async {
                             await storageController.setLang('tr');
                             MyAppState.myAppState.setState(() {
@@ -62,6 +63,7 @@ class _SettingsState extends State<Settings> {
                         ),
                         ListTile(
                           title: Text("English"),
+                          selected: storageController.getLang() == 'en',
                           onTap: () async {
                             await storageController.setLang('en');
                             MyAppState.myAppState.setState(() {
@@ -93,7 +95,8 @@ class _SettingsState extends State<Settings> {
                       children: [
                         ListTile(
                           title:
-                          Text(Languages.translate(context, "light_theme")),
+                              Text(Languages.translate(context, "light_theme")),
+                          selected: storageController.getTheme() == 'light',
                           onTap: () async {
                             await storageController.setTheme('light');
 
@@ -106,6 +109,7 @@ class _SettingsState extends State<Settings> {
                         ListTile(
                           title:
                           Text(Languages.translate(context, "dark_theme")),
+                          selected: storageController.getTheme() == 'dark',
                           onTap: () async {
                             await storageController.setTheme('dark');
                             MyAppState.myAppState.setState(() {
@@ -203,6 +207,33 @@ class _SettingsState extends State<Settings> {
                 },
               );
             },
+          ),
+          Divider(),
+          ListTile(
+            title: SwitchListTile(
+              activeColor: Theme
+                  .of(context)
+                  .primaryColor,
+              contentPadding: EdgeInsets.zero,
+              title: Text(Languages.translate(context, "dark_theme")),
+              secondary: Icon(Icons.nights_stay),
+              value: storageController.getTheme() == 'dark',
+              onChanged: (newValue) async {
+                if (newValue) {
+                  await storageController.setTheme('dark');
+                  MyAppState.myAppState.setState(() {
+                    MyAppState.isDark = true;
+                  });
+                } else {
+                  await storageController.setTheme('light');
+
+                  MyAppState.myAppState.setState(() {
+                    MyAppState.isDark = false;
+                  });
+                }
+              },
+              controlAffinity: ListTileControlAffinity.trailing,
+            ),
           ),
         ],
       ),
