@@ -120,8 +120,8 @@
   "client_comments_posts": "Comment On The Post You Are interest.",
   "admin": "Admin",
   "change_theme": "Themes",
-  "light_theme": "Light theme",
-  "dark_theme": "Dark theme",
+  "light_theme": "Light Mode",
+  "dark_theme": "Dark Mode",
   "chat_rooms_notifications": "Chat & Rooms",
   "groups_notifications": "Groups",
   "home_notifications": "Home"
