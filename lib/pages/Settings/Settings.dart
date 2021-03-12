@@ -118,17 +118,16 @@ class _SettingsState extends State<Settings> {
           ),
           Divider(),
           ListTile(
-            title: Text("Notifications"),
+            title: Text(Languages.translate(context, "notifications")),
             onTap: () {
               showDialog(
                 context: context,
                 builder: (context) {
                   return AlertDialog(
                       scrollable: true,
-                      title: Text(
-                          Languages.translate(context, "notifications")),
-                      content:
-                      StatefulBuilder(
+                      title:
+                          Text(Languages.translate(context, "notifications")),
+                      content: StatefulBuilder(
                         builder: (context, setState) {
                           return Column(
                             mainAxisSize: MainAxisSize.min,

@@ -27,7 +27,7 @@ class _StartingPageState extends State<StartingPage> {
 
   //TODO : Get the links from the server
   String googlePlayUrl =
-      "https://play.google.com/store/apps/details?id=com.abosak.stumeapp";
+      "https://play.google.com/store/apps/details?id=com.company.QoiqApp";
   String appStoreUrl =
       "https://play.google.com/store/apps/details?id=com.abosak.stumeapp";
 
@@ -36,10 +36,12 @@ class _StartingPageState extends State<StartingPage> {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     // String version = packageInfo.version;
     String buildNumber = packageInfo.buildNumber;
+    String packageName = packageInfo.packageName;
 
     print("buildNumber From Firebase " + lastV.data()['version']);
     // print("version "+version);
     print("buildNumber " + buildNumber);
+    print("packageName " + packageName);
     print(lastV.data()['version'] == buildNumber);
     setState(() {
       canGo = lastV.data()['version'] == buildNumber;
