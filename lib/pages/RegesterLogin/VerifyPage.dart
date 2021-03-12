@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
+import 'package:stumeapp/localization.dart';
 
 class VerifyPage extends StatelessWidget {
   String email;
@@ -19,8 +20,7 @@ class VerifyPage extends StatelessWidget {
     width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        //TODO : translation
-        title: Text("Email Verification"),
+        title: Text(Languages.translate(context, "email_verification")),
       ),
       body: WillPopScope(
         onWillPop: ()async{

@@ -124,5 +124,6 @@
   "chat_rooms_notifications": "Chat & Rooms",
   "groups_notifications": "Groups",
   "home_notifications": "Home",
-  "change_lang": "Languages"
+  "change_lang": "Languages",
+  "email_verification": "Email Verification"
 }

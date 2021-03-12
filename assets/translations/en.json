@@ -124,5 +124,6 @@
   "dark_theme": "Dark Mode",
   "chat_rooms_notifications": "Chat & Rooms",
   "groups_notifications": "Groups",
-  "home_notifications": "Home"
+  "home_notifications": "Home",
+  "email_verification": "Email Verification"
 }

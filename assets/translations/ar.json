@@ -124,5 +124,6 @@
   "dark_theme": "الوضع الليلي",
   "chat_rooms_notifications": "إشعارات الدردشات والمجموعات",
   "groups_notifications": "إشعارات المجموعات",
-  "home_notifications": "إشعارات الواجهة الرئيسية"
+  "home_notifications": "إشعارات الواجهة الرئيسية",
+  "email_verification": "تأكيد البريد الإلكتروني"
 }
