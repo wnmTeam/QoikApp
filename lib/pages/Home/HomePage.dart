@@ -480,16 +480,33 @@ class _HomePageState extends State<HomePage> {
                             if (link[3].url != null)
                               {
                                 await launch(link[3].url).then((value) =>
-                                    print('url  ' + link[3].url))
-                              }
-                            else
-                              {throw 'cant launch url'}
-                          },
-                        ),
-                      ],
-                    )
+                                          print('url  ' + link[3].url))
+                                    }
+                                  else
+                                    {throw 'cant launch url'}
+                                },
+                              ),
+                            ],
+                          )
                         : CircularProgressIndicator(),
                     Divider(),
+                    // ListTile(
+                    //   title: Text("More Info"),
+                    //   leading: Icon(Icons.info_outline),
+                    //   onTap: () {
+                    //    showAboutDialog(
+                    //        context: context,
+                    //    applicationIcon:Icon(
+                    //      Icons.face,
+                    //      color: Theme.of(context).primaryColor,
+                    //    size: width/5,),
+                    //      applicationName: "Qoiq App",
+                    //      applicationVersion: "2.0.0",
+                    //      useRootNavigator: false,
+                    //
+                    //    );
+                    //   },
+                    // ),
                     ListTile(
                       title: Text(Languages.translate(
                         context,
