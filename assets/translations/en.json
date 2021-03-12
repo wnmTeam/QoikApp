@@ -121,5 +121,8 @@
   "admin": "Admin",
   "change_theme": "Change the theme",
   "light_theme": "Light theme",
-  "dark_theme": "Dark theme"
+  "dark_theme": "Dark theme",
+  "chat_rooms_notifications": "Chat & Rooms",
+  "groups_notifications": "Groups",
+  "home_notifications": "Home"
 }

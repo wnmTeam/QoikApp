@@ -121,5 +121,8 @@
   "admin": "مسؤول",
   "change_theme": "تغيير الثيم",
   "light_theme": "الثيم النهاري",
-  "dark_theme": "الثيم الليلي"
+  "dark_theme": "الثيم الليلي",
+  "chat_rooms_notifications": "إشعارات الدردشات والمجموعات",
+  "groups_notifications": "إشعارات المجموعات",
+  "home_notifications": "إشعارات الواجهة الرئيسية"
 }
