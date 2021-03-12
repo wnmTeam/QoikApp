@@ -10,7 +10,7 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  List<bool> isSelected = [true, true, true];
+  List<bool> notifications = [true, true, true, true, true];
 
   @override
   Widget build(BuildContext context) {
@@ -95,6 +95,7 @@ class _SettingsState extends State<Settings> {
                             MyAppState.myAppState.setState(() {
                               MyAppState.isDark = false;
                             });
+                            Navigator.pop(context);
                           },
                         ),
                         ListTile(
@@ -105,6 +106,7 @@ class _SettingsState extends State<Settings> {
                             MyAppState.myAppState.setState(() {
                               MyAppState.isDark = true;
                             });
+                            Navigator.pop(context);
                           },
                         ),
                       ],
@@ -114,25 +116,82 @@ class _SettingsState extends State<Settings> {
               );
             },
           ),
-          // ToggleButtons(
-          //     children: [
-          //       ListTile(
-          //         leading: Icon(isSelected[0]? Icons.toggle_on:Icons.toggle_off),
-          //         title: Text('Main notification'),
-          //       ),
-          //
-          //       Icon(isSelected[1]? Icons.toggle_on:Icons.toggle_off),
-          //       Icon(isSelected[2]? Icons.toggle_on:Icons.toggle_off),
-          //     ],
-          //   onPressed: (int index) {
-          //     setState(() {
-          //       isSelected[index] = !isSelected[index];
-          //     });
-          //   },
-          //     isSelected: isSelected
-          // ),
+          Divider(),
+          ListTile(
+            title: Text("Notifications"),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                      scrollable: true,
+                      title: Text(
+                          Languages.translate(context, "notifications")),
+                      content:
+                      StatefulBuilder(
+                        builder: (context, setState) {
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              CheckboxListTile(
+                                activeColor: Theme
+                                    .of(context)
+                                    .primaryColor,
+                                contentPadding: EdgeInsets.zero,
+                                title: Text(Languages.translate(
+                                    context, "chat_rooms_notifications")),
+                                value: notifications[0],
+                                onChanged: (newValue) {
+                                  print(newValue);
+                                  setState(() {
+                                    notifications[0] = !notifications[0];
+                                  });
+                                },
+                                controlAffinity: ListTileControlAffinity
+                                    .trailing,
+                              ),
+                              CheckboxListTile(
+                                activeColor: Theme
+                                    .of(context)
+                                    .primaryColor,
+                                contentPadding: EdgeInsets.zero,
+                                title: Text(Languages.translate(
+                                    context, "groups_notifications")),
+                                value: notifications[1],
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    notifications[1] = newValue;
+                                  });
+                                },
+                                controlAffinity: ListTileControlAffinity
+                                    .trailing,
+                              ),
+                              CheckboxListTile(
+                                activeColor: Theme
+                                    .of(context)
+                                    .primaryColor,
+                                contentPadding: EdgeInsets.zero,
+                                title: Text(Languages.translate(
+                                    context, "home_notifications")),
+                                value: notifications[2],
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    notifications[2] = newValue;
+                                  });
+                                },
+                                controlAffinity: ListTileControlAffinity
+                                    .trailing,
+                              ),
+                            ],
+                          );
+                        },
+                      )
 
-
+                  );
+                },
+              );
+            },
+          ),
         ],
       ),
     );
