@@ -28,6 +28,7 @@ class MyAppState extends State<MyApp> {
   String lang;
   String theme;
   static Locale locale;
+  static bool isDark = false;
 
   @override
   void initState() {
@@ -36,15 +37,9 @@ class MyAppState extends State<MyApp> {
     super.initState();
   }
 
-  static bool isDark = false;
-
   @override
   Widget build(BuildContext context) {
     myAppState = this;
-//    lang = storageController.getLang();
-//    print(lang);
-//    locale = Locale(lang);
-
     return MaterialApp(
       title: 'Qoiq',
       debugShowCheckedModeBanner: true,
