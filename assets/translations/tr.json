@@ -101,7 +101,6 @@
   "Graduates And Masters": "Mezunlar & Master",
   "privacy": "Gizlilik ve Kullanım Politikası",
   "join_us": "Bize Katıl",
-  "change_lang": "Dili Değiştir",
   "no_requests": "Arkadaşlık isteklerin yok",
   "notifications": "Bildirimler",
   "accept_friend_request": "Arkadaşlık isteğin kabul edildi, Şimdi Arkadaşsınız",
@@ -119,10 +118,11 @@
   "commentMyPost": "Gönderinizde bir yorum yapıldı.",
   "client_comments_posts": "Takip ettiğiniz gönderinde bir yorum yapıldı",
   "admin": "Admin",
-  "change_theme": "Change the theme",
+  "change_theme": "Themes",
   "light_theme": "Light theme",
   "dark_theme": "Dark theme",
   "chat_rooms_notifications": "Chat & Rooms",
   "groups_notifications": "Groups",
-  "home_notifications": "Home"
+  "home_notifications": "Home",
+  "change_lang": "Languages"
 }
