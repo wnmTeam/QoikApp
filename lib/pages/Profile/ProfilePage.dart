@@ -752,10 +752,9 @@ class _FriendWidgetState extends State<FriendWidget> {
                   color: Colors.indigo[900],
                   child: CachedNetworkImage(
                     imageUrl: _user.img,
-                    placeholder: (context, url) =>
-                        Center(
-                          child: Image.asset(ConstValues.userImage),
-                        ),
+                    placeholder: (context, url) => Center(
+                      child: Image.asset(ConstValues.userImage),
+                    ),
                     fit: BoxFit.cover,
                   ),
                 ),

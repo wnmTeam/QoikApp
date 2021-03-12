@@ -43,8 +43,6 @@ class _StartingPageState extends State<StartingPage> {
     print(lastV.data()['version'] == buildNumber);
     setState(() {
       canGo = lastV.data()['version'] == buildNumber;
-      //TODO
-      canGo = true;
       print(canGo);
 
       loading = false;
