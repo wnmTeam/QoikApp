@@ -12,6 +12,8 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   List<bool> notifications = [true, true, true, true, true];
 
+  bool xx = true;
+
   @override
   Widget build(BuildContext context) {
     StorageController storageController = new StorageController();
@@ -21,9 +23,11 @@ class _SettingsState extends State<Settings> {
         title: Text(Languages.translate(context, "setting")),
       ),
       body: ListView(
+        padding: EdgeInsets.all(8.0),
         children: [
           ListTile(
             title: Text(Languages.translate(context, "change_lang")),
+            leading: Icon(Icons.translate_outlined),
             onTap: () {
               showDialog(
                 context: context,
@@ -76,6 +80,7 @@ class _SettingsState extends State<Settings> {
           Divider(),
           ListTile(
             title: Text(Languages.translate(context, "change_theme")),
+            leading: Icon(Icons.style_outlined),
             onTap: () {
               showDialog(
                 context: context,
@@ -88,7 +93,7 @@ class _SettingsState extends State<Settings> {
                       children: [
                         ListTile(
                           title:
-                              Text(Languages.translate(context, "light_theme")),
+                          Text(Languages.translate(context, "light_theme")),
                           onTap: () async {
                             await storageController.setTheme('light');
 
@@ -100,7 +105,7 @@ class _SettingsState extends State<Settings> {
                         ),
                         ListTile(
                           title:
-                              Text(Languages.translate(context, "dark_theme")),
+                          Text(Languages.translate(context, "dark_theme")),
                           onTap: () async {
                             await storageController.setTheme('dark');
                             MyAppState.myAppState.setState(() {
@@ -119,72 +124,80 @@ class _SettingsState extends State<Settings> {
           Divider(),
           ListTile(
             title: Text(Languages.translate(context, "notifications")),
+            leading: Icon(Icons.notifications_active_outlined),
             onTap: () {
               showDialog(
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                      scrollable: true,
-                      title:
-                          Text(Languages.translate(context, "notifications")),
-                      content: StatefulBuilder(
-                        builder: (context, setState) {
-                          return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              CheckboxListTile(
-                                activeColor: Theme
-                                    .of(context)
-                                    .primaryColor,
-                                contentPadding: EdgeInsets.zero,
-                                title: Text(Languages.translate(
-                                    context, "chat_rooms_notifications")),
-                                value: notifications[0],
-                                onChanged: (newValue) {
-                                  print(newValue);
-                                  setState(() {
-                                    notifications[0] = !notifications[0];
-                                  });
-                                },
-                                controlAffinity: ListTileControlAffinity
-                                    .trailing,
-                              ),
-                              CheckboxListTile(
-                                activeColor: Theme
-                                    .of(context)
-                                    .primaryColor,
-                                contentPadding: EdgeInsets.zero,
-                                title: Text(Languages.translate(
-                                    context, "groups_notifications")),
-                                value: notifications[1],
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    notifications[1] = newValue;
-                                  });
-                                },
-                                controlAffinity: ListTileControlAffinity
-                                    .trailing,
-                              ),
-                              CheckboxListTile(
-                                activeColor: Theme
-                                    .of(context)
-                                    .primaryColor,
-                                contentPadding: EdgeInsets.zero,
-                                title: Text(Languages.translate(
-                                    context, "home_notifications")),
-                                value: notifications[2],
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    notifications[2] = newValue;
-                                  });
-                                },
-                                controlAffinity: ListTileControlAffinity
-                                    .trailing,
-                              ),
-                            ],
-                          );
-                        },
-                      )
+                    scrollable: true,
+                    title: Text(Languages.translate(context, "notifications")),
+                    content: StatefulBuilder(
+                      builder: (context, setState) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SwitchListTile(
+                              activeColor: Theme
+                                  .of(context)
+                                  .primaryColor,
+                              contentPadding: EdgeInsets.zero,
+                              title: Text(Languages.translate(
+                                  context, "chat_rooms_notifications")),
+                              value: notifications[0],
+                              onChanged: (newValue) {
+                                print(newValue);
+                                setState(() {
+                                  notifications[0] = !notifications[0];
+                                });
+                              },
+                              controlAffinity: ListTileControlAffinity
+                                  .trailing,
+                            ),
+                            SwitchListTile(
+                              activeColor: Theme
+                                  .of(context)
+                                  .primaryColor,
+                              contentPadding: EdgeInsets.zero,
+                              title: Text(Languages.translate(
+                                  context, "groups_notifications")),
+                              value: notifications[1],
+                              onChanged: (newValue) {
+                                setState(() {
+                                  notifications[1] = newValue;
+                                });
+                              },
+                              controlAffinity: ListTileControlAffinity
+                                  .trailing,
+                            ),
+                            SwitchListTile(
+                              activeColor: Theme
+                                  .of(context)
+                                  .primaryColor,
+                              contentPadding: EdgeInsets.zero,
+                              title: Text(Languages.translate(
+                                  context, "home_notifications")),
+                              value: notifications[2],
+                              onChanged: (newValue) {
+                                setState(() {
+                                  notifications[2] = newValue;
+                                });
+                              },
+                              controlAffinity: ListTileControlAffinity
+                                  .trailing,
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                    actions: [
+                      ElevatedButton(
+                          onPressed: () {
+                            //TODO control the notifications
+                            Navigator.pop(context);
+                          },
+                          child: Text(Languages.translate(context, "save"))),
+                    ],
 
                   );
                 },
