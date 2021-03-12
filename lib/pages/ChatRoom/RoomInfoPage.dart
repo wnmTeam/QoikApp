@@ -44,7 +44,10 @@ class _RoomInfoPageState extends State<RoomInfoPage> {
       floatingActionButton: isAdmin
           ? FloatingActionButton(
         backgroundColor: Theme.of(context).primaryColor,
-              child: Icon(Icons.person_add),
+              child: Icon(
+                Icons.person_add,
+                color: Colors.white,
+              ),
               onPressed: () {
                 Navigator.pushNamed(
                   context,
@@ -55,7 +58,7 @@ class _RoomInfoPageState extends State<RoomInfoPage> {
                   },
                 );
                 widget.onUpdate();
-        },
+              },
       )
           : null,
       body: ListView.builder(

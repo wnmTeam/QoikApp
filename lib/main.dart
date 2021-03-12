@@ -58,7 +58,7 @@ class MyAppState extends State<MyApp> {
               backgroundColor: Colors.grey,
               textButtonTheme: TextButtonThemeData(style: ButtonStyle()),
               scaffoldBackgroundColor: Colors.grey,
-
+              iconTheme: IconThemeData(color: Colors.white),
               dialogBackgroundColor: Colors.grey,
               cardColor: Colors.grey[600],
               buttonTheme: ButtonThemeData(
@@ -267,5 +267,4 @@ class MyAppState extends State<MyApp> {
         isDark = theme == 'dark';
       });
   }
-
 }
