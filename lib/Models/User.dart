@@ -24,6 +24,8 @@ class User {
   static const String TAG_PREMIUM_USER = 'Premium User';
   static const String TAG_VERIFIED_USER = 'Verified User';
 
+  static const String DEGREE_HIGH_SCHOOL = 'high school';
+
   String firstName;
   String secondName;
   String fullName;
