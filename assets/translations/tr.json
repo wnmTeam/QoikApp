@@ -128,5 +128,6 @@
   "email_verification": "Email Verification",
   "verif_sent": "Verify message sent to",
   "Verified": "Verified",
-  "send_verify_again": "Send verify again"
+  "send_verify_again": "Send verify again",
+  "send": "Send"
 }

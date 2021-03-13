@@ -128,5 +128,6 @@
   "email_verification": "تأكيد البريد الإلكتروني",
   "verif_sent": "رسالة التأكيد أرسلت إلى",
   "verified": "تم التأكيد",
-  "send_verify_again": "إعادة الإرسال"
+  "send_verify_again": "إعادة الإرسال",
+  "send": "إرسال"
 }
