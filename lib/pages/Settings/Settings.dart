@@ -1,9 +1,9 @@
+import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/main.dart';
-
 class Settings extends StatefulWidget {
   @override
   _SettingsState createState() => _SettingsState();
@@ -21,6 +21,30 @@ class _SettingsState extends State<Settings> {
     return Scaffold(
       appBar: AppBar(
         title: Text(Languages.translate(context, "setting")),
+        actions: [
+          DayNightSwitcherIcon(
+            isDarkModeEnabled: storageController.getTheme() == 'dark',
+            onStateChanged: (isDarkModeEnabled) {
+              setState(() async {
+                if (isDarkModeEnabled) {
+                  await storageController.setTheme('dark');
+                  MyAppState.myAppState.setState(() {
+                    MyAppState.isDark = true;
+                  });
+                } else {
+                  await storageController.setTheme('light');
+
+                  MyAppState.myAppState.setState(() {
+                    MyAppState.isDark = false;
+                  });
+                }
+              });
+            },
+          ),
+          SizedBox(
+            width: 8,
+          ),
+        ],
       ),
       body: ListView(
         padding: EdgeInsets.all(8.0),
@@ -95,7 +119,7 @@ class _SettingsState extends State<Settings> {
                       children: [
                         ListTile(
                           title:
-                              Text(Languages.translate(context, "light_theme")),
+                          Text(Languages.translate(context, "light_theme")),
                           selected: storageController.getTheme() == 'light',
                           onTap: () async {
                             await storageController.setTheme('light');
@@ -234,6 +258,30 @@ class _SettingsState extends State<Settings> {
               },
               controlAffinity: ListTileControlAffinity.trailing,
             ),
+          ),
+          Divider(),
+          ListTile(
+            title: Text(Languages.translate(context, "dark_theme")),
+            trailing: DayNightSwitcherIcon(
+              isDarkModeEnabled: storageController.getTheme() == 'dark',
+              onStateChanged: (isDarkModeEnabled) {
+                setState(() async {
+                  if (isDarkModeEnabled) {
+                    await storageController.setTheme('dark');
+                    MyAppState.myAppState.setState(() {
+                      MyAppState.isDark = true;
+                    });
+                  } else {
+                    await storageController.setTheme('light');
+
+                    MyAppState.myAppState.setState(() {
+                      MyAppState.isDark = false;
+                    });
+                  }
+                });
+              },
+            ),
+            leading: Icon(Icons.nights_stay),
           ),
         ],
       ),

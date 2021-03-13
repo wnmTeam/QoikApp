@@ -29,6 +29,7 @@ class MyAppState extends State<MyApp> {
   String theme;
   static Locale locale;
   static bool isDark = false;
+  int sColor = 0xff333333;
 
   @override
   void initState() {
@@ -48,19 +49,24 @@ class MyAppState extends State<MyApp> {
       showSemanticsDebugger: false,
       theme: isDark
           ? ThemeData(
-              brightness: Brightness.dark,
+        brightness: Brightness.dark,
 
-              primarySwatch: Colors.blueGrey,
-              primaryColor: Colors.blueGrey,
+              primarySwatch: ConstValues.firstColorDark,
+              primaryColor: ConstValues.firstColorDark,
               buttonColor: Colors.blueGrey,
 
+              scaffoldBackgroundColor: Color(sColor),
+              cardColor: Color(sColor),
+
+              //canvasColor is the drawer backgroundColor
+              canvasColor: Color(sColor),
+              dialogBackgroundColor: Color(sColor),
               accentColor: Colors.yellowAccent,
+
               backgroundColor: Colors.grey,
               textButtonTheme: TextButtonThemeData(style: ButtonStyle()),
-              scaffoldBackgroundColor: Colors.grey,
               iconTheme: IconThemeData(color: Colors.white),
-              dialogBackgroundColor: Colors.grey,
-              cardColor: Colors.grey[600],
+
               buttonTheme: ButtonThemeData(
                   textTheme: ButtonTextTheme.normal, buttonColor: Colors.red),
               textTheme: TextTheme(
@@ -107,8 +113,6 @@ class MyAppState extends State<MyApp> {
                   color: Colors.white60,
                 ),
               ),
-              //canvasColor is the drawer backgroundColor
-              canvasColor: Colors.grey,
             )
           : ThemeData(
               brightness: Brightness.light,

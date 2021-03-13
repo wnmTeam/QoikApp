@@ -17,6 +17,9 @@ class ConstValues {
     800: Color.fromRGBO(229, 26, 75, .9),
     900: Color.fromRGBO(229, 26, 75, 1),
   });
+  static MaterialColor firstColorDark = MaterialColor(0xff121212, {
+    50: Color(0xff121212),
+  });
 
   // static Color accentColor =  Colors.greenAccent;
 

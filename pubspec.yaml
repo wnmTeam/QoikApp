@@ -67,6 +67,7 @@ dev_dependencies:
   toast:
   package_info:
   badges: ^1.1.6
+  day_night_switcher:
 
   # Emoji keyBoard
   emoji_pick: ^0.1.0
