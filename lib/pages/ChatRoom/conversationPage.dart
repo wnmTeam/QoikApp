@@ -68,6 +68,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
   bool creatingChat = false;
 
   List<File> _images = [];
+  File doc = new File("null");
 
   Size size;
 
@@ -417,27 +418,71 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                                                 Axis.horizontal,
                                                             itemCount:
                                                                 _images.length,
-                                                            itemBuilder:
-                                                                (context,
-                                                                    index) {
-                                                              return sendImagePreview(
-                                                                  index);
-                                                            },
-                                                          ),
-                                                        );
-                                                      });
-                                                    }
-                                                  }),
-                                              if (showEmoji)
-                                                IconButton(
-                                                    icon: Icon(
-                                                      Icons
-                                                          .emoji_emotions_outlined,
-                                                      color: Theme
-                                                          .of(context)
-                                                          .primaryColor,),
-                                                    onPressed: () {
-                                                      if (emojiHeight == 0.0) {
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                          return sendImagePreview(
+                                                              index);
+                                                        },
+                                                      ),
+                                                    );
+                                                  });
+                                                }
+                                              }),
+                                          IconButton(
+                                              icon: Icon(
+                                                Icons.attach_file,
+                                                color: Colors.blue,
+                                              ),
+                                              onPressed: () async {
+                                                final pickedFile =
+                                                    await _storageController
+                                                        .getDoc();
+                                                if (pickedFile != null) {
+                                                  print(pickedFile.runtimeType);
+                                                  print(doc.runtimeType);
+                                                  doc = pickedFile;
+                                                  print("1");
+                                                  sendMessage();
+                                                  print("2");
+                                                  print("\n\n\n");
+                                                  print(pickedFile.path);
+                                                  print(pickedFile);
+                                                  // _images.add(File(
+                                                  //     pickedFile.path));
+                                                  // setState(() {
+                                                  //   chosenImages =
+                                                  //       Container(
+                                                  //     height: 150,
+                                                  //     child:
+                                                  //         ListView.builder(
+                                                  //       scrollDirection:
+                                                  //           Axis.horizontal,
+                                                  //       itemCount:
+                                                  //           _images.length,
+                                                  //       itemBuilder:
+                                                  //           (context,
+                                                  //               index) {
+                                                  //         return sendImagePreview(
+                                                  //             index);
+                                                  //       },
+                                                  //     ),
+                                                  //   );
+                                                  // });
+                                                  print("\n\n\n");
+                                                } else {
+                                                  print(
+                                                      "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg");
+                                                }
+                                              }),
+                                          if (showEmoji)
+                                            IconButton(
+                                                icon: Icon(
+                                                  Icons.emoji_emotions_outlined,
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                ),
+                                                onPressed: () {
+                                                  if (emojiHeight == 0.0) {
                                                         setState(() {
                                                           emojiHeight = 255.0;
                                                         });
@@ -913,13 +958,39 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
 
   _messageBuilder(Message message, bool isSender, Color color, double x1,
       double x2, double x3, double x4) {
-    String minute = message.date.minute.toString().length < 2
+    String minute = message.date.minute
+        .toString()
+        .length < 2
         ? "0" + message.date.minute.toString()
         : message.date.minute.toString();
+    print("message \n");
+    print("message \n");
+    print("message \n");
+    print("message \n");
+    if (message.text != null) {
+      print("text " + message.text);
+    } else {
+      print("text null");
+    }
+    if (message.doc != null) {
+      // print("doc " + message.doc.path);
+    } else {
+      print("doc null");
+    }
+    if (message.images != null) {
+      print("images " + message.images.toString());
+    } else {
+      print("images null");
+    }
+    print("id " + message.id);
+    print("message \n");
+    print("message \n");
+    print("message \n");
+    print("message \n");
     return Expanded(
       child: Column(
         crossAxisAlignment:
-            isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Container(
             padding: EdgeInsets.all(4),
@@ -968,6 +1039,11 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                 //The text
                 if (message.text != null)
                   messageTextBuilder(message.text, isSender),
+                SizedBox(
+                  height: 1,
+                ),
+                if (message.doc != null)
+                  docBuilder(message.doc, isSender),
                 SizedBox(
                   height: 1,
                 ),
@@ -1110,6 +1186,22 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
     );
   }
 
+  Widget docBuilder(File doc, bool isSender) {
+    return Container(
+      color: Colors.white24,
+      child: ListTile(
+        title: Text("text.txt"),
+        leading: Icon(Icons.insert_drive_file_rounded),
+        trailing: IconButton(
+          icon: Icon(Icons.file_download),
+          onPressed: () {
+
+          },),
+      ),
+    );
+  }
+
+
   Widget sendImagePreview(int index) {
     return Container(
       height: 150,
@@ -1248,7 +1340,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
     if (_messageController.text
         .trim()
         .isEmpty &&
-        _images.isEmpty) return;
+        _images.isEmpty && doc == null) return;
+
     _chatController.addMessage(
       message: Message(
         idOwner: _authController
@@ -1265,9 +1358,11 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
           : widget.user.id,
       id_chat: widget.isRoom ? widget.group.id : getChatID(),
       images: _images,
+      doc: doc,
       type: widget.isRoom ? 'rooms' : 'chats',
     );
     _images = [];
+    doc = null;
     _messageController.clear();
     sounds.sendMessageSound();
   }

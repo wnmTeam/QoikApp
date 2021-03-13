@@ -77,8 +77,9 @@ class StorageController {
     return ImagePicker().getImage(source: ImageSource.camera, imageQuality: 50);
   }
 
-  Future getDoc() async {
-    var v = await FilePicker.getFile();
+  Future<File> getDoc() async {
+    // File x = await FilePicker.getFile();
+    return await FilePicker.getFile();
 
 //    if(result != null) {
 //      PlatformFile file = result.files.first;
