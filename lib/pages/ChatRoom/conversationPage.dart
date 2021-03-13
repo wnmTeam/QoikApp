@@ -404,8 +404,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                           IconButton(
                                               icon: Icon(
                                                 Icons.attach_file,
-                                                color: Theme
-                                                    .of(context)
+                                                color: Theme.of(context)
                                                     .primaryColor,
                                               ),
                                               onPressed: () async {
@@ -417,7 +416,6 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                                       content: Wrap(
                                                         alignment: WrapAlignment
                                                             .spaceAround,
-
                                                         children: [
                                                           //camera icon
                                                           ClipRRect(
@@ -434,8 +432,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                                                 icon: Icon(
                                                                   Icons
                                                                       .photo_camera,
-                                                                  color:
-                                                                  Colors.white,
+                                                                  color: Colors
+                                                                      .white,
                                                                 ),
                                                                 onPressed:
                                                                     () async {
@@ -563,7 +561,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                                                 100),
                                                             child: Container(
                                                               color: Theme
-                                                                  .of(context)
+                                                                  .of(
+                                                                  context)
                                                                   .primaryColor,
                                                               child: IconButton(
                                                                   icon: Icon(
@@ -572,8 +571,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                                                     color: Colors
                                                                         .white,
                                                                   ),
-                                                                  onPressed:
-                                                                      () async {
+                                                                  onPressed: () async {
                                                                     final pickedFile =
                                                                     await _storageController
                                                                         .getDoc();
@@ -582,10 +580,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                                                       doc =
                                                                           pickedFile;
                                                                       showDialog(
-                                                                        context:
-                                                                        context,
-                                                                        builder:
-                                                                            (
+                                                                        context: context,
+                                                                        builder: (
                                                                             context) {
                                                                           return AlertDialog(
                                                                             scrollable:
@@ -607,7 +603,6 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                                                               ElevatedButton(
                                                                                 onPressed: () {
                                                                                   sendMessage();
-
                                                                                   Navigator
                                                                                       .pop(
                                                                                       context);
@@ -776,16 +771,16 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
         //                 ),
         //               ),
         //               chosenImages,
-        //               Container(
-        //                 width: size.width,
-        //                 padding: const EdgeInsets.all(2.0),
-        //                 child: widget.isRoom && iamOut
-        //                     ?Text(Languages
-        //                     .translate(
-        //                   context,
-        //                   'cant_send_messages',
-        //                 )):
-        //                      Row(
+      //               Container(
+      //                 width: size.width,
+      //                 padding: const EdgeInsets.all(2.0),
+      //                 child: widget.isRoom && iamOut
+      //                     ?Text(Languages
+      //                     .translate(
+      //                   context,
+      //                   'cant_send_messages',
+      //                 )):
+      //                      Row(
       //                   crossAxisAlignment: CrossAxisAlignment.center,
       //                   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
       //                   textDirection: TextDirection.ltr,
@@ -829,18 +824,18 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
       //                                       ),
       //                                     );
       //                                   });
-        //                                 }
-        //                               },
-        //                             ),
-        //                             Expanded(
-        //                               child: TextField(
-        //                                 maxLines: 5,
-        //                                 minLines: 1,
-        //                                 textAlign: TextAlign.start,
-        //                                 controller: _messageController,
-        //                                 enableSuggestions: true,
-        //                                 decoration: InputDecoration(
-        //                                   contentPadding:
+      //                                 }
+      //                               },
+      //                             ),
+      //                             Expanded(
+      //                               child: TextField(
+      //                                 maxLines: 5,
+      //                                 minLines: 1,
+      //                                 textAlign: TextAlign.start,
+      //                                 controller: _messageController,
+      //                                 enableSuggestions: true,
+      //                                 decoration: InputDecoration(
+      //                                   contentPadding:
       //                                   EdgeInsets.symmetric(
       //                                       vertical: 0, horizontal: 0),
       //                                   border: InputBorder.none,
@@ -933,16 +928,16 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
       //                               message: Message(
       //                                 idOwner: _authController.getUser.uid,
       //                                 text: _messageController.text
-        //                                         .trim()
-        //                                         .isEmpty
-        //                                     ? null
-        //                                     : _messageController.text.trim(),
-        //                               ),
-        //                               id_receiver:widget.isRoom? widget
-        //                                   .group.id : widget.user.id,
-        //                               id_chat: widget.isRoom?widget.group
-        //                                   .id:getChatID(),
-        //                               images: _images,
+      //                                         .trim()
+      //                                         .isEmpty
+      //                                     ? null
+      //                                     : _messageController.text.trim(),
+      //                               ),
+      //                               id_receiver:widget.isRoom? widget
+      //                                   .group.id : widget.user.id,
+      //                               id_chat: widget.isRoom?widget.group
+      //                                   .id:getChatID(),
+      //                               images: _images,
         //                               type:widget.isRoom?'rooms': 'chats',
         //                             );
         //                             _images = [];
