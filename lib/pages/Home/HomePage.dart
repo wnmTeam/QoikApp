@@ -12,6 +12,7 @@ import 'package:stumeapp/api/notification_api.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
+import 'package:stumeapp/controller/StorageController.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/Home/tabs/FriendsTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/GroupsChatsTabView.dart';
@@ -36,6 +37,7 @@ class _HomePageState extends State<HomePage> {
   NotificationApi _notificationApi = NotificationApi();
   ChatController chatsController = ChatController();
   final FirebaseMessaging fbm = FirebaseMessaging();
+  final AuthController _controller = AuthController();
 
   String getChatID(id) {
     List l = [id, MyUser.myUser.id];
@@ -129,10 +131,14 @@ class _HomePageState extends State<HomePage> {
   List<Link> link = new List();
 
   double width;
+  StorageController storageController = new StorageController();
 
   @override
   Widget build(BuildContext context) {
-    width = MediaQuery.of(context).size.width;
+    width = MediaQuery
+        .of(context)
+        .size
+        .width;
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -364,8 +370,12 @@ class _HomePageState extends State<HomePage> {
               }
               return SingleChildScrollView(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     DrawerHeader(
+                      // decoration: BoxDecoration(
+                      //   color: Theme.of(context).primaryColor,
+                      // ),
                       child: GestureDetector(
                         onTap: () {
                           Navigator.of(context).pushNamed(
@@ -376,57 +386,49 @@ class _HomePageState extends State<HomePage> {
                             },
                           );
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(1000),
-                                child: CachedNetworkImage(
-                                  placeholder: (context, url) => Center(
-                                    child: Image.asset(ConstValues.userImage),
-                                  ),
-                                  imageUrl:
-                                  !loading && MyUser.myUser.img != null
-                                      ? MyUser.myUser.img
-                                      : ConstValues.userImage,
-                                  fit: BoxFit.cover,
-                                  width: width / 4,
-                                  height: width / 4,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(1000),
+                              child: CachedNetworkImage(
+                                placeholder: (context, url) => Center(
+                                  child: Image.asset(ConstValues.userImage),
                                 ),
+                                imageUrl: !loading && MyUser.myUser.img != null
+                                    ? MyUser.myUser.img
+                                    : ConstValues.userImage,
+                                fit: BoxFit.cover,
+                                width: width / 5,
+                                height: width / 5,
                               ),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    MyUser.myUser.firstName +
-                                        ' ' +
-                                        MyUser.myUser.secondName,
-                                    style: TextStyle(
-                                      fontSize: width / ConstValues.fontSize_1,
-                                    ),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  MyUser.myUser.firstName +
+                                      ' ' +
+                                      MyUser.myUser.secondName,
+                                  style: TextStyle(
+                                    fontSize: width / ConstValues.fontSize_1,
                                   ),
-                                  Text(
-                                    MyUser.myUser.email,
-                                    style: TextStyle(
-                                      color: Theme
-                                          .of(context)
-                                          .textTheme
-                                          .bodyText1
-                                          .color
-                                          .withAlpha(150),
-                                      fontSize: width / 40,
-                                    ),
+                                ),
+                                Text(
+                                  MyUser.myUser.email,
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .color
+                                        .withAlpha(150),
+                                    fontSize: width / 40,
                                   ),
-                                ],
-                              )
-                            ],
-                          ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -480,14 +482,14 @@ class _HomePageState extends State<HomePage> {
                             if (link[3].url != null)
                               {
                                 await launch(link[3].url).then((value) =>
-                                          print('url  ' + link[3].url))
-                                    }
-                                  else
-                                    {throw 'cant launch url'}
-                                },
-                              ),
-                            ],
-                          )
+                                    print('url  ' + link[3].url))
+                              }
+                            else
+                              {throw 'cant launch url'}
+                          },
+                        ),
+                      ],
+                    )
                         : CircularProgressIndicator(),
                     Divider(),
                     // ListTile(

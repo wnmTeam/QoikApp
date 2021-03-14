@@ -469,17 +469,26 @@ class ProfilePageState extends State<ProfilePage> {
                                     subtitle: Linkify(
                                       onOpen: (link) async {
                                         if (await canLaunch(link.url)) {
-                                          await launch(link.url);
-                                        } else {
-                                          throw 'Could not launch $link';
-                                        }
-                                      },
-                                      linkStyle: TextStyle(
-                                        color: Colors.blue[200],
-                                      ),
-                                      options: LinkifyOptions(humanize: true),
-                                      text: _bioController.text,
-                                      // style: TextStyle(fontSize: 16),
+                                                await launch(link.url);
+                                              } else {
+                                                throw 'Could not launch $link';
+                                              }
+                                            },
+                                            linkStyle: TextStyle(
+                                              color: Colors.blue[200],
+                                            ),
+                                            options:
+                                                LinkifyOptions(humanize: true),
+                                            text: _bioController.text,
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText2
+                                                  .color
+                                                  .withOpacity(0.6),
+                                              fontSize: 14,
+                                            ),
+                                            // style: TextStyle(fontSize: 16),
                                     ),
                                   ),
                                   if (widget.user.university != null)
@@ -548,21 +557,22 @@ class ProfilePageState extends State<ProfilePage> {
                                     isMyProfile
                                         ? Languages.translate(
                                       context,
-                                      'my_friends',
-                                    )
+                                            'my_friends',
+                                          )
                                         : Languages.translate(
-                                      context,
-                                      'friends',
-                                    ),
+                                            context,
+                                            'friends',
+                                          ),
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18)),
-                                FlatButton(
-                                    onPressed: () {
-                                      //TODO
-                                    },
-                                    child: Text("More friends"))
+                                // FlatButton(
+                                //     onPressed: () {
+                                //       //TODO
+                                //     },
+                                //     child: Text("More friends"),
+                                // )
                               ],
                             ),
                           ),
