@@ -218,67 +218,71 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
       future: _authController.getUserInfo(widget.id_sender),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          user = User().fromMap(snapshot.data)..setId(widget.id_sender);
+          try {
+            user = User().fromMap(snapshot.data)..setId(widget.id_sender);
 
-          return ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-            onTap: () {},
-            leading: ClipRRect(
-              borderRadius: BorderRadius.circular(57),
-              child: CachedNetworkImage(
-                placeholder: (context, url) => Center(
-                  child: Image.asset(ConstValues.userImage),
+            return ListTile(
+              contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+              onTap: () {},
+              leading: ClipRRect(
+                borderRadius: BorderRadius.circular(57),
+                child: CachedNetworkImage(
+                  placeholder: (context, url) => Center(
+                    child: Image.asset(ConstValues.userImage),
+                  ),
+                  imageUrl: user.img != null ? user.img : ConstValues.userImage,
+                  fit: BoxFit.cover,
+                  width: 57,
+                  height: 57,
                 ),
-                imageUrl: user.img != null ? user.img : ConstValues.userImage,
-                fit: BoxFit.cover,
-                width: 57,
-                height: 57,
               ),
-            ),
-            title: Text(user.firstName + ' ' + user.secondName),
-            subtitle: Text(
-              user.degree != User.DEGREE_HIGH_SCHOOL
-                  ? user.university + ' | ' + user.college
-                  : Languages.translate(
-                      context,
-                      'high school',
-                    ),
-              style: TextStyle(
-                fontSize: 12,
+              title: Text(user.firstName + ' ' + user.secondName),
+              subtitle: Text(
+                user.degree != User.DEGREE_HIGH_SCHOOL
+                    ? user.university + ' | ' + user.college
+                    : Languages.translate(
+                        context,
+                        'high school',
+                      ),
+                style: TextStyle(
+                  fontSize: 12,
+                ),
               ),
-            ),
-            trailing: FlatButton.icon(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              icon: Icon(
-                Icons.person_add,
-                color: Colors.grey[700],
-              ),
-              label: Text(Languages.translate(
-                context,
-                'accept',
-              )),
-              onPressed: () async {
-                await _friendsController.acceptRequestFriend(
-                    id_requestSender: user.id);
-                print(Languages.translate(
+              trailing: FlatButton.icon(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                icon: Icon(
+                  Icons.person_add,
+                  color: Colors.grey[700],
+                ),
+                label: Text(Languages.translate(
                   context,
-                  'send_done',
-                ));
+                  'accept',
+                )),
+                onPressed: () async {
+                  await _friendsController.acceptRequestFriend(
+                      id_requestSender: user.id);
+                  print(Languages.translate(
+                    context,
+                    'send_done',
+                  ));
 
-                // Navigator.pushNamed(
-                //   context,
-                //   '/ProfilePage',
-                //   arguments: {
-                //     'id_user': user.id,
-                //     'user': user,
-                //   },
-                // );
-                widget.deleteRequest();
-              },
-            ),
-          );
+                  // Navigator.pushNamed(
+                  //   context,
+                  //   '/ProfilePage',
+                  //   arguments: {
+                  //     'id_user': user.id,
+                  //     'user': user,
+                  //   },
+                  // );
+                  widget.deleteRequest();
+                },
+              ),
+            );
+          } catch (e) {
+            return Container();
+          }
         }
         return UserPlaceholder();
       },

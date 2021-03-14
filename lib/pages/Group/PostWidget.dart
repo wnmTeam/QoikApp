@@ -161,9 +161,13 @@ class _PostWidgetState extends State<PostWidget>
                         return _userWidget();
                       }
                       if (snapshot.hasData) {
-                        user = User().fromMap(snapshot.data)
-                          ..setId(snapshot.data.id);
-                        return _userWidget();
+                        try {
+                          user = User().fromMap(snapshot.data)
+                            ..setId(snapshot.data.id);
+                          return _userWidget();
+                        } catch (e) {
+                          return UserPlaceholder();
+                        }
                       }
                       return UserPlaceholder();
 //                    return CircularProgressIndicator();
@@ -174,87 +178,83 @@ class _PostWidgetState extends State<PostWidget>
                 ),
                 post.text.isNotEmpty
                     ? Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            _isExbended = !_isExbended;
-                          });
-                        },
-                        onLongPress: () {
-                          Clipboard.setData(
-                              ClipboardData(text: post.text))
-                              .then((value) {
-                            Toast.show(
-                              Languages.translate(
-                                  context, 'text_copied'),
-                              context,
-                              duration: Toast.LENGTH_LONG,
-                              backgroundColor: Theme
-                                  .of(context)
-                                  .primaryColor,
-                            );
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  _isExbended = !_isExbended;
+                                });
+                              },
+                              onLongPress: () {
+                                Clipboard.setData(
+                                        ClipboardData(text: post.text))
+                                    .then((value) {
+                                  Toast.show(
+                                    Languages.translate(context, 'text_copied'),
+                                    context,
+                                    duration: Toast.LENGTH_LONG,
+                                    backgroundColor:
+                                        Theme.of(context).primaryColor,
+                                  );
 
-                            // Scaffold.of(context).showSnackBar(
-                            //     SnackBar(content:Text('The text copied')));
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0,
-                            vertical: 10,
-                          ),
-                          child: Linkify(
-                            onOpen: (link) async {
-                              if (await canLaunch(link.url)) {
-                                await launch(link.url);
-                              } else {
-                                throw 'Could not launch $link';
-                              }
-                            },
-                            linkStyle: TextStyle(
-                              color: Colors.blue,
+                                  // Scaffold.of(context).showSnackBar(
+                                  //     SnackBar(content:Text('The text copied')));
+                                });
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8.0,
+                                  vertical: 10,
+                                ),
+                                child: Linkify(
+                                  onOpen: (link) async {
+                                    if (await canLaunch(link.url)) {
+                                      await launch(link.url);
+                                    } else {
+                                      throw 'Could not launch $link';
+                                    }
+                                  },
+                                  linkStyle: TextStyle(
+                                    color: Colors.blue,
+                                  ),
+                                  options: LinkifyOptions(humanize: false),
+                                  text: post.text,
+                                  maxLines: _isExbended ? 10000 : 5,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
                             ),
-                            options: LinkifyOptions(humanize: false),
-                            text: post.text,
-                            maxLines: _isExbended ? 10000 : 5,
-                            overflow: TextOverflow.ellipsis,
-
-                          ),
-                        ),
-                      ),
-                      !_isExbended
-                          ? post.text.length > 200
-                          ? InkWell(
-                        onTap: () {
-                          setState(() {
-                            _isExbended = !_isExbended;
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0,
-                            vertical: 10,
-                          ),
-                          child: Text(
-                            "عرض المزيد",
-                            style: TextStyle(
-                              color: Theme
-                                  .of(context)
-                                  .primaryColor,
-                              fontSize: 16,
-                            ),
-                          ),
+                            !_isExbended
+                                ? post.text.length > 200
+                                    ? InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            _isExbended = !_isExbended;
+                                          });
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0,
+                                            vertical: 10,
+                                          ),
+                                          child: Text(
+                                            "عرض المزيد",
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : Container()
+                                : Container(),
+                          ],
                         ),
                       )
-                          : Container()
-                          : Container(),
-                    ],
-                  ),
-                )
                     : Container(),
                 SizedBox(
                   height: 6,
@@ -298,7 +298,7 @@ class _PostWidgetState extends State<PostWidget>
                                 id_post: widget.post.id);
 
                             DocumentSnapshot d =
-                            await _postsController.getPostChanges(
+                                await _postsController.getPostChanges(
                               id_post: widget.post.id,
                               group: widget.group,
                             );
@@ -313,10 +313,7 @@ class _PostWidgetState extends State<PostWidget>
                             }
                           },
                           color: widget.post.getIsLiked
-                              ? Theme
-                              .of(context)
-                              .primaryColor
-                              .withOpacity(0.7)
+                              ? Theme.of(context).primaryColor.withOpacity(0.7)
                               : buttonsColor,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(25)),
@@ -336,11 +333,12 @@ class _PostWidgetState extends State<PostWidget>
                                 SizedBox(
                                   width: 6,
                                 ),
-                                Text(post.likeCount.toString(),
+                                Text(
+                                  post.likeCount.toString(),
                                   style: TextStyle(
                                     color: widget.post.getIsLiked
-                                        ? Colors.white : ConstValues
-                                        .secondColor,
+                                        ? Colors.white
+                                        : ConstValues.secondColor,
                                   ),
                                 ),
                               ],
@@ -372,9 +370,12 @@ class _PostWidgetState extends State<PostWidget>
                             SizedBox(
                               width: 6,
                             ),
-                            Text(post.commentCount.toString(),
-                              style: TextStyle(color: ConstValues.secondColor,
-                              ),),
+                            Text(
+                              post.commentCount.toString(),
+                              style: TextStyle(
+                                color: ConstValues.secondColor,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -403,7 +404,7 @@ class _PostWidgetState extends State<PostWidget>
                             );
 
                             DocumentSnapshot d =
-                            await _postsController.getPostChanges(
+                                await _postsController.getPostChanges(
                               id_post: widget.post.id,
                               group: widget.group,
                             );
@@ -414,12 +415,8 @@ class _PostWidgetState extends State<PostWidget>
                               });
                           },
                           color: widget.post.getIsFollowed
-                              ? Theme
-                              .of(context)
-                              .primaryColor
-                              .withOpacity(0.7)
-                              : buttonsColor
-                              .withOpacity(0.8),
+                              ? Theme.of(context).primaryColor.withOpacity(0.7)
+                              : buttonsColor.withOpacity(0.8),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(25)),
                           child: Container(
@@ -428,17 +425,21 @@ class _PostWidgetState extends State<PostWidget>
                               children: [
                                 Icon(
                                   Icons.add_box,
-                                  color: widget.post.getIsFollowed ? Colors
-                                      .white : ConstValues.secondColor,
+                                  color: widget.post.getIsFollowed
+                                      ? Colors.white
+                                      : ConstValues.secondColor,
                                 ),
                                 SizedBox(
                                   width: 6,
                                 ),
-                                Text(post.followCount.toString(),
+                                Text(
+                                  post.followCount.toString(),
                                   style: TextStyle(
-                                    color: widget.post.getIsFollowed ? Colors
-                                        .white : ConstValues.secondColor,
-                                  ),),
+                                    color: widget.post.getIsFollowed
+                                        ? Colors.white
+                                        : ConstValues.secondColor,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -498,7 +499,7 @@ class _PostWidgetState extends State<PostWidget>
                                     CommentWidget(
                                       comment: Comment()
                                           .fromMap(newComments[i].data())
-                                        ..setId(newComments[i].id),
+                                            ..setId(newComments[i].id),
                                       post: widget.post,
                                       group: widget.group,
                                       addPoint: (id) async {
@@ -563,9 +564,7 @@ class _PostWidgetState extends State<PostWidget>
                       IconButton(
                         icon: Icon(
                           Icons.send,
-                          color: Theme
-                              .of(context)
-                              .primaryColor,
+                          color: Theme.of(context).primaryColor,
                         ),
                         onPressed: () async {
                           String text = _commentController.text;
@@ -684,13 +683,13 @@ class _PostWidgetState extends State<PostWidget>
           Text(
             user.userTag == 'admin'
                 ? Languages.translate(
-              context,
-              user.userTag,
-            )
+                    context,
+                    user.userTag,
+                  )
                 : Languages.translate(
-              context,
-              user.tag,
-            ),
+                    context,
+                    user.tag,
+                  ),
             style: TextStyle(fontSize: 12),
           ),
           Padding(
