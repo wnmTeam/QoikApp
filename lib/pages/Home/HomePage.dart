@@ -1,7 +1,6 @@
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +14,6 @@ import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 import 'package:stumeapp/localization.dart';
-import 'package:stumeapp/main.dart';
 import 'package:stumeapp/pages/Home/tabs/FriendsTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/GroupsChatsTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/HomeTabView.dart';
@@ -375,103 +373,64 @@ class _HomePageState extends State<HomePage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     DrawerHeader(
-                      child: Stack(
+                      // decoration: BoxDecoration(
+                      //   color: Theme.of(context).primaryColor,
+                      // ),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pushNamed(
+                            '/ProfilePage',
+                            arguments: {
+                              'user': MyUser.myUser,
+                              'id_user': _authController.getUser.uid,
+                            },
+                          );
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).pushNamed(
-                                    '/ProfilePage',
-                                    arguments: {
-                                      'user': MyUser.myUser,
-                                      'id_user': _authController.getUser.uid,
-                                    },
-                                  );
-                                },
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment
-                                      .spaceBetween,
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(1000),
-                                      child: CachedNetworkImage(
-                                        placeholder: (context, url) =>
-                                            Center(
-                                              child: Image.asset(
-                                                  ConstValues.userImage),
-                                            ),
-                                        imageUrl:
-                                        !loading && MyUser.myUser.img != null
-                                            ? MyUser.myUser.img
-                                            : ConstValues.userImage,
-                                        fit: BoxFit.cover,
-                                        width: width / 5,
-                                        height: width / 5,
-                                      ),
-                                    ),
-
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment
-                                          .start,
-                                      children: [
-                                        Text(
-                                          MyUser.myUser.firstName +
-                                              ' ' +
-                                              MyUser.myUser.secondName,
-                                          style: TextStyle(
-                                            fontSize: width /
-                                                ConstValues.fontSize_1,
-                                          ),
-                                        ),
-                                        Text(
-                                          MyUser.myUser.email,
-                                          style: TextStyle(
-                                            color: Theme
-                                                .of(context)
-                                                .textTheme
-                                                .bodyText1
-                                                .color
-                                                .withAlpha(150),
-                                            fontSize: width / 40,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-
-                                  ],
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(1000),
+                              child: CachedNetworkImage(
+                                placeholder: (context, url) => Center(
+                                  child: Image.asset(ConstValues.userImage),
                                 ),
+                                imageUrl: !loading && MyUser.myUser.img != null
+                                    ? MyUser.myUser.img
+                                    : ConstValues.userImage,
+                                fit: BoxFit.cover,
+                                width: width / 5,
+                                height: width / 5,
                               ),
                             ),
-                            Positioned.directional(
-                              textDirection: Directionality.of(context),
-                              end: 0,
-                              top: 0,
-                              child: DayNightSwitcherIcon(
-                                isDarkModeEnabled: storageController
-                                    .getTheme() == 'dark',
-                                onStateChanged: (isDarkModeEnabled) {
-                                  setState(() async {
-                                    if (isDarkModeEnabled) {
-                                      await storageController.setTheme('dark');
-                                      MyAppState.myAppState.setState(() {
-                                        MyAppState.isDark = true;
-                                      });
-                                    } else {
-                                      await storageController.setTheme('light');
-
-                                      MyAppState.myAppState.setState(() {
-                                        MyAppState.isDark = false;
-                                      });
-                                    }
-                                  });
-                                },
-                              ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  MyUser.myUser.firstName +
+                                      ' ' +
+                                      MyUser.myUser.secondName,
+                                  style: TextStyle(
+                                    fontSize: width / ConstValues.fontSize_1,
+                                  ),
+                                ),
+                                Text(
+                                  MyUser.myUser.email,
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .color
+                                        .withAlpha(150),
+                                    fontSize: width / 40,
+                                  ),
+                                ),
+                              ],
                             ),
-
-                          ]
+                          ],
+                        ),
                       ),
-
                     ),
                     snapshot.hasData
                         ? Column(

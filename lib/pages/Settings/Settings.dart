@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/main.dart';
+
 class Settings extends StatefulWidget {
   @override
   _SettingsState createState() => _SettingsState();
@@ -20,6 +21,28 @@ class _SettingsState extends State<Settings> {
     return Scaffold(
       appBar: AppBar(
         title: Text(Languages.translate(context, "setting")),
+        // actions: [
+        //   DayNightSwitcherIcon(
+        //     isDarkModeEnabled: storageController
+        //         .getTheme() == 'dark',
+        //     onStateChanged: (isDarkModeEnabled) {
+        //       setState(() async {
+        //         if (isDarkModeEnabled) {
+        //           await storageController.setTheme('dark');
+        //           MyAppState.myAppState.setState(() {
+        //             MyAppState.isDark = true;
+        //           });
+        //         } else {
+        //           await storageController.setTheme('light');
+        //
+        //           MyAppState.myAppState.setState(() {
+        //             MyAppState.isDark = false;
+        //           });
+        //         }
+        //       });
+        //     },
+        //   ),
+        // ],
       ),
       body: ListView(
         padding: EdgeInsets.all(8.0),
