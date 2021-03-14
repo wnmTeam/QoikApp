@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emoji_pick/emoji_pick.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/Message.dart';
@@ -19,6 +20,8 @@ import 'package:stumeapp/controller/StorageController.dart';
 import 'package:stumeapp/pages/ChatRoom/Emoji.dart';
 import 'package:stumeapp/pages/ImageView/ImageView.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:toast/toast.dart';
+
 
 import '../../const_values.dart';
 import '../../localization.dart';
@@ -1080,30 +1083,48 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
   _messageRowBuilder(Message message) {
     if (message.idOwner != _authController.getUser.uid) {
       //Start other's  message
-      return Container(
-        margin: EdgeInsets.all(8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _senderImage(
-                widget.isRoom
-                    ? members[message.idOwner] != null
-                        ? members[message.idOwner].img
-                        : ConstValues.userImage
-                    : widget.user != null
-                        ? widget.user.img
-                        : ConstValues.userImage,
-                true),
-            SizedBox(
-              width: 5,
-            ),
-            Directionality.of(context) == TextDirection.ltr
-                ? _messageBuilder(
-                    message, false, ConstValues.chatSecondColor, 10, 10, 10, 0)
-                : _messageBuilder(
-                    message, false, ConstValues.chatSecondColor, 0, 10, 10, 10),
-          ],
+      return InkWell(
+        onLongPress: (){
+          Clipboard.setData(
+              ClipboardData(text: message.text))
+              .then((value) {
+            Toast.show(
+              Languages.translate(context, 'text_copied'),
+              context,
+              duration: Toast.LENGTH_LONG,
+              backgroundColor:
+              Theme.of(context).primaryColor,
+            );
+
+            // Scaffold.of(context).showSnackBar(
+            //     SnackBar(content:Text('The text copied')));
+          });
+        },
+        child: Container(
+          margin: EdgeInsets.all(8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _senderImage(
+                  widget.isRoom
+                      ? members[message.idOwner] != null
+                          ? members[message.idOwner].img
+                          : ConstValues.userImage
+                      : widget.user != null
+                          ? widget.user.img
+                          : ConstValues.userImage,
+                  true),
+              SizedBox(
+                width: 5,
+              ),
+              Directionality.of(context) == TextDirection.ltr
+                  ? _messageBuilder(
+                      message, false, ConstValues.chatSecondColor, 10, 10, 10, 0)
+                  : _messageBuilder(
+                      message, false, ConstValues.chatSecondColor, 0, 10, 10, 10),
+            ],
+          ),
         ),
       );
       //End other's message
