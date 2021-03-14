@@ -129,5 +129,6 @@
   "verif_sent": "Verify message sent to",
   "Verified": "Verified",
   "send_verify_again": "Send verify again",
-  "send": "Send"
+  "send": "Send",
+  "add_file": "Add file"
 }

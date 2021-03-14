@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/MyUser.dart';
@@ -14,6 +15,7 @@ import 'package:stumeapp/controller/FriendsController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/ImageView/ImageView.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends StatefulWidget {
   final User user;
@@ -184,8 +186,10 @@ class ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                           uploadImage
-                              ? SizedBox(
-                                  width: size.width / 2,
+                              ? Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: size.width / 4),
+                                  // width: size.width / 2,
                                   child: LinearProgressIndicator())
                               : Container(),
                           SizedBox(
@@ -404,120 +408,132 @@ class ProfilePageState extends State<ProfilePage> {
                                   SizedBox(
                                     height: 18,
                                   ),
-                                  SizedBox(
-                                      width: size.width - 24,
-                                      child: ListTile(
-                                        trailing: isMyProfile
-                                            ? IconButton(
-                                                icon: Icon(
-                                                  !_editBio
-                                                      ? Icons.edit
-                                                      : Icons.save,
-                                                ),
-                                                onPressed: () {
-                                                  if (_editBio) {
-                                                    _authController.updateBio(
-                                                        _bioController.text);
-                                                  }
-                                                  setState(() {
-                                                    if (_editBio) {
-                                                      MyUser.myUser.bio =
-                                                          _bioController.text;
-                                                      widget.user.bio =
-                                                          _bioController.text;
-                                                    }
-                                                    _editBio = !_editBio;
-                                                  });
-                                                },
-                                              )
-                                            : SizedBox(
-                                                height: 2,
-                                                width: 2,
-                                              ),
-                                        title: Text(Languages.translate(
-                                          context,
-                                          'bio',
-                                        )),
-                                        subtitle: TextField(
-                                          maxLines: 50,
-                                          autofocus: true,
-                                          minLines: 1,
-                                          style: TextStyle(
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyText2
-                                                .color
-                                                .withOpacity(0.6),
-                                            fontSize: 14,
-                                          ),
-                                          controller: _bioController,
-                                          readOnly: !_editBio,
-                                          decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.zero,
-                                            border: InputBorder.none,
-                                          ),
-                                        ),
-                                      )),
+                                  isMyProfile ? ListTile(
+                                    trailing: isMyProfile
+                                        ? IconButton(
+                                      icon: Icon(
+                                        !_editBio
+                                            ? Icons.edit
+                                            : Icons.save,
+                                      ),
+                                      onPressed: () {
+                                        if (_editBio) {
+                                          _authController.updateBio(
+                                              _bioController.text);
+                                        }
+                                        setState(() {
+                                          if (_editBio) {
+                                            MyUser.myUser.bio =
+                                                _bioController.text;
+                                            widget.user.bio =
+                                                _bioController.text;
+                                          }
+                                          _editBio = !_editBio;
+                                        });
+                                      },
+                                    )
+                                        : SizedBox(
+                                      height: 2,
+                                      width: 2,
+                                    ),
+                                    title: Text(Languages.translate(
+                                      context,
+                                      'bio',
+                                    )),
+                                    subtitle: TextField(
+                                      maxLines: 50,
+                                      autofocus: true,
+                                      minLines: 1,
+                                      style: TextStyle(
+                                        color: Theme
+                                            .of(context)
+                                            .textTheme
+                                            .bodyText2
+                                            .color
+                                            .withOpacity(0.6),
+                                        fontSize: 14,
+                                      ),
+                                      controller: _bioController,
+                                      readOnly: !_editBio,
+                                      decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.zero,
+                                        border: InputBorder.none,
+                                      ),
+                                    ),
+                                  ) :
+                                  ListTile(
+                                    title: Text(Languages.translate(
+                                      context,
+                                      'bio',
+                                    )),
+                                    subtitle: Linkify(
+                                      onOpen: (link) async {
+                                        if (await canLaunch(link.url)) {
+                                          await launch(link.url);
+                                        } else {
+                                          throw 'Could not launch $link';
+                                        }
+                                      },
+                                      linkStyle: TextStyle(
+                                        color: Colors.blue[200],
+                                      ),
+                                      options: LinkifyOptions(humanize: true),
+                                      text: _bioController.text,
+                                      // style: TextStyle(fontSize: 16),
+                                    ),
+                                  ),
                                   if (widget.user.university != null)
-                                    SizedBox(
-                                        width: size.width - 24,
-                                        child: ListTile(
-                                          title: Text(Languages.translate(
-                                            context,
-                                            'university',
-                                          )),
-                                          subtitle:
-                                              Text(widget.user.university),
-                                        )),
+                                    ListTile(
+                                      title: Text(Languages.translate(
+                                        context,
+                                        'university',
+                                      )),
+                                      subtitle:
+                                      Text(widget.user.university),
+                                    ),
                                   if (widget.user.college != null)
-                                    SizedBox(
-                                        width: size.width - 24,
-                                        child: ListTile(
-                                          title: Text(Languages.translate(
-                                            context,
-                                            'college',
-                                          )),
-                                          subtitle: Text(widget.user.college),
-                                        )),
+                                    ListTile(
+                                      title: Text(Languages.translate(
+                                        context,
+                                        'college',
+                                      )),
+                                      subtitle: Text(widget.user.college),
+                                    ),
                                   isMyProfile && widget.user.email != null
-                                      ? SizedBox(
-                                          width: size.width - 24,
-                                          child: ListTile(
-                                            title: Text(Languages.translate(
-                                              context,
-                                              'email',
-                                            )),
-                                            subtitle: Text(widget.user.email),
-                                          ))
+                                      ? ListTile(
+                                    title: Text(Languages.translate(
+                                      context,
+                                      'email',
+                                    )),
+                                    subtitle: Text(widget.user.email),
+                                  )
                                       : Container(),
                                   isMyProfile
-                                      ? SizedBox(
-                                          width: size.width - 24,
-                                          child: ListTile(
-                                            trailing: IconButton(
-                                              icon: Icon(
-                                                Icons.edit,
-                                              ),
-                                              onPressed: () {
-                                                Navigator.pushNamed(context,
-                                                    '/ChangePasswordPage');
-                                              },
-                                            ),
-                                            title: Text(Languages.translate(
-                                              context,
-                                              'password',
-                                            )),
-                                            subtitle: TextField(
-                                              controller: TextEditingController(
-                                                  text: 'rrrrrrrryuiodrcfvgbh'),
-                                              obscureText: true,
-                                              readOnly: true,
-                                              decoration: InputDecoration(
-                                                contentPadding: EdgeInsets.zero,
-                                                border: InputBorder.none,
-                                              ),
-                                            ),
-                                          ))
+                                      ? ListTile(
+                                    trailing: IconButton(
+                                      icon: Icon(
+                                        Icons.edit,
+                                      ),
+                                      onPressed: () {
+                                        Navigator.pushNamed(context,
+                                            '/ChangePasswordPage');
+                                      },
+                                    ),
+                                    title: Text(Languages.translate(
+                                      context,
+                                      'password',
+                                    )),
+                                    subtitle: TextField(
+                                      controller: TextEditingController(
+                                          text: 'rrrrrrrryuiodrcfvgbh'),
+                                      obscureText: true,
+                                      readOnly: true,
+                                      decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.zero,
+                                        border: InputBorder.none,
+                                      ),
+                                    ),
+                                  )
                                       : Container(),
                                 ],
                               ),
@@ -525,19 +541,30 @@ class ProfilePageState extends State<ProfilePage> {
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                                isMyProfile
-                                    ? Languages.translate(
-                                        context,
-                                        'my_friends',
-                                      )
-                                    : Languages.translate(
-                                        context,
-                                        'friends',
-                                      ),
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 18)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                    isMyProfile
+                                        ? Languages.translate(
+                                      context,
+                                      'my_friends',
+                                    )
+                                        : Languages.translate(
+                                      context,
+                                      'friends',
+                                    ),
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18)),
+                                FlatButton(
+                                    onPressed: () {
+                                      //TODO
+                                    },
+                                    child: Text("More friends"))
+                              ],
+                            ),
                           ),
                           FutureBuilder(
                               future: _friendsController.getFriends(
@@ -592,26 +619,21 @@ class ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                 ),
-                SafeArea(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Container(
-                      // color: Colors.black.withOpacity(0.5),
-                      child: Directionality.of(context) == TextDirection.ltr
-                          ? Positioned(
-                              top: 0,
-                              left: 0,
-                              child: BackButton(),
-                            )
-                          : Positioned(
-                              top: 0,
-                              right: 0,
-                              child: BackButton(),
-                            ),
-                    ),
-                  ),
-                )
-              ])
+          //TODO un comment
+          // SafeArea(
+          //   child: Directionality.of(context) == TextDirection.ltr
+          //       ? Positioned(
+          //           top: 0,
+          //           left: 0,
+          //           child: BackButton(),
+          //         )
+          //       : Positioned(
+          //           top: 0,
+          //           right: 0,
+          //           child: BackButton(),
+          //         ),
+          // )
+        ])
             : Center(child: CircularProgressIndicator()));
   }
 
