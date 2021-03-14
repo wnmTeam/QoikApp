@@ -72,40 +72,45 @@ class _MembersTabState extends State<MembersTab>
             future: _authController.getUserInfo(members[index].id),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                print(snapshot.data);
-                User user = User()
-                    .fromMap(snapshot.data.data())
-                    .setId(snapshot.data.id);
-                print(user.id);
-                return ListTile(
-                  onTap: () {
-                    Navigator.pushNamed(
+                try {
+                  print(snapshot.data);
+                  User user = User()
+                      .fromMap(snapshot.data.data())
+                      .setId(snapshot.data.id);
+                  print(user.id);
+                  return ListTile(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        '/ProfilePage',
+                        arguments: {
+                          'id_user': user.id,
+                          'user': user,
+                        },
+                      );
+                    },
+                    title: Text(user.firstName + ' ' + user.secondName),
+                    subtitle: Text(Languages.translate(
                       context,
-                      '/ProfilePage',
-                      arguments: {
-                        'id_user': user.id,
-                        'user': user,
-                      },
-                    );
-                  },
-                  title: Text(user.firstName + ' ' + user.secondName),
-                  subtitle: Text(Languages.translate(
-                    context,
-                    user.tag,
-                  )),
-                  leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(57),
-                    child: CachedNetworkImage(
-                      placeholder: (context, url) => Center(
-                        child: Image.asset(ConstValues.userImage),
+                      user.tag,
+                    )),
+                    leading: ClipRRect(
+                      borderRadius: BorderRadius.circular(57),
+                      child: CachedNetworkImage(
+                        placeholder: (context, url) => Center(
+                          child: Image.asset(ConstValues.userImage),
+                        ),
+                        imageUrl:
+                            user.img != null ? user.img : ConstValues.userImage,
+                        fit: BoxFit.cover,
+                        width: 57,
+                        height: 57,
                       ),
-                      imageUrl: user.img != null ? user.img : ConstValues.userImage,
-                      fit: BoxFit.cover,
-                      width: 57,
-                      height: 57,
                     ),
-                  ),
-                );
+                  );
+                } catch (e) {
+                  return Container();
+                }
               }
               return UserPlaceholder();
             });
