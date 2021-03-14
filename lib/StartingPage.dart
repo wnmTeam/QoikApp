@@ -35,18 +35,18 @@ class _StartingPageState extends State<StartingPage> {
     var lastV = await _controller.getLastVersion();
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     // String version = packageInfo.version;
+    // String packageName = packageInfo.packageName;
     String buildNumber = packageInfo.buildNumber;
-    String packageName = packageInfo.packageName;
+    String firebaseBuildNumber = lastV.data()['version'];
 
-    print("buildNumber From Firebase " + lastV.data()['version']);
     // print("version "+version);
+    // print("packageName " + packageName);
+    print("buildNumber From Firebase " + lastV.data()['version']);
     print("buildNumber " + buildNumber);
-    print("packageName " + packageName);
-    print(lastV.data()['version'] == buildNumber);
+    print(int.parse(firebaseBuildNumber) <= int.parse(buildNumber));
     setState(() {
-      canGo = lastV.data()['version'] == buildNumber;
+      canGo = int.parse(firebaseBuildNumber) <= int.parse(buildNumber);
       print(canGo);
-
       loading = false;
     });
   }

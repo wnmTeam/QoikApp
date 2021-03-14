@@ -548,21 +548,22 @@ class ProfilePageState extends State<ProfilePage> {
                                     isMyProfile
                                         ? Languages.translate(
                                       context,
-                                      'my_friends',
-                                    )
+                                            'my_friends',
+                                          )
                                         : Languages.translate(
-                                      context,
-                                      'friends',
-                                    ),
+                                            context,
+                                            'friends',
+                                          ),
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18)),
-                                FlatButton(
-                                    onPressed: () {
-                                      //TODO
-                                    },
-                                    child: Text("More friends"))
+                                // FlatButton(
+                                //     onPressed: () {
+                                //       //TODO
+                                //     },
+                                //     child: Text("More friends"),
+                                // )
                               ],
                             ),
                           ),

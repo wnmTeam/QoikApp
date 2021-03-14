@@ -543,100 +543,101 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                                                                               index,
                                                                                               setState);
                                                                                         },
-                                                                                      ),
-                                                                                    );
-                                                                                  },
-                                                                                );
-                                                                          });
+                                                                              ),
+                                                                            );
+                                                                          },
+                                                                        );
+                                                                      });
                                                                     }
                                                                   }),
                                                             ),
                                                           ),
 
-                                                          //send file icon
-                                                          ClipRRect(
-                                                            borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                                100),
-                                                            child: Container(
-                                                              color: Theme
-                                                                  .of(
-                                                                  context)
-                                                                  .primaryColor,
-                                                              child: IconButton(
-                                                                  icon: Icon(
-                                                                    Icons
-                                                                        .insert_drive_file_sharp,
-                                                                    color: Colors
-                                                                        .white,
-                                                                  ),
-                                                                  onPressed: () async {
-                                                                    final pickedFile =
-                                                                    await _storageController
-                                                                        .getDoc();
-                                                                    if (pickedFile !=
-                                                                        null) {
-                                                                      doc =
-                                                                          pickedFile;
-                                                                      showDialog(
-                                                                        context: context,
-                                                                        builder: (
-                                                                            context) {
-                                                                          return AlertDialog(
-                                                                            scrollable:
-                                                                            true,
-                                                                            content:
-                                                                            ListTile(
-                                                                              selected: true,
-                                                                              title: Text(
-                                                                                  doc
-                                                                                      ?.path
-                                                                                      ?.split(
-                                                                                      '/')
-                                                                                      ?.last),
-                                                                              leading: Icon(
-                                                                                  Icons
-                                                                                      .insert_drive_file_rounded),
-                                                                            ),
-                                                                            actions: [
-                                                                              ElevatedButton(
-                                                                                onPressed: () {
-                                                                                  sendMessage();
-                                                                                  Navigator
-                                                                                      .pop(
-                                                                                      context);
-                                                                                },
-                                                                                child: Text(
-                                                                                    Languages
-                                                                                        .translate(
-                                                                                        context,
-                                                                                        "send"
-                                                                                            "")),
-                                                                              ),
-                                                                              FlatButton(
-                                                                                onPressed: () {
-                                                                                  doc =
-                                                                                  null;
-                                                                                  Navigator
-                                                                                      .pop(
-                                                                                      context);
-                                                                                },
-                                                                                child: Text(
-                                                                                    Languages
-                                                                                        .translate(
-                                                                                        context,
-                                                                                        "ca"
-                                                                                            "ncel")),
-                                                                              ),
-                                                                            ],
-                                                                          );
-                                                                        },
-                                                                      );
-                                                                    } else {}
-                                                                  }),
-                                                            ),
-                                                          ),
+                                                          //todo send files
+                                                          // //send file icon
+                                                          // ClipRRect(
+                                                          //   borderRadius:
+                                                          //   BorderRadius
+                                                          //       .circular(
+                                                          //       100),
+                                                          //   child: Container(
+                                                          //     color: Theme
+                                                          //         .of(
+                                                          //         context)
+                                                          //         .primaryColor,
+                                                          //     child: IconButton(
+                                                          //         icon: Icon(
+                                                          //           Icons
+                                                          //               .insert_drive_file_sharp,
+                                                          //           color: Colors
+                                                          //               .white,
+                                                          //         ),
+                                                          //         onPressed: () async {
+                                                          //           final pickedFile =
+                                                          //           await _storageController
+                                                          //               .getDoc();
+                                                          //           if (pickedFile !=
+                                                          //               null) {
+                                                          //             doc =
+                                                          //                 pickedFile;
+                                                          //             showDialog(
+                                                          //               context: context,
+                                                          //               builder: (
+                                                          //                   context) {
+                                                          //                 return AlertDialog(
+                                                          //                   scrollable:
+                                                          //                   true,
+                                                          //                   content:
+                                                          //                   ListTile(
+                                                          //                     selected: true,
+                                                          //                     title: Text(
+                                                          //                         doc
+                                                          //                             ?.path
+                                                          //                             ?.split(
+                                                          //                             '/')
+                                                          //                             ?.last),
+                                                          //                     leading: Icon(
+                                                          //                         Icons
+                                                          //                             .insert_drive_file_rounded),
+                                                          //                   ),
+                                                          //                   actions: [
+                                                          //                     ElevatedButton(
+                                                          //                       onPressed: () {
+                                                          //                         sendMessage();
+                                                          //                         Navigator
+                                                          //                             .pop(
+                                                          //                             context);
+                                                          //                       },
+                                                          //                       child: Text(
+                                                          //                           Languages
+                                                          //                               .translate(
+                                                          //                               context,
+                                                          //                               "send"
+                                                          //                                   "")),
+                                                          //                     ),
+                                                          //                     FlatButton(
+                                                          //                       onPressed: () {
+                                                          //                         doc =
+                                                          //                         null;
+                                                          //                         Navigator
+                                                          //                             .pop(
+                                                          //                             context);
+                                                          //                       },
+                                                          //                       child: Text(
+                                                          //                           Languages
+                                                          //                               .translate(
+                                                          //                               context,
+                                                          //                               "ca"
+                                                          //                                   "ncel")),
+                                                          //                     ),
+                                                          //                   ],
+                                                          //                 );
+                                                          //               },
+                                                          //             );
+                                                          //           } else {}
+                                                          //         }),
+                                                          //   ),
+                                                          // ),
                                                         ],
                                                       ),
                                                     );
