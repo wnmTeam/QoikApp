@@ -16,6 +16,7 @@ import 'package:stumeapp/api/notification_api.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
+import 'package:stumeapp/main.dart';
 import 'package:stumeapp/pages/ChatRoom/Emoji.dart';
 import 'package:stumeapp/pages/ImageView/ImageView.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -236,7 +237,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                     right: 0,
                     bottom: 0,
                     child: Image.asset(
-                      "assets/chat_bg.png",
+                      MyAppState.isDark
+                          ? "assets/chat_bg_dark.png"
+                          : "assets/chat_bg.png",
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -1361,9 +1364,10 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
     return Container(
       color: Colors.white24,
       child: ListTile(
-        title: Text(doc.path
-            .split('/')
-            .last),
+        title: Text(
+          doc.path.split('/').last,
+          maxLines: 3,
+        ),
         leading: Icon(Icons.insert_drive_file_rounded),
         trailing: IconButton(
           icon: Icon(Icons.file_download),

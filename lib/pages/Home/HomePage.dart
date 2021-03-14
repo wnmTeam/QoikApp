@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 import 'package:stumeapp/localization.dart';
+import 'package:stumeapp/main.dart';
 import 'package:stumeapp/pages/Home/tabs/FriendsTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/GroupsChatsTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/HomeTabView.dart';
@@ -372,76 +374,151 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    DrawerHeader(
+                    // DrawerHeader(
+                    //   decoration: BoxDecoration(
+                    //     color: Theme.of(context).primaryColor,
+                    //   ),
+                    //   curve: SawTooth(10),
+                    //   duration: Duration(seconds: 2),
+                    //   child: GestureDetector(
+                    //     onTap: () {
+                    //       Navigator.of(context).pushNamed(
+                    //         '/ProfilePage',
+                    //         arguments: {
+                    //           'user': MyUser.myUser,
+                    //           'id_user': _authController.getUser.uid,
+                    //         },
+                    //       );
+                    //     },
+                    //     child: Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //       children: [
+                    //         ClipRRect(
+                    //           borderRadius: BorderRadius.circular(1000),
+                    //           child: CachedNetworkImage(
+                    //             placeholder: (context, url) => Center(
+                    //               child: Image.asset(ConstValues.userImage),
+                    //             ),
+                    //             imageUrl: !loading && MyUser.myUser.img != null
+                    //                 ? MyUser.myUser.img
+                    //                 : ConstValues.userImage,
+                    //             fit: BoxFit.cover,
+                    //             width: width / 5,
+                    //             height: width / 5,
+                    //           ),
+                    //         ),
+                    //         Column(
+                    //           crossAxisAlignment: CrossAxisAlignment.start,
+                    //           children: [
+                    //             Text(
+                    //               MyUser.myUser.firstName +
+                    //                   ' ' +
+                    //                   MyUser.myUser.secondName,
+                    //               style: TextStyle(
+                    //                 fontSize: width / ConstValues.fontSize_1,
+                    //               ),
+                    //             ),
+                    //             Text(
+                    //               MyUser.myUser.email,
+                    //               style: TextStyle(
+                    //                 color: Theme.of(context)
+                    //                     .textTheme
+                    //                     .bodyText1
+                    //                     .color
+                    //                     .withAlpha(150),
+                    //                 fontSize: width / 40,
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+                    UserAccountsDrawerHeader(
+                      arrowColor: Theme.of(context).primaryColor,
                       // decoration: BoxDecoration(
-                      //   color: Theme.of(context).primaryColor,
+                      //   color: Theme.of(context).canvasColor,
                       // ),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pushNamed(
-                            '/ProfilePage',
-                            arguments: {
-                              'user': MyUser.myUser,
-                              'id_user': _authController.getUser.uid,
-                            },
-                          );
-                        },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(1000),
-                              child: CachedNetworkImage(
-                                placeholder: (context, url) => Center(
-                                  child: Image.asset(ConstValues.userImage),
-                                ),
-                                imageUrl: !loading && MyUser.myUser.img != null
-                                    ? MyUser.myUser.img
-                                    : ConstValues.userImage,
-                                fit: BoxFit.cover,
-                                width: width / 5,
-                                height: width / 5,
-                              ),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  MyUser.myUser.firstName +
-                                      ' ' +
-                                      MyUser.myUser.secondName,
-                                  style: TextStyle(
-                                    fontSize: width / ConstValues.fontSize_1,
-                                  ),
-                                ),
-                                Text(
-                                  MyUser.myUser.email,
-                                  style: TextStyle(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1
-                                        .color
-                                        .withAlpha(150),
-                                    fontSize: width / 40,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                      accountName: Text(
+                        MyUser.myUser.firstName +
+                            ' ' +
+                            MyUser.myUser.secondName,
+                        // style: TextStyle(
+                        //   fontSize: width / ConstValues.fontSize_1,
+                        // ),
+                      ),
+                      accountEmail: Text(
+                        MyUser.myUser.email,
+                        // style: TextStyle(
+                        //   color: Theme.of(context)
+                        //       .textTheme
+                        //       .bodyText1
+                        //       .color
+                        //       .withAlpha(150),
+                        //   fontSize: width / 40,
+                        // ),
+                      ),
+                      currentAccountPicture: ClipRRect(
+                        borderRadius: BorderRadius.circular(1000),
+                        child: CachedNetworkImage(
+                          placeholder: (context, url) => Center(
+                            child: Image.asset(ConstValues.userImage),
+                          ),
+                          imageUrl: !loading && MyUser.myUser.img != null
+                              ? MyUser.myUser.img
+                              : ConstValues.userImage,
+                          fit: BoxFit.cover,
+                          width: width / 5,
+                          height: width / 5,
                         ),
                       ),
+                      otherAccountsPictures: [
+                        CircleAvatar(
+                          child: DayNightSwitcherIcon(
+                            isDarkModeEnabled:
+                                storageController.getTheme() == 'dark',
+                            onStateChanged: (isDarkModeEnabled) {
+                              setState(() async {
+                                if (isDarkModeEnabled) {
+                                  await storageController.setTheme('dark');
+                                  MyAppState.myAppState.setState(() {
+                                    MyAppState.isDark = true;
+                                  });
+                                } else {
+                                  await storageController.setTheme('light');
+
+                                  MyAppState.myAppState.setState(() {
+                                    MyAppState.isDark = false;
+                                  });
+                                }
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+
+                      onDetailsPressed: () {
+                        Navigator.of(context).pushNamed(
+                          '/ProfilePage',
+                          arguments: {
+                            'user': MyUser.myUser,
+                            'id_user': _authController.getUser.uid,
+                          },
+                        );
+                      },
                     ),
                     snapshot.hasData
                         ? Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ListTile(
-                          title: Text(link[0].title),
-                          leading: Icon(link[0].icon),
-                          onTap: () async => {
-                            if (link[0].url != null)
-                              {
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              ListTile(
+                                title: Text(link[0].title),
+                                leading: Icon(link[0].icon),
+                                onTap: () async => {
+                                  if (link[0].url != null)
+                                    {
                                 await launch(link[0].url).then((value) =>
                                     print('url  ' + link[0].url))
                               }
@@ -537,9 +614,9 @@ class _HomePageState extends State<HomePage> {
               );
             }),
       ),
-      drawerScrimColor: Theme
-          .of(context)
-          .primaryColor,
+      // drawerScrimColor: Te
+      //       //     .of(context)
+      //       //     .primaryColor,hem
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: !loading
           ? tabViews[_currentIndex]

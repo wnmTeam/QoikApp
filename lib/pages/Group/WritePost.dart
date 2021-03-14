@@ -153,37 +153,39 @@ class _WritePostPageState extends State<WritePostPage> {
                                 _images.clear();
                               }
                               _images.add(File(pickedFile.path));
-                        });
-                      }
-                    }
-                  },
-                  label: Text(
-                    multiImages
-                        ? Languages.translate(context, "add_image")
-                        : Languages.translate(context, "change_image"),
-                  ),
-                ),
-                TextButton.icon(
-                  icon: Icon(Icons.insert_drive_file_rounded),
-                  onPressed: () async {
-                    final pickedFile = await _storageController.getDoc();
-                    if (pickedFile != null) {
+                            });
+                          }
+                        }
+                      },
+                      label: Text(
+                        multiImages
+                            ? Languages.translate(context, "add_image")
+                            : Languages.translate(context, "change_image"),
+                      ),
+                    ),
+              //TODO un comment
+              // TextButton.icon(
+              //   icon: Icon(Icons.insert_drive_file_rounded),
+              //   onPressed: () async {
+              //     final pickedFile = await _storageController.getDoc();
+              //     if (pickedFile != null) {
+              //
+              //
+              //     }
+              //   },
+              //   label: Text(Languages.translate(context, "add_file")),
+              // ),
 
-
-                    }
-                  },
-                  label: Text(Languages.translate(context, "add_file")),
-                ),
-                // TextButton.icon(
-                //   icon: Icon(Icons.camera_alt),
-                //
-                //   onPressed: () async {
-                //     final pickedFile = await _storageController.getImage();
-                //     if (pickedFile != null) {
-                //       {
-                //         setState(() {
-                //           _images.add(File(pickedFile.path));
-                //         });
+              // TextButton.icon(
+              //   icon: Icon(Icons.camera_alt),
+              //
+              //   onPressed: () async {
+              //     final pickedFile = await _storageController.getImage();
+              //     if (pickedFile != null) {
+              //       {
+              //         setState(() {
+              //           _images.add(File(pickedFile.path));
+              //         });
               //       }
                 //     }
                 //   },
