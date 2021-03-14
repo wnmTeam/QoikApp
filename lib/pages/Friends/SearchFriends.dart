@@ -398,7 +398,7 @@ class _UserWidgetState extends State<UserWidget> {
               ),
               title: Text(widget.user.firstName + ' ' + widget.user.secondName),
               subtitle: Text(
-                widget.user.degree != 'hight school'
+                widget.user.degree != User.DEGREE_HIGH_SCHOOL
                     ? widget.user.university + ' | ' + widget.user.college
                     : Languages.translate(
                         context,

@@ -162,40 +162,46 @@ class _UserWidgetState extends State<UserWidget> {
         future: _authController.getUserInfo(widget.id),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            user = User().fromMap(snapshot.data)..setId(widget.id);
-            return ListTile(
-              contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-              onTap: () {
-                Navigator.of(context).pushNamed(
-                  '/ProfilePage',
-                  arguments: {
-                    'user': user,
-                    'id_user': user.id,
-                  },
-                );
-              },
-              leading: ClipRRect(
-                borderRadius: BorderRadius.circular(57),
-                child: CachedNetworkImage(
-                  placeholder: (context, url) => Center(
-                    child: Image.asset(ConstValues.userImage),
+            try {
+              user = User().fromMap(snapshot.data)..setId(widget.id);
+              return ListTile(
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                onTap: () {
+                  Navigator.of(context).pushNamed(
+                    '/ProfilePage',
+                    arguments: {
+                      'user': user,
+                      'id_user': user.id,
+                    },
+                  );
+                },
+                leading: ClipRRect(
+                  borderRadius: BorderRadius.circular(57),
+                  child: CachedNetworkImage(
+                    placeholder: (context, url) => Center(
+                      child: Image.asset(ConstValues.userImage),
+                    ),
+                    imageUrl:
+                        user.img != null ? user.img : ConstValues.userImage,
+                    fit: BoxFit.cover,
+                    width: 57,
+                    height: 57,
                   ),
-                  imageUrl: user.img != null ? user.img : ConstValues.userImage,
-                  fit: BoxFit.cover,
-                  width: 57,
-                  height: 57,
                 ),
-              ),
-              title: Text(user.firstName + ' ' + user.secondName),
-              subtitle: Text(
-                user.degree != 'hight school'
-                    ? user.university + ' | ' + user.college
-                    : Languages.translate(
-                        context,
-                        'high school',
-                      ),
-              ),
-            );
+                title: Text(user.firstName + ' ' + user.secondName),
+                subtitle: Text(
+                  user.degree != User.DEGREE_HIGH_SCHOOL
+                      ? user.university + ' | ' + user.college
+                      : Languages.translate(
+                          context,
+                          'high school',
+                        ),
+                ),
+              );
+            } catch (e) {
+              return Container();
+            }
           }
           return UserPlaceholder();
         });

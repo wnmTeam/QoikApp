@@ -361,7 +361,9 @@ class ProfilePageState extends State<ProfilePage> {
                                             ),
                                             Text(Languages.translate(
                                               context,
-                                              widget.user.tag,
+                                              widget.user.userTag != 'admin'
+                                                  ? widget.user.tag
+                                                  : widget.user.userTag,
                                             )),
                                           ],
                                         ),
@@ -585,10 +587,14 @@ class ProfilePageState extends State<ProfilePage> {
                                             itemBuilder: (context, index) {
                                               String id = friends[index].id;
                                               print(friends[index].data());
-                                              return FriendWidget(
-                                                id: id,
-                                                isMyProfile: isMyProfile,
-                                              );
+                                              try {
+                                                return FriendWidget(
+                                                  id: id,
+                                                  isMyProfile: isMyProfile,
+                                                );
+                                              } catch (e) {
+                                                return Container();
+                                              }
                                             },
                                           )
                                         : Center(
@@ -744,8 +750,12 @@ class _FriendWidgetState extends State<FriendWidget> {
       future: _getUser,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          _user = User().fromMap(snapshot.data)..setId(snapshot.data.id);
-          return _friendBuilder();
+          try{
+            _user = User().fromMap(snapshot.data)..setId(snapshot.data.id);
+            return _friendBuilder();
+          }catch(e){return Container();}
+
+
         }
         return Container();
       },
@@ -802,8 +812,7 @@ class _FriendWidgetState extends State<FriendWidget> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: Theme
-                        .of(context)
+                    color: Theme.of(context)
                         .textTheme
                         .bodyText2
                         .color
@@ -825,10 +834,11 @@ class Avatar extends StatefulWidget {
   final Function ubdateImagerofile;
   final bool uploadImage;
 
-  Avatar({this.imagePath,
-    this.myProfile,
-    this.ubdateImagerofile,
-    this.uploadImage});
+  Avatar(
+      {this.imagePath,
+      this.myProfile,
+      this.ubdateImagerofile,
+      this.uploadImage});
 
   @override
   _AvatarState createState() => _AvatarState();
@@ -912,18 +922,14 @@ class _AvatarState extends State<Avatar> {
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Theme
-                            .of(context)
-                            .backgroundColor,
+                        color: Theme.of(context).backgroundColor,
                         shape: BoxShape.circle,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(7.0),
                         child: Icon(
                           Icons.camera_alt,
-                          color: Theme
-                              .of(context)
-                              .primaryColor,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ),

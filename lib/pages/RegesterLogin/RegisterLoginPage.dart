@@ -948,10 +948,14 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 print(snapshot.data.data());
+
+                List list = snapshot.data.data()[temp];
+                list.sort();
+
                 return ListView.builder(
-                  itemCount: snapshot.data.data()[temp].length,
+                  itemCount: list.length,
                   itemBuilder: (context, index) {
-                    String item = snapshot.data.data()[temp][index];
+                    String item = list[index];
                     return ListTile(
                       title: Text(item),
                       onTap: () {

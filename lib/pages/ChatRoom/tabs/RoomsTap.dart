@@ -72,41 +72,14 @@ class _RoomsTabState extends State<RoomsTab>
       floatingActionButton: _isVisible
           ? FloatingActionButton(
         onPressed: () {
-          if (!_authController.isBan())
-            Navigator.pushNamed(context, '/CreateGroupPage');
-          else
-            showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: Text(Languages.translate(
-                      context,
-                      'blocked',
-                    )),
-                    actions: [
-                      FlatButton(
-                        onPressed: () {
-                          Navigator.pop(
-                            context,
-                          );
-                        },
-                        child: Text(
-                                Languages.translate(
-                                  context,
-                                  'ok',
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      });
-              },
-              backgroundColor: Theme.of(context).primaryColor,
-              child: Icon(
-                Icons.person_add,
-                color: Colors.white,
-              ),
-            )
+         _createGroup();
+        },
+        backgroundColor: ConstValues.firstColor,
+        child: Icon(
+          Icons.person_add,
+          color: Colors.white,
+        ),
+      )
           : null,
       body: StreamBuilder(
         stream: _chatsController.getRooms(
@@ -271,4 +244,38 @@ class _RoomsTabState extends State<RoomsTab>
 
   @override
   bool get wantKeepAlive => true;
+
+  void _createGroup() {
+
+    if (!_authController.isBan())
+      Navigator.pushNamed(context, '/CreateGroupPage');
+    // else if(_chatsController.canCreateGroup(id_user))
+    else
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text(Languages.translate(
+                context,
+                'blocked',
+              )),
+              actions: [
+                FlatButton(
+                  onPressed: () {
+                    Navigator.pop(
+                      context,
+                    );
+                  },
+                  child: Text(
+                    Languages.translate(
+                      context,
+                      'ok',
+                    ),
+                  ),
+                ),
+              ],
+            );
+          });
+
+  }
 }

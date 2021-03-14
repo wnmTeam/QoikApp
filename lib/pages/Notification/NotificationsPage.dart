@@ -152,90 +152,97 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
       future: _authController.getUserInfo(widget.notification.idSender),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          user = User().fromMap(snapshot.data)
-            ..setId(widget.notification.idSender);
-          print(widget.notification.type);
+          try {
+            user = User().fromMap(snapshot.data)
+              ..setId(widget.notification.idSender);
+            print(widget.notification.type);
 
-          return ListTile(
-              contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-              onTap: () async {
-                switch (widget.notification.type) {
-                  case 'send_friend_request':
-                    Navigator.pushNamed(context, '/MyFriendsPage', arguments: {
-                      'id_user': user.id,
-                    });
-                    break;
-                  case 'accept_friend_request':
-                    Navigator.of(context).pushNamed(
-                      '/ProfilePage',
-                      arguments: {
-                        'user': user,
-                        'id_user': user.id,
-                      },
-                    );
-                    break;
-                  case 'client_comments_posts':
-                    var d = await _postsControler.getPost(
-                      id_group: widget.notification.idGroup,
-                      id_post: widget.notification.idPost,
-                    );
-                    print('oooooooooooooooooooooooooooooooooooooooo');
-                    print(d.data());
-                    Navigator.of(context).pushNamed(
-                      '/PostPage',
-                      arguments: {
-                        'post': Post().fromMap(d.data())..setId(d.id),
-                        'group': Group().setId(widget.notification.idGroup),
-                      },
-                    );
-                    break;
-                  case 'commentMyPost':
-                    var d = await _postsControler.getPost(
-                      id_group: widget.notification.idGroup,
-                      id_post: widget.notification.idPost,
-                    );
-                    Navigator.of(context).pushNamed(
-                      '/PostPage',
-                      arguments: {
-                        'post': Post().fromMap(d.data())..setId(d.id),
-                        'group': Group().setId(widget.notification.idGroup),
-                      },
-                    );
-                    break;
-                }
-              },
-              leading: ClipRRect(
-                borderRadius: BorderRadius.circular(57),
-                child: CachedNetworkImage(
-                  placeholder: (context, url) => Center(
-                    child: Image.asset(ConstValues.userImage),
+            return ListTile(
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                onTap: () async {
+                  switch (widget.notification.type) {
+                    case 'send_friend_request':
+                      Navigator.pushNamed(context, '/MyFriendsPage',
+                          arguments: {
+                            'id_user': user.id,
+                          });
+                      break;
+                    case 'accept_friend_request':
+                      Navigator.of(context).pushNamed(
+                        '/ProfilePage',
+                        arguments: {
+                          'user': user,
+                          'id_user': user.id,
+                        },
+                      );
+                      break;
+                    case 'client_comments_posts':
+                      var d = await _postsControler.getPost(
+                        id_group: widget.notification.idGroup,
+                        id_post: widget.notification.idPost,
+                      );
+                      print('oooooooooooooooooooooooooooooooooooooooo');
+                      print(d.data());
+                      Navigator.of(context).pushNamed(
+                        '/PostPage',
+                        arguments: {
+                          'post': Post().fromMap(d.data())..setId(d.id),
+                          'group': Group().setId(widget.notification.idGroup),
+                        },
+                      );
+                      break;
+                    case 'commentMyPost':
+                      var d = await _postsControler.getPost(
+                        id_group: widget.notification.idGroup,
+                        id_post: widget.notification.idPost,
+                      );
+                      Navigator.of(context).pushNamed(
+                        '/PostPage',
+                        arguments: {
+                          'post': Post().fromMap(d.data())..setId(d.id),
+                          'group': Group().setId(widget.notification.idGroup),
+                        },
+                      );
+                      break;
+                  }
+                },
+                leading: ClipRRect(
+                  borderRadius: BorderRadius.circular(57),
+                  child: CachedNetworkImage(
+                    placeholder: (context, url) => Center(
+                      child: Image.asset(ConstValues.userImage),
+                    ),
+                    imageUrl:
+                        user.img != null ? user.img : ConstValues.userImage,
+                    fit: BoxFit.cover,
+                    width: 50,
+                    height: 50,
                   ),
-                  imageUrl: user.img != null ? user.img : ConstValues.userImage,
-                  fit: BoxFit.cover,
-                  width: 50,
-                  height: 50,
                 ),
-              ),
-              title: Text(user.firstName +
-                  ' ' +
-                  user.secondName +
-                  " " +
-                  Languages.translate(
-                    context,
-                    widget.notification.type,
-                  )),
-              subtitle: Row(
-                children: [
-                  Icon(
-                    CupertinoIcons.calendar_today,
-                    size: 13,
-                  ),
-                  SizedBox(
-                    width: 3,
-                  ),
-                  Text(widget.notification.getStringDate),
-                ],
-              ));
+                title: Text(user.firstName +
+                    ' ' +
+                    user.secondName +
+                    " " +
+                    Languages.translate(
+                      context,
+                      widget.notification.type,
+                    )),
+                subtitle: Row(
+                  children: [
+                    Icon(
+                      CupertinoIcons.calendar_today,
+                      size: 13,
+                    ),
+                    SizedBox(
+                      width: 3,
+                    ),
+                    Text(widget.notification.getStringDate),
+                  ],
+                ));
+          } catch (e) {
+            return Container();
+          }
         }
         return UserPlaceholder();
       },
