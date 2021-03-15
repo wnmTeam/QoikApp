@@ -1,6 +1,7 @@
 import 'dart:async';
-import 'package:firebase_auth/firebase_auth.dart' as auth;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
 
@@ -183,6 +184,10 @@ class Auth {
 
   getLastVersion() {
     return _firestore.collection('appInfo').doc('version').get(GetOptions());
+  }
+
+  getStoreLink() {
+    return _firestore.collection('appInfo').doc('storeLinks').get();
   }
 
   getLinks() {
