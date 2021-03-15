@@ -130,5 +130,6 @@
   "new_passeord": "Yeni Şifre",
   "old_password": "Eski Şifre",
   "change_password": "Şifreyi Değiştir",
-  "ok": "Tamam"
+  "ok": "Tamam",
+  "empty": "Empty"
 }

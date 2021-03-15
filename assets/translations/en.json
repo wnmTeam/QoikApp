@@ -130,5 +130,6 @@
   "Verified": "Verified",
   "send_verify_again": "Send verify again",
   "send": "Send",
-  "add_file": "Add file"
+  "add_file": "Add file",
+  "empty": "Empty"
 }

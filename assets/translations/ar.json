@@ -130,5 +130,6 @@
   "verified": "تم التأكيد",
   "send_verify_again": "إعادة الإرسال",
   "send": "إرسال",
-  "add_file": "إضافة ملف"
+  "add_file": "إضافة ملف",
+  "empty": "فارغ"
 }
