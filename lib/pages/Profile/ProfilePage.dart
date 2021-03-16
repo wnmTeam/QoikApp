@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
@@ -19,7 +18,7 @@ import 'package:stumeapp/pages/ImageView/ImageView.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends StatefulWidget {
-  User user;
+  final User user;
 
   ProfilePage({this.user});
 
@@ -476,7 +475,7 @@ class ProfilePageState extends State<ProfilePage> {
                                             context,
                                             'bio',
                                           )),
-                                          subtitle: Linkify(
+                                    subtitle: SelectableLinkify(
                                             onOpen: (link) async {
                                               if (await canLaunch(link.url)) {
                                                 await launch(link.url);
@@ -490,18 +489,17 @@ class ProfilePageState extends State<ProfilePage> {
                                             options:
                                                 LinkifyOptions(humanize: true),
                                             text: _bioController.text,
-                                      style: TextStyle(
-                                        color: Theme
-                                            .of(context)
-                                            .textTheme
-                                            .bodyText2
-                                            .color
-                                            .withOpacity(0.6),
-                                        fontSize: 14,
-                                      ),
-                                      // style: TextStyle(fontSize: 16),
-                                    ),
-                                  ),
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText2
+                                                  .color
+                                                  .withOpacity(0.6),
+                                              fontSize: 14,
+                                            ),
+                                            // style: TextStyle(fontSize: 16),
+                                          ),
+                                        ),
                                   if (widget.user.university != null)
                                     ListTile(
                                       title: Text(Languages.translate(
@@ -520,8 +518,7 @@ class ProfilePageState extends State<ProfilePage> {
                                     ),
                                   MyUser.myUser.university == null &&
                                       isMyProfile
-                                      ?
-                                  ListTile(
+                                      ? ListTile(
                                     onTap: () {
                                       _bottomSheetBuild(
                                         'universities',
@@ -545,8 +542,7 @@ class ProfilePageState extends State<ProfilePage> {
                                   _university != null &&
                                       MyUser.myUser.college == null &&
                                       isMyProfile
-                                      ?
-                                  ListTile(
+                                      ? ListTile(
                                     onTap: () {
                                       _bottomSheetBuild(
                                         'colleges',
@@ -657,21 +653,25 @@ class ProfilePageState extends State<ProfilePage> {
                                         ? Languages.translate(
                                       context,
                                       'my_friends',
-                                          )
+                                    )
                                         : Languages.translate(
-                                            context,
-                                            'friends',
-                                          ),
+                                      context,
+                                      'friends',
+                                    ),
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18)),
-                                // FlatButton(
-                                //     onPressed: () {
-                                //       //TODO
-                                //     },
-                                //     child: Text("More friends"),
-                                // )
+                                FlatButton(
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .pushNamed("/FriendsPage", arguments: {
+                                      'user': widget.user,
+                                    });
+                                  },
+                                  child: Text(
+                                      Languages.translate(context, "more")),
+                                )
                               ],
                             ),
                           ),
@@ -879,16 +879,17 @@ class ProfilePageState extends State<ProfilePage> {
         });
   }
 
-  _getUserInfo() async {
-    DocumentSnapshot d =
-    await _authController.getUserInfo(_authController.getUser.uid);
-    User user = User().fromMap(d.data()).setId(d.id);
-    MyUser.myUser = user;
-    _authController.updateUserTag(user);
-    setState(() {
-      loading = false;
-    });
-  }
+// _getUserInfo() async {
+//   DocumentSnapshot d =
+//   await _authController.getUserInfo(_authController.getUser.uid);
+//   User user = User().fromMap(d.data()).setId(d.id);
+//   MyUser.myUser = user;
+//   _authController.updateUserTag(user);
+//   setState(() {
+//     loading = false;
+//   });
+// }
+
 }
 
 class FriendWidget extends StatefulWidget {

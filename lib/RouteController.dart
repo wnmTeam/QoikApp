@@ -3,6 +3,7 @@ import 'package:stumeapp/pages/ChatRoom/ChatsPage.dart';
 import 'package:stumeapp/pages/ChatRoom/RoomInfoPage.dart';
 import 'package:stumeapp/pages/ChatRoom/conversationPage.dart';
 import 'package:stumeapp/pages/Friends/FriendsRequestsPage.dart';
+import 'package:stumeapp/pages/Friends/FrindsPage.dart';
 import 'package:stumeapp/pages/Friends/SearchFriends.dart';
 import 'package:stumeapp/pages/Group/CreatGroupPage.dart';
 import 'package:stumeapp/pages/Group/EditPostPage.dart';
@@ -38,15 +39,20 @@ class RouteController {
       case '/MyFriendsPage':
         return MaterialPageRoute(
             builder: (_) => FriendsRequestsPage(
-              id_user: args['id_user'],
-            ));
+                  id_user: args['id_user'],
+                ));
+      case '/FriendsPage':
+        return MaterialPageRoute(
+            builder: (_) => FriendsPage(
+                  user: args['user'],
+                ));
       case '/SelectMembers':
         return MaterialPageRoute(
             builder: (_) => SelectFriendsPage(
-              group: args['group'],
-              type: args['type'],
-              image: args['image'],
-            ));
+                  group: args['group'],
+                  type: args['type'],
+                  image: args['image'],
+                ));
       case '/CreateGroupPage':
         return MaterialPageRoute(builder: (_) => CreateGroupPage());
       case '/ChatRoomPage':

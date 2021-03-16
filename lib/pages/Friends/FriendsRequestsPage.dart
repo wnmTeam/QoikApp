@@ -193,8 +193,8 @@ class _FriendsRequestsPageState extends State<FriendsRequestsPage> {
 }
 
 class RequestFriendWidget extends StatefulWidget {
-  String id_sender;
-  Function deleteRequest;
+  final String id_sender;
+  final Function deleteRequest;
 
   RequestFriendWidget(this.id_sender, this.deleteRequest);
 
