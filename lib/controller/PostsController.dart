@@ -11,25 +11,26 @@ class PostsController {
   PostsApi api = PostsApi();
   Auth auth = Auth();
 
-  Future getPosts({int limit, DocumentSnapshot last, String id_group}) {
+  Future getPosts({int limit, DocumentSnapshot last, String groupId}) {
     return api.getPosts(
       limit: limit,
       last: last,
-      id_group: id_group,
+      groupId: groupId,
     );
   }
 
   Future createPost(
-      String text, List<File> images, List<File> files, String id_group) {
+      String text, List<File> images, List<File> files, String groupId) {
     return api.createPost(
       text,
       images,
       files,
-      id_group,
+      groupId,
     );
   }
 
-  Future<void> createComment({String text, Post post, Group group}) {
+  Future<void> createComment(
+      {String text, Post post, File image, File file, Group group}) {
     api.createComment(
       comment: Comment(
         text: text,
@@ -37,108 +38,111 @@ class PostsController {
         likeCount: 0,
         date: DateTime.now(),
       ),
+      image: image,
+      file: file,
       post: post,
-      id_group: group.id,
+      groupId: group.id,
     );
   }
 
   Future<QuerySnapshot> getComments(
-      {int limit, DocumentSnapshot last, Group group, String id_post}) {
+      {int limit, DocumentSnapshot last, Group group, String postId}) {
     return api.getComments(
       limit: limit,
       last: last,
-      id_group: group.id,
-      id_post: id_post,
+      groupId: group.id,
+      postId: postId,
     );
   }
 
   Stream getNewComments({
-    String id_post,
+    String postId,
     Group group,
   }) =>
       api.getNewComments(
-        id_post: id_post,
+        postId: postId,
         group: group,
       );
 
-  getPostChanges({String id_post, Group group}) => api.getPostChanges(
-    id_post: id_post,
-    group: group,
-  );
+  getPostChanges({String postId, Group group}) =>
+      api.getPostChanges(
+        postId: postId,
+        group: group,
+      );
 
   Future getMorePostInfo({Post post, Group group}) async {
     DocumentSnapshot d = await auth.getUserInfo(post.idOwner);
   }
 
-  isLikePost({id_user, Group group, String id_post}) =>
-      api.ifILikePost(group: group, id_post: id_post, id_user: id_user);
+  isLikePost({userId, Group group, String postId}) =>
+      api.ifILikePost(group: group, postId: postId, userId: userId);
 
-  Future setLike({id_user, Group group, String id_post}) =>
-      api.setLike(id_user: id_user, id_post: id_post, group: group);
+  Future setLike({userId, Group group, String postId}) =>
+      api.setLike(userId: userId, postId: postId, group: group);
 
-  followPost({id_user, Group group, String id_post}) =>
-      api.followPost(id_user: id_user, id_post: id_post, group: group);
+  followPost({userId, Group group, String postId}) =>
+      api.followPost(userId: userId, postId: postId, group: group);
 
-  isFollowPost({id_user, Group group, String id_post}) =>
-      api.isFollowPost(group: group, id_post: id_post, id_user: id_user);
+  isFollowPost({userId, Group group, String postId}) =>
+      api.isFollowPost(group: group, postId: postId, userId: userId);
 
-  setLikeToComment({id_user, Group group, String id_post, String id_comment}) =>
+  setLikeToComment({userId, Group group, String postId, String commentId}) =>
       api.setLikeToComment(
-        id_post: id_post,
-        id_user: id_user,
-        id_comment: id_comment,
+        postId: postId,
+        userId: userId,
+        commentId: commentId,
         group: group,
       );
 
   isLikeComment(
-      {String id_user, Group group, String id_post, String id_comment}) =>
+      {String userId, Group group, String postId, String commentId}) =>
       api.isLikeComment(
         group: group,
-        id_post: id_post,
-        id_user: id_user,
-        id_comment: id_comment,
+        postId: postId,
+        userId: userId,
+        commentId: commentId,
       );
 
-  Future addPoint({String id_group, Comment comment, Post post}) {
+  Future addPoint({String groupId, Comment comment, Post post}) {
     return api.addPoint(
-      id_group: id_group,
+      groupId: groupId,
       comment: comment,
       post: post,
     );
   }
 
-  deletePost({String id_group, String id_post}) {
+  deletePost({String groupId, String postId}) {
     return api.deletePost(
-      id_group: id_group,
-      id_post: id_post,
+      groupId: groupId,
+      postId: postId,
     );
   }
 
-  updatePost({String id_group, String id_post, String text}) {
+  updatePost({String groupId, String postId, String text}) {
     return api.updatePost(
-      id_post: id_post,
-      id_group: id_group,
+      postId: postId,
+      groupId: groupId,
       text: text,
     );
   }
 
-  deletePoint({String id_group, Comment comment, Post post}) {
+  deletePoint({String groupId, Comment comment, Post post}) {
     return api.deletePoint(
-      id_group: id_group,
+      groupId: groupId,
       comment: comment,
       post: post,
     );
   }
 
-  getCommentChanges({String id_group, String id_post, String id_comment}) {
+  getCommentChanges({String groupId, String postId, String id_comment}) {
     return api.getCommentChanges(
-      id_group: id_group,
-      id_post: id_post,
-      id_comment: id_comment,
+      groupId: groupId,
+      postId: postId,
+      commentId: id_comment,
     );
   }
 
-  getPost({String id_group, String id_post}) {
-    return api.getPost(id_group: id_group, id_post: id_post);
+  getPost({String groupId, String postId}) {
+    return api.getPost(groupId: groupId, postId: postId);
   }
 }

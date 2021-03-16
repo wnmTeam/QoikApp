@@ -190,7 +190,7 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
         .getPosts(
       limit: documentLimit,
       last: lastDocument,
-      id_group: widget.group.id,
+      groupId: widget.group.id,
     )
         .then((value) {
       setState(() {

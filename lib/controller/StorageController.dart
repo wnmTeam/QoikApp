@@ -150,6 +150,44 @@ class StorageController {
     return url;
   }
 
+  uploadCommentImage({
+    String id_post,
+    String nom,
+    File img,
+    String id_group,
+  }) async {
+    String url;
+    str.Reference firebaseStorageRef = str.FirebaseStorage.instance
+        .ref()
+        .child('commentImages')
+        .child(id_group + id_post + nom);
+    str.UploadTask uploadTask = firebaseStorageRef.putFile(img);
+    await uploadTask.then((res) async {
+      url = await res.ref.getDownloadURL();
+      return;
+    });
+    return url;
+  }
+
+  uploadCommentFile({
+    String id_post,
+    String nom,
+    File file,
+    String id_group,
+  }) async {
+    String url;
+    str.Reference firebaseStorageRef = str.FirebaseStorage.instance
+        .ref()
+        .child('commentFiles')
+        .child(id_group + id_post + nom);
+    str.UploadTask uploadTask = firebaseStorageRef.putFile(file);
+    await uploadTask.then((res) async {
+      url = await res.ref.getDownloadURL();
+      return;
+    });
+    return url;
+  }
+
   uploadRoomImage({
     File img,
     String id_room,
