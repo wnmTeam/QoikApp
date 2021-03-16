@@ -94,6 +94,10 @@ class StorageController {
 //    }
   }
 
+  Future<List<File>> getDocs() async {
+    return await FilePicker.getMultiFile();
+  }
+
   Future uploadPic(context, img, id_user) async {
     String url;
     str.Reference firebaseStorageRef = str.FirebaseStorage.instance
@@ -127,15 +131,32 @@ class StorageController {
     return url;
   }
 
+  uploadPostFile({
+    String id_post,
+    String nom,
+    File file,
+    String id_group,
+  }) async {
+    String url;
+    str.Reference firebaseStorageRef = str.FirebaseStorage.instance
+        .ref()
+        .child('postFiles')
+        .child(id_group + id_post + nom);
+    str.UploadTask uploadTask = firebaseStorageRef.putFile(file);
+    await uploadTask.then((res) async {
+      url = await res.ref.getDownloadURL();
+      return;
+    });
+    return url;
+  }
+
   uploadRoomImage({
     File img,
     String id_room,
   }) async {
     String url;
-    str.Reference firebaseStorageRef = str.FirebaseStorage.instance
-        .ref()
-        .child('roomImages')
-        .child(id_room);
+    str.Reference firebaseStorageRef =
+        str.FirebaseStorage.instance.ref().child('roomImages').child(id_room);
     str.UploadTask uploadTask = firebaseStorageRef.putFile(img);
     await uploadTask.then((res) async {
       url = await res.ref.getDownloadURL();

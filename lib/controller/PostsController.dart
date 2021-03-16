@@ -1,12 +1,11 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/Models/Comment.dart';
 import 'package:stumeapp/Models/Group.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/Models/Post.dart';
 import 'package:stumeapp/api/auth.dart';
 import 'package:stumeapp/api/posts_api.dart';
-import 'package:stumeapp/controller/AuthController.dart';
 
 class PostsController {
   PostsApi api = PostsApi();
@@ -20,10 +19,12 @@ class PostsController {
     );
   }
 
-  Future createPost(String text, List<File> images, String id_group) {
+  Future createPost(
+      String text, List<File> images, List<File> files, String id_group) {
     return api.createPost(
       text,
       images,
+      files,
       id_group,
     );
   }

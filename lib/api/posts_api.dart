@@ -5,12 +5,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/Models/Comment.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/MyUser.dart';
+import 'package:stumeapp/Models/Notification.dart' as noti;
 import 'package:stumeapp/Models/Post.dart';
 import 'package:stumeapp/api/auth.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 
 import 'notification_api.dart';
-import 'package:stumeapp/Models/Notification.dart' as noti;
 
 class PostsApi {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -41,16 +41,17 @@ class PostsApi {
     } else {
       return reference
           .orderBy(
-        'date',
-        descending: true,
-      )
+            'date',
+            descending: true,
+          )
           .startAfterDocument(last)
           .limit(limit)
           .get();
     }
   }
 
-  Future createPost(String text, List<File> images, String id_group) async {
+  Future createPost(
+      String text, List<File> images, List<File> files, String id_group) async {
     CollectionReference reference;
 
     reference =
@@ -66,6 +67,7 @@ class PostsApi {
     });
 
     List urls = [];
+    List filesUrls = [];
     int i = 0;
     for (File file in images) {
       String url = await _storageController.uploadPostImage(
@@ -77,9 +79,22 @@ class PostsApi {
       urls.add(url);
       i++;
     }
+    //--------------------------------
+    for (File file in files) {
+      String url = await _storageController.uploadPostFile(
+        id_post: ref.id,
+        id_group: id_group,
+        nom: i.toString(),
+        file: file,
+      );
+      print("File url $url");
+      filesUrls.add(url);
+      i++;
+    }
 
     return ref.set({
       'images': FieldValue.arrayUnion(urls),
+      'files': FieldValue.arrayUnion(filesUrls),
     }, SetOptions(merge: true));
   }
 

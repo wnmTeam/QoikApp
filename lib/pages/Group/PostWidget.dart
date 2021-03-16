@@ -16,6 +16,7 @@ import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/PostsController.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/ImageView/ImageView.dart';
+import 'package:stumeapp/pages/widgets/FileWidget.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -775,28 +776,7 @@ class _PostWidgetState extends State<PostWidget>
     for (String file in files) {
       dd.add(Container(
         color: Colors.white24,
-        child: ListTile(
-          title: Text(
-            file
-                .split('/')
-                .last,
-            maxLines: 3,
-          ),
-          leading: Icon(Icons.insert_drive_file_rounded,),
-          // leading: Image.network(file),
-          trailing: IconButton(
-            icon: Icon(Icons.file_download,),
-            onPressed: () async {
-              //TODO search for download package
-              if (file != null) {
-                await launch(file)
-                    .then((value) => print('path  ' + file));
-              } else {
-                throw 'cant launch url';
-              }
-            },
-          ),
-        ),
+        child: FileWidget(file),
       ));
       dd.add(SizedBox(height: 4,));
     }
