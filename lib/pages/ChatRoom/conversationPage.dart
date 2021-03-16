@@ -1140,30 +1140,6 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
         .length < 2
         ? "0" + message.date.minute.toString()
         : message.date.minute.toString();
-    print("message \n");
-    print("message \n");
-    print("message \n");
-    print("message \n");
-    if (message.text != null) {
-      print("text " + message.text);
-    } else {
-      print("text null");
-    }
-    if (message.doc != null) {
-      // print("doc " + message.doc.path);
-    } else {
-      print("doc null");
-    }
-    if (message.images != null) {
-      print("images " + message.images.toString());
-    } else {
-      print("images null");
-    }
-    print("id " + message.id);
-    print("message \n");
-    print("message \n");
-    print("message \n");
-    print("message \n");
     return Expanded(
       child: Column(
         crossAxisAlignment:

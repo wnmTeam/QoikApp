@@ -265,6 +265,8 @@ class _PostWidgetState extends State<PostWidget>
                   SizedBox(
                     height: 6,
                   ),
+                if (widget.post.files != null)
+                  docBuilder(widget.post.files),
                 Divider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -759,6 +761,44 @@ class _PostWidgetState extends State<PostWidget>
       dd.add(SizedBox(
         height: 2,
       ));
+    }
+    return Column(
+      children: dd,
+    );
+  }
+
+  Widget docBuilder(List files) {
+    List<Widget> dd = new List();
+
+    print(files);
+    print(files.length);
+    for (String file in files) {
+      dd.add(Container(
+        color: Colors.white24,
+        child: ListTile(
+          title: Text(
+            file
+                .split('/')
+                .last,
+            maxLines: 3,
+          ),
+          leading: Icon(Icons.insert_drive_file_rounded,),
+          // leading: Image.network(file),
+          trailing: IconButton(
+            icon: Icon(Icons.file_download,),
+            onPressed: () async {
+              //TODO search for download package
+              if (file != null) {
+                await launch(file)
+                    .then((value) => print('path  ' + file));
+              } else {
+                throw 'cant launch url';
+              }
+            },
+          ),
+        ),
+      ));
+      dd.add(SizedBox(height: 4,));
     }
     return Column(
       children: dd,
