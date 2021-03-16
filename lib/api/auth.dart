@@ -64,6 +64,12 @@ class Auth {
     return _firestore.collection("users").doc(getUser.uid).set(user.toMap());
   }
 
+  Future<void> updateUserInfo(User user) {
+    print(getUser.uid);
+    print(user.toMap());
+    return _firestore.collection("users").doc(getUser.uid).update(user.toMap());
+  }
+
   getUserInfo(String id) {
     return _firestore.collection('users').doc(id).get();
   }

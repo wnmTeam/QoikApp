@@ -76,6 +76,27 @@ class AuthController {
     return;
   }
 
+  Future updateUserUniversity(User user) async {
+    await api.updateUserInfo(user);
+
+    if (user.college != null) {
+      await _groupsController.addMemberToGroup(
+        uid: getUser.uid,
+        id_group: user.groups[1],
+        name: user.university,
+        type: 'university',
+      );
+      print('un');
+      await _groupsController.addMemberToGroup(
+        uid: getUser.uid,
+        name: user.college,
+        id_group: user.groups[2],
+        type: 'college',
+      );
+      print('coll');
+    }
+  }
+
   login(String email, String password) async {
     await api.signIn(email, password);
     await _notificationApi.saveDeviceToken(getUser.uid);

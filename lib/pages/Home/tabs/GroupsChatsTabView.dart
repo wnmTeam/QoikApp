@@ -32,6 +32,7 @@ class _GroupsChatsTabState extends State<GroupsChatsTab>
 
   @override
   Widget build(BuildContext context) {
+    print(MyUser.myUser.groups);
     return ListView.builder(
       itemCount: MyUser.myUser.groups.length,
       itemBuilder: (context, index) {
@@ -40,6 +41,7 @@ class _GroupsChatsTabState extends State<GroupsChatsTab>
               id_group: MyUser.myUser.groups[index]),
           builder: (_, snapshot) {
             if (snapshot.hasData) {
+              print(snapshot.data.data());
               print(MyUser.myUser.groups[index]);
               Group group = Group()
                   .fromMap(snapshot.data.data())
