@@ -393,6 +393,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                                 hintStyle: TextStyle(
                                                     color: Colors.grey),
                                               ),
+                                              style: TextStyle(
+                                                  color: Colors.black),
                                               onTap: () {
                                                 if (emojiHeight != 0.0) {
                                                   setState(() {
