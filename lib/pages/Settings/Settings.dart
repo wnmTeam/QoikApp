@@ -221,14 +221,6 @@ class _SettingsState extends State<Settings> {
                         );
                       },
                     ),
-                    // actions: [
-                    //   ElevatedButton(
-                    //       onPressed: () {
-                    //         //TODO control the notifications
-                    //         Navigator.pop(context);
-                    //       },
-                    //       child: Text(Languages.translate(context, "save"))),
-                    // ],
                   );
                 },
               );
