@@ -199,4 +199,21 @@ class Auth {
   getLinks() {
     return _firestore.collection('appInfo').doc('links').get();
   }
+
+  setAllNotificationSetting(Map<String, bool> map) {
+    print(getUser.uid);
+    return _firestore
+        .collection('NotificationsSettings')
+        .doc(getUser.uid)
+        .set(map);
+  }
+
+  getAllNotificationSetting() {
+    print(getUser.uid);
+
+    return _firestore
+        .collection('NotificationsSettings')
+        .doc(getUser.uid)
+        .get();
+  }
 }

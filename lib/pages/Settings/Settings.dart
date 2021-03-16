@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/main.dart';
@@ -10,17 +11,20 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  List<bool> notifications = [];
+  List<bool> notifications = [true, true, true];
 
   bool xx = true;
   StorageController storageController = new StorageController();
+  AuthController authController = new AuthController();
 
-  getAllNotificationSetting() async {
-    print(notifications);
-    notifications = await storageController.getAllNotificationSetting();
-    print(notifications);
-    return notifications;
-  }
+  // getAllNotificationSetting() async {
+  //   var d = await authController.getAllNotificationSetting();
+  //   print("d $d");
+  //   print(notifications);
+  //   notifications = await storageController.getAllNotificationSetting();
+  //   print(notifications);
+  //   return notifications;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -143,17 +147,49 @@ class _SettingsState extends State<Settings> {
                   return AlertDialog(
                     scrollable: true,
                     title: Text(Languages.translate(context, "notifications")),
+                    actions: [
+                      ElevatedButton(
+                          onPressed: () async {
+                            await authController
+                                .setAllNotificationSetting(<String, bool>{
+                              "chat&roomsNotif": true,
+                              "groupsNotif": true,
+                              "homeNotif": false,
+                            });
+                          },
+                          child: Text("Save"))
+                    ],
                     content: StatefulBuilder(
                       builder: (context, setState) {
                         return FutureBuilder(
-                          future: getAllNotificationSetting(),
+                          future: authController.getAllNotificationSetting(),
                           builder: (context, snapshot) {
+                            print("snapshot $snapshot");
                             print(
                                 "snapshot.connectionState ${snapshot.connectionState}");
                             print("snapshot.hasData ${snapshot.hasData}");
-                            print("snapshot.hasData ${snapshot.data}");
+                            print("snapshot.data ${snapshot.data}");
+                            print(
+                                "snapshot.requireData ${snapshot.requireData}");
+                            print(
+                                "snapshot.runtimeType ${snapshot.runtimeType}");
+                            print("snapshot.hasError ${snapshot.hasError}");
+
+                            var data;
+                            try {
+                              data = snapshot.data;
+                              var xx = snapshot.data["chat&roomsNotif"];
+                            } catch (e) {
+                              data = <String, bool>{
+                                "chat&roomsNotif": true,
+                                "groupsNotif": true,
+                                "homeNotif": true,
+                              };
+                            }
+
                             if (snapshot.connectionState ==
-                                ConnectionState.done) {
+                                    ConnectionState.done &&
+                                snapshot.hasData) {
                               return Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -162,53 +198,70 @@ class _SettingsState extends State<Settings> {
                                     contentPadding: EdgeInsets.zero,
                                     title: Text(Languages.translate(
                                         context, "chat_rooms_notifications")),
-                                    value: notifications[0],
+                                    value: data["chat&roomsNotif"],
                                     onChanged: (newValue) async {
-                                      print(newValue);
-                                      await storageController
-                                          .setOneNotificationSetting(
-                                              "chat&roomsNotif", newValue);
-                                      setState(() {
-                                        notifications[0] = !notifications[0];
+                                      await authController
+                                          .setAllNotificationSetting(<String,
+                                              bool>{
+                                        "chat&roomsNotif": newValue,
+                                        "groupsNotif": data["groupsNotif"],
+                                        "homeNotif": data["homeNotif"],
                                       });
+                                      setState(() {});
                                     },
                                     controlAffinity:
                                         ListTileControlAffinity.trailing,
                                   ),
                                   SwitchListTile(
-                                    activeColor: Theme.of(context).primaryColor,
+                                    activeColor: Theme
+                                        .of(context)
+                                        .primaryColor,
                                     contentPadding: EdgeInsets.zero,
                                     title: Text(Languages.translate(
                                         context, "groups_notifications")),
-                                    value: notifications[1],
+                                    value: data["groupsNotif"],
                                     onChanged: (newValue) async {
-                                      await storageController
-                                          .setOneNotificationSetting(
-                                              "groupsNotif", newValue);
+                                      await authController
+                                          .setAllNotificationSetting(
+                                          <String, bool>{
+                                            "chat&roomsNotif": data["chat&roomsNotif"],
+                                            "groupsNotif": newValue,
+                                            "homeNotif": data["homeNotif"],
+                                          }
+                                      );
                                       setState(() {
-                                        notifications[1] = newValue;
-                                      });
+
+                                      }
+                                      );
                                     },
                                     controlAffinity:
                                         ListTileControlAffinity.trailing,
                                   ),
                                   SwitchListTile(
-                                    activeColor: Theme.of(context).primaryColor,
+                                    activeColor: Theme
+                                        .of(context)
+                                        .primaryColor,
                                     contentPadding: EdgeInsets.zero,
                                     title: Text(Languages.translate(
                                         context, "home_notifications")),
-                                    value: notifications[2],
+                                    value: data["homeNotif"],
                                     onChanged: (newValue) async {
-                                      await storageController
-                                          .setOneNotificationSetting(
-                                              "homeNotif", newValue);
-
+                                      await authController
+                                          .setAllNotificationSetting(
+                                          <String, bool>{
+                                            "chat&roomsNotif": data["chat&roomsNotif"],
+                                            "groupsNotif": data["groupsNotif"],
+                                            "homeNotif": newValue,
+                                          }
+                                      );
                                       setState(() {
-                                        notifications[2] = newValue;
-                                      });
+
+                                      }
+
+                                      );
                                     },
                                     controlAffinity:
-                                        ListTileControlAffinity.trailing,
+                                    ListTileControlAffinity.trailing,
                                   ),
                                 ],
                               );

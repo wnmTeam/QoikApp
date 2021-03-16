@@ -218,4 +218,14 @@ class AuthController {
   getLinks() {
     return api.getLinks();
   }
+
+  setAllNotificationSetting(Map<String, bool> map) {
+    return api.setAllNotificationSetting(map);
+  }
+
+  getAllNotificationSetting() {
+    Future<dynamic> d = api.getAllNotificationSetting();
+
+    return d;
+  }
 }

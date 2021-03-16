@@ -216,13 +216,13 @@ class StorageController {
     return prefs.setString('theme', theme);
   }
 
-  setOneNotificationSetting(String notificationType, bool value) {
-    prefs.setBool(notificationType, value);
-  }
-
-  getOneNotificationSetting(String notificationType) {
-    return prefs.getBool(notificationType);
-  }
+  // setOneNotificationSetting(String notificationType, bool value) {
+  //   prefs.setBool(notificationType, value);
+  // }
+  //
+  // getOneNotificationSetting(String notificationType) {
+  //   return prefs.getBool(notificationType);
+  // }
 
   getAllNotificationSetting() {
     List<bool> n = new List<bool>();
