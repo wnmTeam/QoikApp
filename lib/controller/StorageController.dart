@@ -216,6 +216,39 @@ class StorageController {
     return prefs.setString('theme', theme);
   }
 
+  setOneNotificationSetting(String notificationType, bool value) {
+    prefs.setBool(notificationType, value);
+  }
+
+  getOneNotificationSetting(String notificationType) {
+    return prefs.getBool(notificationType);
+  }
+
+  getAllNotificationSetting() {
+    List<bool> n = new List<bool>();
+    try {
+      n.insert(0, prefs.getBool("chat&roomsNotif"));
+      n[0] = n[0] == null ? true : n[0];
+    } catch (e, s) {
+      n.insert(0, true);
+    }
+    try {
+      n.insert(1, prefs.getBool("groupsNotif"));
+      n[1] = n[1] == null ? true : n[1];
+    } catch (e, s) {
+      n.insert(1, true);
+    }
+    try {
+      n.insert(2, prefs.getBool("homeNotif"));
+      n[2] = n[2] == null ? true : n[2];
+    } catch (e, s) {
+      n.insert(2, true);
+    }
+
+    print(n);
+    return n;
+  }
+
 //  void setGroup(Group group) {
 //    prefs.setString('groupName.', value)
 //  }
