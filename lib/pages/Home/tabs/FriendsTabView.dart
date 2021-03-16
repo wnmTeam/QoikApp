@@ -68,7 +68,6 @@ class _FriendsTabState extends State<FriendsTab> {
                               },
                             );
                           },
-                          color: Colors.grey[300],
                           child: Text(Languages.translate(
                             context,
                             'frind_requests',

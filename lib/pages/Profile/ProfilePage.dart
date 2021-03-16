@@ -63,10 +63,10 @@ class ProfilePageState extends State<ProfilePage> {
       isMyProfile = true;
       print('My Profile');
     }
-    if (isMyProfile) {
-      _getUserInfo();
-      widget.user = MyUser.myUser;
-    }
+    // if (isMyProfile) {
+    //   _getUserInfo();
+    //   widget.user = MyUser.myUser;
+    // }
     _bioController = TextEditingController(
       text: widget.user.bio,
     );
