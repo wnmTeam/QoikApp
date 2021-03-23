@@ -117,6 +117,7 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
                       ),
                 Text(
                   item.text,
+                  maxLines: 1,
                   style: TextStyle(color: color),
                 )
               ],

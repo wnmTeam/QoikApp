@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:stumeapp/Models/Comment.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/MyUser.dart';
@@ -12,6 +13,9 @@ import 'package:stumeapp/Sounds.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/PostsController.dart';
 import 'package:stumeapp/localization.dart';
+import 'package:stumeapp/main.dart';
+import 'package:stumeapp/pages/ImageView/ImageView.dart';
+import 'package:stumeapp/pages/widgets/FileWidget.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -48,6 +52,10 @@ class _CommentWidgetState extends State<CommentWidget> {
 
   Sounds sounds = Sounds();
 
+  final Color baseColor = MyAppState.isDark ? Colors.black87 : Colors.grey[100];
+  final Color highlightColor =
+      MyAppState.isDark ? Colors.black54 : Colors.grey[300];
+
   @override
   void dispose() {
     sounds.dispose();
@@ -66,17 +74,17 @@ class _CommentWidgetState extends State<CommentWidget> {
         future: _getUser,
         builder: (context, snapshot) {
           if (user != null) {
-            return _postBuilder();
+            return _commentBuilder();
           }
           if (snapshot.hasData) {
             user = User().fromMap(snapshot.data)..setId(snapshot.data.id);
-            return _postBuilder();
+            return _commentBuilder();
           }
           return UserPlaceholder();
         });
   }
 
-  Widget _postBuilder() {
+  Widget _commentBuilder() {
     return Container(
       child: ListTile(
         onTap: () {
@@ -162,7 +170,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                     onTap: () async {
                       if (widget.post.idOwner == MyUser.myUser.id) {
                         await _postsController.deletePoint(
-                          id_group: widget.group.id,
+                          groupId: widget.group.id,
                           comment: widget.comment,
                           post: widget.post,
                         );
@@ -188,14 +196,55 @@ class _CommentWidgetState extends State<CommentWidget> {
               SizedBox(
                 height: 4,
               ),
+              if(widget.comment.image != null)
+                GestureDetector(
+                  onTap: () {
+                    print("------------------------");
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(
+                        builder: (_) => ImageView(widget.comment.image)));
+                  },
+                  child: Hero(
+                    tag: widget.comment.image,
+                    child: CachedNetworkImage(
+                      placeholder: (context, url) =>
+                          Center(
+                            child: Shimmer.fromColors(
+                              baseColor: baseColor,
+                              highlightColor: highlightColor,
+                              child: Container(
+                                width: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width / 2.5,
+                                height: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width / 2.5,
+                                color: Colors.grey[200],
+                              ),
+                            ),
+                          ),
+                      imageUrl: widget.comment.image,
+                    ),
+                  ),
+                ),
+              SizedBox(
+                height: 20,
+              ),
+              if(widget.comment.file != null)
+                FileWidget(widget.comment.file),
+              SizedBox(
+                height: 4,
+              ),
               Row(
                 children: [
                   StreamBuilder(
                       stream: _postsController.isLikeComment(
-                        id_user: _authController.getUser.uid,
+                        userId: _authController.getUser.uid,
                         group: widget.group,
-                        id_post: widget.post.id,
-                        id_comment: widget.comment.id,
+                        postId: widget.post.id,
+                        commentId: widget.comment.id,
                       ),
                       builder: (context, snapshot) {
                         print(snapshot.data);
@@ -237,10 +286,10 @@ class _CommentWidgetState extends State<CommentWidget> {
                           ),
                           onTap: () async {
                             await _postsController.setLikeToComment(
-                              id_user: _authController.getUser.uid,
+                              userId: _authController.getUser.uid,
                               group: widget.group,
-                              id_post: widget.post.id,
-                              id_comment: widget.comment.id,
+                              postId: widget.post.id,
+                              commentId: widget.comment.id,
                             );
                             if (widget.comment.isLiked) {
                               sounds.likeSound();
@@ -277,7 +326,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                     ),
                     onTap: () async {
                       await _postsController.addPoint(
-                        id_group: widget.group.id,
+                        groupId: widget.group.id,
                         comment: widget.comment,
                         post: widget.post,
                       );

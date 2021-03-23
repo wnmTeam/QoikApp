@@ -94,6 +94,10 @@ class StorageController {
 //    }
   }
 
+  Future<List<File>> getDocs() async {
+    return await FilePicker.getMultiFile();
+  }
+
   Future uploadPic(context, img, id_user) async {
     String url;
     str.Reference firebaseStorageRef = str.FirebaseStorage.instance
@@ -127,15 +131,70 @@ class StorageController {
     return url;
   }
 
+  uploadPostFile({
+    String id_post,
+    String nom,
+    File file,
+    String id_group,
+  }) async {
+    String url;
+    str.Reference firebaseStorageRef = str.FirebaseStorage.instance
+        .ref()
+        .child('postFiles')
+        .child(id_group + id_post + nom);
+    str.UploadTask uploadTask = firebaseStorageRef.putFile(file);
+    await uploadTask.then((res) async {
+      url = await res.ref.getDownloadURL();
+      return;
+    });
+    return url;
+  }
+
+  uploadCommentImage({
+    String id_post,
+    String nom,
+    File img,
+    String id_group,
+  }) async {
+    String url;
+    str.Reference firebaseStorageRef = str.FirebaseStorage.instance
+        .ref()
+        .child('commentImages')
+        .child(id_group + id_post + nom);
+    str.UploadTask uploadTask = firebaseStorageRef.putFile(img);
+    await uploadTask.then((res) async {
+      url = await res.ref.getDownloadURL();
+      return;
+    });
+    return url;
+  }
+
+  uploadCommentFile({
+    String id_post,
+    String nom,
+    File file,
+    String id_group,
+  }) async {
+    String url;
+    str.Reference firebaseStorageRef = str.FirebaseStorage.instance
+        .ref()
+        .child('commentFiles')
+        .child(id_group + id_post + nom);
+    str.UploadTask uploadTask = firebaseStorageRef.putFile(file);
+    await uploadTask.then((res) async {
+      url = await res.ref.getDownloadURL();
+      return;
+    });
+    return url;
+  }
+
   uploadRoomImage({
     File img,
     String id_room,
   }) async {
     String url;
-    str.Reference firebaseStorageRef = str.FirebaseStorage.instance
-        .ref()
-        .child('roomImages')
-        .child(id_room);
+    str.Reference firebaseStorageRef =
+        str.FirebaseStorage.instance.ref().child('roomImages').child(id_room);
     str.UploadTask uploadTask = firebaseStorageRef.putFile(img);
     await uploadTask.then((res) async {
       url = await res.ref.getDownloadURL();
@@ -214,6 +273,39 @@ class StorageController {
 
   setTheme(String theme) {
     return prefs.setString('theme', theme);
+  }
+
+  // setOneNotificationSetting(String notificationType, bool value) {
+  //   prefs.setBool(notificationType, value);
+  // }
+  //
+  // getOneNotificationSetting(String notificationType) {
+  //   return prefs.getBool(notificationType);
+  // }
+
+  getAllNotificationSetting() {
+    List<bool> n = new List<bool>();
+    try {
+      n.insert(0, prefs.getBool("chat&roomsNotif"));
+      n[0] = n[0] == null ? true : n[0];
+    } catch (e, s) {
+      n.insert(0, true);
+    }
+    try {
+      n.insert(1, prefs.getBool("groupsNotif"));
+      n[1] = n[1] == null ? true : n[1];
+    } catch (e, s) {
+      n.insert(1, true);
+    }
+    try {
+      n.insert(2, prefs.getBool("homeNotif"));
+      n[2] = n[2] == null ? true : n[2];
+    } catch (e, s) {
+      n.insert(2, true);
+    }
+
+    print(n);
+    return n;
   }
 
 //  void setGroup(Group group) {

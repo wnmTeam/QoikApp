@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,8 +16,10 @@ import 'package:stumeapp/Sounds.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/PostsController.dart';
+import 'package:stumeapp/controller/StorageController.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/ImageView/ImageView.dart';
+import 'package:stumeapp/pages/widgets/FileWidget.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -56,6 +60,7 @@ class _PostWidgetState extends State<PostWidget>
 
   PostsController _postsController = PostsController();
   AuthController _authController = AuthController();
+  StorageController _storageController = StorageController();
 
   Size size;
 
@@ -67,6 +72,9 @@ class _PostWidgetState extends State<PostWidget>
   Sounds sounds = Sounds();
 
   Color buttonsColor;
+
+  File image;
+  File file;
 
   @override
   void dispose() {
@@ -104,9 +112,12 @@ class _PostWidgetState extends State<PostWidget>
 
   @override
   Widget build(BuildContext context) {
-    size = MediaQuery.of(context).size;
+    size = MediaQuery
+        .of(context)
+        .size;
     buttonsColor = Colors.grey[200];
 
+    print("asdhgbalsjkbxas xiausk xhiasuk xiasu hxiasuj xhiuas xhasui");
     return _postBuilder(widget.post);
   }
 
@@ -124,7 +135,7 @@ class _PostWidgetState extends State<PostWidget>
     _postsController
         .getComments(
       group: widget.group,
-      id_post: widget.post.id,
+      postId: widget.post.id,
       last: comments.length == 0 ? null : comments.last,
       limit: commentsLimit,
     )
@@ -149,7 +160,6 @@ class _PostWidgetState extends State<PostWidget>
         child: Padding(
           padding: const EdgeInsets.all(5),
           child: Container(
-            width: size.width - 24,
             child: Column(
               children: [
                 FutureBuilder(
@@ -178,142 +188,150 @@ class _PostWidgetState extends State<PostWidget>
                 ),
                 post.text.isNotEmpty
                     ? Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  _isExbended = !_isExbended;
-                                });
-                              },
-                              onLongPress: () {
-                                Clipboard.setData(
-                                        ClipboardData(text: post.text))
-                                    .then((value) {
-                                  Toast.show(
-                                    Languages.translate(context, 'text_copied'),
-                                    context,
-                                    duration: Toast.LENGTH_LONG,
-                                    backgroundColor:
-                                        Theme.of(context).primaryColor,
-                                  );
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            _isExbended = !_isExbended;
+                          });
+                        },
+                        onLongPress: () {
+                          Clipboard.setData(
+                              ClipboardData(text: post.text))
+                              .then((value) {
+                            Toast.show(
+                              Languages.translate(context, 'text_copied'),
+                              context,
+                              duration: Toast.LENGTH_LONG,
+                              backgroundColor:
+                              Theme
+                                  .of(context)
+                                  .primaryColor,
+                            );
 
-                                  // Scaffold.of(context).showSnackBar(
-                                  //     SnackBar(content:Text('The text copied')));
-                                });
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8.0,
-                                  vertical: 10,
-                                ),
-                                child: Linkify(
-                                  onOpen: (link) async {
-                                    if (await canLaunch(link.url)) {
-                                      await launch(link.url);
-                                    } else {
-                                      throw 'Could not launch $link';
-                                    }
-                                  },
-                                  linkStyle: TextStyle(
-                                    color: Colors.blue,
-                                  ),
-                                  options: LinkifyOptions(humanize: false),
-                                  text: post.text,
-                                  maxLines: _isExbended ? 10000 : 5,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
+                            // Scaffold.of(context).showSnackBar(
+                            //     SnackBar(content:Text('The text copied')));
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0,
+                            vertical: 10,
+                          ),
+                          child: Linkify(
+                            onOpen: (link) async {
+                              if (await canLaunch(link.url)) {
+                                await launch(link.url);
+                              } else {
+                                throw 'Could not launch $link';
+                              }
+                            },
+                            linkStyle: TextStyle(
+                              color: Colors.blue,
                             ),
-                            !_isExbended
-                                ? post.text.length > 200
-                                    ? InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            _isExbended = !_isExbended;
-                                          });
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0,
-                                            vertical: 10,
-                                          ),
-                                          child: Text(
-                                            "عرض المزيد",
-                                            style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .primaryColor,
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                    : Container()
-                                : Container(),
-                          ],
+                            options: LinkifyOptions(humanize: false),
+                            text: post.text,
+                            maxLines: _isExbended ? 10000 : 5,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
+                      !_isExbended
+                          ? post.text.length > 200
+                          ? InkWell(
+                        onTap: () {
+                          setState(() {
+                            _isExbended = !_isExbended;
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0,
+                            vertical: 10,
+                          ),
+                          child: Text(
+                            "عرض المزيد",
+                            style: TextStyle(
+                              color: Theme
+                                  .of(context)
+                                  .primaryColor,
+                              fontSize: 16,
+                            ),
+                          ),
                         ),
                       )
+                          : Container()
+                          : Container(),
+                    ],
+                  ),
+                )
                     : Container(),
                 SizedBox(
                   height: 6,
                 ),
-                if (widget.post.images != null && widget.post.images.length > 0)
-                  imagesBuilder(widget.post.images),
-                if (widget.post.images != null && widget.post.images.length > 0)
+                if (post.images != null && post.images.length > 0)
+                  imagesBuilder(post.images),
+                if (post.images != null && post.images.length > 0)
                   SizedBox(
                     height: 6,
                   ),
+                if (post.files != null)
+                  docBuilder(post.files),
                 Divider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     StreamBuilder(
                       stream: _postsController.isLikePost(
-                          id_user: _authController.getUser.uid,
+                          userId: _authController.getUser.uid,
                           group: widget.group,
-                          id_post: widget.post.id),
+                          postId: post.id),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           if (snapshot.data.data() != null &&
                               snapshot.data.data()['exists'] == 1)
-                            widget.post.setIsLiked = true;
+                            post.setIsLiked = true;
                           else
-                            widget.post.setIsLiked = false;
+                            post.setIsLiked = false;
                         }
                         return RaisedButton(
                           padding: EdgeInsets.symmetric(vertical: 10),
                           elevation: 0,
                           onPressed: () async {
                             setState(() {
-                              if (!widget.post.isLiked)
-                                widget.post.likeCount++;
+                              if (!post.isLiked)
+                                post.likeCount++;
                               else
-                                widget.post.likeCount--;
+                                post.likeCount--;
                             });
                             await _postsController.setLike(
-                                id_user: _authController.getUser.uid,
+                                userId: _authController.getUser.uid,
                                 group: widget.group,
-                                id_post: widget.post.id);
+                                postId: post.id);
 
                             DocumentSnapshot d =
-                                await _postsController.getPostChanges(
-                              id_post: widget.post.id,
+                            await _postsController.getPostChanges(
+                              postId: post.id,
                               group: widget.group,
                             );
                             if (d.data() != null) {
                               widget.updatePost(d);
 
-                              if (widget.post.isLiked) {
+                              if (post.isLiked) {
                                 sounds.likeSound();
                               } else {
                                 sounds.disLikeSound();
                               }
                             }
                           },
-                          color: widget.post.getIsLiked
-                              ? Theme.of(context).primaryColor.withOpacity(0.7)
+                          color: post.getIsLiked
+                              ? Theme
+                              .of(context)
+                              .primaryColor
+                              .withOpacity(0.7)
                               : buttonsColor,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(25)),
@@ -326,7 +344,7 @@ class _PostWidgetState extends State<PostWidget>
                                   'assets/like.svg',
                                   width: 20,
                                   height: 20,
-                                  color: widget.post.getIsLiked
+                                  color: post.getIsLiked
                                       ? Colors.white
                                       : ConstValues.secondColor,
                                 ),
@@ -336,7 +354,7 @@ class _PostWidgetState extends State<PostWidget>
                                 Text(
                                   post.likeCount.toString(),
                                   style: TextStyle(
-                                    color: widget.post.getIsLiked
+                                    color: post.getIsLiked
                                         ? Colors.white
                                         : ConstValues.secondColor,
                                   ),
@@ -382,40 +400,43 @@ class _PostWidgetState extends State<PostWidget>
                     ),
                     StreamBuilder(
                       stream: _postsController.isFollowPost(
-                          id_user: _authController.getUser.uid,
+                          userId: _authController.getUser.uid,
                           group: widget.group,
-                          id_post: widget.post.id),
+                          postId: post.id),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           if (snapshot.data.data() != null &&
                               snapshot.data.data()['exists'] == 1)
-                            widget.post.setIsFollowed = true;
+                            post.setIsFollowed = true;
                           else
-                            widget.post.setIsFollowed = false;
+                            post.setIsFollowed = false;
                         }
                         return RaisedButton(
                           padding: EdgeInsets.symmetric(vertical: 10),
                           elevation: 0,
                           onPressed: () async {
                             await _postsController.followPost(
-                              id_user: _authController.getUser.uid,
+                              userId: _authController.getUser.uid,
                               group: widget.group,
-                              id_post: widget.post.id,
+                              postId: post.id,
                             );
 
                             DocumentSnapshot d =
-                                await _postsController.getPostChanges(
-                              id_post: widget.post.id,
+                            await _postsController.getPostChanges(
+                              postId: post.id,
                               group: widget.group,
                             );
                             if (d.data() != null)
                               setState(() {
                                 widget.post = Post().fromMap(d.data())
-                                  ..setId(widget.post.id);
+                                  ..setId(post.id);
                               });
                           },
-                          color: widget.post.getIsFollowed
-                              ? Theme.of(context).primaryColor.withOpacity(0.7)
+                          color: post.getIsFollowed
+                              ? Theme
+                              .of(context)
+                              .primaryColor
+                              .withOpacity(0.7)
                               : buttonsColor.withOpacity(0.8),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(25)),
@@ -425,7 +446,7 @@ class _PostWidgetState extends State<PostWidget>
                               children: [
                                 Icon(
                                   Icons.add_box,
-                                  color: widget.post.getIsFollowed
+                                  color: post.getIsFollowed
                                       ? Colors.white
                                       : ConstValues.secondColor,
                                 ),
@@ -435,7 +456,7 @@ class _PostWidgetState extends State<PostWidget>
                                 Text(
                                   post.followCount.toString(),
                                   style: TextStyle(
-                                    color: widget.post.getIsFollowed
+                                    color: post.getIsFollowed
                                         ? Colors.white
                                         : ConstValues.secondColor,
                                   ),
@@ -468,14 +489,14 @@ class _PostWidgetState extends State<PostWidget>
                       addPoint: (id) async {
                         var d = await _postsController.getPostChanges(
                           group: widget.group,
-                          id_post: widget.post.id,
+                          postId: post.id,
                         );
                         if (d.data() != null) widget.updatePost(d);
                       },
                       deletePoint: () async {
                         var d = await _postsController.getPostChanges(
                           group: widget.group,
-                          id_post: widget.post.id,
+                          postId: post.id,
                         );
                         if (d.data() != null) widget.updatePost(d);
                       },
@@ -483,7 +504,7 @@ class _PostWidgetState extends State<PostWidget>
                 if (commentsShow)
                   StreamBuilder(
                     stream: _postsController.getNewComments(
-                      id_post: widget.post.id,
+                      postId: post.id,
                       group: widget.group,
                     ),
                     builder: (context, snapshot) {
@@ -499,14 +520,14 @@ class _PostWidgetState extends State<PostWidget>
                                     CommentWidget(
                                       comment: Comment()
                                           .fromMap(newComments[i].data())
-                                            ..setId(newComments[i].id),
+                                        ..setId(newComments[i].id),
                                       post: widget.post,
                                       group: widget.group,
                                       addPoint: (id) async {
                                         var d = await _postsController
                                             .getPostChanges(
                                           group: widget.group,
-                                          id_post: widget.post.id,
+                                          postId: post.id,
                                         );
                                         if (d.data() != null)
                                           widget.updatePost(d);
@@ -515,7 +536,7 @@ class _PostWidgetState extends State<PostWidget>
                                         var d = await _postsController
                                             .getPostChanges(
                                           group: widget.group,
-                                          id_post: widget.post.id,
+                                          postId: post.id,
                                         );
                                         if (d.data() != null)
                                           widget.updatePost(d);
@@ -532,15 +553,23 @@ class _PostWidgetState extends State<PostWidget>
                   ),
                 if (commentsShow) Divider(),
                 if (commentsShow)
+                  if(file != null)
+                    FileWidget(file.path)
+                  else
+                    Container(
+                      height: 20,
+                      color: Colors.red,
+                    ),
+                if (commentsShow)
                   Row(
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(57),
                         child: CachedNetworkImage(
-                          placeholder: (context, url) => Center(
-                            child: Image.asset(ConstValues.userImage),
-//                    child: Container(),
-                          ),
+                          placeholder: (context, url) =>
+                              Center(
+                                child: Image.asset(ConstValues.userImage),
+                              ),
                           imageUrl: MyUser.myUser.img,
                           fit: BoxFit.cover,
                           width: 45,
@@ -561,10 +590,53 @@ class _PostWidgetState extends State<PostWidget>
                               )),
                         ),
                       ),
+                      //TODO -------------------
+                      IconButton(
+                        icon: Icon(
+                          Icons.insert_drive_file,
+                          color: Theme
+                              .of(context)
+                              .primaryColor,
+                        ),
+                        onPressed: () async {
+                          final pickedFile = await _storageController.getDoc();
+                          if (pickedFile != null) {
+                            print("${pickedFile.path}\n");
+                            setState(() {
+                              file = pickedFile;
+                            });
+                          } else {
+                            print("444444444444444444444444");
+                          }
+                        },
+                      ),
+                      //TODO -------------------
+                      IconButton(
+                        icon: Icon(
+                          Icons.image,
+                          color: Theme
+                              .of(context)
+                              .primaryColor,
+                        ),
+                        onPressed: () async {
+                          final pickedFile = await _storageController
+                              .getImage();
+                          if (pickedFile != null) {
+                            print("${pickedFile.path}\n");
+                            setState(() {
+                              image = pickedFile;
+                            });
+                          } else {
+                            print("444444444444444444444444");
+                          }
+                        },
+                      ),
                       IconButton(
                         icon: Icon(
                           Icons.send,
-                          color: Theme.of(context).primaryColor,
+                          color: Theme
+                              .of(context)
+                              .primaryColor,
                         ),
                         onPressed: () async {
                           String text = _commentController.text;
@@ -572,9 +644,11 @@ class _PostWidgetState extends State<PostWidget>
                           _commentController.clear();
                           if (!_authController.isBan()) {
                             await _postsController.createComment(
-                              text: text,
-                              post: widget.post,
-                              group: widget.group,
+                                text: text,
+                                post: widget.post,
+                                group: widget.group,
+                                image: image,
+                                file: file
                             );
                             sounds.commentSound();
                           } else
@@ -683,13 +757,13 @@ class _PostWidgetState extends State<PostWidget>
           Text(
             user.userTag == 'admin'
                 ? Languages.translate(
-                    context,
-                    user.userTag,
-                  )
+              context,
+              user.userTag,
+            )
                 : Languages.translate(
-                    context,
-                    user.tag,
-                  ),
+              context,
+              user.tag,
+            ),
             style: TextStyle(fontSize: 12),
           ),
           Padding(
@@ -706,8 +780,8 @@ class _PostWidgetState extends State<PostWidget>
 
   _deletePost() async {
     await _postsController.deletePost(
-      id_group: widget.group.id,
-      id_post: widget.post.id,
+      groupId: widget.group.id,
+      postId: widget.post.id,
     );
     widget.deletePost();
   }
@@ -726,7 +800,7 @@ class _PostWidgetState extends State<PostWidget>
     );
 
     DocumentSnapshot d = await _postsController.getPostChanges(
-      id_post: widget.post.id,
+      postId: widget.post.id,
       group: widget.group,
     );
     if (d.data() != null) widget.updatePost(d);
@@ -759,6 +833,23 @@ class _PostWidgetState extends State<PostWidget>
       dd.add(SizedBox(
         height: 2,
       ));
+    }
+    return Column(
+      children: dd,
+    );
+  }
+
+  Widget docBuilder(List files) {
+    List<Widget> dd = new List();
+
+    print(files);
+    print(files.length);
+    for (String file in files) {
+      dd.add(Container(
+        color: Colors.white24,
+        child: FileWidget(file),
+      ));
+      dd.add(SizedBox(height: 4,));
     }
     return Column(
       children: dd,

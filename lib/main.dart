@@ -49,7 +49,7 @@ class MyAppState extends State<MyApp> {
       showSemanticsDebugger: false,
       theme: isDark
           ? ThemeData(
-        brightness: Brightness.dark,
+              brightness: Brightness.dark,
 
               primarySwatch: ConstValues.firstColorDark,
               primaryColor: ConstValues.firstColorDark,
@@ -67,8 +67,11 @@ class MyAppState extends State<MyApp> {
               textButtonTheme: TextButtonThemeData(style: ButtonStyle()),
               iconTheme: IconThemeData(color: Colors.white),
 
+              //Search friends button
               buttonTheme: ButtonThemeData(
-                  textTheme: ButtonTextTheme.normal, buttonColor: Colors.red),
+                  textTheme: ButtonTextTheme.primary,
+                  buttonColor: Theme.of(context).primaryColor),
+
               textTheme: TextTheme(
                 button: TextStyle(
                   color: Colors.red,
@@ -125,26 +128,30 @@ class MyAppState extends State<MyApp> {
 
               backgroundColor: Colors.white,
               scaffoldBackgroundColor: Colors.white,
-              dialogBackgroundColor: Colors.white,
-              cardColor: Colors.white,
+        dialogBackgroundColor: Colors.white,
+        cardColor: Colors.white,
 
-              //canvasColor is the drawer backgroundColor
-              canvasColor: Colors.white,
+        //canvasColor is the drawer backgroundColor
+        canvasColor: Colors.white,
 
-              iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: Colors.white),
 
-              buttonTheme: ButtonThemeData(
-                  textTheme: ButtonTextTheme.normal, buttonColor: Colors.white),
+        //Search friends button
+        buttonTheme: ButtonThemeData(
+            textTheme: ButtonTextTheme.primary, buttonColor: Theme
+            .of
+          (context)
+            .primaryColor),
 
-              textTheme: TextTheme(
-                button: TextStyle(
-                  color: Colors.white,
-                ),
-                // headline1: TextStyle(color: Colors.indigo),
-                // headline2: TextStyle(color: Colors.deepPurple),
-                // headline3: TextStyle(color: Colors.brown),
-                // headline4: TextStyle(color: Colors.deepOrange),
-                // headline5: TextStyle(color: Colors.teal),
+        textTheme: TextTheme(
+          button: TextStyle(
+            color: Colors.white,
+          ),
+          // headline1: TextStyle(color: Colors.indigo),
+          // headline2: TextStyle(color: Colors.deepPurple),
+          // headline3: TextStyle(color: Colors.brown),
+          // headline4: TextStyle(color: Colors.deepOrange),
+          // headline5: TextStyle(color: Colors.teal),
                 // subtitle2: TextStyle(color: Colors.red,),
                 // overline: TextStyle(color: Colors.blue,),
 

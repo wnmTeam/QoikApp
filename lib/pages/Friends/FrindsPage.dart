@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
@@ -10,103 +9,70 @@ import 'package:stumeapp/controller/FriendsController.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
-class FriendsTab extends StatefulWidget {
+class FriendsPage extends StatefulWidget {
+  final User user;
+
+  FriendsPage({this.user});
+
   @override
-  _FriendsTabState createState() => _FriendsTabState();
+  _FriendsPageState createState() => _FriendsPageState();
 }
 
-class _FriendsTabState extends State<FriendsTab> {
+class _FriendsPageState extends State<FriendsPage> {
   bool isLoading = false;
   bool hasMore = true;
   int documentLimit = 10;
   DocumentSnapshot lastDocument = null;
 
   FriendsController _friendsController = FriendsController();
-  AuthController _authController = AuthController();
 
   List<DocumentSnapshot> friends = [null, null, null];
 
-  Future<void> refresh() {
-    setState(() {
-      friends = [null, null, null];
-      hasMore = true;
-      lastDocument = null;
-    });
-    getMyFriends();
-    return Future.delayed(Duration(milliseconds: 1));
-  }
-
   @override
   void initState() {
-    getMyFriends();
+    getFriends();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: refresh,
-      child: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: friends.length,
-              itemBuilder: (context, index) {
-                if (index == 0)
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: RaisedButton(
-                          elevation: 0,
-                          onPressed: () {
-                            Navigator.of(context).pushNamed(
-                              '/MyFriendsPage',
-                              arguments: {
-                                'id_user': _authController.getUser.uid
-                              },
-                            );
-                          },
-                          child: Text(Languages.translate(
-                            context,
-                            'frind_requests',
-                          )),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                        ),
-                      )
-                    ],
-                  );
-                else if (index == friends.length - 2)
-                  return SizedBox(
-                    height: 30,
-                  );
-                else if (index == friends.length - 1) {
-                  if (isLoading)
-                    return Center(child: CircularProgressIndicator());
-                  else if (hasMore)
-                    return FlatButton(
-                      onPressed: () {
-                        getMyFriends();
-                      },
-                      child: Text(Languages.translate(
-                        context,
-                        'load_more',
-                      )),
-                    );
-                  return Container();
-                }
-                return UserWidget(id: friends[index].id);
-              },
-            ),
-          ),
-        ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(Languages.translate(context, "friends")),
+      ),
+      body: ListView.builder(
+        itemCount: friends.length,
+        itemBuilder: (context, index) {
+          if (index == 0)
+            return SizedBox(
+              height: 10,
+            );
+          else if (index == friends.length - 2)
+            return SizedBox(
+              height: 0,
+            );
+          else if (index == friends.length - 1) {
+            if (isLoading)
+              return Center(child: CircularProgressIndicator());
+            else if (hasMore)
+              return FlatButton(
+                onPressed: () {
+                  getFriends();
+                },
+                child: Text(Languages.translate(
+                  context,
+                  'load_more',
+                )),
+              );
+            return Container();
+          }
+          return UserWidget(id: friends[index].id);
+        },
       ),
     );
   }
 
-  getMyFriends() async {
+  getFriends() async {
     if (!hasMore) {
       print('No More friends');
       return;
@@ -119,7 +85,7 @@ class _FriendsTabState extends State<FriendsTab> {
     });
     _friendsController
         .getFriends(
-      id: MyUser.myUser.id,
+      id: widget.user.id,
       limit: documentLimit,
       last: lastDocument,
     )
@@ -142,7 +108,7 @@ class _FriendsTabState extends State<FriendsTab> {
 }
 
 class UserWidget extends StatefulWidget {
-  String id;
+  final String id;
 
   UserWidget({this.id});
 

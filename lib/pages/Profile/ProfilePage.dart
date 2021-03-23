@@ -51,12 +51,21 @@ class ProfilePageState extends State<ProfilePage> {
   bool _editBio = false;
   bool uploadImage = false;
 
+  String _college;
+  String _university;
+
+  bool loading = false;
+
   @override
   void initState() {
     if (MyUser.myUser.id == widget.user.id) {
       isMyProfile = true;
       print('My Profile');
     }
+    // if (isMyProfile) {
+    //   _getUserInfo();
+    //   widget.user = MyUser.myUser;
+    // }
     _bioController = TextEditingController(
       text: widget.user.bio,
     );
@@ -408,67 +417,67 @@ class ProfilePageState extends State<ProfilePage> {
                                   SizedBox(
                                     height: 18,
                                   ),
-                                  isMyProfile ? ListTile(
-                                    trailing: isMyProfile
-                                        ? IconButton(
-                                      icon: Icon(
-                                        !_editBio
-                                            ? Icons.edit
-                                            : Icons.save,
-                                      ),
-                                      onPressed: () {
-                                        if (_editBio) {
-                                          _authController.updateBio(
-                                              _bioController.text);
-                                        }
-                                        setState(() {
-                                          if (_editBio) {
-                                            MyUser.myUser.bio =
-                                                _bioController.text;
-                                            widget.user.bio =
-                                                _bioController.text;
-                                          }
-                                          _editBio = !_editBio;
-                                        });
-                                      },
-                                    )
-                                        : SizedBox(
-                                      height: 2,
-                                      width: 2,
-                                    ),
-                                    title: Text(Languages.translate(
-                                      context,
-                                      'bio',
-                                    )),
-                                    subtitle: TextField(
-                                      maxLines: 50,
-                                      autofocus: true,
-                                      minLines: 1,
-                                      style: TextStyle(
-                                        color: Theme
-                                            .of(context)
-                                            .textTheme
-                                            .bodyText2
-                                            .color
-                                            .withOpacity(0.6),
-                                        fontSize: 14,
-                                      ),
-                                      controller: _bioController,
-                                      readOnly: !_editBio,
-                                      decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.zero,
-                                        border: InputBorder.none,
-                                      ),
-                                    ),
-                                  ) :
-                                  ListTile(
-                                    title: Text(Languages.translate(
-                                      context,
-                                      'bio',
-                                    )),
-                                    subtitle: Linkify(
-                                      onOpen: (link) async {
-                                        if (await canLaunch(link.url)) {
+                                  isMyProfile
+                                      ? ListTile(
+                                          trailing: isMyProfile
+                                              ? IconButton(
+                                                  icon: Icon(
+                                                    !_editBio
+                                                        ? Icons.edit
+                                                        : Icons.save,
+                                                  ),
+                                                  onPressed: () {
+                                                    if (_editBio) {
+                                                      _authController.updateBio(
+                                                          _bioController.text);
+                                                    }
+                                                    setState(() {
+                                                      if (_editBio) {
+                                                        MyUser.myUser.bio =
+                                                            _bioController.text;
+                                                        widget.user.bio =
+                                                            _bioController.text;
+                                                      }
+                                                      _editBio = !_editBio;
+                                                    });
+                                                  },
+                                                )
+                                              : SizedBox(
+                                                  height: 2,
+                                                  width: 2,
+                                                ),
+                                          title: Text(Languages.translate(
+                                            context,
+                                            'bio',
+                                          )),
+                                          subtitle: TextField(
+                                            maxLines: 50,
+                                            autofocus: true,
+                                            minLines: 1,
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText2
+                                                  .color
+                                                  .withOpacity(0.6),
+                                              fontSize: 14,
+                                            ),
+                                            controller: _bioController,
+                                            readOnly: !_editBio,
+                                            decoration: InputDecoration(
+                                              contentPadding: EdgeInsets.zero,
+                                              border: InputBorder.none,
+                                            ),
+                                          ),
+                                        )
+                                      : ListTile(
+                                          title: Text(Languages.translate(
+                                            context,
+                                            'bio',
+                                          )),
+                                    subtitle: SelectableLinkify(
+                                            onOpen: (link) async {
+                                              if (await canLaunch(link.url)) {
                                                 await launch(link.url);
                                               } else {
                                                 throw 'Could not launch $link';
@@ -489,16 +498,15 @@ class ProfilePageState extends State<ProfilePage> {
                                               fontSize: 14,
                                             ),
                                             // style: TextStyle(fontSize: 16),
-                                    ),
-                                  ),
+                                          ),
+                                        ),
                                   if (widget.user.university != null)
                                     ListTile(
                                       title: Text(Languages.translate(
                                         context,
                                         'university',
                                       )),
-                                      subtitle:
-                                      Text(widget.user.university),
+                                      subtitle: Text(widget.user.university),
                                     ),
                                   if (widget.user.college != null)
                                     ListTile(
@@ -508,6 +516,93 @@ class ProfilePageState extends State<ProfilePage> {
                                       )),
                                       subtitle: Text(widget.user.college),
                                     ),
+                                  MyUser.myUser.university == null &&
+                                      isMyProfile
+                                      ? ListTile(
+                                    onTap: () {
+                                      _bottomSheetBuild(
+                                        'universities',
+                                        _authController.getUniversities(),
+                                      );
+                                    },
+                                    title: Text(Languages.translate(
+                                      context,
+                                      'university',
+                                    )),
+                                    subtitle: Text(_university == null
+                                        ? Languages.translate(
+                                      context,
+                                      'tap_to_select',
+                                    )
+                                        : _university),
+                                  )
+                                      : Container(
+                                    height: 0,
+                                  ),
+                                  _university != null &&
+                                      MyUser.myUser.college == null &&
+                                      isMyProfile
+                                      ? ListTile(
+                                    onTap: () {
+                                      _bottomSheetBuild(
+                                        'colleges',
+                                        _authController.getColleges(),
+                                      );
+                                    },
+                                    title: Text(Languages.translate(
+                                      context,
+                                      'college',
+                                    )),
+                                    subtitle: Text(_college == null
+                                        ? Languages.translate(
+                                      context,
+                                      'tap_to_select',
+                                    )
+                                        : _college),
+                                  )
+                                      : Container(
+                                    height: 0,
+                                  ),
+                                  _university != null && _college != null
+                                      ? loading
+                                      ? FlatButton.icon(
+                                    onPressed: () {},
+                                    icon: CircularProgressIndicator(),
+                                    label: Text(
+                                      Languages.translate(
+                                          context, "whaiting"),
+                                    ),
+                                  )
+                                      : FlatButton.icon(
+                                      onPressed: () async {
+                                        setState(() {
+                                          loading = true;
+                                        });
+                                        print(MyUser.myUser);
+                                        // MyUser.myUser.university = _university;
+                                        // MyUser.myUser.college = _college;
+
+                                        User x = MyUser.myUser;
+                                        x.university = _university;
+                                        x.college = _college;
+                                        x.groups = [
+                                          _university + '.' + _college,
+                                          _college,
+                                          Group.TYPE_MOFADALAH,
+                                        ];
+
+                                        await _authController
+                                            .updateUserUniversity(x);
+                                        setState(() {
+                                          loading = false;
+                                        });
+                                      },
+                                      icon: Icon(Icons.save),
+                                      label: Text(Languages.translate(
+                                          context, "save")))
+                                      : Container(
+                                    height: 0,
+                                  ),
                                   isMyProfile && widget.user.email != null
                                       ? ListTile(
                                     title: Text(Languages.translate(
@@ -557,22 +652,26 @@ class ProfilePageState extends State<ProfilePage> {
                                     isMyProfile
                                         ? Languages.translate(
                                       context,
-                                            'my_friends',
-                                          )
+                                      'my_friends',
+                                    )
                                         : Languages.translate(
-                                            context,
-                                            'friends',
-                                          ),
+                                      context,
+                                      'friends',
+                                    ),
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18)),
-                                // FlatButton(
-                                //     onPressed: () {
-                                //       //TODO
-                                //     },
-                                //     child: Text("More friends"),
-                                // )
+                                FlatButton(
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .pushNamed("/FriendsPage", arguments: {
+                                      'user': widget.user,
+                                    });
+                                  },
+                                  child: Text(
+                                      Languages.translate(context, "more")),
+                                )
                               ],
                             ),
                           ),
@@ -730,6 +829,67 @@ class ProfilePageState extends State<ProfilePage> {
         return 'assets/newUser.png';
     }
   }
+
+  _bottomSheetBuild(String type,
+      Future future,) {
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+        ),
+//        isScrollControlled: true,
+        builder: (BuildContext context) {
+          String temp;
+          if (type == 'old')
+            temp = 'universities';
+          else
+            temp = type;
+          return FutureBuilder(
+            future: future,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                print(snapshot.data.data());
+
+                List list = snapshot.data.data()[temp];
+                list.sort();
+
+                return ListView.builder(
+                  itemCount: list.length,
+                  itemBuilder: (context, index) {
+                    String item = list[index];
+                    return ListTile(
+                      title: Text(item),
+                      onTap: () {
+                        setState(() {
+                          if (type == 'colleges')
+                            _college = item;
+                          else
+                            _university = item;
+                        });
+                        Navigator.pop(context, item);
+                        print(item);
+                      },
+                    );
+                  },
+                );
+              }
+              return Center(child: CircularProgressIndicator());
+            },
+          );
+        });
+  }
+
+// _getUserInfo() async {
+//   DocumentSnapshot d =
+//   await _authController.getUserInfo(_authController.getUser.uid);
+//   User user = User().fromMap(d.data()).setId(d.id);
+//   MyUser.myUser = user;
+//   _authController.updateUserTag(user);
+//   setState(() {
+//     loading = false;
+//   });
+// }
+
 }
 
 class FriendWidget extends StatefulWidget {
@@ -760,12 +920,13 @@ class _FriendWidgetState extends State<FriendWidget> {
       future: _getUser,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          try{
-            _user = User().fromMap(snapshot.data)..setId(snapshot.data.id);
+          try {
+            _user = User().fromMap(snapshot.data)
+              ..setId(snapshot.data.id);
             return _friendBuilder();
-          }catch(e){return Container();}
-
-
+          } catch (e) {
+            return Container();
+          }
         }
         return Container();
       },

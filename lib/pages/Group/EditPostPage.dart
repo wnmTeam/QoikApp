@@ -45,8 +45,8 @@ class _EditPostPageState extends State<EditPostPage> {
                     loading = true;
                   });
                   await _postsController.updatePost(
-                    id_group: widget.group.id,
-                    id_post: widget.post.id,
+                    groupId: widget.group.id,
+                    postId: widget.post.id,
                     text: _postTextController.text,
                   );
                   Navigator.pop(

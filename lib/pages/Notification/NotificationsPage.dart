@@ -179,8 +179,8 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
                       break;
                     case 'client_comments_posts':
                       var d = await _postsControler.getPost(
-                        id_group: widget.notification.idGroup,
-                        id_post: widget.notification.idPost,
+                        groupId: widget.notification.idGroup,
+                        postId: widget.notification.idPost,
                       );
                       print('oooooooooooooooooooooooooooooooooooooooo');
                       print(d.data());
@@ -194,8 +194,8 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
                       break;
                     case 'commentMyPost':
                       var d = await _postsControler.getPost(
-                        id_group: widget.notification.idGroup,
-                        id_post: widget.notification.idPost,
+                        groupId: widget.notification.idGroup,
+                        postId: widget.notification.idPost,
                       );
                       Navigator.of(context).pushNamed(
                         '/PostPage',

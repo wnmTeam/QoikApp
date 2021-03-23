@@ -1,7 +1,7 @@
 import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/Models/Group.dart';
-import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/api/notification_api.dart';
 import 'package:stumeapp/controller/GroupsController.dart';
@@ -74,6 +74,27 @@ class AuthController {
         type: 'G',
       );
     return;
+  }
+
+  Future updateUserUniversity(User user) async {
+    await api.updateUserInfo(user);
+
+    if (user.college != null) {
+      await _groupsController.addMemberToGroup(
+        uid: getUser.uid,
+        id_group: user.groups[1],
+        name: user.university,
+        type: 'university',
+      );
+      print('un');
+      await _groupsController.addMemberToGroup(
+        uid: getUser.uid,
+        name: user.college,
+        id_group: user.groups[2],
+        type: 'college',
+      );
+      print('coll');
+    }
   }
 
   login(String email, String password) async {
@@ -190,7 +211,21 @@ class AuthController {
     return api.getLastVersion();
   }
 
+  getStoreLink() {
+    return api.getStoreLink();
+  }
+
   getLinks() {
     return api.getLinks();
+  }
+
+  setAllNotificationSetting(Map<String, bool> map) {
+    return api.setAllNotificationSetting(map);
+  }
+
+  getAllNotificationSetting() {
+    Future<dynamic> d = api.getAllNotificationSetting();
+
+    return d;
   }
 }

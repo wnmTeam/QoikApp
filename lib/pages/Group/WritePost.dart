@@ -7,6 +7,7 @@ import 'package:stumeapp/Sounds.dart';
 import 'package:stumeapp/controller/PostsController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 import 'package:stumeapp/localization.dart';
+import 'package:stumeapp/pages/widgets/FileWidget.dart';
 
 class WritePostPage extends StatefulWidget {
   final Group group;
@@ -24,6 +25,7 @@ class _WritePostPageState extends State<WritePostPage> {
   StorageController _storageController = StorageController();
 
   List<File> _images = [];
+  List<File> _files = [];
 
   bool waiting = false;
 
@@ -66,15 +68,16 @@ class _WritePostPageState extends State<WritePostPage> {
               child: FlatButton(
                   onPressed: () {
                     if (waiting) {
-                      return;
-                    }
-                    if (_postTextController.text.isEmpty &&
-                        _images.length == 0) {
-                      return;
-                    } else {
-                      _sendPost(_postTextController.text);
-                    }
-                  },
+                    return;
+                  }
+                  if (_postTextController.text.isEmpty &&
+                      _images.length == 0 &&
+                      _files.length == 0) {
+                    return;
+                  } else {
+                    _sendPost(_postTextController.text);
+                  }
+                },
                   child: waiting ? Icon(
                     Icons.watch_later_outlined,
                     color: Colors.white,
@@ -120,6 +123,12 @@ class _WritePostPageState extends State<WritePostPage> {
             ),
 
             Column(
+              children: [
+                for (File file in _files)
+                  FileWidget(file.path)
+              ],
+            ),
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _images.length == 0 ?
@@ -153,27 +162,35 @@ class _WritePostPageState extends State<WritePostPage> {
                                 _images.clear();
                               }
                               _images.add(File(pickedFile.path));
-                        });
-                      }
-                    }
-                  },
+                            });
+                          }
+                        }
+                      },
                   label: Text(
                     multiImages
                         ? Languages.translate(context, "add_image")
                         : Languages.translate(context, "change_image"),
                   ),
                 ),
+
+                //Send Files
                 TextButton.icon(
                   icon: Icon(Icons.insert_drive_file_rounded),
                   onPressed: () async {
-                    final pickedFile = await _storageController.getDoc();
+                    final pickedFile = await _storageController.getDocs();
                     if (pickedFile != null) {
+                      for (File file in pickedFile) {
+                        print("${file.path}\n");
+                        _files.add(file);
+                      }
+                      setState(() {
 
-
+                      });
                     }
                   },
                   label: Text(Languages.translate(context, "add_file")),
                 ),
+
                 // TextButton.icon(
                 //   icon: Icon(Icons.camera_alt),
                 //
@@ -184,60 +201,60 @@ class _WritePostPageState extends State<WritePostPage> {
                 //         setState(() {
                 //           _images.add(File(pickedFile.path));
                 //         });
-              //       }
-                //     }
-                //   },
-                //   label: Text(
-                //     Languages.translate(
-                //       context,
-                //       'chose_image',
-                //     ),
+                //       }
+                //       }
+                //     },
+                //     label: Text(
+                //       Languages.translate(
+                //         context,
+                //         'chose_image',
+                //       ),
                 //
+                //     ),
                 //   ),
-                // ),
-                // TextButton.icon(
-                //   icon: Icon(Icons.post_add),
-                //   onPressed: () {
-                //     if (_postTextController.text.isEmpty && _images.length == 0) {
-                //       return;
-                //     } else {
-                //       _sendPost(_postTextController.text);
-                //     }
-                //   },
-                //   label: !waiting
-                //       ? Text(
-                //           Languages.translate(
-                //             context,
-                //             'post',
+                //   TextButton.icon(
+                //     icon: Icon(Icons.post_add),
+                //     onPressed: () {
+                //       if (_postTextController.text.isEmpty && _images.length == 0) {
+                //         return;
+                //       } else {
+                //         _sendPost(_postTextController.text);
+                //       }
+                //     },
+                //     label: !waiting
+                //         ? Text(
+                //             Languages.translate(
+                //               context,
+                //               'post',
+                //             ),
+                //           )
+                //         : Row(
+                //             mainAxisAlignment: MainAxisAlignment.center,
+                //             mainAxisSize: MainAxisSize.min,
+                //             children: [
+                //               SizedBox(
+                //                   width: 18,
+                //                   height: 18,
+                //                   child: CircularProgressIndicator(
+                //                     backgroundColor: Colors.white,
+                //                   )),
+                //               SizedBox(
+                //                 width: 12,
+                //               ),
+                //               Text(
+                //                 Languages.translate(
+                //                   context,
+                //                   'whaiting',
+                //                 ),
+                //                 style: TextStyle(
+                //                   fontSize: size.width / ConstValues.fontSize_2,
+                //                   color: Colors.white,
+                //                   fontWeight: FontWeight.bold,
+                //                 ),
+                //               ),
+                //             ],
                 //           ),
-                //         )
-                //       : Row(
-                //           mainAxisAlignment: MainAxisAlignment.center,
-                //           mainAxisSize: MainAxisSize.min,
-                //           children: [
-                //             SizedBox(
-                //                 width: 18,
-                //                 height: 18,
-                //                 child: CircularProgressIndicator(
-                //                   backgroundColor: Colors.white,
-                //                 )),
-                //             SizedBox(
-                //               width: 12,
-                //             ),
-                //             Text(
-                //               Languages.translate(
-                //                 context,
-                //                 'whaiting',
-                //               ),
-                //               style: TextStyle(
-                //                 fontSize: size.width / ConstValues.fontSize_2,
-                //                 color: Colors.white,
-                //                 fontWeight: FontWeight.bold,
-                //               ),
-                //             ),
-                //           ],
-                //         ),
-                // ),
+                //   ),
               ],
           ),
         ],
@@ -249,7 +266,7 @@ class _WritePostPageState extends State<WritePostPage> {
     setState(() {
       waiting = true;
     });
-    await _postsController.createPost(text, _images, widget.group.id);
+    await _postsController.createPost(text, _images, _files, widget.group.id);
     sounds.postSound();
     Navigator.of(context).pop();
   }

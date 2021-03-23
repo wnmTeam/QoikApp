@@ -1,6 +1,7 @@
 import 'dart:async';
-import 'package:firebase_auth/firebase_auth.dart' as auth;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
 
@@ -61,6 +62,12 @@ class Auth {
     print(getUser.uid);
     print(user.toMap());
     return _firestore.collection("users").doc(getUser.uid).set(user.toMap());
+  }
+
+  Future<void> updateUserInfo(User user) {
+    print(getUser.uid);
+    print(user.toMap());
+    return _firestore.collection("users").doc(getUser.uid).update(user.toMap());
   }
 
   getUserInfo(String id) {
@@ -185,7 +192,28 @@ class Auth {
     return _firestore.collection('appInfo').doc('version').get(GetOptions());
   }
 
+  getStoreLink() {
+    return _firestore.collection('appInfo').doc('storeLinks').get();
+  }
+
   getLinks() {
     return _firestore.collection('appInfo').doc('links').get();
+  }
+
+  setAllNotificationSetting(Map<String, bool> map) {
+    print(getUser.uid);
+    return _firestore
+        .collection('NotificationsSettings')
+        .doc(getUser.uid)
+        .set(map);
+  }
+
+  getAllNotificationSetting() {
+    print(getUser.uid);
+
+    return _firestore
+        .collection('NotificationsSettings')
+        .doc(getUser.uid)
+        .get();
   }
 }

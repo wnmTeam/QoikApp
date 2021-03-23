@@ -73,7 +73,7 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
                 spacing: 5,
                 children: [
                   RaisedButton(
-                    elevation: 0,
+                    // elevation: 0,
                     onPressed: () async {
                       String item = await _bottomSheetBuild(
                         'universities',
@@ -95,7 +95,7 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
                     ),
                   ),
                   RaisedButton(
-                    elevation: 0,
+                    // elevation: 0,
                     onPressed: () async {
                       String item = await _bottomSheetBuild(
                         'colleges',
@@ -117,7 +117,7 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
                     ),
                   ),
                   RaisedButton(
-                    elevation: 0,
+                    // elevation: 0,
                     onPressed: () async {
                       String item = await _bottomSheetBuild('gender', null);
                       _search();
@@ -135,7 +135,20 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
                       borderRadius: BorderRadius.circular(25),
                     ),
                   ),
-                  RaisedButton(
+                  RaisedButton.icon(
+                    icon: Icon(
+                      Icons.clear,
+                      size: 17,
+                      color: Colors.white,
+                    ),
+                    label: Text(
+                        Languages.translate(
+                          context,
+                          'clear',
+                        ),
+                        style: TextStyle(
+                          color: Colors.white,
+                        )),
                     elevation: 0,
                     onPressed: () {
                       setState(() {
@@ -145,27 +158,6 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
                       });
                     },
                     color: Theme.of(context).primaryColor,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.clear,
-                          size: 17,
-                          color: Colors.white,
-                        ),
-                        SizedBox(
-                          width: 3,
-                        ),
-                        Text(
-                            Languages.translate(
-                              context,
-                              'clear',
-                            ),
-                            style: TextStyle(
-                              color: Colors.white,
-                            )),
-                      ],
-                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
                     ),

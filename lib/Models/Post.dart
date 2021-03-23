@@ -6,6 +6,7 @@ class Post {
   static const String TEXT = 'text';
   static const String DATE = 'date';
   static const String IMAGES = 'images';
+  static const String Files = 'files';
   static const String LIKE_COUNT = 'likeCount';
   static const String COMMENT_COUNT = 'commentCount';
   static const String FOLLOW_COUNT = 'followCount';
@@ -20,6 +21,7 @@ class Post {
   int followCount;
   DateTime date;
   List images = [];
+  List files = [];
 
   bool isLiked = false;
 
@@ -34,6 +36,7 @@ class Post {
     this.commentPointed,
     this.date,
     this.images,
+    this.files,
   });
 
   String get getStringDate {
@@ -61,7 +64,8 @@ class Post {
 
   get getIsLiked => isLiked;
 
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toMap() =>
+      {
         ID_OWNER: idOwner,
         TEXT: text,
         DATE: date,
@@ -70,6 +74,7 @@ class Post {
         FOLLOW_COUNT: followCount,
         COMMENT_POINTED: commentPointed,
         IMAGES: images,
+        Files: files,
       };
 
   Post fromMap(map) {
@@ -81,6 +86,7 @@ class Post {
     this.followCount = map[FOLLOW_COUNT];
     this.commentPointed = map[COMMENT_POINTED];
     this.images = map[IMAGES];
+    this.files = map[Files];
     return this;
   }
 

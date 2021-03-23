@@ -17,6 +17,7 @@ import 'package:stumeapp/api/notification_api.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
+import 'package:stumeapp/main.dart';
 import 'package:stumeapp/pages/ChatRoom/Emoji.dart';
 import 'package:stumeapp/pages/ImageView/ImageView.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -239,7 +240,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                     right: 0,
                     bottom: 0,
                     child: Image.asset(
-                      "assets/chat_bg.png",
+                      MyAppState.isDark
+                          ? "assets/chat_bg_dark.png"
+                          : "assets/chat_bg.png",
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -393,6 +396,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                                 hintStyle: TextStyle(
                                                     color: Colors.grey),
                                               ),
+                                              style: TextStyle(
+                                                  color: Colors.black),
                                               onTap: () {
                                                 if (emojiHeight != 0.0) {
                                                   setState(() {
@@ -1156,30 +1161,6 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
         .length < 2
         ? "0" + message.date.minute.toString()
         : message.date.minute.toString();
-    print("message \n");
-    print("message \n");
-    print("message \n");
-    print("message \n");
-    if (message.text != null) {
-      print("text " + message.text);
-    } else {
-      print("text null");
-    }
-    if (message.doc != null) {
-      // print("doc " + message.doc.path);
-    } else {
-      print("doc null");
-    }
-    if (message.images != null) {
-      print("images " + message.images.toString());
-    } else {
-      print("images null");
-    }
-    print("id " + message.id);
-    print("message \n");
-    print("message \n");
-    print("message \n");
-    print("message \n");
     return Expanded(
       child: Column(
         crossAxisAlignment:
@@ -1382,9 +1363,10 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
     return Container(
       color: Colors.white24,
       child: ListTile(
-        title: Text(doc.path
-            .split('/')
-            .last),
+        title: Text(
+          doc.path.split('/').last,
+          maxLines: 3,
+        ),
         leading: Icon(Icons.insert_drive_file_rounded),
         trailing: IconButton(
           icon: Icon(Icons.file_download),

@@ -25,14 +25,17 @@ class _StartingPageState extends State<StartingPage> {
   bool canGo = false;
   String appUrl = "";
 
-  //TODO : Get the links from the server
-  String googlePlayUrl =
-      "https://play.google.com/store/apps/details?id=com.company.QoiqApp";
-  String appStoreUrl =
-      "https://play.google.com/store/apps/details?id=com.abosak.stumeapp";
+  String googlePlayUrl;
+
+  String appStoreUrl;
 
   _check() async {
     var lastV = await _controller.getLastVersion();
+
+    var storeLink = await _controller.getStoreLink();
+    googlePlayUrl = storeLink.data()["googleStore"];
+    appStoreUrl = storeLink.data()["appleStore"];
+
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     // String version = packageInfo.version;
     // String packageName = packageInfo.packageName;
@@ -86,7 +89,6 @@ class _StartingPageState extends State<StartingPage> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        //TODO: Change the image
                         Image.asset("assets/login.png"),
                         Text(
                           Languages.translate(context, "update_message"),
