@@ -132,5 +132,10 @@
   "send": "إرسال",
   "add_file": "إضافة ملف",
   "empty": "فارغ",
-  "more": "المزيد"
+  "more": "المزيد",
+  "Test": "Test",
+  "New Admin": "مشرف جديد",
+  "Active Admin": "مشرف نشيط",
+  "Premium Admin": "مشرف مميز",
+  "Verified Admin": "مشرف موثوق"
 }

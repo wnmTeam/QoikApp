@@ -50,8 +50,8 @@ class PostsApi {
     }
   }
 
-  Future createPost(String text, List<File> images, List<File> files,
-      String groupId) async {
+  Future createPost(
+      String text, List<File> images, List<File> files, String groupId) async {
     CollectionReference reference;
 
     reference =
@@ -98,8 +98,12 @@ class PostsApi {
     }, SetOptions(merge: true));
   }
 
-  Future createComment({Comment comment, Post post, String groupId, File
-  image, File file}) async {
+  Future createComment(
+      {Comment comment,
+      Post post,
+      String groupId,
+      File image,
+      File file}) async {
     CollectionReference reference;
     reference = _fireStore
         .collection('groups')
@@ -132,7 +136,6 @@ class PostsApi {
       'image': "imageTest",
       "file": "fileTest"
     });
-
 
     _notificationApi.sendNotification(
         noti.Notification(
@@ -189,17 +192,17 @@ class PostsApi {
       log(reference.path, name: 'reference');
       return reference
           .orderBy(
-        Comment.DATE,
-        descending: true,
-      )
+            Comment.DATE,
+            descending: true,
+          )
           .limit(limit)
           .get();
     } else {
       return reference
           .orderBy(
-        Comment.DATE,
-        descending: true,
-      )
+            Comment.DATE,
+            descending: true,
+          )
           .startAfterDocument(last)
           .limit(limit)
           .get();
@@ -214,8 +217,8 @@ class PostsApi {
         .doc(postId)
         .collection('comments')
         .orderBy(
-      Comment.DATE,
-    )
+          Comment.DATE,
+        )
         .startAfter([DateTime.now()]).snapshots();
   }
 
@@ -268,7 +271,7 @@ class PostsApi {
           .collection('posts')
           .doc(postId)
           .set(
-          {'likeCount': FieldValue.increment(-1)}, SetOptions(merge: true));
+              {'likeCount': FieldValue.increment(-1)}, SetOptions(merge: true));
     }
 
     print('no like');
@@ -320,7 +323,7 @@ class PostsApi {
           .collection('posts')
           .doc(postId)
           .set({'followCount': FieldValue.increment(-1)},
-          SetOptions(merge: true));
+              SetOptions(merge: true));
     }
 
     await _fireStore
@@ -387,7 +390,7 @@ class PostsApi {
           .collection('comments')
           .doc(commentId)
           .set(
-          {'likeCount': FieldValue.increment(-1)}, SetOptions(merge: true));
+              {'likeCount': FieldValue.increment(-1)}, SetOptions(merge: true));
     }
 
     await _fireStore
@@ -493,5 +496,35 @@ class PostsApi {
         .collection('posts')
         .doc(postId)
         .get();
+  }
+
+  deleteComment({String comment_id, String post_id, String group_id}) {
+    print(group_id);
+    print(post_id);
+    print(comment_id);
+    WriteBatch b = _fireStore.batch();
+
+    var d = _fireStore
+        .collection('groups')
+        .doc(group_id)
+        .collection('posts')
+        .doc(post_id);
+    b.set(d, {Post.COMMENT_COUNT: FieldValue.increment(-1)},
+        SetOptions(merge: true));
+    b.delete(d.collection('comments').doc(comment_id));
+
+    return b.commit();
+  }
+
+  updateComment(
+      {String text, String comment_id, String post_id, String group_id}) {
+    return _fireStore
+        .collection('groups')
+        .doc(group_id)
+        .collection('posts')
+        .doc(post_id)
+        .collection('comments')
+        .doc(comment_id)
+        .set({'text': text}, SetOptions(merge: true));
   }
 }

@@ -64,8 +64,7 @@ class PostsController {
         group: group,
       );
 
-  getPostChanges({String postId, Group group}) =>
-      api.getPostChanges(
+  getPostChanges({String postId, Group group}) => api.getPostChanges(
         postId: postId,
         group: group,
       );
@@ -95,7 +94,7 @@ class PostsController {
       );
 
   isLikeComment(
-      {String userId, Group group, String postId, String commentId}) =>
+          {String userId, Group group, String postId, String commentId}) =>
       api.isLikeComment(
         group: group,
         postId: postId,
@@ -144,5 +143,22 @@ class PostsController {
 
   getPost({String groupId, String postId}) {
     return api.getPost(groupId: groupId, postId: postId);
+  }
+
+  Future deleteComment({String post_id, String comment_id, String group_id}) {
+    return api.deleteComment(
+      comment_id: comment_id,
+      post_id: post_id,
+      group_id: group_id,
+    );
+  }
+
+  updateComment({String text, String comment_id, String post_id, String group_id}) {
+    return api.updateComment(
+      text: text,
+      comment_id: comment_id,
+      post_id: post_id,
+      group_id: group_id,
+    );
   }
 }

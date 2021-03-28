@@ -101,7 +101,7 @@ class _GroupsChatsTabState extends State<GroupsChatsTab>
           color: Theme.of(context).primaryColor,
         ),
       ),
-      subtitle: group.type == Group.TYPE_MOFADALAH || group.type == 'G'
+      subtitle: group.type == Group.TYPE_MOFADALAH || group.type == 'G'|| group.type == 'test'
           ? Text('')
           : Text(group.name),
       contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),

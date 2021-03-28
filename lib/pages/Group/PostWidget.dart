@@ -486,6 +486,7 @@ class _PostWidgetState extends State<PostWidget>
                         ..setId(comments[i].id),
                       post: widget.post,
                       group: widget.group,
+                      doc: comments[i],
                       addPoint: (id) async {
                         var d = await _postsController.getPostChanges(
                           group: widget.group,
@@ -499,6 +500,14 @@ class _PostWidgetState extends State<PostWidget>
                           postId: post.id,
                         );
                         if (d.data() != null) widget.updatePost(d);
+                      },
+                      deleteComment: (comment) async {
+                        var d = await _postsController.getPostChanges(
+                          group: widget.group,
+                          postId: post.id,
+                        );
+                        if (d.data() != null) widget.updatePost(d);
+                        comments.remove(comment);
                       },
                     ),
                 if (commentsShow)
@@ -523,6 +532,7 @@ class _PostWidgetState extends State<PostWidget>
                                         ..setId(newComments[i].id),
                                       post: widget.post,
                                       group: widget.group,
+                                      doc: newComments[i],
                                       addPoint: (id) async {
                                         var d = await _postsController
                                             .getPostChanges(
@@ -540,6 +550,14 @@ class _PostWidgetState extends State<PostWidget>
                                         );
                                         if (d.data() != null)
                                           widget.updatePost(d);
+                                      },
+                                      deleteComment: (comment) async {
+                                        var d = await _postsController.getPostChanges(
+                                          group: widget.group,
+                                          postId: post.id,
+                                        );
+                                        if (d.data() != null) widget.updatePost(d);
+                                        comments.remove(comment);
                                       },
                                     ),
                                 ],
@@ -737,8 +755,8 @@ class _PostWidgetState extends State<PostWidget>
                   }
                 },
                 items: <String>[
-                  if (MyUser.myUser.id == widget.post.idOwner) 'Edit',
-                  if (MyUser.myUser.id == widget.post.idOwner) 'Delete',
+                  if (MyUser.myUser.id == widget.post.idOwner || MyUser.myUser.isAdmin()) 'Edit',
+                  if (MyUser.myUser.id == widget.post.idOwner || MyUser.myUser.isAdmin()) 'Delete',
                   if (MyUser.myUser.id != widget.post.idOwner) 'Report',
                 ].map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(

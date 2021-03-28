@@ -65,39 +65,37 @@ class _GroupPageState extends State<GroupPage>
                         .subtitle1,
                   )
                 : widget.group.type == Group.TYPE_COLLEGE
-                ? Text(
-              Languages.translate(
-                context,
-                'my_college',
-              ),
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .copyWith(subtitle1: TextStyle(color: Colors.white))
-                  .subtitle1,
-            )
-                : Text(
-              Languages.translate(
-                context,
-                widget.group.id,
-              ),
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .copyWith(subtitle1: TextStyle(color: Colors.white))
-                  .subtitle1,
-            ),
+                    ? Text(
+                        Languages.translate(
+                          context,
+                          'my_college',
+                        ),
+                        style: Theme.of(context)
+                            .textTheme
+                            .copyWith(subtitle1: TextStyle(color: Colors.white))
+                            .subtitle1,
+                      )
+                    : Text(
+                        Languages.translate(
+                          context,
+                          widget.group.id,
+                        ),
+                        style: Theme.of(context)
+                            .textTheme
+                            .copyWith(subtitle1: TextStyle(color: Colors.white))
+                            .subtitle1,
+                      ),
             subtitle: widget.group.type == 'G' ||
-                widget.group.type == Group.TYPE_MOFADALAH
+                    widget.group.type == Group.TYPE_MOFADALAH ||
+                    widget.group.type == 'test'
                 ? null
                 : Text(
-              widget.group.name,
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .copyWith(caption: TextStyle(color: Colors.white))
-                  .caption,
-            ),
+                    widget.group.name,
+                    style: Theme.of(context)
+                        .textTheme
+                        .copyWith(caption: TextStyle(color: Colors.white))
+                        .caption,
+                  ),
             leading: Container(
               width: 38,
               height: 38,
@@ -106,9 +104,7 @@ class _GroupPageState extends State<GroupPage>
                 children: [
                   SvgPicture.asset(
                     'assets/col.svg',
-                    color: Theme
-                        .of(context)
-                        .primaryColor,
+                    color: Theme.of(context).primaryColor,
                     width: 20,
                     height: 20,
                   ),

@@ -24,6 +24,13 @@ class User {
   static const String TAG_PREMIUM_USER = 'Premium User';
   static const String TAG_VERIFIED_USER = 'Verified User';
 
+  static const String USER_TAG_NEW_ADMIN = 'New Admin';
+  static const String USER_TAG_ACTIVE_ADMIN = 'Active Admin';
+  static const String USER_TAG_PREMIUM_ADMIN = 'Premium Admin';
+  static const String USER_TAG_VERIFIED_ADMIN = 'Verified Admin';
+  static const String USER_TAG_NORMAL_USER = 'new_user';
+  static const String USER_TAG_ADMIN = 'admin';
+
   static const String DEGREE_HIGH_SCHOOL = 'high school';
 
   String firstName;
@@ -114,5 +121,13 @@ class User {
   User setId(String id) {
     this.id = id;
     return this;
+  }
+
+  bool isAdmin() {
+    return userTag == USER_TAG_ACTIVE_ADMIN ||
+        userTag == USER_TAG_ADMIN ||
+        userTag == USER_TAG_NEW_ADMIN ||
+        userTag == USER_TAG_PREMIUM_ADMIN ||
+        userTag == USER_TAG_VERIFIED_ADMIN;
   }
 }
