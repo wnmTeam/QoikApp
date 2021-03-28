@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
+// TODO
+
+// import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:stumeapp/controller/LibraryController.dart';
 
 class BookViewerPage extends StatefulWidget {
@@ -16,7 +18,7 @@ class BookViewerPage extends StatefulWidget {
 
 class _BookViewerPageState extends State<BookViewerPage> {
   bool _isLoading = true;
-  PDFDocument document;
+  // PDFDocument document;
   String url;
 
   LibraryController _libraryController = LibraryController();
@@ -31,7 +33,7 @@ class _BookViewerPageState extends State<BookViewerPage> {
     url = await _libraryController.getDownloadLink(
       id: widget.id,
     );
-    document = await PDFDocument.fromURL(url);
+    // document = await PDFDocument.fromURL(url);
 
     setState(() => _isLoading = false);
   }
@@ -44,11 +46,11 @@ class _BookViewerPageState extends State<BookViewerPage> {
         title: Text(widget.id),
       ),
       body: Center(
-        child: _isLoading
-            ? Center(child: CircularProgressIndicator())
-            : PDFViewer(
-          document: document,
-        ),
+        // child: _isLoading
+        //     ? Center(child: CircularProgressIndicator())
+        //     : PDFViewer(
+        //   document: document,
+        // ),
       ),
     );
   }

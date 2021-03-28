@@ -29,55 +29,56 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.0
+  cupertino_icons: ^1.0.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   # Firebase
-  firebase_auth: ^0.18.3
-  firebase_core: ^0.5.2
-  firebase_storage:
-  firebase_messaging: ^7.0.3
-  cloud_firestore: ^0.14.3+1
+  firebase_auth: ^1.0.1
+  firebase_core: ^1.0.2
+  firebase_storage: ^8.0.0
+  firebase_messaging: ^9.0.1
+  cloud_firestore: ^1.0.2
+
 
   # Images
-  image_picker:
-  flutter_svg:
-  cached_network_image: ^2.5.0
-  photo_view: ^0.10.3
+  image_picker: ^0.7.3
+  flutter_svg: ^0.21.0-nullsafety.0
+  cached_network_image: ^3.0.0-nullsafety
+  photo_view: ^0.11.1
 
   # Localizations
   flutter_localizations:
     sdk: flutter
 
   # Storage
-  shared_preferences: ^0.5.12+4
+  shared_preferences: ^2.0.5
 
   # Pdf
-  advance_pdf_viewer:
+#  advance_pdf_viewer:
 
   # File
-  file_picker: ^1.4.2
+#  file_picker: ^3.0.0
 
   # Other
-  timeago: ^2.0.29
-  url_launcher: ^5.7.5
-  toast:
-  package_info:
-  badges: ^1.1.6
-  day_night_switcher:
+  timeago: ^3.0.2
+  url_launcher: ^6.0.3
+#  toast:
+  package_info: ^2.0.0
+  badges: ^2.0.0-nullsafety.1
+  day_night_switcher: ^0.2.0+1
 
   # Emoji keyBoard
-  emoji_pick: ^0.1.0
+#  emoji_pick: ^0.1.0
 
   # Text to link
-  flutter_linkify: ^4.0.2
+  flutter_linkify: ^5.0.0
 
   # Sound effect
-  audioplayers: ^0.13.2
-  shimmer: ^1.1.2
+#  audioplayers: ^0.18.1
+  shimmer: ^2.0.0-nullsafety.0
 
 
 # For information on the generic Dart part of this file, see the

@@ -30,12 +30,12 @@ class _WritePostPageState extends State<WritePostPage> {
   bool waiting = false;
 
   Size size;
-  Sounds sounds = Sounds();
+  // Sounds sounds = Sounds();
   bool multiImages = true;
 
   @override
   void dispose() {
-    sounds.dispose();
+    // sounds.dispose();
 
     super.dispose();
   }
@@ -267,7 +267,7 @@ class _WritePostPageState extends State<WritePostPage> {
       waiting = true;
     });
     await _postsController.createPost(text, _images, _files, widget.group.id);
-    sounds.postSound();
+    // sounds.postSound();
     Navigator.of(context).pop();
   }
 

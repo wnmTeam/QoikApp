@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
   AuthController _authController = AuthController();
   NotificationApi _notificationApi = NotificationApi();
   ChatController chatsController = ChatController();
-  final FirebaseMessaging fbm = FirebaseMessaging();
+  final FirebaseMessaging fbm = FirebaseMessaging.instance;
   final AuthController _controller = AuthController();
 
   String getChatID(id) {
@@ -62,61 +62,63 @@ class _HomePageState extends State<HomePage> {
       LibraryTab(),
     ];
 
-    fbm.requestNotificationPermissions();
-    fbm.configure(
-      onMessage: (msg) {
-        print(msg);
-        return;
-      },
-      onLaunch: (msg) {
-        print(msg);
-        String type = msg['data']['type'];
-        String id_sender = msg['data']['id_sender'];
+    fbm.requestPermission();
+    // TODO
 
-        switch (type) {
-          case 'chats':
-            var d = chatsController.getChat(getChatID(id_sender));
-
-            Navigator.pushNamed(context, '/ChatRoomPage', arguments: {
-              'group': Group().fromMap(d.data())..setId(d.id),
-              'user': User().fromMap(d.data()),
-            });
-            break;
-          case 'rooms':
-            break;
-          default:
-            Navigator.pushNamed(
-              context,
-              '/NotificationsPage',
-            );
-        }
-        return;
-      },
-      onResume: (msg) {
-        print(msg);
-        String type = msg['data']['type'];
-        String id_sender = msg['data']['id_sender'];
-
-        switch (type) {
-          case 'chats':
-            var d = chatsController.getChat(getChatID(id_sender));
-
-            Navigator.pushNamed(context, '/ChatRoomPage', arguments: {
-              'group': Group().fromMap(d.data())..setId(d.id),
-              'user': User().fromMap(d.data()),
-            });
-            break;
-          case 'rooms':
-            break;
-          default:
-            Navigator.pushNamed(
-              context,
-              '/NotificationsPage',
-            );
-        }
-        return;
-      },
-    );
+    // fbm.configure(
+    //   onMessage: (msg) {
+    //     print(msg);
+    //     return;
+    //   },
+    //   onLaunch: (msg) {
+    //     print(msg);
+    //     String type = msg['data']['type'];
+    //     String id_sender = msg['data']['id_sender'];
+    //
+    //     switch (type) {
+    //       case 'chats':
+    //         var d = chatsController.getChat(getChatID(id_sender));
+    //
+    //         Navigator.pushNamed(context, '/ChatRoomPage', arguments: {
+    //           'group': Group().fromMap(d.data())..setId(d.id),
+    //           'user': User().fromMap(d.data()),
+    //         });
+    //         break;
+    //       case 'rooms':
+    //         break;
+    //       default:
+    //         Navigator.pushNamed(
+    //           context,
+    //           '/NotificationsPage',
+    //         );
+    //     }
+    //     return;
+    //   },
+    //   onResume: (msg) {
+    //     print(msg);
+    //     String type = msg['data']['type'];
+    //     String id_sender = msg['data']['id_sender'];
+    //
+    //     switch (type) {
+    //       case 'chats':
+    //         var d = chatsController.getChat(getChatID(id_sender));
+    //
+    //         Navigator.pushNamed(context, '/ChatRoomPage', arguments: {
+    //           'group': Group().fromMap(d.data())..setId(d.id),
+    //           'user': User().fromMap(d.data()),
+    //         });
+    //         break;
+    //       case 'rooms':
+    //         break;
+    //       default:
+    //         Navigator.pushNamed(
+    //           context,
+    //           '/NotificationsPage',
+    //         );
+    //     }
+    //     return;
+    //   },
+    // );
   }
 
   _getUserInfo() async {

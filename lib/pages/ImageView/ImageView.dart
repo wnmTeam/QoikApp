@@ -31,33 +31,34 @@ class _ImageViewState extends State<ImageView> {
       extendBodyBehindAppBar: true,
       appBar: showAppBar
           ? AppBar(
-        backgroundColor: Colors.transparent,
-      )
+              backgroundColor: Colors.transparent,
+            )
           : null,
       body: PhotoView(
         backgroundDecoration: BoxDecoration(
           color: Colors.white,
         ),
-        imageProvider: widget.isFile ? FileImage(widget.image) : NetworkImage(
-            url),
+        imageProvider:
+            widget.isFile ? FileImage(widget.image) : NetworkImage(url),
         enableRotation: true,
         heroAttributes: PhotoViewHeroAttributes(tag: url),
         minScale: PhotoViewComputedScale.contained,
-        errorBuilder: (context, error, stackTrace) =>
-            Center(
-              child: Icon(
-                Icons.error_outline,
-                color: Colors.red,
-                size: width / 2,
-              ),
-            ),
-        loadFailedChild: Center(
+        errorBuilder: (context, error, stackTrace) => Center(
           child: Icon(
             Icons.error_outline,
             color: Colors.red,
             size: width / 2,
           ),
         ),
+        // TODO
+
+        // loadFailedChild: Center(
+        //   child: Icon(
+        //     Icons.error_outline,
+        //     color: Colors.red,
+        //     size: width / 2,
+        //   ),
+        // ),
         loadingBuilder: (context, event) => Padding(
           padding: EdgeInsets.all(50),
           child: Column(

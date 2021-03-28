@@ -21,7 +21,7 @@ import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/ImageView/ImageView.dart';
 import 'package:stumeapp/pages/widgets/FileWidget.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
-import 'package:toast/toast.dart';
+// import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'CommentWidget.dart';
@@ -69,7 +69,7 @@ class _PostWidgetState extends State<PostWidget>
   Future _getUser;
 
   bool tag = true;
-  Sounds sounds = Sounds();
+  // Sounds sounds = Sounds();
 
   Color buttonsColor;
 
@@ -78,7 +78,7 @@ class _PostWidgetState extends State<PostWidget>
 
   @override
   void dispose() {
-    sounds.dispose();
+    // sounds.dispose();
     super.dispose();
   }
 
@@ -202,15 +202,15 @@ class _PostWidgetState extends State<PostWidget>
                           Clipboard.setData(
                               ClipboardData(text: post.text))
                               .then((value) {
-                            Toast.show(
-                              Languages.translate(context, 'text_copied'),
-                              context,
-                              duration: Toast.LENGTH_LONG,
-                              backgroundColor:
-                              Theme
-                                  .of(context)
-                                  .primaryColor,
-                            );
+                            // Toast.show(
+                            //   Languages.translate(context, 'text_copied'),
+                            //   context,
+                            //   duration: Toast.LENGTH_LONG,
+                            //   backgroundColor:
+                            //   Theme
+                            //       .of(context)
+                            //       .primaryColor,
+                            // );
 
                             // Scaffold.of(context).showSnackBar(
                             //     SnackBar(content:Text('The text copied')));
@@ -321,9 +321,9 @@ class _PostWidgetState extends State<PostWidget>
                               widget.updatePost(d);
 
                               if (post.isLiked) {
-                                sounds.likeSound();
+                                // sounds.likeSound();
                               } else {
-                                sounds.disLikeSound();
+                                // sounds.disLikeSound();
                               }
                             }
                           },
@@ -650,7 +650,7 @@ class _PostWidgetState extends State<PostWidget>
                                 image: image,
                                 file: file
                             );
-                            sounds.commentSound();
+                            // sounds.commentSound();
                           } else
                             showDialog(
                                 context: context,

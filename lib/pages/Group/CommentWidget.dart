@@ -17,7 +17,7 @@ import 'package:stumeapp/main.dart';
 import 'package:stumeapp/pages/ImageView/ImageView.dart';
 import 'package:stumeapp/pages/widgets/FileWidget.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
-import 'package:toast/toast.dart';
+// import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../const_values.dart';
@@ -50,7 +50,7 @@ class _CommentWidgetState extends State<CommentWidget> {
   User user;
   bool _isCommentExpended = false;
 
-  Sounds sounds = Sounds();
+  // Sounds sounds = Sounds();
 
   final Color baseColor = MyAppState.isDark ? Colors.black87 : Colors.grey[100];
   final Color highlightColor =
@@ -58,7 +58,7 @@ class _CommentWidgetState extends State<CommentWidget> {
 
   @override
   void dispose() {
-    sounds.dispose();
+    // sounds.dispose();
     super.dispose();
   }
 
@@ -97,12 +97,12 @@ class _CommentWidgetState extends State<CommentWidget> {
         onLongPress: () {
           Clipboard.setData(ClipboardData(text: widget.comment.text))
               .then((value) {
-            Toast.show(
-              Languages.translate(context, 'text_copied'),
-              context,
-              duration: Toast.LENGTH_LONG,
-              backgroundColor: Theme.of(context).primaryColor,
-            );
+            // Toast.show(
+            //   Languages.translate(context, 'text_copied'),
+            //   context,
+            //   duration: Toast.LENGTH_LONG,
+            //   backgroundColor: Theme.of(context).primaryColor,
+            // );
 
             // Scaffold.of(context).showSnackBar(
             //     SnackBar(content:Text('The text copied')));
@@ -292,9 +292,9 @@ class _CommentWidgetState extends State<CommentWidget> {
                               commentId: widget.comment.id,
                             );
                             if (widget.comment.isLiked) {
-                              sounds.likeSound();
+                              // sounds.likeSound();
                             } else {
-                              sounds.disLikeSound();
+                              // sounds.disLikeSound();
                             }
                           },
                         );

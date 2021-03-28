@@ -4,7 +4,7 @@ import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/RegesterLogin/RegisterLoginPage.dart';
-import 'package:toast/toast.dart';
+// import 'package:toast/toast.dart';
 
 class ChangePasswordPage extends StatefulWidget {
   @override
@@ -122,11 +122,13 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       return count++ == 2;
                     });
                   } catch (e) {
-                    Toast.show("Fail", context,
-                        backgroundColor: Colors.grey,
-                        textColor: Colors.white,
-                        duration: Toast.LENGTH_LONG,
-                        gravity: Toast.CENTER);
+                    // TODO
+
+                    // Toast.show("Fail", context,
+                    //     backgroundColor: Colors.grey,
+                    //     textColor: Colors.white,
+                    //     duration: Toast.LENGTH_LONG,
+                    //     gravity: Toast.CENTER);
                   }
                   setState(() {
                     updating = false;

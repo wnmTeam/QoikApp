@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:emoji_pick/emoji_pick.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,7 +20,7 @@ import 'package:stumeapp/main.dart';
 import 'package:stumeapp/pages/ChatRoom/Emoji.dart';
 import 'package:stumeapp/pages/ImageView/ImageView.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:toast/toast.dart';
+// import 'package:toast/toast.dart';
 
 
 import '../../const_values.dart';
@@ -88,7 +87,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
   List<String> _tabsName = Emoji.TABS_NAMES;
   List<dynamic> _tabsEmoji = Emoji.TABS_EMOJI;
 
-  Sounds sounds = Sounds();
+  // Sounds sounds = Sounds();
   static const _MAX_VALUE = 0x100000000;
   final _random = Random();
 
@@ -125,7 +124,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
       id_group: widget.group.id,
       id_user: MyUser.myUser.id,
     );
-    sounds.dispose();
+    // sounds.dispose();
     super.dispose();
   }
 
@@ -697,12 +696,12 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                 ],
                         ),
                       ),
-                      Emojies(
-                          tabsname: _tabsName,
-                          tabsemoji: _tabsEmoji,
-                          maxheight: emojiHeight,
-                          inputtext: _messageController,
-                          bgcolor: Colors.white),
+                      // Emojies(
+                      //     tabsname: _tabsName,
+                      //     tabsemoji: _tabsEmoji,
+                      //     maxheight: emojiHeight,
+                      //     inputtext: _messageController,
+                      //     bgcolor: Colors.white),
                     ],
                   ),
                 ],
@@ -1089,13 +1088,13 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
           Clipboard.setData(
               ClipboardData(text: message.text))
               .then((value) {
-            Toast.show(
-              Languages.translate(context, 'text_copied'),
-              context,
-              duration: Toast.LENGTH_LONG,
-              backgroundColor:
-              Theme.of(context).primaryColor,
-            );
+            // Toast.show(
+            //   Languages.translate(context, 'text_copied'),
+            //   context,
+            //   duration: Toast.LENGTH_LONG,
+            //   backgroundColor:
+            //   Theme.of(context).primaryColor,
+            // );
 
             // Scaffold.of(context).showSnackBar(
             //     SnackBar(content:Text('The text copied')));
@@ -1542,6 +1541,6 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
     _images = [];
     doc = null;
     _messageController.clear();
-    sounds.sendMessageSound();
+    // sounds.sendMessageSound();
   }
 }

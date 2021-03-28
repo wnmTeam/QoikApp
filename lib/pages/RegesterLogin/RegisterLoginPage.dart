@@ -5,7 +5,7 @@ import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/localization.dart';
-import 'package:toast/toast.dart';
+// import 'package:toast/toast.dart';
 
 import 'Widgets.dart';
 
@@ -663,14 +663,16 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               if ((_degree == null) ||
                   (_degree != 'high school' &&
                       (_college == null || _university == null))) {
-                Toast.show(
-                    Languages.translate(context, "Please_Chose_degree"),
-                    context,
-                    backgroundColor: Theme
-                        .of(context)
-                        .errorColor,
-                    duration: Toast.LENGTH_LONG,
-                    gravity: Toast.CENTER);
+                // TODO
+
+                // Toast.show(
+                //     Languages.translate(context, "Please_Chose_degree"),
+                //     context,
+                //     backgroundColor: Theme
+                //         .of(context)
+                //         .errorColor,
+                //     duration: Toast.LENGTH_LONG,
+                //     gravity: Toast.CENTER);
                 return;
               }
               setState(() {

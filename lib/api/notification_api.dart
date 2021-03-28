@@ -9,67 +9,69 @@ import 'package:stumeapp/Models/User.dart';
 //import 'package:stumeapp/controller/AuthController.dart';
 
 class NotificationApi {
-  final FirebaseMessaging fbm = FirebaseMessaging();
+  final FirebaseMessaging fbm = FirebaseMessaging.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 //  AuthController _authController = AuthController();
 
   requestNotificationPermissions(context) async {
-    fbm.requestNotificationPermissions();
-    fbm.configure(
-      onMessage: (msg) {
-        print(msg);
-        return;
-      },
-      onLaunch: (msg) {
-        print(msg);
-        String type = msg['data']['type'];
-        String id_sender = msg['data']['id_sender'];
+    fbm.requestPermission();
+    // TODO
 
-        switch (type) {
-          case 'chats':
-//            var d = _authController.getUserInfo(id_sender);
-
-//            Navigator.pushNamed(context, '/ChatRoomPage', arguments: {
-//              'group': null,
-//              'user': User().fromMap(d.data()),
-//            });
-            break;
-          case 'rooms':
-            break;
-          default:
-            Navigator.pushNamed(
-              context,
-              '/NotificationsPage',
-            );
-        }
-        return;
-      },
-      onResume: (msg) {
-        print(msg);
-        String type = msg['data']['type'];
-        String id_sender = msg['data']['id_sender'];
-
-        switch (type) {
-          case 'chats':
-//            var d = _authController.getUserInfo(id_sender);
-
-//            Navigator.pushNamed(context, '/ChatRoomPage', arguments: {
-//              'group': null,
-//              'user': User().fromMap(d.data())..setId(d.id),
-//            });
-            break;
-          case 'rooms':
-            break;
-          default:
-            Navigator.pushNamed(
-              context,
-              '/NotificationsPage',
-            );
-        }
-        return;
-      },
-    );
+//     FirebaseMessaging.configure(
+//       onMessage: (msg) {
+//         print(msg);
+//         return;
+//       },
+//       onLaunch: (msg) {
+//         print(msg);
+//         String type = msg['data']['type'];
+//         String id_sender = msg['data']['id_sender'];
+//
+//         switch (type) {
+//           case 'chats':
+// //            var d = _authController.getUserInfo(id_sender);
+//
+// //            Navigator.pushNamed(context, '/ChatRoomPage', arguments: {
+// //              'group': null,
+// //              'user': User().fromMap(d.data()),
+// //            });
+//             break;
+//           case 'rooms':
+//             break;
+//           default:
+//             Navigator.pushNamed(
+//               context,
+//               '/NotificationsPage',
+//             );
+//         }
+//         return;
+//       },
+//       onResume: (msg) {
+//         print(msg);
+//         String type = msg['data']['type'];
+//         String id_sender = msg['data']['id_sender'];
+//
+//         switch (type) {
+//           case 'chats':
+// //            var d = _authController.getUserInfo(id_sender);
+//
+// //            Navigator.pushNamed(context, '/ChatRoomPage', arguments: {
+// //              'group': null,
+// //              'user': User().fromMap(d.data())..setId(d.id),
+// //            });
+//             break;
+//           case 'rooms':
+//             break;
+//           default:
+//             Navigator.pushNamed(
+//               context,
+//               '/NotificationsPage',
+//             );
+//         }
+//         return;
+//       },
+//     );
   }
 //  requestNotificationPermissions(context) async {
 //    fbm.requestNotificationPermissions();

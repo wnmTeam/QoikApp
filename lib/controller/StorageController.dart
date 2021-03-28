@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
+// import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as str;
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -79,7 +79,8 @@ class StorageController {
 
   Future<File> getDoc() async {
     // File x = await FilePicker.getFile();
-    return await FilePicker.getFile();
+    // TODO
+    // return await FilePicker.getFile();
 
 //    if(result != null) {
 //      PlatformFile file = result.files.first;
@@ -95,7 +96,8 @@ class StorageController {
   }
 
   Future<List<File>> getDocs() async {
-    return await FilePicker.getMultiFile();
+    // TODO
+    // return await FilePicker.getMultiFile();
   }
 
   Future uploadPic(context, img, id_user) async {
