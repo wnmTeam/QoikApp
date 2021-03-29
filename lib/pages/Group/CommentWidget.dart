@@ -253,6 +253,8 @@ class _CommentWidgetState extends State<CommentWidget> {
                   child: Hero(
                     tag: widget.comment.image,
                     child: CachedNetworkImage(
+                      width: MediaQuery.of(context).size.width / 2.5,
+                      height: MediaQuery.of(context).size.width / 2.5,
                       placeholder: (context, url) => Center(
                         child: Shimmer.fromColors(
                           baseColor: baseColor,
@@ -268,9 +270,9 @@ class _CommentWidgetState extends State<CommentWidget> {
                     ),
                   ),
                 ),
-              SizedBox(
-                height: 20,
-              ),
+              // SizedBox(
+              //   height: 20,
+              // ),
               if (widget.comment.file != null) FileWidget(widget.comment.file),
               SizedBox(
                 height: 4,

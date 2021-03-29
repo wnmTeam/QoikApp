@@ -159,10 +159,12 @@ class StorageController {
     String id_group,
   }) async {
     String url;
+    String name = id_group + id_post + nom.toString();
+    print(name);
     str.Reference firebaseStorageRef = str.FirebaseStorage.instance
         .ref()
         .child('commentImages')
-        .child(id_group + id_post + nom);
+        .child(name);
     str.UploadTask uploadTask = firebaseStorageRef.putFile(img);
     await uploadTask.then((res) async {
       url = await res.ref.getDownloadURL();

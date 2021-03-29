@@ -578,13 +578,24 @@ class _PostWidgetState extends State<PostWidget>
                   ),
                 if (commentsShow) Divider(),
                 if (commentsShow)
-                  if (file != null)
-                    FileWidget(file.path)
-                  else
+                  if(image != null)
                     Container(
-                      height: 20,
-                      color: Colors.red,
+                      margin: EdgeInsets.only(left: 4, right: 4, bottom: 4, top:
+                      4),
+                      width: 80,
+                      height: 80,
+                      child: Image.file(
+                        image,
+                        fit: BoxFit.cover,
+                      ),
                     ),
+                  // if (file != null)
+                  //   FileWidget(file.path)
+                  // else
+                  //   Container(
+                  //     height: 20,
+                  //     color: Colors.red,
+                  //   ),
                 if (commentsShow)
                   Row(
                     children: [
@@ -639,15 +650,13 @@ class _PostWidgetState extends State<PostWidget>
                           color: Theme.of(context).primaryColor,
                         ),
                         onPressed: () async {
-                          final pickedFile =
-                              await _storageController.getImage();
+                          final pickedFile = await _storageController.getImage();
                           if (pickedFile != null) {
-                            print("${pickedFile.path}\n");
-                            setState(() {
-                              image = pickedFile;
-                            });
-                          } else {
-                            print("444444444444444444444444");
+                            {
+                              setState(() {
+                                image = File(pickedFile.path);
+                              });
+                            }
                           }
                         },
                       ),
@@ -658,15 +667,21 @@ class _PostWidgetState extends State<PostWidget>
                         ),
                         onPressed: () async {
                           String text = _commentController.text;
-                          if (text.isEmpty) return;
-                          _commentController.clear();
+                          if (text.isEmpty && image == null && file == null) return;
+
                           if (!_authController.isBan()) {
+                            print('send comment');
                             await _postsController.createComment(
                                 text: text,
                                 post: widget.post,
                                 group: widget.group,
                                 image: image,
                                 file: file);
+                            setState(() {
+                              image = null;
+                              file = null;
+                              _commentController.clear();
+                            });
                             // sounds.commentSound();
                           } else
                             showDialog(
