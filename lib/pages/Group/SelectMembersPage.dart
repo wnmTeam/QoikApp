@@ -21,7 +21,11 @@ class SelectFriendsPage extends StatefulWidget {
 
   File image;
 
-  SelectFriendsPage({this.group, this.type = 'create', this.image,});
+  SelectFriendsPage({
+    this.group,
+    this.type = 'create',
+    this.image,
+  });
 
   @override
   _SelectFriendsPageState createState() => _SelectFriendsPageState();
@@ -226,42 +230,48 @@ class _UserWidgetState extends State<UserWidget> {
         future: _authController.getUserInfo(widget.id),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            user = User().fromMap(snapshot.data)..setId(widget.id);
-            return ListTile(
-              selectedTileColor: Colors.blueGrey[100],
-              selected: selected,
-              contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-              onTap: () {
-                setState(() {
-                  selected = !selected;
-                  widget.addUser(widget.id, selected);
-                });
-              },
-              leading: ClipRRect(
-                borderRadius: BorderRadius.circular(57),
-                child: CachedNetworkImage(
-                  placeholder: (context, url) => Center(
-                    child: Image.asset(ConstValues.userImage),
+            try {
+              user = User().fromMap(snapshot.data)..setId(widget.id);
+              return ListTile(
+                selectedTileColor: Colors.blueGrey[100],
+                selected: selected,
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                onTap: () {
+                  setState(() {
+                    selected = !selected;
+                    widget.addUser(widget.id, selected);
+                  });
+                },
+                leading: ClipRRect(
+                  borderRadius: BorderRadius.circular(57),
+                  child: CachedNetworkImage(
+                    placeholder: (context, url) => Center(
+                      child: Image.asset(ConstValues.userImage),
+                    ),
+                    imageUrl:
+                        user.img != null ? user.img : ConstValues.userImage,
+                    fit: BoxFit.cover,
+                    width: 57,
+                    height: 57,
                   ),
-                  imageUrl: user.img != null ? user.img : ConstValues.userImage,
-                  fit: BoxFit.cover,
-                  width: 57,
-                  height: 57,
                 ),
-              ),
-              title: Text(user.firstName + ' ' + user.secondName),
-              subtitle: Text(
-                user.degree != User.DEGREE_HIGH_SCHOOL
-                    ? user.university + ' | ' + user.college
-                    : Languages.translate(
-                  context,
-                  'high school',
+                title: Text(user.firstName + ' ' + user.secondName),
+                subtitle: Text(
+                  user.degree != User.DEGREE_HIGH_SCHOOL
+                      ? user.university + ' | ' + user.college
+                      : Languages.translate(
+                          context,
+                          'high school',
+                        ),
+                  style: TextStyle(
+                    fontSize: 12,
+                  ),
                 ),
-                style: TextStyle(
-                  fontSize: 12,
-                ),
-              ),
-            );
+              );
+            } catch (e) {
+              return Container();
+            }
           }
           return UserPlaceholder();
         });
