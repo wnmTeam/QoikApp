@@ -414,6 +414,11 @@ class _CommentWidgetState extends State<CommentWidget> {
                           value: 3,
                           child: Text('Report'),
                         ),
+                      if (MyUser.myUser.isAdmin())
+                        PopupMenuItem(
+                          value: 4,
+                          child: Text('Block'),
+                        ),
                     ],
                     onSelected: (value) {
                       switch (value) {
@@ -428,6 +433,9 @@ class _CommentWidgetState extends State<CommentWidget> {
                           break;
                         case 3:
                           _reportComment();
+                          break;
+                        case 4:
+                          _blockComment(widget.comment.idOwner);
                           break;
                       }
                     },
@@ -498,7 +506,9 @@ class _CommentWidgetState extends State<CommentWidget> {
     widget.deleteComment(widget.doc);
   }
 
-  void _editComment() {}
+  _blockComment(String id_user) async {
+    await _authController.blockUser(id_user: id_user);
+  }
 
   void _reportComment() {}
 }

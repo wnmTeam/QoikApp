@@ -766,6 +766,9 @@ class _PostWidgetState extends State<PostWidget>
                     case 'Report':
                       _reportPost();
                       break;
+                    case 'Block':
+                      _blockPost(widget.post.idOwner);
+                      break;
                   }
                 },
                 items: <String>[
@@ -775,6 +778,8 @@ class _PostWidgetState extends State<PostWidget>
                   if (MyUser.myUser.id == widget.post.idOwner ||
                       MyUser.myUser.isAdmin())
                     'Delete',
+                  if (MyUser.myUser.isAdmin())
+                    'Block',
                   if (MyUser.myUser.id != widget.post.idOwner) 'Report',
                 ].map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
@@ -823,6 +828,12 @@ class _PostWidgetState extends State<PostWidget>
   }
 
   _reportPost() {}
+
+
+  _blockPost(String id_user) async  {
+    await _authController.blockUser(id_user: id_user);
+  }
+
 
   _editPost() async {
     await Navigator.pushNamed(

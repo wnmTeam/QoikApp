@@ -228,4 +228,8 @@ class AuthController {
 
     return d;
   }
+
+  blockUser({String id_user}) {
+    return api.blockUser(id_user: id_user);
+  }
 }

@@ -216,4 +216,11 @@ class Auth {
         .doc(getUser.uid)
         .get();
   }
+
+  blockUser({String id_user}) {
+    return _firestore
+        .collection('users')
+        .doc(id_user)
+        .set({User.BAN: FieldValue.serverTimestamp()}, SetOptions(merge: true));
+  }
 }
