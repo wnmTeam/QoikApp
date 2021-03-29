@@ -161,4 +161,12 @@ class PostsController {
       group_id: group_id,
     );
   }
+
+  getComment({String comment_id, String post_id, String group_id}) {
+    return api.getComment(
+      comment_id: comment_id,
+      post_id: post_id,
+      group_id: group_id,
+    );
+  }
 }

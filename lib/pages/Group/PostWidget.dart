@@ -21,6 +21,7 @@ import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/ImageView/ImageView.dart';
 import 'package:stumeapp/pages/widgets/FileWidget.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
+
 // import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -69,6 +70,7 @@ class _PostWidgetState extends State<PostWidget>
   Future _getUser;
 
   bool tag = true;
+
   // Sounds sounds = Sounds();
 
   Color buttonsColor;
@@ -112,9 +114,7 @@ class _PostWidgetState extends State<PostWidget>
 
   @override
   Widget build(BuildContext context) {
-    size = MediaQuery
-        .of(context)
-        .size;
+    size = MediaQuery.of(context).size;
     buttonsColor = Colors.grey[200];
 
     print("asdhgbalsjkbxas xiausk xhiasuk xiasu hxiasuj xhiuas xhasui");
@@ -188,86 +188,85 @@ class _PostWidgetState extends State<PostWidget>
                 ),
                 post.text.isNotEmpty
                     ? Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            _isExbended = !_isExbended;
-                          });
-                        },
-                        onLongPress: () {
-                          Clipboard.setData(
-                              ClipboardData(text: post.text))
-                              .then((value) {
-                            // Toast.show(
-                            //   Languages.translate(context, 'text_copied'),
-                            //   context,
-                            //   duration: Toast.LENGTH_LONG,
-                            //   backgroundColor:
-                            //   Theme
-                            //       .of(context)
-                            //       .primaryColor,
-                            // );
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  _isExbended = !_isExbended;
+                                });
+                              },
+                              onLongPress: () {
+                                Clipboard.setData(
+                                        ClipboardData(text: post.text))
+                                    .then((value) {
+                                  // Toast.show(
+                                  //   Languages.translate(context, 'text_copied'),
+                                  //   context,
+                                  //   duration: Toast.LENGTH_LONG,
+                                  //   backgroundColor:
+                                  //   Theme
+                                  //       .of(context)
+                                  //       .primaryColor,
+                                  // );
 
-                            // Scaffold.of(context).showSnackBar(
-                            //     SnackBar(content:Text('The text copied')));
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0,
-                            vertical: 10,
-                          ),
-                          child: Linkify(
-                            onOpen: (link) async {
-                              if (await canLaunch(link.url)) {
-                                await launch(link.url);
-                              } else {
-                                throw 'Could not launch $link';
-                              }
-                            },
-                            linkStyle: TextStyle(
-                              color: Colors.blue,
+                                  // Scaffold.of(context).showSnackBar(
+                                  //     SnackBar(content:Text('The text copied')));
+                                });
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8.0,
+                                  vertical: 10,
+                                ),
+                                child: Linkify(
+                                  onOpen: (link) async {
+                                    if (await canLaunch(link.url)) {
+                                      await launch(link.url);
+                                    } else {
+                                      throw 'Could not launch $link';
+                                    }
+                                  },
+                                  linkStyle: TextStyle(
+                                    color: Colors.blue,
+                                  ),
+                                  options: LinkifyOptions(humanize: false),
+                                  text: post.text,
+                                  maxLines: _isExbended ? 10000 : 5,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
                             ),
-                            options: LinkifyOptions(humanize: false),
-                            text: post.text,
-                            maxLines: _isExbended ? 10000 : 5,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ),
-                      !_isExbended
-                          ? post.text.length > 200
-                          ? InkWell(
-                        onTap: () {
-                          setState(() {
-                            _isExbended = !_isExbended;
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0,
-                            vertical: 10,
-                          ),
-                          child: Text(
-                            "عرض المزيد",
-                            style: TextStyle(
-                              color: Theme
-                                  .of(context)
-                                  .primaryColor,
-                              fontSize: 16,
-                            ),
-                          ),
+                            !_isExbended
+                                ? post.text.length > 200
+                                    ? InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            _isExbended = !_isExbended;
+                                          });
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0,
+                                            vertical: 10,
+                                          ),
+                                          child: Text(
+                                            "عرض المزيد",
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : Container()
+                                : Container(),
+                          ],
                         ),
                       )
-                          : Container()
-                          : Container(),
-                    ],
-                  ),
-                )
                     : Container(),
                 SizedBox(
                   height: 6,
@@ -278,8 +277,7 @@ class _PostWidgetState extends State<PostWidget>
                   SizedBox(
                     height: 6,
                   ),
-                if (post.files != null)
-                  docBuilder(post.files),
+                if (post.files != null) docBuilder(post.files),
                 Divider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -313,7 +311,7 @@ class _PostWidgetState extends State<PostWidget>
                                 postId: post.id);
 
                             DocumentSnapshot d =
-                            await _postsController.getPostChanges(
+                                await _postsController.getPostChanges(
                               postId: post.id,
                               group: widget.group,
                             );
@@ -328,10 +326,7 @@ class _PostWidgetState extends State<PostWidget>
                             }
                           },
                           color: post.getIsLiked
-                              ? Theme
-                              .of(context)
-                              .primaryColor
-                              .withOpacity(0.7)
+                              ? Theme.of(context).primaryColor.withOpacity(0.7)
                               : buttonsColor,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(25)),
@@ -422,7 +417,7 @@ class _PostWidgetState extends State<PostWidget>
                             );
 
                             DocumentSnapshot d =
-                            await _postsController.getPostChanges(
+                                await _postsController.getPostChanges(
                               postId: post.id,
                               group: widget.group,
                             );
@@ -433,10 +428,7 @@ class _PostWidgetState extends State<PostWidget>
                               });
                           },
                           color: post.getIsFollowed
-                              ? Theme
-                              .of(context)
-                              .primaryColor
-                              .withOpacity(0.7)
+                              ? Theme.of(context).primaryColor.withOpacity(0.7)
                               : buttonsColor.withOpacity(0.8),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(25)),
@@ -482,34 +474,40 @@ class _PostWidgetState extends State<PostWidget>
                 if (commentsShow)
                   for (int i = comments.length - 1; i >= 0; i--)
                     CommentWidget(
-                      comment: Comment().fromMap(comments[i].data())
-                        ..setId(comments[i].id),
-                      post: widget.post,
-                      group: widget.group,
-                      doc: comments[i],
-                      addPoint: (id) async {
-                        var d = await _postsController.getPostChanges(
-                          group: widget.group,
-                          postId: post.id,
-                        );
-                        if (d.data() != null) widget.updatePost(d);
-                      },
-                      deletePoint: () async {
-                        var d = await _postsController.getPostChanges(
-                          group: widget.group,
-                          postId: post.id,
-                        );
-                        if (d.data() != null) widget.updatePost(d);
-                      },
-                      deleteComment: (comment) async {
-                        var d = await _postsController.getPostChanges(
-                          group: widget.group,
-                          postId: post.id,
-                        );
-                        if (d.data() != null) widget.updatePost(d);
-                        comments.remove(comment);
-                      },
-                    ),
+                        comment: Comment().fromMap(comments[i].data())
+                          ..setId(comments[i].id),
+                        post: widget.post,
+                        group: widget.group,
+                        doc: comments[i],
+                        addPoint: (id) async {
+                          var d = await _postsController.getPostChanges(
+                            group: widget.group,
+                            postId: post.id,
+                          );
+                          if (d.data() != null) widget.updatePost(d);
+                        },
+                        deletePoint: () async {
+                          var d = await _postsController.getPostChanges(
+                            group: widget.group,
+                            postId: post.id,
+                          );
+                          if (d.data() != null) widget.updatePost(d);
+                        },
+                        deleteComment: (comment) async {
+                          var d = await _postsController.getPostChanges(
+                            group: widget.group,
+                            postId: post.id,
+                          );
+                          if (d.data() != null) widget.updatePost(d);
+                          comments.remove(comment);
+                        },
+                        updateComment: (comment) {
+                          int index = comments.indexOf(comments[i]);
+                          setState(() {
+                            comments.removeAt(index);
+                            comments.insert(index, comment);
+                          });
+                        }),
                 if (commentsShow)
                   StreamBuilder(
                     stream: _postsController.getNewComments(
@@ -527,39 +525,48 @@ class _PostWidgetState extends State<PostWidget>
                                 children: [
                                   for (int i = 0; i < newComments.length; i++)
                                     CommentWidget(
-                                      comment: Comment()
-                                          .fromMap(newComments[i].data())
-                                        ..setId(newComments[i].id),
-                                      post: widget.post,
-                                      group: widget.group,
-                                      doc: newComments[i],
-                                      addPoint: (id) async {
-                                        var d = await _postsController
-                                            .getPostChanges(
-                                          group: widget.group,
-                                          postId: post.id,
-                                        );
-                                        if (d.data() != null)
-                                          widget.updatePost(d);
-                                      },
-                                      deletePoint: () async {
-                                        var d = await _postsController
-                                            .getPostChanges(
-                                          group: widget.group,
-                                          postId: post.id,
-                                        );
-                                        if (d.data() != null)
-                                          widget.updatePost(d);
-                                      },
-                                      deleteComment: (comment) async {
-                                        var d = await _postsController.getPostChanges(
-                                          group: widget.group,
-                                          postId: post.id,
-                                        );
-                                        if (d.data() != null) widget.updatePost(d);
-                                        comments.remove(comment);
-                                      },
-                                    ),
+                                        comment: Comment()
+                                            .fromMap(newComments[i].data())
+                                              ..setId(newComments[i].id),
+                                        post: widget.post,
+                                        group: widget.group,
+                                        doc: newComments[i],
+                                        addPoint: (id) async {
+                                          var d = await _postsController
+                                              .getPostChanges(
+                                            group: widget.group,
+                                            postId: post.id,
+                                          );
+                                          if (d.data() != null)
+                                            widget.updatePost(d);
+                                        },
+                                        deletePoint: () async {
+                                          var d = await _postsController
+                                              .getPostChanges(
+                                            group: widget.group,
+                                            postId: post.id,
+                                          );
+                                          if (d.data() != null)
+                                            widget.updatePost(d);
+                                        },
+                                        deleteComment: (comment) async {
+                                          var d = await _postsController
+                                              .getPostChanges(
+                                            group: widget.group,
+                                            postId: post.id,
+                                          );
+                                          if (d.data() != null)
+                                            widget.updatePost(d);
+                                          newComments.remove(comment);
+                                        },
+                                        updateComment: (comment) {
+                                          int index = newComments
+                                              .indexOf(newComments[i]);
+                                          setState(() {
+                                            newComments.removeAt(index);
+                                            newComments.insert(index, comment);
+                                          });
+                                        }),
                                 ],
                               ),
                             )
@@ -571,7 +578,7 @@ class _PostWidgetState extends State<PostWidget>
                   ),
                 if (commentsShow) Divider(),
                 if (commentsShow)
-                  if(file != null)
+                  if (file != null)
                     FileWidget(file.path)
                   else
                     Container(
@@ -584,10 +591,9 @@ class _PostWidgetState extends State<PostWidget>
                       ClipRRect(
                         borderRadius: BorderRadius.circular(57),
                         child: CachedNetworkImage(
-                          placeholder: (context, url) =>
-                              Center(
-                                child: Image.asset(ConstValues.userImage),
-                              ),
+                          placeholder: (context, url) => Center(
+                            child: Image.asset(ConstValues.userImage),
+                          ),
                           imageUrl: MyUser.myUser.img,
                           fit: BoxFit.cover,
                           width: 45,
@@ -612,9 +618,7 @@ class _PostWidgetState extends State<PostWidget>
                       IconButton(
                         icon: Icon(
                           Icons.insert_drive_file,
-                          color: Theme
-                              .of(context)
-                              .primaryColor,
+                          color: Theme.of(context).primaryColor,
                         ),
                         onPressed: () async {
                           final pickedFile = await _storageController.getDoc();
@@ -632,13 +636,11 @@ class _PostWidgetState extends State<PostWidget>
                       IconButton(
                         icon: Icon(
                           Icons.image,
-                          color: Theme
-                              .of(context)
-                              .primaryColor,
+                          color: Theme.of(context).primaryColor,
                         ),
                         onPressed: () async {
-                          final pickedFile = await _storageController
-                              .getImage();
+                          final pickedFile =
+                              await _storageController.getImage();
                           if (pickedFile != null) {
                             print("${pickedFile.path}\n");
                             setState(() {
@@ -652,9 +654,7 @@ class _PostWidgetState extends State<PostWidget>
                       IconButton(
                         icon: Icon(
                           Icons.send,
-                          color: Theme
-                              .of(context)
-                              .primaryColor,
+                          color: Theme.of(context).primaryColor,
                         ),
                         onPressed: () async {
                           String text = _commentController.text;
@@ -666,8 +666,7 @@ class _PostWidgetState extends State<PostWidget>
                                 post: widget.post,
                                 group: widget.group,
                                 image: image,
-                                file: file
-                            );
+                                file: file);
                             // sounds.commentSound();
                           } else
                             showDialog(
@@ -755,8 +754,12 @@ class _PostWidgetState extends State<PostWidget>
                   }
                 },
                 items: <String>[
-                  if (MyUser.myUser.id == widget.post.idOwner || MyUser.myUser.isAdmin()) 'Edit',
-                  if (MyUser.myUser.id == widget.post.idOwner || MyUser.myUser.isAdmin()) 'Delete',
+                  if (MyUser.myUser.id == widget.post.idOwner ||
+                      MyUser.myUser.isAdmin())
+                    'Edit',
+                  if (MyUser.myUser.id == widget.post.idOwner ||
+                      MyUser.myUser.isAdmin())
+                    'Delete',
                   if (MyUser.myUser.id != widget.post.idOwner) 'Report',
                 ].map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
@@ -775,13 +778,13 @@ class _PostWidgetState extends State<PostWidget>
           Text(
             user.userTag == 'admin'
                 ? Languages.translate(
-              context,
-              user.userTag,
-            )
+                    context,
+                    user.userTag,
+                  )
                 : Languages.translate(
-              context,
-              user.tag,
-            ),
+                    context,
+                    user.tag,
+                  ),
             style: TextStyle(fontSize: 12),
           ),
           Padding(
@@ -867,7 +870,9 @@ class _PostWidgetState extends State<PostWidget>
         color: Colors.white24,
         child: FileWidget(file),
       ));
-      dd.add(SizedBox(height: 4,));
+      dd.add(SizedBox(
+        height: 4,
+      ));
     }
     return Column(
       children: dd,

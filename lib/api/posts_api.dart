@@ -527,4 +527,14 @@ class PostsApi {
         .doc(comment_id)
         .set({'text': text}, SetOptions(merge: true));
   }
+
+  getComment({String comment_id, String post_id, String group_id}) {
+    return _fireStore
+        .collection('groups')
+        .doc(group_id)
+        .collection('posts')
+        .doc(post_id)
+        .collection('comments')
+        .doc(comment_id).get();
+  }
 }

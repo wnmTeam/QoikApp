@@ -31,6 +31,7 @@ class CommentWidget extends StatefulWidget {
   Function addPoint;
   Function deletePoint;
   Function deleteComment;
+  Function updateComment;
 
   var doc;
 
@@ -41,6 +42,7 @@ class CommentWidget extends StatefulWidget {
     this.addPoint,
     this.deletePoint,
     this.deleteComment,
+    this.updateComment,
     this.doc,
   });
 
@@ -64,7 +66,7 @@ class _CommentWidgetState extends State<CommentWidget> {
 
   final Color baseColor = MyAppState.isDark ? Colors.black87 : Colors.grey[100];
   final Color highlightColor =
-  MyAppState.isDark ? Colors.black54 : Colors.grey[300];
+      MyAppState.isDark ? Colors.black54 : Colors.grey[300];
 
   @override
   void dispose() {
@@ -88,8 +90,7 @@ class _CommentWidgetState extends State<CommentWidget> {
             return _commentBuilder();
           }
           if (snapshot.hasData) {
-            user = User().fromMap(snapshot.data)
-              ..setId(snapshot.data.id);
+            user = User().fromMap(snapshot.data)..setId(snapshot.data.id);
             return _commentBuilder();
           }
           return UserPlaceholder();
@@ -126,10 +127,9 @@ class _CommentWidgetState extends State<CommentWidget> {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(57),
             child: CachedNetworkImage(
-              placeholder: (context, url) =>
-                  Center(
-                    child: Image.asset(ConstValues.userImage),
-                  ),
+              placeholder: (context, url) => Center(
+                child: Image.asset(ConstValues.userImage),
+              ),
               imageUrl: user.img != null ? user.img : ConstValues.userImage,
               fit: BoxFit.cover,
               width: 40,
@@ -159,75 +159,84 @@ class _CommentWidgetState extends State<CommentWidget> {
                       },
                       child: !edit
                           ? Linkify(
-                        onOpen: (link) async {
-                          if (await canLaunch(link.url)) {
-                            await launch(link.url);
-                          } else {
-                            throw 'Could not launch $link';
-                          }
-                        },
-                        linkStyle: TextStyle(
-                          color: Colors.blue,
-                        ),
-                        options: LinkifyOptions(humanize: false),
-                        text: widget.comment.text,
-                        maxLines: _isCommentExpended ? 1000 : 3,
-                        overflow: TextOverflow.ellipsis,
-                        // style: TextStyle(
-                        //   color: Colors.grey[700],
-                        // ),
-                      )
-                          : Row(
-                        children: [
-                          SizedBox(
-                              width: 180,
-                              height: 50,
-                              child: TextField(
-                                autofocus: true,
-                                controller: _controller,
-                                decoration: InputDecoration(),
-                              )),
-                          ElevatedButton(
-                              onPressed: () async {
-                                await _postsController.updateComment(
-                                  text: _controller.text,
-                                  comment_id: widget.comment.id,
-                                  post_id: widget.post.id,
-                                  group_id: widget.group.id,);
-                                setState(() {
-                                  edit = false;
-                                });
+                              onOpen: (link) async {
+                                if (await canLaunch(link.url)) {
+                                  await launch(link.url);
+                                } else {
+                                  throw 'Could not launch $link';
+                                }
                               },
-                              child: Text('save')),
-                        ],
-                      ),
+                              linkStyle: TextStyle(
+                                color: Colors.blue,
+                              ),
+                              options: LinkifyOptions(humanize: false),
+                              text: widget.comment.text,
+                              maxLines: _isCommentExpended ? 1000 : 3,
+                              overflow: TextOverflow.ellipsis,
+                              // style: TextStyle(
+                              //   color: Colors.grey[700],
+                              // ),
+                            )
+                          : Row(
+                              children: [
+                                SizedBox(
+                                    width: 180,
+                                    height: 50,
+                                    child: TextField(
+                                      autofocus: true,
+                                      controller: _controller,
+                                      decoration: InputDecoration(),
+                                    )),
+                                ElevatedButton(
+                                    onPressed: () async {
+                                      await _postsController.updateComment(
+                                        text: _controller.text,
+                                        comment_id: widget.comment.id,
+                                        post_id: widget.post.id,
+                                        group_id: widget.group.id,
+                                      );
+                                      // setState(() {
+                                      var d = await _postsController.getComment(
+                                        comment_id: widget.comment.id,
+                                        post_id: widget.post.id,
+                                        group_id: widget.group.id,
+                                      );
+                                      setState(() {
+                                        edit = false;
+                                      });
+                                      widget.updateComment(d);
+                                      // });
+                                    },
+                                    child: Text('save')),
+                              ],
+                            ),
                     ),
                   ),
                   widget.comment.id == widget.post.commentPointed
                       ? InkWell(
-                    onTap: () async {
-                      if (widget.post.idOwner == MyUser.myUser.id) {
-                        await _postsController.deletePoint(
-                          groupId: widget.group.id,
-                          comment: widget.comment,
-                          post: widget.post,
-                        );
-                        print('delete point');
-                        await _authController.deletePoint(
-                            id_user: widget.comment.idOwner);
-                        widget.deletePoint();
-                      }
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 0, horizontal: 15),
-                      child: Icon(
-                        Icons.star,
-                        color: Colors.amber[300],
-                        size: 30,
-                      ),
-                    ),
-                  )
+                          onTap: () async {
+                            if (widget.post.idOwner == MyUser.myUser.id) {
+                              await _postsController.deletePoint(
+                                groupId: widget.group.id,
+                                comment: widget.comment,
+                                post: widget.post,
+                              );
+                              print('delete point');
+                              await _authController.deletePoint(
+                                  id_user: widget.comment.idOwner);
+                              widget.deletePoint();
+                            }
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 0, horizontal: 15),
+                            child: Icon(
+                              Icons.star,
+                              color: Colors.amber[300],
+                              size: 30,
+                            ),
+                          ),
+                        )
                       : Container(),
                 ],
               ),
@@ -244,24 +253,17 @@ class _CommentWidgetState extends State<CommentWidget> {
                   child: Hero(
                     tag: widget.comment.image,
                     child: CachedNetworkImage(
-                      placeholder: (context, url) =>
-                          Center(
-                            child: Shimmer.fromColors(
-                              baseColor: baseColor,
-                              highlightColor: highlightColor,
-                              child: Container(
-                                width: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width / 2.5,
-                                height: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width / 2.5,
-                                color: Colors.grey[200],
-                              ),
-                            ),
+                      placeholder: (context, url) => Center(
+                        child: Shimmer.fromColors(
+                          baseColor: baseColor,
+                          highlightColor: highlightColor,
+                          child: Container(
+                            width: MediaQuery.of(context).size.width / 2.5,
+                            height: MediaQuery.of(context).size.width / 2.5,
+                            color: Colors.grey[200],
                           ),
+                        ),
+                      ),
                       imageUrl: widget.comment.image,
                     ),
                   ),
@@ -314,10 +316,9 @@ class _CommentWidgetState extends State<CommentWidget> {
                             ),
                             decoration: BoxDecoration(
                               color: widget.comment.isLiked
-                                  ? Theme
-                                  .of(context)
-                                  .primaryColor
-                                  .withOpacity(0.7)
+                                  ? Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(0.7)
                                   : Colors.grey[200],
                               borderRadius: BorderRadius.circular(20),
                             ),
@@ -341,41 +342,41 @@ class _CommentWidgetState extends State<CommentWidget> {
                     width: 6,
                   ),
                   _authController.getUser.uid == widget.post.idOwner &&
-                      _authController.getUser.uid !=
-                          widget.comment.idOwner &&
-                      widget.post.commentPointed == null
+                          _authController.getUser.uid !=
+                              widget.comment.idOwner &&
+                          widget.post.commentPointed == null
                       ? InkWell(
-                    child: Container(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 4.0, horizontal: 6),
-                        child: Text(
-                          ' ' +
-                              Languages.translate(
-                                context,
-                                'give_point',
-                              ) +
-                              ' ',
-                          style: TextStyle(fontSize: 15),
-                        ),
-                      ),
-                      decoration: BoxDecoration(
-                        // color: Colors.grey[100],
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                    onTap: () async {
-                      await _postsController.addPoint(
-                        groupId: widget.group.id,
-                        comment: widget.comment,
-                        post: widget.post,
-                      );
-                      print('add point');
-                      await _authController.addPoint(
-                          id_user: widget.comment.idOwner);
-                      widget.addPoint(widget.comment.id);
-                    },
-                  )
+                          child: Container(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 4.0, horizontal: 6),
+                              child: Text(
+                                ' ' +
+                                    Languages.translate(
+                                      context,
+                                      'give_point',
+                                    ) +
+                                    ' ',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                              // color: Colors.grey[100],
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          onTap: () async {
+                            await _postsController.addPoint(
+                              groupId: widget.group.id,
+                              comment: widget.comment,
+                              post: widget.post,
+                            );
+                            print('add point');
+                            await _authController.addPoint(
+                                id_user: widget.comment.idOwner);
+                            widget.addPoint(widget.comment.id);
+                          },
+                        )
                       : Container(),
                   SizedBox(
                     width: 0,
@@ -393,8 +394,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                           child: Icon(Icons.more_horiz,
                               color: ConstValues.secondColor),
                         )),
-                    itemBuilder: (context) =>
-                    [
+                    itemBuilder: (context) => [
                       if (MyUser.myUser.id == widget.comment.idOwner ||
                           MyUser.myUser.isAdmin())
                         PopupMenuItem(
@@ -419,7 +419,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                           _deleteComment();
                           break;
                         case 1:
-                        // _editComment();
+                          // _editComment();
                           setState(() {
                             edit = true;
                           });
