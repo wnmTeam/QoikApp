@@ -112,14 +112,16 @@ class PostsApi {
         .doc(post.id)
         .collection('comments');
 
-    String imageUrl = await _storageController.uploadCommentImage(
-      id_post: post.id,
-      id_group: groupId,
-      nom: "0",
-      img: image,
-    );
+    String imageUrl;
+    if (image != null)
+      imageUrl = await _storageController.uploadCommentImage(
+        id_post: post.id,
+        id_group: groupId,
+        nom: "0",
+        img: image,
+      );
     //
-       //TODO upload comment file
+    //TODO upload comment file
     // String fileUrl = await _storageController.uploadCommentFile(
     //   id_post: post.id,
     //   id_group: groupId,
@@ -534,6 +536,7 @@ class PostsApi {
         .collection('posts')
         .doc(post_id)
         .collection('comments')
-        .doc(comment_id).get();
+        .doc(comment_id)
+        .get();
   }
 }
