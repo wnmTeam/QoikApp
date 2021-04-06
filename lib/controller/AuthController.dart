@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/Models/Group.dart';
+import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
 import 'package:stumeapp/api/notification_api.dart';
 import 'package:stumeapp/controller/GroupsController.dart';
@@ -231,5 +232,11 @@ class AuthController {
 
   blockUser({String id_user}) {
     return api.blockUser(id_user: id_user);
+  }
+
+  isLibraryAdmin() {
+    return MyUser.myUser.userTag == User.USER_TAG_ADMIN ||
+        MyUser.myUser.userTag == User.USER_TAG_PREMIUM_ADMIN ||
+        MyUser.myUser.userTag == User.USER_TAG_VERIFIED_ADMIN;
   }
 }

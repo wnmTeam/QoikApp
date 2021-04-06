@@ -1,7 +1,6 @@
 class Book {
   static const String URL = 'url';
   static const String NAME = 'name';
-  static const String PUBLIC_NAME = 'public_name';
   static const String IMG = 'img';
 
   static const String UNIVERSITY = 'university';
@@ -12,7 +11,6 @@ class Book {
 
   String url;
   String name;
-  String public_name;
   String img;
 
   String university;
@@ -26,7 +24,6 @@ class Book {
   Book({
     this.img,
     this.name,
-    this.public_name,
     this.url,
     this.university,
     this.college,
@@ -36,7 +33,6 @@ class Book {
 
   Map<String, dynamic> toMap() => {
     NAME: name,
-    PUBLIC_NAME: public_name,
     URL: url,
     IMG: img,
     COLLEGE: college,
@@ -48,7 +44,6 @@ class Book {
   Book fromMap(map) {
     this.img = map[IMG];
     this.name = map[NAME];
-    this.public_name = map[PUBLIC_NAME];
     this.url = map[URL];
     this.university = map[UNIVERSITY];
     this.college = map[COLLEGE];
@@ -59,5 +54,9 @@ class Book {
 
   setId(String id) {
     this.id = id;
+  }
+
+  setUrl(String url) {
+    this.url = url;
   }
 }

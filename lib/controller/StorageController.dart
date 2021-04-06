@@ -1,9 +1,10 @@
 import 'dart:io';
 
-// import 'package:file_picker/file_picker.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as str;
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stumeapp/Models/Book.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/User.dart';
 
@@ -78,21 +79,19 @@ class StorageController {
   }
 
   Future<File> getDoc() async {
-    // File x = await FilePicker.getFile();
-    // TODO
-    // return await FilePicker.getFile();
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: [ 'pdf'],
+    );
 
-//    if(result != null) {
-//      PlatformFile file = result.files.first;
-//
-//      print(file.name);
-//      print(file.bytes);
-//      print(file.size);
-//      print(file.extension);
-//      print(file.path);
-//    } else {
-//      // User canceled the picker
-//    }
+    if (result != null) {
+      File file = File(result.files.single.path);
+    } else {
+      return null;
+    }
+
+    PlatformFile file = result.files.first;
+    return File(file.path);
   }
 
   Future<List<File>> getDocs() async {
@@ -111,6 +110,24 @@ class StorageController {
       url = await res.ref.getDownloadURL();
       return;
     });
+    return url;
+  }
+
+  Future uploadBook(Book book, File file, updateProgress) async {
+    String url;
+    str.Reference firebaseStorageRef = str.FirebaseStorage.instance
+        .ref()
+        .child('books')
+        .child(book.id);
+    str.UploadTask uploadTask = firebaseStorageRef.putFile(file);
+    uploadTask.snapshotEvents.listen((event) {
+      updateProgress(event);
+    });
+    str.TaskSnapshot taskSnapshot = await uploadTask.then((res) async {
+      url = await res.ref.getDownloadURL();
+      return;
+    });
+
     return url;
   }
 
@@ -198,7 +215,7 @@ class StorageController {
   }) async {
     String url;
     str.Reference firebaseStorageRef =
-        str.FirebaseStorage.instance.ref().child('roomImages').child(id_room);
+    str.FirebaseStorage.instance.ref().child('roomImages').child(id_room);
     str.UploadTask uploadTask = firebaseStorageRef.putFile(img);
     await uploadTask.then((res) async {
       url = await res.ref.getDownloadURL();
@@ -207,12 +224,11 @@ class StorageController {
     return url;
   }
 
-  uploadMessageImage(
-      {String id_message,
-      String nom,
-      File img,
-      String type,
-      String id_group}) async {
+  uploadMessageImage({String id_message,
+    String nom,
+    File img,
+    String type,
+    String id_group}) async {
     String url;
     str.Reference firebaseStorageRef = str.FirebaseStorage.instance
         .ref()

@@ -60,7 +60,7 @@ dev_dependencies:
 #  advance_pdf_viewer:
 
   # File
-#  file_picker: ^3.0.0
+  file_picker: ^3.0.1
 
   # Other
   timeago: ^3.0.2

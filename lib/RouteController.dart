@@ -13,6 +13,7 @@ import 'package:stumeapp/pages/Group/SelectMembersPage.dart';
 import 'package:stumeapp/pages/Group/WritePost.dart';
 import 'package:stumeapp/pages/Library/BookViewerPage.dart';
 import 'package:stumeapp/pages/Library/BooksLibraryPage.dart';
+import 'package:stumeapp/pages/Library/UploadBookPage.dart';
 import 'package:stumeapp/pages/Notification/NotificationsPage.dart';
 import 'package:stumeapp/pages/Profile/ChangePasswordPage.dart';
 import 'package:stumeapp/pages/Profile/ProfilePage.dart';
@@ -58,63 +59,65 @@ class RouteController {
       case '/ChatRoomPage':
         return MaterialPageRoute(
             builder: (_) => ChatRoomPage(
-              user: args['user'],
-              group: args['group'],
-            ));
+                  user: args['user'],
+                  group: args['group'],
+                ));
 
       case '/BookViewerPage':
         return MaterialPageRoute(
             builder: (_) => BookViewerPage(
-              id: args['id'],
-            ));
+                  id: args['id'],
+                ));
       case '/BooksPage':
         return MaterialPageRoute(
             builder: (_) => BooksPage(
-              category: args['category'],
-            ));
+                  category: args['category'],
+                ));
       case '/ProfilePage':
         return MaterialPageRoute(
             builder: (_) => ProfilePage(
-              user: args['user'],
-            ));
+                  user: args['user'],
+                ));
       case '/ChatsPage':
         return MaterialPageRoute(builder: (_) => ChatsPage());
       case '/RoomPage':
         return MaterialPageRoute(
             builder: (_) => ChatRoomPage.room(
-              userId: args['id_user'],
-              user: args['user'],
-              group: args['group'],
-              onUpdate: args['onUpdate'],
-              exitGroup: args['exitGroup'],
-            ));
+                  userId: args['id_user'],
+                  user: args['user'],
+                  group: args['group'],
+                  onUpdate: args['onUpdate'],
+                  exitGroup: args['exitGroup'],
+                ));
       case '/ChangePasswordPage':
         return MaterialPageRoute(builder: (_) => ChangePasswordPage());
       case '/EditPostPage':
         return MaterialPageRoute(
             builder: (_) => EditPostPage(
-              post: args['post'],
-              group: args['group'],
-              editPost: args['editPost'],
-            ));
+                  post: args['post'],
+                  group: args['group'],
+                  editPost: args['editPost'],
+                ));
 
       case '/RoomInfoPage':
         return MaterialPageRoute(
             builder: (_) => RoomInfoPage(
-              group: args['group'],
-              onUpdate: args['onUpdate'],
-            ));
+                  group: args['group'],
+                  onUpdate: args['onUpdate'],
+                ));
 
       case '/Settings':
         return MaterialPageRoute(builder: (_) => Settings());
       case '/NotificationsPage':
         return MaterialPageRoute(builder: (_) => NotificationsPage());
+      case '/UploadBookPage':
+        return MaterialPageRoute(builder: (_) => UploadBookPage());
       case '/PostPage':
         return MaterialPageRoute(
             builder: (_) => PostPage(
-              group: args['group'],
-              post: args['post'],
-            ));
+                  group: args['group'],
+                  post: args['post'],
+                ));
     }
   }
 }

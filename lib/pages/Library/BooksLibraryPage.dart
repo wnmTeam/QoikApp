@@ -47,40 +47,36 @@ class _BooksPageState extends State<BooksPage> {
       appBar: AppBar(
         title: openSearchBar
             ? TextField(
-          // focusNode: focusNode,
-          controller: _searchController,
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: Languages.translate(
-                context,
-                'search',
-              ),
-              hintStyle: TextStyle(color: Colors.white70)),
-          onChanged: (value) {
-            if (value
-                .trim()
-                .isNotEmpty) {
-              _search(value.trim());
-            } else {
-              setState(() {
-                isSearch = false;
-              });
-            }
-          },
-          onSubmitted: (value) {
-            if (value
-                .trim()
-                .isNotEmpty) {
-              _search(value.trim());
-            } else {
-              setState(() {
-                isSearch = false;
-              });
-            }
-          },
-          style: TextStyle(color: Colors.white70),
-          textInputAction: TextInputAction.search,
-        )
+                // focusNode: focusNode,
+                controller: _searchController,
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: Languages.translate(
+                      context,
+                      'search',
+                    ),
+                    hintStyle: TextStyle(color: Colors.white70)),
+                onChanged: (value) {
+                  if (value.trim().isNotEmpty) {
+                    _search(value.trim());
+                  } else {
+                    setState(() {
+                      isSearch = false;
+                    });
+                  }
+                },
+                onSubmitted: (value) {
+                  if (value.trim().isNotEmpty) {
+                    _search(value.trim());
+                  } else {
+                    setState(() {
+                      isSearch = false;
+                    });
+                  }
+                },
+                style: TextStyle(color: Colors.white70),
+                textInputAction: TextInputAction.search,
+              )
             : Text(widget.category),
         actions: [
           IconButton(
@@ -98,21 +94,19 @@ class _BooksPageState extends State<BooksPage> {
       ),
       body: bookCount == 0
           ? Center(
-        child: Text(Languages.translate(context, "empty")),
-      )
+              child: Text(Languages.translate(context, "empty")),
+            )
           : GridView.count(
-          crossAxisCount: 3,
-          childAspectRatio: 0.8,
-          children: List.generate(
-              isSearch
-                  ? searchBooks.length
-                  : books.length,
-                  (index) {
-                return BookWidget(book: Book().fromMap(
-                    isSearch
+              crossAxisCount: 3,
+              childAspectRatio: 0.8,
+              children: List.generate(
+                  isSearch ? searchBooks.length : books.length, (index) {
+                return BookWidget(
+                    book: Book().fromMap(isSearch
                         ? searchBooks[index].data()
-                        : books[index].data()
-                ));
+                        : books[index].data())
+                      ..setId(
+                          isSearch ? searchBooks[index].id : books[index].id));
               })),
     );
   }
@@ -120,10 +114,7 @@ class _BooksPageState extends State<BooksPage> {
   void _search(String value) {
     searchBooks.clear();
     for (int i = 0; i < books.length; i++) {
-      if (Book()
-          .fromMap(books[i].data())
-          .name
-          .contains(value)) {
+      if (Book().fromMap(books[i].data()).name.contains(value)) {
         searchBooks.add(books[i]);
       }
     }
@@ -190,10 +181,9 @@ class _BookWidgetState extends State<BookWidget> {
     return InkWell(
       onTap: () async {
         String link = await _libraryController.getDownloadLink(
-          id: widget.book.name,
+          id: widget.book.id,
         );
-        await launch(link)
-            .then((value) => print('url  ' + link));
+        await launch(link).then((value) => print('url  ' + link));
       },
       child: Column(
         children: [
@@ -202,10 +192,7 @@ class _BookWidgetState extends State<BookWidget> {
               padding: const EdgeInsets.all(4.0),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Theme
-                      .of(context)
-                      .primaryColor
-                      .withOpacity(0.6),
+                  color: Theme.of(context).primaryColor.withOpacity(0.6),
                 ),
               ),
             ),
