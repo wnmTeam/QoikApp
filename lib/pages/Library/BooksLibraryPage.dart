@@ -183,7 +183,8 @@ class _BookWidgetState extends State<BookWidget> {
         String link = await _libraryController.getDownloadLink(
           id: widget.book.id,
         );
-        await launch(link).then((value) => print('url  ' + link));
+        // await launch(link).then((value) => print('url  ' + link));
+        Navigator.pushNamed(context,'/PDFScreen', arguments: {'path': link});
       },
       child: Column(
         children: [

@@ -57,8 +57,9 @@ dev_dependencies:
   shared_preferences: ^2.0.5
 
   # Pdf
-#  advance_pdf_viewer:
-
+#  advance_pdf_viewer: ^1.2.2
+#  flutter_pdfview: ^1.0.4
+  pdf_render: ^1.0.9
   # File
   file_picker: ^3.0.1
 

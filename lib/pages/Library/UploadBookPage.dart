@@ -269,12 +269,49 @@ class _UploadBookPageState extends State<UploadBookPage> {
                         list = snapshot.data.data()[temp];
                       }
                       list.sort();
-
+                      print(list);
                       return ListView.builder(
                         itemCount: list.length,
                         itemBuilder: (context, index) {
                           String item = list[index];
-                          return ListTile(
+                          return null != item
+                              ? ListTile(
+                                  title: Text(item),
+                                  onTap: () {
+                                    setState(() {
+                                      if (type == 'colleges')
+                                        _college = item;
+                                      else if (type == 'subjects') {
+                                        if (null == item) _addSubject();
+                                        _subject_name = item;
+                                      } else if (type == 'librarySections')
+                                        _librarySection = item;
+                                      else
+                                        _university = item;
+                                    });
+                                    Navigator.pop(context, item);
+                                  },
+                                )
+                              : ListTile(
+                                  leading: Icon(
+                                    Icons.add_circle,
+                                    color: ConstValues.firstColor,
+                                  ),
+                                  onTap: () {},
+                                );
+                        },
+                      );
+                    }
+                    return Center(child: CircularProgressIndicator());
+                  },
+                )
+              : ListView.builder(
+                  itemCount: _librarySections[_librarySection].subjects.length,
+                  itemBuilder: (context, index) {
+                    String item =
+                        _librarySections[_librarySection].subjects[index];
+                    return null != item
+                        ? ListTile(
                             title: Text(item),
                             onTap: () {
                               setState(() {
@@ -289,34 +326,17 @@ class _UploadBookPageState extends State<UploadBookPage> {
                               });
                               Navigator.pop(context, item);
                             },
+                          )
+                        : ListTile(
+                            leading: Icon(
+                              Icons.add_circle,
+                              color: ConstValues.firstColor,
+                            ),
+                            title: Text('_add_subject'),
+                            onTap: () {
+                              _addSubject();
+                            },
                           );
-                        },
-                      );
-                    }
-                    return Center(child: CircularProgressIndicator());
-                  },
-                )
-              : ListView.builder(
-                  itemCount: _librarySections[_librarySection].subjects.length,
-                  itemBuilder: (context, index) {
-                    String item =
-                        _librarySections[_librarySection].subjects[index];
-                    return ListTile(
-                      title: Text(item),
-                      onTap: () {
-                        setState(() {
-                          if (type == 'colleges')
-                            _college = item;
-                          else if (type == 'subjects')
-                            _subject_name = item;
-                          else if (type == 'librarySections')
-                            _librarySection = item;
-                          else
-                            _university = item;
-                        });
-                        Navigator.pop(context, item);
-                      },
-                    );
                   },
                 );
         });
@@ -346,5 +366,43 @@ class _UploadBookPageState extends State<UploadBookPage> {
 
     await _libraryController.createBookRecord(
         book: book, section: _librarySection);
+  }
+
+  void _addSubject() {
+    TextEditingController _subjectController = TextEditingController();
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+        ),
+//        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return Column(
+            children: [
+              TextFormField(
+                controller: _subjectController,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text('_cansel')),
+                  ElevatedButton(
+                    onPressed: () async {
+                      await _libraryController.addSubject(
+                        subject: _subjectController.text.trim(),
+                        section: _librarySection,
+                      );
+                    },
+                    child: Text('_add'),
+                  ),
+                ],
+              )
+            ],
+          );
+        });
   }
 }

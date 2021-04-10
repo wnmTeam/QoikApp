@@ -14,6 +14,7 @@ import 'package:stumeapp/pages/Group/WritePost.dart';
 import 'package:stumeapp/pages/Library/BookViewerPage.dart';
 import 'package:stumeapp/pages/Library/BooksLibraryPage.dart';
 import 'package:stumeapp/pages/Library/UploadBookPage.dart';
+import 'package:stumeapp/pages/Library/pdfViewerPage.dart';
 import 'package:stumeapp/pages/Notification/NotificationsPage.dart';
 import 'package:stumeapp/pages/Profile/ChangePasswordPage.dart';
 import 'package:stumeapp/pages/Profile/ProfilePage.dart';
@@ -117,6 +118,11 @@ class RouteController {
             builder: (_) => PostPage(
                   group: args['group'],
                   post: args['post'],
+                ));
+    case '/PDFScreen':
+        return MaterialPageRoute(
+            builder: (_) => PDFScreen(
+                  path: args['path'],
                 ));
     }
   }

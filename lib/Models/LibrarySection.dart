@@ -12,7 +12,7 @@ class LibrarySection {
   Map<String, dynamic> toMap() => {SUBJECTS: subjects};
 
   LibrarySection fromMap(map) {
-    this.subjects = map[SUBJECTS];
+    this.subjects = map[SUBJECTS]..add(null);
     return this;
   }
 

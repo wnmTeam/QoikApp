@@ -42,4 +42,9 @@ class LibraryApi {
         .collection('books').doc(book.id).set(book.toMap());
   }
 
+  addSubject({String subject, String section}) {
+    return _firestore.collection('books')
+        .doc(section).set({'subjects': FieldValue.arrayUnion([subject])}, SetOptions(merge: true));
+  }
+
 }
