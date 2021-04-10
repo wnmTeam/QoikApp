@@ -347,8 +347,10 @@ class _UploadBookPageState extends State<UploadBookPage> {
     Book book = Book(
         publisher: MyUser.myUser.id,
         name: _bookNameController.text,
+        section: _librarySection,
         university: _university,
         college: _college,
+        is_pending: true,
         subject_name: _subject_name)
       ..setId(MyUser.myUser.id +
           _librarySection +
@@ -364,8 +366,7 @@ class _UploadBookPageState extends State<UploadBookPage> {
       });
     });
 
-    await _libraryController.createBookRecord(
-        book: book, section: _librarySection);
+    await _libraryController.createBookRecord(book: book);
   }
 
   void _addSubject() {

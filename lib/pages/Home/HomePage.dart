@@ -354,7 +354,7 @@ class _HomePageState extends State<HomePage> {
                   _currentIndex == 2
                       ? Icons.add
                       : _currentIndex == 3
-                          ? Icons.upload_file
+                          ? Icons.add
                           : Icons.person,
                   color: Colors.white,
                 ),
