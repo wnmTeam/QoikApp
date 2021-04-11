@@ -11,6 +11,7 @@ import 'package:stumeapp/pages/Group/GroupPage.dart';
 import 'package:stumeapp/pages/Group/PostPage.dart';
 import 'package:stumeapp/pages/Group/SelectMembersPage.dart';
 import 'package:stumeapp/pages/Group/WritePost.dart';
+import 'package:stumeapp/pages/Library/BookInfoPage.dart';
 import 'package:stumeapp/pages/Library/BookViewerPage.dart';
 import 'package:stumeapp/pages/Library/BooksLibraryPage.dart';
 import 'package:stumeapp/pages/Library/PendingBooksBage.dart';
@@ -120,15 +121,19 @@ class RouteController {
                   group: args['group'],
                   post: args['post'],
                 ));
-    case '/PDFScreen':
+      case '/PDFScreen':
         return MaterialPageRoute(
             builder: (_) => PDFScreen(
                   path: args['path'],
                 ));
-        case '/PendingBooksPage':
+      case '/BookInfoPage':
         return MaterialPageRoute(
-            builder: (_) => PendingBooksPage(
+            builder: (_) => BookInfoPage(
+                  book: args['book'],
+                  type: args['type'],
                 ));
+      case '/PendingBooksPage':
+        return MaterialPageRoute(builder: (_) => PendingBooksPage());
     }
   }
 }

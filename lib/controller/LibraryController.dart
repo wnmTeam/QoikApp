@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:stumeapp/Models/Book.dart';
 import 'package:stumeapp/api/library_api.dart';
 
 class LibraryController {
@@ -18,5 +19,9 @@ class LibraryController {
     return api.getDownloadLink(
       id: id,
     );
+  }
+
+  acceptBook({Book book, double rate}) {
+    return api.acceptBook(book: book, rate: rate);
   }
 }

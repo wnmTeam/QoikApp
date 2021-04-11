@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:stumeapp/Models/Book.dart';
+import 'package:stumeapp/Models/MyUser.dart';
 
 class LibraryApi {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -67,5 +68,17 @@ class LibraryApi {
           .set({
         'subjects': FieldValue.arrayUnion([subject])
       }, SetOptions(merge: true));
+  }
+
+  acceptBook({Book book, double rate}) async {
+    await _firestore.collection('books').doc(book.id).set({
+      'is_pending': false,
+      'admin': MyUser.myUser.id,
+    }, SetOptions(merge: true));
+
+    return _firestore
+        .collection('users')
+        .doc(book.publisher)
+        .set({'points': FieldValue.increment(rate)}, SetOptions(merge: true));
   }
 }

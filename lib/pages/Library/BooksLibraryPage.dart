@@ -179,11 +179,9 @@ class _BookWidgetState extends State<BookWidget> {
     size = MediaQuery.of(context).size;
     return InkWell(
       onTap: () async {
-        String link = await _libraryController.getDownloadLink(
-          id: widget.book.id,
-        );
-        // await launch(link).then((value) => print('url  ' + link));
-        Navigator.pushNamed(context,'/PDFScreen', arguments: {'path': link});
+        Navigator.of(context).pushNamed('/BookInfoPage', arguments: {
+          'book': widget.book,
+        });
       },
       child: Column(
         children: [

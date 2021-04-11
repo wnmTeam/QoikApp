@@ -62,6 +62,7 @@ class Book {
     this.subject_name = map[SUBJECT_NAME];
     this.is_pending = map[IS_PENDING];
     this.admin = map[ADMIN];
+    this.id = getId();
     return this;
   }
 
@@ -71,5 +72,9 @@ class Book {
 
   setUrl(String url) {
     this.url = url;
+  }
+
+  getId() {
+    return publisher + section + university + name + subject_name;
   }
 }

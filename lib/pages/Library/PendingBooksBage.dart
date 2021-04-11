@@ -27,7 +27,8 @@ class _PendingBooksPageState extends State<PendingBooksPage> {
   Size size;
 
   List<DocumentSnapshot> books = [
-    null,null,
+    null,
+    null,
   ];
 
   @override
@@ -38,7 +39,6 @@ class _PendingBooksPageState extends State<PendingBooksPage> {
 
   @override
   Widget build(BuildContext context) {
-
     size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -116,8 +116,8 @@ class BookWidget extends StatefulWidget {
 }
 
 class _BookWidgetState extends State<BookWidget> {
-
   Size size;
+
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
@@ -125,7 +125,10 @@ class _BookWidgetState extends State<BookWidget> {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
       onTap: () {
-
+        Navigator.of(context).pushNamed('/BookInfoPage', arguments: {
+          'book': widget.book,
+          'type': 'pending',
+        });
       },
       leading: ClipRRect(
         borderRadius: BorderRadius.circular(30),
