@@ -139,7 +139,6 @@ class _BooksPageState extends State<BooksPage> {
     });
     _libraryController
         .getBooks(
-      id: widget.category,
       limit: documentLimit,
       last: lastDocument,
     )

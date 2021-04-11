@@ -6,8 +6,12 @@ class LibraryController {
 
   Future getCategories() => api.getCategories();
 
-  getBooks({String id, int limit, DocumentSnapshot last}) {
+  getBooks({int limit, DocumentSnapshot last}) {
     return api.getBooks(limit: limit, last: last);
+  }
+
+  getPendingBooks({int limit, DocumentSnapshot last}) {
+    return api.getPendingBooks(limit: limit, last: last);
   }
 
   getDownloadLink({String category, String id}) {

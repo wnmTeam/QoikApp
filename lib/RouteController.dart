@@ -13,6 +13,7 @@ import 'package:stumeapp/pages/Group/SelectMembersPage.dart';
 import 'package:stumeapp/pages/Group/WritePost.dart';
 import 'package:stumeapp/pages/Library/BookViewerPage.dart';
 import 'package:stumeapp/pages/Library/BooksLibraryPage.dart';
+import 'package:stumeapp/pages/Library/PendingBooksBage.dart';
 import 'package:stumeapp/pages/Library/UploadBookPage.dart';
 import 'package:stumeapp/pages/Library/pdfViewerPage.dart';
 import 'package:stumeapp/pages/Notification/NotificationsPage.dart';
@@ -123,6 +124,10 @@ class RouteController {
         return MaterialPageRoute(
             builder: (_) => PDFScreen(
                   path: args['path'],
+                ));
+        case '/PendingBooksPage':
+        return MaterialPageRoute(
+            builder: (_) => PendingBooksPage(
                 ));
     }
   }
