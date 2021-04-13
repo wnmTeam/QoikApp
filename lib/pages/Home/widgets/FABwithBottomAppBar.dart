@@ -1,12 +1,17 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:badges/badges.dart';
+
 
 class FABBottomAppBarItem {
-  FABBottomAppBarItem({this.iconData, this.text, this.svgIcon});
+  FABBottomAppBarItem({this.iconData, this.text, this.svgIcon, this.stream});
 
   IconData iconData;
   String text;
   String svgIcon;
+
+  Stream stream;
 }
 
 class FABBottomAppBar extends StatefulWidget {
@@ -20,6 +25,7 @@ class FABBottomAppBar extends StatefulWidget {
     this.selectedColor,
     this.notchedShape,
     this.onTabSelected,
+    this.loading
   }) {
     assert(this.items.length == 2 || this.items.length == 4);
   }
@@ -33,6 +39,8 @@ class FABBottomAppBar extends StatefulWidget {
   final Color selectedColor;
   final NotchedShape notchedShape;
   final ValueChanged<int> onTabSelected;
+
+  bool loading;
 
   @override
   State<StatefulWidget> createState() => FABBottomAppBarState();
@@ -96,35 +104,86 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
   }) {
     Color color =
         _selectedIndex == index ? widget.selectedColor : Colors.white60;
-    return Expanded(
-      child: SizedBox(
-        height: widget.height,
-        child: Material(
-          type: MaterialType.transparency,
-          child: InkWell(
-            onTap: () => onPressed(index),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                item.svgIcon == null
-                    ? Icon(item.iconData, color: color, size: widget.iconSize)
-                    : SvgPicture.asset(
+    return StreamBuilder(
+        stream: !widget.loading
+            ? item.stream
+            : null,
+        builder: (context, snapshot) {
+          if (snapshot.hasData && snapshot.data.data() != null) {
+            // TODO add sound here
+            return Expanded(
+              child: Badge(
+                showBadge: snapshot.data['count'] != 0,
+                badgeColor: Theme.of(context).accentColor,
+                badgeContent: Text(
+                  snapshot.data['count'].toString(),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 6,
+                  ),
+                ),
+                position: BadgePosition.topEnd(top: 8, end: 20),
+                child: SizedBox(
+                  height: widget.height,
+                  child: Material(
+                    type: MaterialType.transparency,
+                    child: InkWell(
+                      onTap: () => onPressed(index),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          item.svgIcon == null
+                              ? Icon(item.iconData, color: color, size: widget.iconSize)
+                              : SvgPicture.asset(
+                            'assets/lib.svg',
+                            color: color,
+                            width: 22,
+                            height: 22,
+                          ),
+                          Text(
+                            item.text,
+                            maxLines: 1,
+                            style: TextStyle(color: color),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }
+          return Expanded(
+            child: SizedBox(
+              height: widget.height,
+              child: Material(
+                type: MaterialType.transparency,
+                child: InkWell(
+                  onTap: () => onPressed(index),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      item.svgIcon == null
+                          ? Icon(item.iconData, color: color, size: widget.iconSize)
+                          : SvgPicture.asset(
                         'assets/lib.svg',
                         color: color,
                         width: 22,
                         height: 22,
                       ),
-                Text(
-                  item.text,
-                  maxLines: 1,
-                  style: TextStyle(color: color),
-                )
-              ],
+                      Text(
+                        item.text,
+                        maxLines: 1,
+                        style: TextStyle(color: color),
+                      )
+                    ],
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
-    );
+          );
+        });
   }
 }

@@ -13,6 +13,7 @@ import 'package:stumeapp/api/notification_api.dart';
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/ChatController.dart';
+import 'package:stumeapp/controller/LibraryController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/main.dart';
@@ -39,7 +40,7 @@ class _HomePageState extends State<HomePage> {
   NotificationApi _notificationApi = NotificationApi();
   ChatController chatsController = ChatController();
   final FirebaseMessaging fbm = FirebaseMessaging.instance;
-  final AuthController _controller = AuthController();
+  final LibraryController _libraryController = LibraryController();
 
   String getChatID(id) {
     List l = [id, MyUser.myUser.id];
@@ -237,6 +238,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       bottomNavigationBar: FABBottomAppBar(
+        loading: loading,
         backgroundColor: Theme.of(context).primaryColor,
         notchedShape: CircularNotchedRectangle(),
         selectedColor: Colors.white,
@@ -248,6 +250,7 @@ class _HomePageState extends State<HomePage> {
               context,
               'home',
             ),
+            stream: null,
           ),
           FABBottomAppBarItem(
             iconData: Icons.chat,
@@ -255,6 +258,8 @@ class _HomePageState extends State<HomePage> {
               context,
               'groups',
             ),
+            stream: null,
+
           ),
           FABBottomAppBarItem(
             iconData: Icons.group,
@@ -262,6 +267,8 @@ class _HomePageState extends State<HomePage> {
               context,
               'friends',
             ),
+            stream: null,
+
           ),
           FABBottomAppBarItem(
             iconData: CupertinoIcons.book_solid,
@@ -269,7 +276,7 @@ class _HomePageState extends State<HomePage> {
               context,
               'library',
             ),
-//            svgIcon: 'assets/lib.svg',
+            stream: _libraryController.getPendingBooksCount(),
           ),
         ],
       ),

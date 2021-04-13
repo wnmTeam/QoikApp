@@ -74,7 +74,7 @@ class RouteController {
       case '/BooksPage':
         return MaterialPageRoute(
             builder: (_) => BooksPage(
-                  category: args['category'],
+                  section: args['section'],
                 ));
       case '/ProfilePage':
         return MaterialPageRoute(

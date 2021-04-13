@@ -21,7 +21,11 @@ class LibraryController {
     );
   }
 
-  acceptBook({Book book, double rate}) {
+  acceptBook({Book book, int rate}) {
     return api.acceptBook(book: book, rate: rate);
+  }
+
+  getPendingBooksCount() {
+    return api.getPendingBooksCount();
   }
 }

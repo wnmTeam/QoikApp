@@ -23,7 +23,7 @@ class BookInfoPage extends StatefulWidget {
 class _BookInfoPageState extends State<BookInfoPage> {
   Size size;
 
-  double _rate;
+  int _rate;
 
   LibraryController _libraryController = LibraryController();
 
@@ -114,7 +114,7 @@ class _BookInfoPageState extends State<BookInfoPage> {
                               ),
                               onRatingUpdate: (rating) {
                                 setState(() {
-                                  _rate = rating;
+                                  _rate = rating.toInt();
                                 });
                               },
                             ),

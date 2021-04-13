@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:stumeapp/Models/LibrarySection.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/LibraryController.dart';
+import 'package:badges/badges.dart';
 
 class LibraryTab extends StatefulWidget {
   final String userId;
@@ -56,6 +58,28 @@ class _LibraryTabState extends State<LibraryTab>
                                 borderRadius: BorderRadius.circular(20)),
                           ),
                         ),
+                        StreamBuilder(
+                            stream: _libraryController.getPendingBooksCount(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData &&
+                                  snapshot.data.data() != null) {
+                                // TODO add sound here
+                                return Badge(
+                                  showBadge: snapshot.data['count'] != 0,
+                                  badgeColor: Theme.of(context).accentColor,
+                                  badgeContent: Text(
+                                    snapshot.data['count'].toString(),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                  position: BadgePosition.topStart(
+                                      top: 15, start: 100),
+                                );
+                              }
+                              return Container();
+                            }),
                       ],
                     );
                   return Container();
@@ -64,8 +88,10 @@ class _LibraryTabState extends State<LibraryTab>
                     title: Text(categories[index].id),
                     leading: Icon(Icons.category),
                     onTap: () {
-                      Navigator.pushNamed(context, '/BooksPage',
-                          arguments: {'category': categories[index].id});
+                      Navigator.pushNamed(context, '/BooksPage', arguments: {
+                        'section': LibrarySection().fromMap(categories[index])
+                          ..setId(categories[index].id)
+                      });
                     },
                   );
               },

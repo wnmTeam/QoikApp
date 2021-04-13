@@ -20,14 +20,14 @@ class LibraryApi {
       return _firestore
           .collection('books')
           .where('is_pending', isEqualTo: false)
-          .startAfterDocument(last)
-          .limit(limit)
+          // .startAfterDocument(last)
+          // .limit(limit)
           .get();
 
     return _firestore
         .collection('books')
         .where('is_pending', isEqualTo: false)
-        .limit(limit)
+        // .limit(limit)
         .get();
   }
 
@@ -36,14 +36,14 @@ class LibraryApi {
       return _firestore
           .collection('books')
           .where('is_pending', isEqualTo: true)
-          .startAfterDocument(last)
-          .limit(limit)
+          // .startAfterDocument(last)
+          // .limit(limit)
           .get();
 
     return _firestore
         .collection('books')
         .where('is_pending', isEqualTo: true)
-        .limit(limit)
+        // .limit(limit)
         .get();
   }
 
@@ -54,9 +54,11 @@ class LibraryApi {
   createBookRecord({Book book, String section}) async {
     await _firestore.collection('books').doc(book.id).set(book.toMap());
 
-    return _firestore.collection('pendingBooks').doc(book.id).set({
-      'ex': true,
-    });
+    return _firestore.collection('pendingBooks').doc('count').set(
+      {'count': FieldValue.increment(1)},
+      SetOptions(merge: true),
+    );
+
   }
 
   addSubject({String subject, String section}) {
@@ -70,15 +72,24 @@ class LibraryApi {
       }, SetOptions(merge: true));
   }
 
-  acceptBook({Book book, double rate}) async {
+  acceptBook({Book book, int rate}) async {
     await _firestore.collection('books').doc(book.id).set({
       'is_pending': false,
       'admin': MyUser.myUser.id,
     }, SetOptions(merge: true));
 
+    await _firestore.collection('pendingBooks').doc('count').set(
+      {'count': FieldValue.increment(-1)},
+      SetOptions(merge: true),
+    );
+
     return _firestore
         .collection('users')
         .doc(book.publisher)
         .set({'points': FieldValue.increment(rate)}, SetOptions(merge: true));
+  }
+
+  getPendingBooksCount() {
+    return _firestore.collection('pendingBooks').doc('count').snapshots();
   }
 }
