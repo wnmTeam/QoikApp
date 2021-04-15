@@ -152,7 +152,17 @@ class _HomePageState extends State<HomePage> {
         ),
         centerTitle: false,
         titleSpacing: 5,
-        actions: [
+        actions: [IconButton(
+          icon: SvgPicture.asset(
+            'assets/store.svg',
+            color: Colors.white,
+            width: 25,
+            height: 25,
+          ),
+          onPressed: () {
+
+          },
+        ),
           StreamBuilder(
               stream: !loading
                   ? _notificationApi.getUnreadNotificationsCount(

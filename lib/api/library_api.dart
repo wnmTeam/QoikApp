@@ -15,11 +15,12 @@ class LibraryApi {
         .get();
   }
 
-  getBooks({int limit, DocumentSnapshot last}) {
+  getBooks({int limit, DocumentSnapshot last, String section}) {
     if (last != null)
       return _firestore
           .collection('books')
           .where('is_pending', isEqualTo: false)
+          .where('section', isEqualTo: section)
           // .startAfterDocument(last)
           // .limit(limit)
           .get();
@@ -27,6 +28,7 @@ class LibraryApi {
     return _firestore
         .collection('books')
         .where('is_pending', isEqualTo: false)
+        .where('section', isEqualTo: section)
         // .limit(limit)
         .get();
   }

@@ -80,8 +80,11 @@ class _UploadBookPageState extends State<UploadBookPage> {
               children: [
                 TextFormField(
                   controller: _bookNameController,
+                  autofocus: true,
                   decoration: InputDecoration(
+                    border: OutlineInputBorder(),
                     labelText: 'book_name',
+                    icon: Icon(CupertinoIcons.doc),
                   ),
                 ),
                 SizedBox(
@@ -102,7 +105,7 @@ class _UploadBookPageState extends State<UploadBookPage> {
                           'tap_to_select',
                         )
                       : _subject_name),
-                  leading: Icon(CupertinoIcons.book),
+                  leading: Icon(CupertinoIcons.bookmark),
                 ),
                 SizedBox(
                   height: 20,
