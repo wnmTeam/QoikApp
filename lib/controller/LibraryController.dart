@@ -28,4 +28,8 @@ class LibraryController {
   getPendingBooksCount() {
     return api.getPendingBooksCount();
   }
+
+  void deleteBook(Book book) {
+    return api.deleteBook(book: book);
+  }
 }

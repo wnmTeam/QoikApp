@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Book.dart';
+import 'package:stumeapp/Models/MyUser.dart';
+import 'package:stumeapp/Models/User.dart';
+import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/LibraryController.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
 
 import '../../const_values.dart';
 import '../../localization.dart';
@@ -26,6 +30,7 @@ class _BookInfoPageState extends State<BookInfoPage> {
   int _rate;
 
   LibraryController _libraryController = LibraryController();
+  AuthController _authController = AuthController();
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +38,26 @@ class _BookInfoPageState extends State<BookInfoPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.book.name),
+        actions: [
+          MyUser.myUser.isAdmin()
+              ? PopupMenuButton(
+                  icon: Icon(Icons.more_vert),
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      value: 1,
+                      child: Text('_delete'),
+                    ),
+                  ],
+                  onSelected: (value) {
+                    switch (value) {
+                      case 1:
+                        _deleteBook();
+                        break;
+                    }
+                  },
+                )
+              : Container(),
+        ],
       ),
       body: ListView(
         children: [
@@ -80,12 +105,42 @@ class _BookInfoPageState extends State<BookInfoPage> {
           SizedBox(
             height: 10,
           ),
-          ListTile(
-            leading: Icon(Icons.person),
-            title: Text('publisher_name'),
-            subtitle: Text(widget.book.publisher),
-            onTap: () {},
-          ),
+          FutureBuilder(
+              future: _authController.getUserInfo(widget.book.publisher),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  try {
+                    User user = User().fromMap(snapshot.data)
+                      ..setId(snapshot.data.id);
+                    return ListTile(
+                      onTap: () {
+                        Navigator.of(context).pushNamed(
+                          '/ProfilePage',
+                          arguments: {
+                            'user': user,
+                            'id_user': user.id,
+                          },
+                        );
+                      },
+                      leading: Icon(Icons.person),
+                      title: Text(
+                        user.firstName + ' ' + user.secondName,
+                      ),
+                      subtitle: Text(
+                        user.degree != User.DEGREE_HIGH_SCHOOL
+                            ? user.university + ' | ' + user.college
+                            : Languages.translate(
+                          context,
+                          'high school',
+                        ),
+                      ),
+                    );
+                  } catch (e) {
+                    return Container();
+                  }
+                }
+                return UserPlaceholder();
+              }),
           SizedBox(
             height: 45,
           ),
@@ -121,6 +176,14 @@ class _BookInfoPageState extends State<BookInfoPage> {
                             actions: [
                               FlatButton(
                                 onPressed: () {
+                                  _libraryController.acceptBook(
+                                    book: widget.book,
+                                    rate: _rate,
+                                  );
+                                  setState(() {
+                                    widget.type = null;
+                                  });
+
                                   Navigator.pop(
                                     context,
                                   );
@@ -135,13 +198,6 @@ class _BookInfoPageState extends State<BookInfoPage> {
                             ],
                           );
                         });
-                    await _libraryController.acceptBook(
-                      book: widget.book,
-                      rate: _rate,
-                    );
-                    setState(() {
-                      widget.type = null;
-                    });
                     // TODO show toast done
                   } else {
                     String link = await _libraryController.getDownloadLink(
@@ -190,5 +246,39 @@ class _BookInfoPageState extends State<BookInfoPage> {
         ],
       ),
     );
+  }
+
+  _deleteBook() async {
+    await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('_delete_book'),
+            content: Text('are_you_sure'),
+            actions: [
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(
+                    context,
+                  );
+                },
+                child: Text(
+                  '_cancel',
+                ),
+              ),
+              FlatButton(
+                onPressed: () {
+                  _libraryController.deleteBook(widget.book);
+                  Navigator.pop(
+                    context,
+                  );
+                },
+                child: Text(
+                  '_yes',
+                ),
+              ),
+            ],
+          );
+        });
   }
 }

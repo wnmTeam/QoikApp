@@ -88,10 +88,14 @@ class LibraryApi {
     return _firestore
         .collection('users')
         .doc(book.publisher)
-        .set({'points': FieldValue.increment(rate)}, SetOptions(merge: true));
+        .set({'points': FieldValue.increment(rate.toInt())}, SetOptions(merge: true));
   }
 
   getPendingBooksCount() {
     return _firestore.collection('pendingBooks').doc('count').snapshots();
+  }
+
+   deleteBook({Book book}) {
+    return _firestore.collection('books').doc(book.id).delete();
   }
 }

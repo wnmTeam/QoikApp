@@ -10,6 +10,7 @@ import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/StorageController.dart';
 import 'package:firebase_storage/firebase_storage.dart' as str;
+// import 'package:path/path.dart';
 
 import '../../localization.dart';
 
@@ -28,6 +29,8 @@ class _UploadBookPageState extends State<UploadBookPage> {
   String _university;
   String _college;
   String _subject_name;
+
+  bool _uploadDone = false;
 
   double _uploadValue = 0;
 
@@ -80,7 +83,6 @@ class _UploadBookPageState extends State<UploadBookPage> {
               children: [
                 TextFormField(
                   controller: _bookNameController,
-                  autofocus: true,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'book_name',
@@ -113,30 +115,54 @@ class _UploadBookPageState extends State<UploadBookPage> {
                 _universityCollegeBuilder(),
               ],
             ),
-            isActive: _currentStep >= 0,
-            state: _currentStep >= 0 ? StepState.complete : StepState.disabled,
+            isActive: _currentStep >= 1,
+            state: _currentStep >= 1 ? StepState.complete : StepState.disabled,
           ),
           Step(
             title: new Text('chose_book'),
-            content: Column(
-              children: <Widget>[
-                ElevatedButton(
-                  onPressed: () async {
-                    final pickedFile = await _storageController.getDoc();
-                    if (pickedFile != null) {
-                      print("${pickedFile.path}\n");
-                      setState(() {
-                        file = pickedFile;
-                      });
-                    } else {
-                      print("no file selected");
-                    }
-                  },
-                  child: Text('_chose_book'),
-                ),
-              ],
+            content: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                children: <Widget>[
+                  file != null?
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+
+                      children: [
+                        Column(
+                          children: [
+                            Container(
+                              width: 100,
+                              height: 125,
+                              color: ConstValues.firstColor[400],
+                            ),
+                            SizedBox(height: 8,),
+                            Text(file.path.split('/').last, style: TextStyle(fontSize: 21),),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ): Container(),
+                  ElevatedButton(
+                    onPressed: () async {
+                      final pickedFile = await _storageController.getDoc();
+                      if (pickedFile != null) {
+                        print("${pickedFile.path}\n");
+                        setState(() {
+                          file = pickedFile;
+                        });
+                      } else {
+                        print("no file selected");
+                      }
+                    },
+                    child: Text('_chose_book'),
+                  ),
+                ],
+              ),
             ),
-            isActive: _currentStep >= 0,
+            isActive: _currentStep >= 2,
             state: _currentStep >= 2 ? StepState.complete : StepState.disabled,
           ),
           Step(
@@ -161,8 +187,10 @@ class _UploadBookPageState extends State<UploadBookPage> {
                 ),
               ),
             ),
-            isActive: _currentStep >= 0,
-            state: _currentStep >= 2 ? StepState.complete : StepState.disabled,
+            isActive: _currentStep >= 3,
+            state: _currentStep >= 3 || _uploadDone
+                ? StepState.complete
+                : StepState.disabled,
           ),
         ],
       ),
@@ -173,8 +201,37 @@ class _UploadBookPageState extends State<UploadBookPage> {
     setState(() => _currentStep = step);
   }
 
+  bool canContinue() {
+    switch (_currentStep) {
+      case 0:
+        if (_librarySection == null) {
+          return false;
+        }
+        _subject_name = null;
+        return true;
+      case 1:
+        if (_bookNameController.text.trim().isEmpty ||
+            _subject_name == null ||
+            _university == null ||
+            _college == null) {
+          return false;
+        }
+        return true;
+      case 2:
+        if (file == null) {
+          return false;
+        }
+        return true;
+      case 3:
+        return false;
+    }
+  }
+
   continued() {
-    _currentStep < 3 ? setState(() => _currentStep += 1) : null;
+    if (!canContinue()) return;
+    setState(() {
+      _currentStep += 1;
+    });
     if (_currentStep == 3) {
       _uploadBook();
     }
