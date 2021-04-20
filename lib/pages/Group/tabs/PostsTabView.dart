@@ -147,10 +147,11 @@ class _PostsTabState extends State<PostsTab>
                             'blocked',
                           )),
                           actions: [
-
                             FlatButton(
                               onPressed: () {
-                                Navigator.pop(context,);
+                                Navigator.pop(
+                                  context,
+                                );
                               },
                               child: Text(
                                 Languages.translate(
@@ -191,10 +192,31 @@ class _PostsTabState extends State<PostsTab>
       limit: documentLimit,
       last: lastDocument,
       groupId: widget.group.id,
+      order: !hasMore ? Post.DATE : Post.LAST_ACTIVE,
     )
         .then((value) {
+          List<DocumentSnapshot> l = value.docs;
+      l.sort((d1, d2) {
+        DateTime lastActive;
+        DateTime lastActive1;
+
+        try {
+          lastActive = d1.data()[Post.LAST_ACTIVE].toDate();
+        } catch (e) {
+          return 1;
+        }
+
+        try {
+          lastActive1 = d2.data()[Post.LAST_ACTIVE].toDate();
+        } catch (e) {
+          return -1;
+        }
+
+        if (lastActive.isBefore(lastActive1)) return 1;
+        return -1;
+      });
       setState(() {
-        posts.insertAll(posts.length - 1, value.docs);
+        posts.insertAll(posts.length - 1, l);
         isLoading = false;
 
         if (value.docs.length < documentLimit)

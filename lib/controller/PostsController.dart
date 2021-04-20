@@ -11,12 +11,35 @@ class PostsController {
   PostsApi api = PostsApi();
   Auth auth = Auth();
 
-  Future getPosts({int limit, DocumentSnapshot last, String groupId}) {
-    return api.getPosts(
-      limit: limit,
-      last: last,
-      groupId: groupId,
-    );
+  Future getPosts({
+    int limit,
+    DocumentSnapshot last,
+    String groupId,
+    String order,
+  }) async {
+    QuerySnapshot querySnapshot = await api.getPosts(
+        limit: limit, last: last, groupId: groupId, order: order);
+    // querySnapshot.docs.sort((d1, d2) {
+    //   DateTime lastActive;
+    //   DateTime lastActive1;
+    //
+    //   try {
+    //     lastActive = d1.data()[Post.LAST_ACTIVE].toDate();
+    //   } catch (e) {
+    //     return -1;
+    //   }
+    //
+    //   try {
+    //     lastActive1 = d2.data()[Post.LAST_ACTIVE].toDate();
+    //   } catch (e) {
+    //     return 1;
+    //   }
+    //
+    //   if (lastActive.isBefore(lastActive1)) return 1;
+    //   return -1;
+    // });
+    print(querySnapshot.docs);
+    return querySnapshot;
   }
 
   Future createPost(
@@ -153,7 +176,8 @@ class PostsController {
     );
   }
 
-  updateComment({String text, String comment_id, String post_id, String group_id}) {
+  updateComment(
+      {String text, String comment_id, String post_id, String group_id}) {
     return api.updateComment(
       text: text,
       comment_id: comment_id,

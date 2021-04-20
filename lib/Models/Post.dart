@@ -5,6 +5,7 @@ class Post {
   static const String ID_OWNER = 'id_owner';
   static const String TEXT = 'text';
   static const String DATE = 'date';
+  static const String LAST_ACTIVE = 'lastActive';
   static const String IMAGES = 'images';
   static const String Files = 'files';
   static const String LIKE_COUNT = 'likeCount';
@@ -20,6 +21,7 @@ class Post {
   int commentCount;
   int followCount;
   DateTime date;
+  DateTime lastActive;
   List images = [];
   List files = [];
 
@@ -37,6 +39,7 @@ class Post {
     this.date,
     this.images,
     this.files,
+    this.lastActive,
   });
 
   String get getStringDate {
@@ -69,6 +72,7 @@ class Post {
         ID_OWNER: idOwner,
         TEXT: text,
         DATE: date,
+        LAST_ACTIVE: lastActive,
         LIKE_COUNT: likeCount,
         COMMENT_COUNT: commentCount,
         FOLLOW_COUNT: followCount,
@@ -81,6 +85,11 @@ class Post {
     this.idOwner = map[ID_OWNER];
     this.text = map[TEXT];
     this.date = map[DATE].toDate();
+    try {
+      this.lastActive = map[LAST_ACTIVE].toDate();
+    } catch (e) {
+      this.lastActive = null;
+    }
     this.likeCount = map[LIKE_COUNT];
     this.commentCount = map[COMMENT_COUNT];
     this.followCount = map[FOLLOW_COUNT];

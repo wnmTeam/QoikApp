@@ -23,6 +23,7 @@ class PostsApi {
     int limit,
     DocumentSnapshot last,
     String groupId,
+    String order,
   }) {
     CollectionReference reference;
 
@@ -33,7 +34,7 @@ class PostsApi {
       log(reference.path, name: 'reference');
       return reference
           .orderBy(
-            'date',
+            Post.DATE,
             descending: true,
           )
           .limit(limit)
@@ -41,7 +42,7 @@ class PostsApi {
     } else {
       return reference
           .orderBy(
-            'date',
+            Post.DATE,
             descending: true,
           )
           .startAfterDocument(last)
@@ -64,6 +65,7 @@ class PostsApi {
       Post.FOLLOW_COUNT: 0,
       Post.COMMENT_POINTED: null,
       Post.DATE: FieldValue.serverTimestamp(),
+      Post.LAST_ACTIVE: FieldValue.serverTimestamp(),
     });
 
     List imagesUrls = [];
@@ -137,6 +139,14 @@ class PostsApi {
       'image': imageUrl,
       "file": null
     });
+
+    await _fireStore
+        .collection('groups')
+        .doc(groupId)
+        .collection('posts')
+        .doc(post.id)
+        .set({Post.LAST_ACTIVE: FieldValue.serverTimestamp()},
+            SetOptions(merge: true));
 
     _notificationApi.sendNotification(
         noti.Notification(
