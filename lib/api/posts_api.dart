@@ -51,6 +51,16 @@ class PostsApi {
     }
   }
 
+  getPinnedPosts({String groupId}) {
+    return _fireStore
+        .collection('groups')
+        .doc(groupId)
+        .collection('posts')
+        .where(Post.IS_PIN, isEqualTo: true)
+        .orderBy(Post.LAST_ACTIVE, descending: true)
+        .get();
+  }
+
   Future createPost(
       String text, List<File> images, List<File> files, String groupId) async {
     CollectionReference reference;
@@ -548,5 +558,23 @@ class PostsApi {
         .collection('comments')
         .doc(comment_id)
         .get();
+  }
+
+  pinPost({String id_group, String id_post}) {
+    return _fireStore
+        .collection('groups')
+        .doc(id_group)
+        .collection('posts')
+        .doc(id_post)
+        .set({'isPin': true}, SetOptions(merge: true));
+  }
+
+  unPinPost({String id_group, String id_post}) {
+    return _fireStore
+        .collection('groups')
+        .doc(id_group)
+        .collection('posts')
+        .doc(id_post)
+        .set({'isPin': FieldValue.delete()}, SetOptions(merge: true));
   }
 }

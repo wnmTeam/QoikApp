@@ -1,6 +1,5 @@
 import 'package:timeago/timeago.dart' as timeago;
 
-
 class Post {
   static const String ID_OWNER = 'id_owner';
   static const String TEXT = 'text';
@@ -12,6 +11,7 @@ class Post {
   static const String COMMENT_COUNT = 'commentCount';
   static const String FOLLOW_COUNT = 'followCount';
   static const String COMMENT_POINTED = 'commentPointed';
+  static const String IS_PIN = 'isPin';
 
   String id;
   String idOwner;
@@ -24,6 +24,7 @@ class Post {
   DateTime lastActive;
   List images = [];
   List files = [];
+  bool isPin;
 
   bool isLiked = false;
 
@@ -40,6 +41,7 @@ class Post {
     this.images,
     this.files,
     this.lastActive,
+    this.isPin,
   });
 
   String get getStringDate {
@@ -67,8 +69,7 @@ class Post {
 
   get getIsLiked => isLiked;
 
-  Map<String, dynamic> toMap() =>
-      {
+  Map<String, dynamic> toMap() => {
         ID_OWNER: idOwner,
         TEXT: text,
         DATE: date,
@@ -79,6 +80,7 @@ class Post {
         COMMENT_POINTED: commentPointed,
         IMAGES: images,
         Files: files,
+        IS_PIN: isPin,
       };
 
   Post fromMap(map) {
@@ -90,6 +92,8 @@ class Post {
     } catch (e) {
       this.lastActive = null;
     }
+    this.isPin = map[IS_PIN];
+
     this.likeCount = map[LIKE_COUNT];
     this.commentCount = map[COMMENT_COUNT];
     this.followCount = map[FOLLOW_COUNT];

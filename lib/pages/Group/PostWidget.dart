@@ -578,10 +578,10 @@ class _PostWidgetState extends State<PostWidget>
                   ),
                 if (commentsShow) Divider(),
                 if (commentsShow)
-                  if(image != null)
+                  if (image != null)
                     Container(
-                      margin: EdgeInsets.only(left: 4, right: 4, bottom: 4, top:
-                      4),
+                      margin:
+                          EdgeInsets.only(left: 4, right: 4, bottom: 4, top: 4),
                       width: 80,
                       height: 80,
                       child: Image.file(
@@ -589,13 +589,13 @@ class _PostWidgetState extends State<PostWidget>
                         fit: BoxFit.cover,
                       ),
                     ),
-                  // if (file != null)
-                  //   FileWidget(file.path)
-                  // else
-                  //   Container(
-                  //     height: 20,
-                  //     color: Colors.red,
-                  //   ),
+                // if (file != null)
+                //   FileWidget(file.path)
+                // else
+                //   Container(
+                //     height: 20,
+                //     color: Colors.red,
+                //   ),
                 if (commentsShow)
                   Row(
                     children: [
@@ -650,7 +650,8 @@ class _PostWidgetState extends State<PostWidget>
                           color: Theme.of(context).primaryColor,
                         ),
                         onPressed: () async {
-                          final pickedFile = await _storageController.getImage();
+                          final pickedFile =
+                              await _storageController.getImage();
                           if (pickedFile != null) {
                             {
                               setState(() {
@@ -667,7 +668,8 @@ class _PostWidgetState extends State<PostWidget>
                         ),
                         onPressed: () async {
                           String text = _commentController.text;
-                          if (text.isEmpty && image == null && file == null) return;
+                          if (text.isEmpty && image == null && file == null)
+                            return;
 
                           if (!_authController.isBan()) {
                             print('send comment');
@@ -749,10 +751,16 @@ class _PostWidgetState extends State<PostWidget>
           Text(
             user.firstName + ' ' + user.secondName,
           ),
+          if (widget.post.isPin != null)
+            Text(
+              'pinned_post',
+              style: TextStyle(color: ConstValues.firstColor, fontSize: 12),
+            ),
           SizedBox(
             height: 30,
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
+                isExpanded: false,
                 value: null,
                 icon: Icon(Icons.more_horiz),
                 onChanged: (String newValue) {
@@ -769,17 +777,24 @@ class _PostWidgetState extends State<PostWidget>
                     case 'Block':
                       _blockPost(widget.post.idOwner);
                       break;
+                    case 'Pin':
+                      _pinPost();
+                      break;
+                    case 'Unpin':
+                      _unPinPost();
+                      break;
                   }
                 },
                 items: <String>[
                   if (MyUser.myUser.id == widget.post.idOwner ||
                       MyUser.myUser.isAdmin())
                     'Edit',
+                  if (MyUser.myUser.isAdmin())
+                    if (widget.post.isPin == null) 'Pin' else 'Unpin',
                   if (MyUser.myUser.id == widget.post.idOwner ||
                       MyUser.myUser.isAdmin())
                     'Delete',
-                  if (MyUser.myUser.isAdmin())
-                    'Block',
+                  if (MyUser.myUser.isAdmin()) 'Block',
                   if (MyUser.myUser.id != widget.post.idOwner) 'Report',
                 ].map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
@@ -829,11 +844,19 @@ class _PostWidgetState extends State<PostWidget>
 
   _reportPost() {}
 
-
-  _blockPost(String id_user) async  {
+  _blockPost(String id_user) async {
     await _authController.blockUser(id_user: id_user);
   }
 
+  _pinPost() {
+    _postsController.pinPost(
+        id_post: widget.post.id, id_group: widget.group.id);
+  }
+
+  _unPinPost() {
+    _postsController.unPinPost(
+        id_post: widget.post.id, id_group: widget.group.id);
+  }
 
   _editPost() async {
     await Navigator.pushNamed(

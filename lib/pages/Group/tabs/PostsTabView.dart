@@ -36,7 +36,7 @@ class _PostsTabState extends State<PostsTab>
   PostsController _postsController = PostsController();
   AuthController _authController = AuthController();
 
-  List<DocumentSnapshot> posts = [null];
+  List posts = ['loading'];
 
 //  List<List<DocumentChange>> myposts = [];
 //  List<Stream> streams = [];
@@ -71,6 +71,7 @@ class _PostsTabState extends State<PostsTab>
         getPosts();
       }
     });
+    getPinnedPosts();
 
     getPosts();
     super.initState();
@@ -90,8 +91,10 @@ class _PostsTabState extends State<PostsTab>
       hasMore = true;
       lastDocument = null;
 
-      posts = [null];
+      posts = ['loading'];
     });
+    getPinnedPosts();
+
     getPosts();
     return Future.delayed(Duration(milliseconds: 1));
   }
@@ -106,10 +109,11 @@ class _PostsTabState extends State<PostsTab>
           controller: _scrollController,
           itemCount: posts.length,
           itemBuilder: (context, index) {
-            if (index == posts.length - 1) {
+            if (posts[index] == 'loading') {
               if (isLoading) return Center(child: CircularProgressIndicator());
               return Container();
-            }
+            } else if (posts[index] == 'pinnedPosts')
+              return Text('pinned_posts');
             return PostWidget(
               post: Post().fromMap(posts[index].data())..setId(posts[index].id),
               group: widget.group,
@@ -195,7 +199,17 @@ class _PostsTabState extends State<PostsTab>
       order: !hasMore ? Post.DATE : Post.LAST_ACTIVE,
     )
         .then((value) {
-          List<DocumentSnapshot> l = value.docs;
+      List<DocumentSnapshot> l = value.docs;
+
+      for (int i = 0; i < l.length; i++) {
+        try {
+          if (l[i].data()[Post.IS_PIN]) {
+            l.removeAt(i);
+            i--;
+          }
+        } catch (e) {}
+      }
+
       l.sort((d1, d2) {
         DateTime lastActive;
         DateTime lastActive1;
@@ -224,6 +238,24 @@ class _PostsTabState extends State<PostsTab>
         else
           lastDocument = value.docs.last;
       });
+    });
+  }
+
+  void getPinnedPosts() {
+    _postsController
+        .getPinnedPosts(
+      groupId: widget.group.id,
+    )
+        .then((value) {
+      List<DocumentSnapshot> l = value.docs;
+      print('pinned posts');
+      print(l.length);
+      if (l.isNotEmpty) {
+        print(l[0].data()['isPin']);
+        setState(() {
+          posts.insertAll(0, l);
+        });
+      }
     });
   }
 

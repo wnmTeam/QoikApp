@@ -168,6 +168,11 @@ class PostsController {
     return api.getPost(groupId: groupId, postId: postId);
   }
 
+  getPinnedPosts({String groupId}) {
+    return api.getPinnedPosts(groupId: groupId);
+  }
+
+
   Future deleteComment({String post_id, String comment_id, String group_id}) {
     return api.deleteComment(
       comment_id: comment_id,
@@ -193,4 +198,13 @@ class PostsController {
       group_id: group_id,
     );
   }
+
+   pinPost({String id_post, String id_group}) {
+    return api.pinPost(id_group: id_group, id_post: id_post,);
+  }
+
+  unPinPost({String id_post, String id_group}) {
+    return api.unPinPost(id_group: id_group, id_post: id_post,);
+  }
+
 }
