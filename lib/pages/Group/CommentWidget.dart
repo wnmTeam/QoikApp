@@ -145,7 +145,16 @@ class _CommentWidgetState extends State<CommentWidget> {
               SizedBox(
                 height: 12,
               ),
-              Text(user.firstName + ' ' + user.secondName),
+              Row(
+                children: [
+                  Text(user.firstName + ' ' + user.secondName),
+                  SizedBox(width: 10,),
+                  Text(
+                    widget.comment.getStringDate,
+                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
+                ],
+              ),
               SizedBox(
                 height: 3,
               ),
@@ -303,15 +312,15 @@ class _CommentWidgetState extends State<CommentWidget> {
                               padding: const EdgeInsets.symmetric(
                                   vertical: 4.0, horizontal: 6),
                               child: Text(
-
-                                    ' ' +
+                                ' ' +
                                     Languages.translate(
                                       context,
                                       'like',
                                     ) +
-                                    ' ' +  (widget.comment.likeCount != 0
+                                    ' ' +
+                                    (widget.comment.likeCount != 0
                                         ? widget.comment.likeCount.toString()
-                                        : '') ,
+                                        : ''),
                                 style: TextStyle(
                                   color: widget.comment.isLiked
                                       ? Colors.white
@@ -399,6 +408,9 @@ class _CommentWidgetState extends State<CommentWidget> {
                   PopupMenuButton(
                     // child: Icon(Icons.more_horiz),
                     padding: EdgeInsets.zero,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     icon: Container(
                         decoration: BoxDecoration(
                           color: Colors.grey[200],

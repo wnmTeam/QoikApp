@@ -1,3 +1,5 @@
+import 'package:timeago/timeago.dart' as timeago;
+
 class Comment {
   static const String ID_OWNER = 'id_owner';
   static const String TEXT = 'text';
@@ -28,11 +30,10 @@ class Comment {
   });
 
   String get getStringDate {
-    return date.day.toString() +
-        '/' +
-        date.month.toString() +
-        '/' +
-        date.year.toString();
+    DateTime now = DateTime.now();
+    DateTime def = now.subtract(now.difference(this.date));
+
+    return timeago.format(def);
   }
 
   Map<String, dynamic> toMap() =>

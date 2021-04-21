@@ -152,17 +152,16 @@ class _HomePageState extends State<HomePage> {
         ),
         centerTitle: false,
         titleSpacing: 5,
-        actions: [IconButton(
-          icon: SvgPicture.asset(
-            'assets/store.svg',
-            color: Colors.white,
-            width: 25,
-            height: 25,
+        actions: [
+          IconButton(
+            icon: SvgPicture.asset(
+              'assets/store.svg',
+              color: Colors.white,
+              width: 25,
+              height: 25,
+            ),
+            onPressed: () {},
           ),
-          onPressed: () {
-
-          },
-        ),
           StreamBuilder(
               stream: !loading
                   ? _notificationApi.getUnreadNotificationsCount(
@@ -269,7 +268,6 @@ class _HomePageState extends State<HomePage> {
               'groups',
             ),
             stream: null,
-
           ),
           FABBottomAppBarItem(
             iconData: Icons.group,
@@ -278,7 +276,6 @@ class _HomePageState extends State<HomePage> {
               'friends',
             ),
             stream: null,
-
           ),
           FABBottomAppBarItem(
             iconData: CupertinoIcons.book_solid,
