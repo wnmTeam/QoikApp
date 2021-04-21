@@ -17,6 +17,7 @@ import 'package:stumeapp/main.dart';
 import 'package:stumeapp/pages/ImageView/ImageView.dart';
 import 'package:stumeapp/pages/widgets/FileWidget.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 // import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -302,12 +303,15 @@ class _CommentWidgetState extends State<CommentWidget> {
                               padding: const EdgeInsets.symmetric(
                                   vertical: 4.0, horizontal: 6),
                               child: Text(
-                                ' ' +
+
+                                    ' ' +
                                     Languages.translate(
                                       context,
                                       'like',
                                     ) +
-                                    ' ',
+                                    ' ' +  (widget.comment.likeCount != 0
+                                        ? widget.comment.likeCount.toString()
+                                        : '') ,
                                 style: TextStyle(
                                   color: widget.comment.isLiked
                                       ? Colors.white
@@ -332,10 +336,19 @@ class _CommentWidgetState extends State<CommentWidget> {
                               postId: widget.post.id,
                               commentId: widget.comment.id,
                             );
-                            if (widget.comment.isLiked) {
-                              // sounds.likeSound();
-                            } else {
-                              // sounds.disLikeSound();
+                            DocumentSnapshot d =
+                                await _postsController.getCommentChanges(
+                              postId: widget.post.id,
+                              groupId: widget.group.id,
+                              id_comment: widget.comment.id,
+                            );
+                            if (d.data() != null) {
+                              widget.updateComment(d);
+                              if (widget.comment.isLiked) {
+                                // sounds.likeSound();
+                              } else {
+                                // sounds.disLikeSound();
+                              }
                             }
                           },
                         );
