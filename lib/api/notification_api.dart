@@ -7,6 +7,7 @@ import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/Notification.dart' as noti;
 import 'package:stumeapp/Models/User.dart';
 //import 'package:stumeapp/controller/AuthController.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationApi {
   final FirebaseMessaging fbm = FirebaseMessaging.instance;
@@ -276,5 +277,18 @@ class NotificationApi {
     topic = topic.replaceAll(RegExp("[ÜĞŞÇÖIüğışçö]"), '.');
     return topic;
   }
+
+  /// Create a [AndroidNotificationChannel] for heads up notifications
+  static const AndroidNotificationChannel channel = AndroidNotificationChannel(
+    'high_importance_channel', // id
+    'High Importance Notifications', // title
+    'This channel is used for important notifications.', // description
+    importance: Importance.high,
+  );
+
+  /// Initialize the [FlutterLocalNotificationsPlugin] package.
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  FlutterLocalNotificationsPlugin();
+
 }
 

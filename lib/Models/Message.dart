@@ -47,7 +47,7 @@ class Message {
       print(map[DOC]);
       this.doc = File(map[DOC]);
     } catch (e, s) {
-      print(s);
+      // print(s);
     }
 
     try {

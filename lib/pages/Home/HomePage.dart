@@ -5,6 +5,7 @@ import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/MyUser.dart';
@@ -38,8 +39,9 @@ class _HomePageState extends State<HomePage> {
 
   AuthController _authController = AuthController();
   NotificationApi _notificationApi = NotificationApi();
-  ChatController chatsController = ChatController();
-  final FirebaseMessaging fbm = FirebaseMessaging.instance;
+  ChatController _chatsController = ChatController();
+
+  // final FirebaseMessaging fbm = FirebaseMessaging.instance;
   final LibraryController _libraryController = LibraryController();
 
   String getChatID(id) {
@@ -63,9 +65,8 @@ class _HomePageState extends State<HomePage> {
       LibraryTab(),
     ];
 
-    fbm.requestPermission();
-    // TODO
-
+    // fbm.requestPermission();
+    // FirebaseMessaging.
     // fbm.configure(
     //   onMessage: (msg) {
     //     print(msg);
@@ -140,6 +141,24 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    if (!loading) {
+      FirebaseMessaging.instance
+          .getInitialMessage()
+          .then((RemoteMessage message) {
+        if (message != null) {
+          _notificationRout(message: message);
+        }
+      });
+
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        _createForgroundNotification(message: message);
+      });
+
+      FirebaseMessaging.onMessageOpenedApp
+          .listen((RemoteMessage message) async {
+        await _notificationRout(message: message);
+      });
+    }
     width = MediaQuery.of(context).size.width;
     return Scaffold(
       key: _scaffoldKey,
@@ -677,6 +696,59 @@ class _HomePageState extends State<HomePage> {
       icon: Icons.privacy_tip_outlined,
       url: links['privacy'],
     ));
+  }
+
+  _notificationRout({RemoteMessage message}) async {
+    Map data = message.data;
+    print(data);
+    switch (data['type']) {
+      case 'chats':
+        String id_sender = data['id_sender'];
+        var d = await _chatsController.getChat(getChatID(id_sender));
+        Group chat;
+        User user;
+        if (d.data() != null) {
+          chat = Group().fromMap(d.data())..setId(d.id);
+        }
+        d = await _authController.getUserInfo(id_sender);
+        if (d.data() != null) {
+          user = User().fromMap(d.data())..setId(d.id);
+        }
+
+        Navigator.pushNamed(
+          context,
+          '/ChatRoomPage',
+          arguments: {
+            'user': user,
+            'group': chat,
+          },
+        );
+        break;
+
+      default:
+        Navigator.pushNamed(context, '/NotificationsPage');
+    }
+  }
+
+  _createForgroundNotification({RemoteMessage message}) {
+    RemoteNotification notification = message.notification;
+    AndroidNotification android = message.notification?.android;
+    if (notification != null && android != null) {
+      flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              channel.description,
+              // TODO add a proper drawable resource to android, for now using
+              //      one that already exists in example app.
+              icon: 'launch_background',
+            ),
+          ));
+    }
   }
 }
 

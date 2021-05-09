@@ -133,6 +133,8 @@ class _StartingPageState extends State<StartingPage> {
     );
   }
 
+
+
   waitingWidget() => Stack(
         children: [
           Positioned.fill(

@@ -22,7 +22,6 @@ import 'package:stumeapp/pages/ImageView/ImageView.dart';
 import 'package:url_launcher/url_launcher.dart';
 // import 'package:toast/toast.dart';
 
-
 import '../../const_values.dart';
 import '../../localization.dart';
 
@@ -140,6 +139,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
+
     return Scaffold(
         appBar: widget.isRoom
             ? AppBar(
@@ -427,13 +427,12 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                                           //camera icon
                                                           ClipRRect(
                                                             borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                                100),
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        100),
                                                             child: Container(
-                                                              color: Theme
-                                                                  .of(
-                                                                  context)
+                                                              color: Theme.of(
+                                                                      context)
                                                                   .primaryColor,
                                                               child: IconButton(
                                                                 icon: Icon(
@@ -445,49 +444,36 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                                                 onPressed:
                                                                     () async {
                                                                   final pickedFile =
-                                                                  await _storageController
-                                                                      .getImageFromCamera();
+                                                                      await _storageController
+                                                                          .getImageFromCamera();
                                                                   if (pickedFile !=
                                                                       null) {
-                                                                    _images.add(
-                                                                        File(
-                                                                            pickedFile
-                                                                                .path));
+                                                                    _images.add(File(
+                                                                        pickedFile
+                                                                            .path));
                                                                     setState(
-                                                                            () {
-                                                                          chosenImages =
-                                                                              StatefulBuilder(
-                                                                                  builder:
-                                                                                      (
-                                                                                      context,
-                                                                                      setState) {
-                                                                                    return Container(
-                                                                                      height: _images
-                                                                                          .length >
-                                                                                          0
-                                                                                          ? 150
-                                                                                          : 0,
-                                                                                      child:
-                                                                                      ListView
-                                                                                          .builder(
-                                                                                        scrollDirection:
-                                                                                        Axis
-                                                                                            .horizontal,
-                                                                                        itemCount:
-                                                                                        _images
-                                                                                            .length,
-                                                                                        itemBuilder:
-                                                                                            (
-                                                                                            context,
-                                                                                            index) {
-                                                                                          return sendImagePreview(
-                                                                                              index,
-                                                                                              setState);
-                                                                                        },
-                                                                                      ),
-                                                                                    );
-                                                                                  });
-                                                                        });
+                                                                        () {
+                                                                      chosenImages =
+                                                                          StatefulBuilder(builder:
+                                                                              (context, setState) {
+                                                                        return Container(
+                                                                          height: _images.length > 0
+                                                                              ? 150
+                                                                              : 0,
+                                                                          child:
+                                                                              ListView.builder(
+                                                                            scrollDirection:
+                                                                                Axis.horizontal,
+                                                                            itemCount:
+                                                                                _images.length,
+                                                                            itemBuilder:
+                                                                                (context, index) {
+                                                                              return sendImagePreview(index, setState);
+                                                                            },
+                                                                          ),
+                                                                        );
+                                                                      });
+                                                                    });
                                                                   }
                                                                 },
                                                               ),
@@ -497,13 +483,12 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                                           //send image icon
                                                           ClipRRect(
                                                             borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                                100),
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        100),
                                                             child: Container(
-                                                              color: Theme
-                                                                  .of(
-                                                                  context)
+                                                              color: Theme.of(
+                                                                      context)
                                                                   .primaryColor,
                                                               child: IconButton(
                                                                   icon: Icon(
@@ -514,42 +499,27 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                                                   onPressed:
                                                                       () async {
                                                                     final pickedFile =
-                                                                    await _storageController
-                                                                        .getImage();
+                                                                        await _storageController
+                                                                            .getImage();
                                                                     if (pickedFile !=
                                                                         null) {
-                                                                      _images
-                                                                          .add(
-                                                                          File(
-                                                                              pickedFile
-                                                                                  .path));
+                                                                      _images.add(File(
+                                                                          pickedFile
+                                                                              .path));
                                                                       setState(
-                                                                              () {
-                                                                            chosenImages =
-                                                                                StatefulBuilder(
-                                                                                  builder:
-                                                                                      (
-                                                                                      context,
-                                                                                      setState) {
-                                                                                    return Container(
-                                                                                      height: _images
-                                                                                          .length >
-                                                                                          0
-                                                                                          ? 150
-                                                                                          : 0,
-                                                                                      child: ListView
-                                                                                          .builder(
-                                                                                        scrollDirection: Axis
-                                                                                            .horizontal,
-                                                                                        itemCount: _images
-                                                                                            .length,
-                                                                                        itemBuilder: (
-                                                                                            context,
-                                                                                            index) {
-                                                                                          return sendImagePreview(
-                                                                                              index,
-                                                                                              setState);
-                                                                                        },
+                                                                          () {
+                                                                        chosenImages =
+                                                                            StatefulBuilder(
+                                                                          builder:
+                                                                              (context, setState) {
+                                                                            return Container(
+                                                                              height: _images.length > 0 ? 150 : 0,
+                                                                              child: ListView.builder(
+                                                                                scrollDirection: Axis.horizontal,
+                                                                                itemCount: _images.length,
+                                                                                itemBuilder: (context, index) {
+                                                                                  return sendImagePreview(index, setState);
+                                                                                },
                                                                               ),
                                                                             );
                                                                           },
@@ -657,8 +627,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                             IconButton(
                                                 icon: Icon(
                                                   Icons.emoji_emotions_outlined,
-                                                  color: Theme
-                                                      .of(context)
+                                                  color: Theme.of(context)
                                                       .primaryColor,
                                                 ),
                                                 onPressed: () {
@@ -680,9 +649,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(100),
                                     child: Container(
-                                      color: Theme
-                                          .of(context)
-                                          .primaryColor,
+                                      color: Theme.of(context).primaryColor,
                                       child: IconButton(
                                         icon: Icon(
                                           Icons.send,
@@ -694,7 +661,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                     ),
                                   ),
                                 ],
-                        ),
+                              ),
                       ),
                       // Emojies(
                       //     tabsname: _tabsName,
@@ -705,7 +672,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                     ],
                   ),
                 ],
-        )
+              )
             : Center(child: CircularProgressIndicator())
         // : !creatingChat
         //     ? Stack(
@@ -779,173 +746,173 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
         //                 ),
         //               ),
         //               chosenImages,
-      //               Container(
-      //                 width: size.width,
-      //                 padding: const EdgeInsets.all(2.0),
-      //                 child: widget.isRoom && iamOut
-      //                     ?Text(Languages
-      //                     .translate(
-      //                   context,
-      //                   'cant_send_messages',
-      //                 )):
-      //                      Row(
-      //                   crossAxisAlignment: CrossAxisAlignment.center,
-      //                   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //                   textDirection: TextDirection.ltr,
-      //                   children: [
-      //                     Expanded(
-      //                       child: Container(
-      //                         decoration: BoxDecoration(
-      //                           color: Colors.white,
-      //                           borderRadius: BorderRadius.circular(10.0),
-      //                           boxShadow: [
-      //                             BoxShadow(
-      //                                 offset: Offset(0, 3),
-      //                                 blurRadius: 5,
-      //                                 color: Colors.grey)
-      //                           ],
-      //                         ),
-      //                         child: Row(
-      //                           crossAxisAlignment: CrossAxisAlignment.end,
-      //                           children: [
-      //                             IconButton(
-      //                               icon: Icon(Icons.photo_camera,
-      //                                   color: Theme.of(context).primaryColor,),
-      //                               onPressed: () async {
-      //                                 final pickedFile =
-      //                                     await _storageController
-      //                                         .getImageFromCamera();
-      //                                 if (pickedFile != null) {
-      //                                   _images.add(File(pickedFile.path));
-      //                                   setState(() {
-      //                                     chosenImages = Container(
-      //                                       height: 150,
-      //                                       child: ListView.builder(
-      //                                         scrollDirection:
-      //                                             Axis.horizontal,
-      //                                         itemCount: _images.length,
-      //                                         itemBuilder:
-      //                                             (context, index) {
-      //                                           return sendImagePreview(
-      //                                               index);
-      //                                         },
-      //                                       ),
-      //                                     );
-      //                                   });
-      //                                 }
-      //                               },
-      //                             ),
-      //                             Expanded(
-      //                               child: TextField(
-      //                                 maxLines: 5,
-      //                                 minLines: 1,
-      //                                 textAlign: TextAlign.start,
-      //                                 controller: _messageController,
-      //                                 enableSuggestions: true,
-      //                                 decoration: InputDecoration(
-      //                                   contentPadding:
-      //                                   EdgeInsets.symmetric(
-      //                                       vertical: 0, horizontal: 0),
-      //                                   border: InputBorder.none,
-      //                                   hintText: Languages.translate(
-      //                                     context,
-      //                                     'type_a_message',
-      //                                   ),
-      //                                   hintStyle:
-      //                                   TextStyle(color: Colors.grey),
-      //                                 ),
-      //                                 onTap: () {
-      //                                   if (emojiHeight != 0.0) {
-      //                                     setState(() {
-      //                                       emojiHeight = 0.0;
-      //                                     });
-      //                                   }
-      //                                 },
-      //                               ),
-      //                             ),
-      //                             IconButton(
-      //                                 icon: Icon(Icons.attach_file,
-      //                                     color: Theme.of(context).primaryColor,),
-      //                                 onPressed: () async {
-      //                                   final pickedFile =
-      //                                       await _storageController
-      //                                           .getImage();
-      //                                   if (pickedFile != null) {
-      //                                     _images
-      //                                         .add(File(pickedFile.path));
-      //                                     setState(() {
-      //                                       chosenImages = Container(
-      //                                         height: 150,
-      //                                         child: ListView.builder(
-      //                                           scrollDirection:
-      //                                               Axis.horizontal,
-      //                                           itemCount: _images.length,
-      //                                           itemBuilder:
-      //                                               (context, index) {
-      //                                             return sendImagePreview(
-      //                                                 index);
-      //                                           },
-      //                                         ),
-      //                                       );
-      //                                     });
-      //                                   }
-      //                                 }),
-      //                             if (showEmoji)
-      //                               IconButton(
-      //                                   icon: Icon(
-      //                                       Icons.emoji_emotions_outlined,
-      //                                       color: Theme.of(context).primaryColor,),
-      //                                   onPressed: () {
-      //                                     if (emojiHeight == 0.0) {
-      //                                       setState(() {
-      //                                         emojiHeight = 255.0;
-      //                                       });
-      //                                     } else {
-      //                                       setState(() {
-      //                                         emojiHeight = 0.0;
-      //                                       });
-      //                                     }
-      //                                   }),
-      //                           ],
-      //                         ),
-      //                       ),
-      //                     ),
-      //                     SizedBox(width: 10),
-      //                     ClipRRect(
-      //                       borderRadius: BorderRadius.circular(100),
-      //                       child: Container(
-      //                         color: Theme.of(context).primaryColor,,
-      //                         child: IconButton(
-      //                           icon: Icon(
-      //                             Icons.send,
-      //                             color: Colors.white,
-      //                             textDirection: TextDirection.ltr,
-      //                           ),
-      //                           onPressed: () {
-      //                             if (_images.isNotEmpty) {
-      //                               setState(() {
-      //                                 chosenImages = Container();
-      //                               });
-      //                             }
-      //
-      //                             if (_messageController.text
-      //                                     .trim()
-      //                                     .isEmpty &&
-      //                                 _images.isEmpty) return;
-      //                             _chatController.addMessage(
-      //                               message: Message(
-      //                                 idOwner: _authController.getUser.uid,
-      //                                 text: _messageController.text
-      //                                         .trim()
-      //                                         .isEmpty
-      //                                     ? null
-      //                                     : _messageController.text.trim(),
-      //                               ),
-      //                               id_receiver:widget.isRoom? widget
-      //                                   .group.id : widget.user.id,
-      //                               id_chat: widget.isRoom?widget.group
-      //                                   .id:getChatID(),
-      //                               images: _images,
+        //               Container(
+        //                 width: size.width,
+        //                 padding: const EdgeInsets.all(2.0),
+        //                 child: widget.isRoom && iamOut
+        //                     ?Text(Languages
+        //                     .translate(
+        //                   context,
+        //                   'cant_send_messages',
+        //                 )):
+        //                      Row(
+        //                   crossAxisAlignment: CrossAxisAlignment.center,
+        //                   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //                   textDirection: TextDirection.ltr,
+        //                   children: [
+        //                     Expanded(
+        //                       child: Container(
+        //                         decoration: BoxDecoration(
+        //                           color: Colors.white,
+        //                           borderRadius: BorderRadius.circular(10.0),
+        //                           boxShadow: [
+        //                             BoxShadow(
+        //                                 offset: Offset(0, 3),
+        //                                 blurRadius: 5,
+        //                                 color: Colors.grey)
+        //                           ],
+        //                         ),
+        //                         child: Row(
+        //                           crossAxisAlignment: CrossAxisAlignment.end,
+        //                           children: [
+        //                             IconButton(
+        //                               icon: Icon(Icons.photo_camera,
+        //                                   color: Theme.of(context).primaryColor,),
+        //                               onPressed: () async {
+        //                                 final pickedFile =
+        //                                     await _storageController
+        //                                         .getImageFromCamera();
+        //                                 if (pickedFile != null) {
+        //                                   _images.add(File(pickedFile.path));
+        //                                   setState(() {
+        //                                     chosenImages = Container(
+        //                                       height: 150,
+        //                                       child: ListView.builder(
+        //                                         scrollDirection:
+        //                                             Axis.horizontal,
+        //                                         itemCount: _images.length,
+        //                                         itemBuilder:
+        //                                             (context, index) {
+        //                                           return sendImagePreview(
+        //                                               index);
+        //                                         },
+        //                                       ),
+        //                                     );
+        //                                   });
+        //                                 }
+        //                               },
+        //                             ),
+        //                             Expanded(
+        //                               child: TextField(
+        //                                 maxLines: 5,
+        //                                 minLines: 1,
+        //                                 textAlign: TextAlign.start,
+        //                                 controller: _messageController,
+        //                                 enableSuggestions: true,
+        //                                 decoration: InputDecoration(
+        //                                   contentPadding:
+        //                                   EdgeInsets.symmetric(
+        //                                       vertical: 0, horizontal: 0),
+        //                                   border: InputBorder.none,
+        //                                   hintText: Languages.translate(
+        //                                     context,
+        //                                     'type_a_message',
+        //                                   ),
+        //                                   hintStyle:
+        //                                   TextStyle(color: Colors.grey),
+        //                                 ),
+        //                                 onTap: () {
+        //                                   if (emojiHeight != 0.0) {
+        //                                     setState(() {
+        //                                       emojiHeight = 0.0;
+        //                                     });
+        //                                   }
+        //                                 },
+        //                               ),
+        //                             ),
+        //                             IconButton(
+        //                                 icon: Icon(Icons.attach_file,
+        //                                     color: Theme.of(context).primaryColor,),
+        //                                 onPressed: () async {
+        //                                   final pickedFile =
+        //                                       await _storageController
+        //                                           .getImage();
+        //                                   if (pickedFile != null) {
+        //                                     _images
+        //                                         .add(File(pickedFile.path));
+        //                                     setState(() {
+        //                                       chosenImages = Container(
+        //                                         height: 150,
+        //                                         child: ListView.builder(
+        //                                           scrollDirection:
+        //                                               Axis.horizontal,
+        //                                           itemCount: _images.length,
+        //                                           itemBuilder:
+        //                                               (context, index) {
+        //                                             return sendImagePreview(
+        //                                                 index);
+        //                                           },
+        //                                         ),
+        //                                       );
+        //                                     });
+        //                                   }
+        //                                 }),
+        //                             if (showEmoji)
+        //                               IconButton(
+        //                                   icon: Icon(
+        //                                       Icons.emoji_emotions_outlined,
+        //                                       color: Theme.of(context).primaryColor,),
+        //                                   onPressed: () {
+        //                                     if (emojiHeight == 0.0) {
+        //                                       setState(() {
+        //                                         emojiHeight = 255.0;
+        //                                       });
+        //                                     } else {
+        //                                       setState(() {
+        //                                         emojiHeight = 0.0;
+        //                                       });
+        //                                     }
+        //                                   }),
+        //                           ],
+        //                         ),
+        //                       ),
+        //                     ),
+        //                     SizedBox(width: 10),
+        //                     ClipRRect(
+        //                       borderRadius: BorderRadius.circular(100),
+        //                       child: Container(
+        //                         color: Theme.of(context).primaryColor,,
+        //                         child: IconButton(
+        //                           icon: Icon(
+        //                             Icons.send,
+        //                             color: Colors.white,
+        //                             textDirection: TextDirection.ltr,
+        //                           ),
+        //                           onPressed: () {
+        //                             if (_images.isNotEmpty) {
+        //                               setState(() {
+        //                                 chosenImages = Container();
+        //                               });
+        //                             }
+        //
+        //                             if (_messageController.text
+        //                                     .trim()
+        //                                     .isEmpty &&
+        //                                 _images.isEmpty) return;
+        //                             _chatController.addMessage(
+        //                               message: Message(
+        //                                 idOwner: _authController.getUser.uid,
+        //                                 text: _messageController.text
+        //                                         .trim()
+        //                                         .isEmpty
+        //                                     ? null
+        //                                     : _messageController.text.trim(),
+        //                               ),
+        //                               id_receiver:widget.isRoom? widget
+        //                                   .group.id : widget.user.id,
+        //                               id_chat: widget.isRoom?widget.group
+        //                                   .id:getChatID(),
+        //                               images: _images,
         //                               type:widget.isRoom?'rooms': 'chats',
         //                             );
         //                             _images = [];
@@ -1084,10 +1051,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
     if (message.idOwner != _authController.getUser.uid) {
       //Start other's  message
       return InkWell(
-        onLongPress: (){
-          Clipboard.setData(
-              ClipboardData(text: message.text))
-              .then((value) {
+        onLongPress: () {
+          Clipboard.setData(ClipboardData(text: message.text)).then((value) {
             // Toast.show(
             //   Languages.translate(context, 'text_copied'),
             //   context,
@@ -1119,10 +1084,10 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                 width: 5,
               ),
               Directionality.of(context) == TextDirection.ltr
-                  ? _messageBuilder(
-                      message, false, ConstValues.chatSecondColor, 10, 10, 10, 0)
-                  : _messageBuilder(
-                      message, false, ConstValues.chatSecondColor, 0, 10, 10, 10),
+                  ? _messageBuilder(message, false, ConstValues.chatSecondColor,
+                      10, 10, 10, 0)
+                  : _messageBuilder(message, false, ConstValues.chatSecondColor,
+                      0, 10, 10, 10),
             ],
           ),
         ),
@@ -1155,15 +1120,13 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
 
   _messageBuilder(Message message, bool isSender, Color color, double x1,
       double x2, double x3, double x4) {
-    String minute = message.date.minute
-        .toString()
-        .length < 2
+    String minute = message.date.minute.toString().length < 2
         ? "0" + message.date.minute.toString()
         : message.date.minute.toString();
     return Expanded(
       child: Column(
         crossAxisAlignment:
-        isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Container(
             padding: EdgeInsets.all(4),
@@ -1392,8 +1355,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             onTap: () {
               print(_images[index].path);
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) =>
-                      ImageView.file(
+                  builder: (_) => ImageView.file(
                         image: _images[index],
                         isFile: true,
                       )));
@@ -1517,18 +1479,14 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
       });
     }
 
-    if (_messageController.text
-        .trim()
-        .isEmpty &&
+    if (_messageController.text.trim().isEmpty &&
         _images.isEmpty &&
         doc == null) return;
 
     _chatController.addMessage(
       message: Message(
         idOwner: _authController.getUser.uid,
-        text: _messageController.text
-            .trim()
-            .isEmpty
+        text: _messageController.text.trim().isEmpty
             ? null
             : _messageController.text.trim(),
       ),

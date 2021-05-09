@@ -434,6 +434,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                           value: 2,
                           child: Text('Delete'),
                         ),
+
                       if (MyUser.myUser.id != widget.comment.idOwner)
                         PopupMenuItem(
                           value: 3,
