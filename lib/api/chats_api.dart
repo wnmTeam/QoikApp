@@ -27,17 +27,17 @@ class ChatsApi {
     if (last == null) {
       return reference
           .orderBy(
-        'date',
-        descending: true,
-      )
+            'date',
+            descending: true,
+          )
           .limit(limit)
           .get();
     } else {
       return reference
           .orderBy(
-        'date',
-        descending: true,
-      )
+            'date',
+            descending: true,
+          )
           .startAfterDocument(last)
           .limit(limit)
           .get();

@@ -221,15 +221,57 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               }),
-          IconButton(
-            icon: Icon(
-              CupertinoIcons.chat_bubble_2_fill,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pushNamed(context, '/ChatsPage');
-            },
-          ),
+          StreamBuilder(
+              stream: !loading
+                  ? _notificationApi.getUnreadGroupsNotificationsCount(
+                      id_user: MyUser.myUser.id,
+                      type: 'chatsNotificationsCount',
+                    )
+                  : null,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  // TODO add sound here
+                  return Badge(
+                    showBadge: snapshot.data.docs.length != 0,
+                    badgeColor: Theme.of(context).accentColor,
+                    badgeContent: Text(
+                      snapshot.data.docs.length.toString(),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                      ),
+                    ),
+                    position: BadgePosition.topStart(top: 8, start: 5),
+                    child: IconButton(
+                      icon: Icon(
+                        CupertinoIcons.chat_bubble_2_fill,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/ChatsPage');
+                      },
+                    ),
+                  );
+                }
+                return IconButton(
+                  icon: Icon(
+                    CupertinoIcons.chat_bubble_2_fill,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/ChatsPage');
+                  },
+                );
+              }),
+          // IconButton(
+          //   icon: Icon(
+          //     CupertinoIcons.chat_bubble_2_fill,
+          //     color: Colors.white,
+          //   ),
+          //   onPressed: () {
+          //     Navigator.pushNamed(context, '/ChatsPage');
+          //   },
+          // ),
           Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
               child: InkWell(

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/Notification.dart' as noti;
 import 'package:stumeapp/Models/User.dart';
+
 //import 'package:stumeapp/controller/AuthController.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -74,6 +75,7 @@ class NotificationApi {
 //       },
 //     );
   }
+
 //  requestNotificationPermissions(context) async {
 //    fbm.requestNotificationPermissions();
 //    fbm.configure(
@@ -161,28 +163,29 @@ class NotificationApi {
   }
 
   sendNotification(
-      noti.Notification notification,
-      String type, {
-        String id_group,
-        String id_post,
-      }) {
+    noti.Notification notification,
+    String type, {
+    String id_group,
+    String id_post,
+  }) {
     Map m = notification.toMap();
     m[noti.Notification.DATE] = FieldValue.serverTimestamp();
     print('MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM');
     print(m);
     WriteBatch batch = _firestore.batch();
 
-    if (notification.type == 'chats')
+    if (notification.type == 'chats') {
       batch.set(
         _firestore
             .collection('chatsNotificationsCount')
-            .doc(id_group)
+            .doc(notification.idReceiver)
             .collection('count')
-            .doc(notification.idReceiver),
+            .doc(id_group),
         {'count': FieldValue.increment(1)},
         SetOptions(merge: true),
       );
-    else if (notification.type == 'commentPost');
+    } else if (notification.type == 'commentPost')
+      ;
 
 //    else if (notification.type == 'rooms')
 //      batch.set(
@@ -240,9 +243,9 @@ class NotificationApi {
       {String id_user, String id_group, String type}) {
     _firestore
         .collection(type)
-        .doc(id_group)
-        .collection('count')
         .doc(id_user)
+        .collection('count')
+        .doc(id_group)
         .set({'count': 0});
   }
 
@@ -250,9 +253,18 @@ class NotificationApi {
       {String id_user, String id_group, String type}) {
     return _firestore
         .collection(type)
-        .doc(id_group)
-        .collection('count')
         .doc(id_user)
+        .collection('count')
+        .doc(id_group)
+        .snapshots();
+  }
+
+  Stream getUnreadGroupsNotificationsCount({String id_user, String type}) {
+    return _firestore
+        .collection(type)
+        .doc(id_user)
+        .collection('count')
+        .where('count', isGreaterThan: 0)
         .snapshots();
   }
 
@@ -288,7 +300,5 @@ class NotificationApi {
 
   /// Initialize the [FlutterLocalNotificationsPlugin] package.
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
-
+      FlutterLocalNotificationsPlugin();
 }
-
