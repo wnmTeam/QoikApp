@@ -223,4 +223,8 @@ class Auth {
         .doc(id_user)
         .set({User.BAN: FieldValue.serverTimestamp()}, SetOptions(merge: true));
   }
+
+  getTagedUsers({String text, String groupId, int limit}) {
+    return _firestore.collection('users').where('groups', arrayContains: groupId).orderBy('fullName').startAt([text]).endAt([text + '\uf8ff']).limit(limit).get();
+  }
 }

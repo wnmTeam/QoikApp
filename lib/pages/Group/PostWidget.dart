@@ -21,6 +21,7 @@ import 'package:stumeapp/localization.dart';
 import 'package:stumeapp/pages/ImageView/ImageView.dart';
 import 'package:stumeapp/pages/widgets/FileWidget.dart';
 import 'package:stumeapp/pages/widgets/UserPlaceholder.dart';
+import 'package:stumeapp/pages/widgets/other.dart';
 
 // import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -57,7 +58,7 @@ class _PostWidgetState extends State<PostWidget>
   bool _isExbended = false;
   bool _isCommentExpended = false;
 
-  TextEditingController _commentController = TextEditingController();
+  MyEditController _commentController = MyEditController();
 
   PostsController _postsController = PostsController();
   AuthController _authController = AuthController();
@@ -78,6 +79,8 @@ class _PostWidgetState extends State<PostWidget>
   File image;
   File file;
 
+  List _commentMentions = [];
+
   @override
   void dispose() {
     // sounds.dispose();
@@ -87,6 +90,14 @@ class _PostWidgetState extends State<PostWidget>
   @override
   void initState() {
     _getUser = _authController.getUserInfo(widget.post.idOwner);
+    _commentController.addListener(() {
+      for (int i = 0; i < _commentMentions.length; i++) {
+        if (_commentMentions[i]['start_at'] > _commentController.text.length) {
+          _commentMentions.removeAt(i);
+          i--;
+        }
+      }
+    });
     super.initState();
   }
 
@@ -617,6 +628,7 @@ class _PostWidgetState extends State<PostWidget>
                       Expanded(
                         child: TextField(
                           controller: _commentController,
+                          style: TextStyle(),
                           decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: Languages.translate(
@@ -628,19 +640,28 @@ class _PostWidgetState extends State<PostWidget>
                       //TODO -------------------
                       IconButton(
                         icon: Icon(
-                          Icons.insert_drive_file,
+                          Icons.alternate_email,
                           color: Theme.of(context).primaryColor,
                         ),
                         onPressed: () async {
-                          final pickedFile = await _storageController.getDoc();
-                          if (pickedFile != null) {
-                            print("${pickedFile.path}\n");
-                            setState(() {
-                              file = pickedFile;
+                          User user = await Navigator.pushNamed(
+                              context, '/SearchToTag',
+                              arguments: {'groupId': widget.group.id}) as User;
+                          setState(() {
+                            _commentController.addMention({
+                              'user': user,
+                              'start_at': _commentController.text.length,
+                              'end_at': _commentController.text.length +
+                                  user.fullName.length +
+                                  1,
                             });
-                          } else {
-                            print("444444444444444444444444");
-                          }
+                          });
+
+                          _commentMentions.add({
+                            'user_id': user.id,
+                            'start_at': _commentController.text.length,
+                            'end_at': user.fullName.length,
+                          });
                         },
                       ),
                       //TODO -------------------
@@ -673,15 +694,24 @@ class _PostWidgetState extends State<PostWidget>
 
                           if (!_authController.isBan()) {
                             print('send comment');
+                            List ms = [];
+                            for (Map m in _commentController.mentions)
+                              ms.add({
+                                'user_id': m['user'].id,
+                                'start_at': m['start_at'],
+                                'end_at': m['end_at'],
+                              });
                             await _postsController.createComment(
                                 text: text,
                                 post: widget.post,
                                 group: widget.group,
                                 image: image,
-                                file: file);
+                                file: file,
+                                mentions: ms);
                             setState(() {
                               image = null;
                               file = null;
+                              _commentMentions = [];
                               _commentController.clear();
                             });
                             // sounds.commentSound();

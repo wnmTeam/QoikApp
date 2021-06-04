@@ -147,7 +147,8 @@ class PostsApi {
       "date": comment.date,
       "likeCount": comment.likeCount,
       'image': imageUrl,
-      "file": null
+      "file": null,
+      Comment.MENTIONS: comment.mentions,
     });
 
     await _fireStore
@@ -157,6 +158,13 @@ class PostsApi {
         .doc(post.id)
         .set({Post.LAST_ACTIVE: FieldValue.serverTimestamp()},
             SetOptions(merge: true));
+
+    _notificationApi.sendMentionsNotifications(
+      mentions: comment.mentions,
+      idPost: post.id,
+      idGroup: groupId,
+      idSender: auth.getUser.uid,
+    );
 
     _notificationApi.sendNotification(
         noti.Notification(

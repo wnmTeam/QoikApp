@@ -30,18 +30,14 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  flutter_local_notifications: ^5.0.0+1
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
+  flutter_local_notifications: ^5.0.0+4
 
   # Firebase
-  firebase_auth: ^1.0.1
-  firebase_storage: ^8.0.0
-  firebase_core: "^1.1.0"
-  firebase_messaging: "^9.1.3"
-  cloud_firestore: ^1.0.2
+  firebase_auth: ^1.2.0
+  firebase_storage: ^8.1.0
+  firebase_core: ^1.2.0
+  firebase_messaging: ^10.0.0
+  cloud_firestore: ^2.2.0
 
 
   # Images
@@ -58,8 +54,8 @@ dev_dependencies:
   shared_preferences: ^2.0.5
 
   # Pdf
-#  advance_pdf_viewer: ^1.2.2
-#  flutter_pdfview: ^1.0.4
+  #  advance_pdf_viewer: ^1.2.2
+  #  flutter_pdfview: ^1.0.4
   pdf_render: ^1.0.9
   # File
   file_picker: ^3.0.1
@@ -67,21 +63,27 @@ dev_dependencies:
   # Other
   timeago: ^3.0.2
   url_launcher: ^6.0.3
-#  toast:
+  #  toast:
   package_info: ^2.0.0
   badges: ^2.0.0-nullsafety.1
   day_night_switcher: ^0.2.0+1
   flutter_rating_bar: ^4.0.0
 
   # Emoji keyBoard
-#  emoji_pick: ^0.1.0
+  #  emoji_pick: ^0.1.0
 
   # Text to link
   flutter_linkify: ^5.0.0
 
   # Sound effect
-#  audioplayers: ^0.18.1
+  #  audioplayers: ^0.18.1
   shimmer: ^2.0.0-nullsafety.0
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
 
 
 # For information on the generic Dart part of this file, see the

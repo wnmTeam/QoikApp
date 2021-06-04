@@ -53,13 +53,20 @@ class PostsController {
   }
 
   Future<void> createComment(
-      {String text, Post post, File image, File file, Group group}) {
+      {String text,
+      Post post,
+      File image,
+      File file,
+      Group group,
+      List mentions}) {
+
     api.createComment(
       comment: Comment(
         text: text,
         idOwner: auth.getUser.uid,
         likeCount: 0,
         date: DateTime.now(),
+        mentions: mentions,
       ),
       image: image,
       file: file,
@@ -172,7 +179,6 @@ class PostsController {
     return api.getPinnedPosts(groupId: groupId);
   }
 
-
   Future deleteComment({String post_id, String comment_id, String group_id}) {
     return api.deleteComment(
       comment_id: comment_id,
@@ -199,12 +205,17 @@ class PostsController {
     );
   }
 
-   pinPost({String id_post, String id_group}) {
-    return api.pinPost(id_group: id_group, id_post: id_post,);
+  pinPost({String id_post, String id_group}) {
+    return api.pinPost(
+      id_group: id_group,
+      id_post: id_post,
+    );
   }
 
   unPinPost({String id_post, String id_group}) {
-    return api.unPinPost(id_group: id_group, id_post: id_post,);
+    return api.unPinPost(
+      id_group: id_group,
+      id_post: id_post,
+    );
   }
-
 }

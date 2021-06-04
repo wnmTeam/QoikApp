@@ -301,4 +301,29 @@ class NotificationApi {
   /// Initialize the [FlutterLocalNotificationsPlugin] package.
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
+
+  sendMentionsNotifications(
+      {List mentions, String idSender, String idGroup, String idPost}) {
+    WriteBatch batch = _firestore.batch();
+    for (Map mention in mentions) {
+      batch.set(
+        _firestore.collection('notifications').doc(),
+        noti.Notification(
+          type: 'mention_comment',
+          idSender: idSender,
+          idReceiver: mention['user_id'],
+          idGroup: idGroup,
+          idPost: idPost,
+        ).toMap()
+          ..['date'] = FieldValue.serverTimestamp(),
+      );
+      batch.set(
+        _firestore.collection('notificationsCount').doc(mention['user_id']),
+        {'count': FieldValue.increment(1)},
+        SetOptions(merge: true),
+      );
+    }
+
+    return batch.commit();
+  }
 }

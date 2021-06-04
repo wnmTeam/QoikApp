@@ -5,6 +5,7 @@ class Comment {
   static const String TEXT = 'text';
   static const String DATE = 'date';
   static const String IMAGES = 'images';
+  static const String MENTIONS = 'mentions';
   static const String IMAGE = 'image';
   static const String FILE = 'file';
   static const String LIKE_COUNT = 'likeCount';
@@ -15,6 +16,8 @@ class Comment {
   DateTime date;
   var image;
   var file;
+
+  List mentions;
 
   String id;
 
@@ -27,6 +30,7 @@ class Comment {
     this.date,
     this.image,
     this.file,
+    this.mentions,
   });
 
   String get getStringDate {
@@ -44,6 +48,7 @@ class Comment {
         LIKE_COUNT: likeCount,
         IMAGE: image,
         FILE: file,
+        MENTIONS: mentions,
       };
 
   Comment fromMap(map) {
@@ -53,6 +58,7 @@ class Comment {
     this.likeCount = map[LIKE_COUNT];
     this.image = map[IMAGE];
     this.file = map[FILE];
+    this.mentions = map[MENTIONS];
     return this;
   }
 

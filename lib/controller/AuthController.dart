@@ -239,4 +239,8 @@ class AuthController {
         MyUser.myUser.userTag == User.USER_TAG_PREMIUM_ADMIN ||
         MyUser.myUser.userTag == User.USER_TAG_VERIFIED_ADMIN;
   }
+
+  getTagedUsers({String text, String groupId, int limit}) {
+    return api.getTagedUsers(text: text.toLowerCase(), groupId: groupId, limit: limit);
+  }
 }

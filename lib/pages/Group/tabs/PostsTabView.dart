@@ -202,31 +202,31 @@ class _PostsTabState extends State<PostsTab>
       List<DocumentSnapshot> l = value.docs;
 
       for (int i = 0; i < l.length; i++) {
-        try {
-          if (l[i].data()[Post.IS_PIN]) {
-            l.removeAt(i);
-            i--;
-          }
-        } catch (e) {}
+        // try {
+        //   if (l[i].data()[Post.IS_PIN]) {
+        //     l.removeAt(i);
+        //     i--;
+        //   }
+        // } catch (e) {}
       }
 
       l.sort((d1, d2) {
         DateTime lastActive;
         DateTime lastActive1;
 
-        try {
-          lastActive = d1.data()[Post.LAST_ACTIVE].toDate();
-        } catch (e) {
-          return 1;
-        }
+        // try {
+        //   lastActive = d1.data()[Post.LAST_ACTIVE].toDate();
+        // } catch (e) {
+        //   return 1;
+        // }
+        //
+        // try {
+        //   lastActive1 = d2.data()[Post.LAST_ACTIVE].toDate();
+        // } catch (e) {
+        //   return -1;
+        // }
 
-        try {
-          lastActive1 = d2.data()[Post.LAST_ACTIVE].toDate();
-        } catch (e) {
-          return -1;
-        }
-
-        if (lastActive.isBefore(lastActive1)) return 1;
+        // if (lastActive.isBefore(lastActive1)) return 1;
         return -1;
       });
       setState(() {
@@ -251,7 +251,7 @@ class _PostsTabState extends State<PostsTab>
       print('pinned posts');
       print(l.length);
       if (l.isNotEmpty) {
-        print(l[0].data()['isPin']);
+        // print(l[0].data()['isPin']);
         setState(() {
           posts.insertAll(0, l);
         });

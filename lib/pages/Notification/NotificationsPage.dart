@@ -205,6 +205,19 @@ class _RequestFriendWidgetState extends State<RequestFriendWidget> {
                         },
                       );
                       break;
+                    case 'mention_comment':
+                      var d = await _postsControler.getPost(
+                        groupId: widget.notification.idGroup,
+                        postId: widget.notification.idPost,
+                      );
+                      Navigator.of(context).pushNamed(
+                        '/PostPage',
+                        arguments: {
+                          'post': Post().fromMap(d.data())..setId(d.id),
+                          'group': Group().setId(widget.notification.idGroup),
+                        },
+                      );
+                      break;
                   }
                 },
                 leading: ClipRRect(

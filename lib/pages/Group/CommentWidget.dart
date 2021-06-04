@@ -77,6 +77,7 @@ class _CommentWidgetState extends State<CommentWidget> {
 
   @override
   void initState() {
+    print('MENTIONS:' + widget.comment.mentions.toString());
     _controller.text = widget.comment.text;
     _getUser = _authController.getUserInfo(widget.comment.idOwner);
     super.initState();
@@ -148,7 +149,9 @@ class _CommentWidgetState extends State<CommentWidget> {
               Row(
                 children: [
                   Text(user.firstName + ' ' + user.secondName),
-                  SizedBox(width: 10,),
+                  SizedBox(
+                    width: 10,
+                  ),
                   Text(
                     widget.comment.getStringDate,
                     style: TextStyle(fontSize: 12, color: Colors.grey),
@@ -168,24 +171,8 @@ class _CommentWidgetState extends State<CommentWidget> {
                         });
                       },
                       child: !edit
-                          ? Linkify(
-                              onOpen: (link) async {
-                                if (await canLaunch(link.url)) {
-                                  await launch(link.url);
-                                } else {
-                                  throw 'Could not launch $link';
-                                }
-                              },
-                              linkStyle: TextStyle(
-                                color: Colors.blue,
-                              ),
-                              options: LinkifyOptions(humanize: false),
-                              text: widget.comment.text,
-                              maxLines: _isCommentExpended ? 1000 : 3,
-                              overflow: TextOverflow.ellipsis,
-                              // style: TextStyle(
-                              //   color: Colors.grey[700],
-                              // ),
+                          ? Wrap(
+                              children: _commentContent(),
                             )
                           : Row(
                               children: [
@@ -434,7 +421,6 @@ class _CommentWidgetState extends State<CommentWidget> {
                           value: 2,
                           child: Text('Delete'),
                         ),
-
                       if (MyUser.myUser.id != widget.comment.idOwner)
                         PopupMenuItem(
                           value: 3,
@@ -537,4 +523,68 @@ class _CommentWidgetState extends State<CommentWidget> {
   }
 
   void _reportComment() {}
+
+  _commentContent() {
+    List<Widget> content = [];
+    List mentions = widget.comment.mentions;
+
+    if (mentions != null && mentions.length > 0)
+      for (int i = 0; i < mentions.length; i++) {
+        if (i == 0)
+          content.add(_normalText(
+              widget.comment.text.substring(0, mentions[i]['start_at'])));
+        else if (i != mentions.length - 1)
+          content.add(_normalText(widget.comment.text
+              .substring(mentions[i - 1]['end_at'], mentions[i]['start_at'])));
+        content.add(_mentionText(mentions[i]
+            // widget.comment.text.substring(mentions[i]['start_at'], mentions[i]['end_at'])
+            ));
+        if (i == mentions.length - 1)
+          content.add(_normalText(widget.comment.text
+              .substring(mentions[i]['end_at'], widget.comment.text.length)));
+      }
+    else
+      content.add(_normalText(widget.comment.text));
+    return content;
+  }
+
+  _mentionText(Map mention) {
+    return InkWell(
+      child: Text(
+        widget.comment.text.substring(mention['start_at'], mention['end_at']),
+        style: TextStyle(color: ConstValues.firstColor),
+      ),
+      onTap: () async {
+        print(mention['user_id']);
+        var d = await _authController.getUserInfo(mention['id_user']);
+        if (d != null) {
+          User user = User().fromMap(d.data.data()).setId(d.id);
+          Navigator.pushNamed(context, '/ProfilePage',
+              arguments: {'user': user});
+        }
+      },
+    );
+  }
+
+  _normalText(String text) {
+    return Linkify(
+      onOpen: (link) async {
+        if (await canLaunch(link.url)) {
+          await launch(link.url);
+        } else {
+          throw 'Could not launch $link';
+        }
+      },
+      linkStyle: TextStyle(
+        color: Colors.blue,
+      ),
+      options: LinkifyOptions(humanize: false),
+      text: text,
+      maxLines: _isCommentExpended ? 1000 : 3,
+      overflow: TextOverflow.ellipsis,
+      // style: TextStyle(
+      //   color: Colors.grey[700],
+      // ),
+    );
+  }
 }

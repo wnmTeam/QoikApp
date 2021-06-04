@@ -10,6 +10,7 @@ import 'package:stumeapp/pages/Group/EditPostPage.dart';
 import 'package:stumeapp/pages/Group/GroupPage.dart';
 import 'package:stumeapp/pages/Group/PostPage.dart';
 import 'package:stumeapp/pages/Group/SelectMembersPage.dart';
+import 'package:stumeapp/pages/Group/Widgets.dart';
 import 'package:stumeapp/pages/Group/WritePost.dart';
 import 'package:stumeapp/pages/Library/BookInfoPage.dart';
 import 'package:stumeapp/pages/Library/BookViewerPage.dart';
@@ -134,6 +135,11 @@ class RouteController {
                 ));
       case '/PendingBooksPage':
         return MaterialPageRoute(builder: (_) => PendingBooksPage());
+      case '/SearchToTag':
+        return MaterialPageRoute(
+            builder: (_) => SearchToTag(
+                  groupId: args['groupId'],
+                ));
     }
   }
 }
