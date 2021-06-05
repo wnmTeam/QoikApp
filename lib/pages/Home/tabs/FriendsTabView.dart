@@ -19,6 +19,9 @@ class _FriendsTabState extends State<FriendsTab> {
   bool isLoading = false;
   bool hasMore = true;
   int documentLimit = 10;
+
+  int count = 0;
+
   DocumentSnapshot lastDocument = null;
 
   FriendsController _friendsController = FriendsController();
@@ -95,6 +98,11 @@ class _FriendsTabState extends State<FriendsTab> {
                         'load_more',
                       )),
                     );
+                  else if (count == 0)
+                    return Padding(
+                      padding: const EdgeInsets.all(80.0),
+                      child: Center(child: Image.asset('assets/empty1.png')),
+                    );
                   return Container();
                 }
                 return UserWidget(id: friends[index].id);
@@ -126,7 +134,9 @@ class _FriendsTabState extends State<FriendsTab> {
         .then((value) {
       print('friends');
       print(value.docs.length);
+
       setState(() {
+        count = value.docs.length;
         friends.insertAll(friends.length - 2, value.docs);
         isLoading = false;
         if (value.docs.length < documentLimit)

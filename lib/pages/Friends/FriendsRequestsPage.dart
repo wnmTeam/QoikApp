@@ -63,14 +63,10 @@ class _FriendsRequestsPageState extends State<FriendsRequestsPage> {
         onRefresh: refresh,
         child: friendRequests.isEmpty
             ? Center(
-                child: Text(
-                  Languages.translate(context, "no_requests"),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width / 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey),
-                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(80.0),
+                  child: Center(child: Image.asset('assets/empty1.png'),),
+                )
               )
             : ListView.builder(
                 itemCount: friendRequests.length,

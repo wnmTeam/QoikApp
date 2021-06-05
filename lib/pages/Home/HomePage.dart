@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _currentIndex = 1;
+    _currentIndex = 0;
     _getUserInfo();
     _notificationApi.saveDeviceToken(_authController.getUser.uid);
     _authController.recordEnter();
@@ -349,7 +349,9 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       floatingActionButton: SafeArea(
-        child: _currentIndex == 0 && MyUser.myUser.userTag == 'admin'
+        child: _currentIndex == 0 &&
+                MyUser.myUser != null &&
+                MyUser.myUser.userTag == 'admin'
             ? FloatingActionButton(
                 onPressed: () {
                   if (!_authController.isBan())
@@ -509,78 +511,86 @@ class _HomePageState extends State<HomePage> {
                     //     ),
                     //   ),
                     // ),
-                    UserAccountsDrawerHeader(
-                      arrowColor: Theme.of(context).primaryColor,
-                      // decoration: BoxDecoration(
-                      //   color: Theme.of(context).canvasColor,
-                      // ),
-                      accountName: Text(
-                        MyUser.myUser.firstName +
-                            ' ' +
-                            MyUser.myUser.secondName,
-                        // style: TextStyle(
-                        //   fontSize: width / ConstValues.fontSize_1,
-                        // ),
-                      ),
-                      accountEmail: Text(
-                        MyUser.myUser.email,
-                        // style: TextStyle(
-                        //   color: Theme.of(context)
-                        //       .textTheme
-                        //       .bodyText1
-                        //       .color
-                        //       .withAlpha(150),
-                        //   fontSize: width / 40,
-                        // ),
-                      ),
-                      currentAccountPicture: ClipRRect(
-                        borderRadius: BorderRadius.circular(1000),
-                        child: CachedNetworkImage(
-                          placeholder: (context, url) => Center(
-                            child: Image.asset(ConstValues.userImage),
+                    Stack(
+                      children: [
+                        UserAccountsDrawerHeader(
+                          arrowColor: Theme.of(context).primaryColor,
+                          // decoration: BoxDecoration(
+                          //   color: Theme.of(context).canvasColor,
+                          // ),
+                          accountName: Text(
+                            MyUser.myUser.firstName +
+                                ' ' +
+                                MyUser.myUser.secondName,
+                            // style: TextStyle(
+                            //   fontSize: width / ConstValues.fontSize_1,
+                            // ),
                           ),
-                          imageUrl: !loading && MyUser.myUser.img != null
-                              ? MyUser.myUser.img
-                              : ConstValues.userImage,
-                          fit: BoxFit.cover,
-                          width: width / 5,
-                          height: width / 5,
-                        ),
-                      ),
-                      otherAccountsPictures: [
-                        CircleAvatar(
-                          child: DayNightSwitcherIcon(
-                            isDarkModeEnabled:
-                                storageController.getTheme() == 'dark',
-                            onStateChanged: (isDarkModeEnabled) {
-                              setState(() async {
-                                if (isDarkModeEnabled) {
-                                  await storageController.setTheme('dark');
-                                  MyAppState.myAppState.setState(() {
-                                    MyAppState.isDark = true;
-                                  });
-                                } else {
-                                  await storageController.setTheme('light');
+                          accountEmail: Text(
+                            MyUser.myUser.email,
+                            // style: TextStyle(
+                            //   color: Theme.of(context)
+                            //       .textTheme
+                            //       .bodyText1
+                            //       .color
+                            //       .withAlpha(150),
+                            //   fontSize: width / 40,
+                            // ),
+                          ),
+                          currentAccountPicture: ClipRRect(
+                            borderRadius: BorderRadius.circular(1000),
+                            child: CachedNetworkImage(
+                              placeholder: (context, url) => Center(
+                                child: Image.asset(ConstValues.userImage),
+                              ),
+                              imageUrl: !loading && MyUser.myUser.img != null
+                                  ? MyUser.myUser.img
+                                  : ConstValues.userImage,
+                              fit: BoxFit.cover,
+                              width: width / 5,
+                              height: width / 5,
+                            ),
+                          ),
 
-                                  MyAppState.myAppState.setState(() {
-                                    MyAppState.isDark = false;
-                                  });
-                                }
-                              });
-                            },
+                          onDetailsPressed: () {
+                            Navigator.of(context).pushNamed(
+                              '/ProfilePage',
+                              arguments: {
+                                'user': MyUser.myUser,
+                                'id_user': _authController.getUser.uid,
+                              },
+                            );
+                          },
+                        ),
+                        Positioned(
+                          right: 15,
+                          top: 50,
+                          child: SizedBox(
+                            width: 60,
+                            height: 60,
+                            child: DayNightSwitcherIcon(
+                              isDarkModeEnabled:
+                                  storageController.getTheme() == 'dark',
+                              onStateChanged: (isDarkModeEnabled) {
+                                setState(() async {
+                                  if (isDarkModeEnabled) {
+                                    await storageController.setTheme('dark');
+                                    MyAppState.myAppState.setState(() {
+                                      MyAppState.isDark = true;
+                                    });
+                                  } else {
+                                    await storageController.setTheme('light');
+
+                                    MyAppState.myAppState.setState(() {
+                                      MyAppState.isDark = false;
+                                    });
+                                  }
+                                });
+                              },
+                            ),
                           ),
                         ),
                       ],
-
-                      onDetailsPressed: () {
-                        Navigator.of(context).pushNamed(
-                          '/ProfilePage',
-                          arguments: {
-                            'user': MyUser.myUser,
-                            'id_user': _authController.getUser.uid,
-                          },
-                        );
-                      },
                     ),
                     snapshot.hasData
                         ? Column(

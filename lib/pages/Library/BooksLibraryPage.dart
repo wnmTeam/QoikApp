@@ -99,9 +99,10 @@ class _BooksPageState extends State<BooksPage> {
           ],
         ),
         body: bookCount == 0
-            ? Center(
-                child: Text(Languages.translate(context, "empty")),
-              )
+            ?  Padding(
+              padding: const EdgeInsets.all(80.0),
+              child: Center(child: Image.asset('assets/empty2.png')),
+            )
             : Column(
                 children: [
                   isSearch

@@ -200,83 +200,85 @@ class _PostWidgetState extends State<PostWidget>
                 post.text.isNotEmpty
                     ? Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  _isExbended = !_isExbended;
-                                });
-                              },
-                              onLongPress: () {
-                                Clipboard.setData(
-                                        ClipboardData(text: post.text))
-                                    .then((value) {
-                                  // Toast.show(
-                                  //   Languages.translate(context, 'text_copied'),
-                                  //   context,
-                                  //   duration: Toast.LENGTH_LONG,
-                                  //   backgroundColor:
-                                  //   Theme
-                                  //       .of(context)
-                                  //       .primaryColor,
-                                  // );
+                        // child: Column(
+                        //   mainAxisAlignment: MainAxisAlignment.start,
+                        //   children: [
+                        //     InkWell(
+                        //       onTap: () {
+                        //         setState(() {
+                        //           _isExbended = !_isExbended;
+                        //         });
+                        //       },
+                        //       onLongPress: () {
+                        //         Clipboard.setData(
+                        //                 ClipboardData(text: post.text))
+                        //             .then((value) {
+                        //           // Toast.show(
+                        //           //   Languages.translate(context, 'text_copied'),
+                        //           //   context,
+                        //           //   duration: Toast.LENGTH_LONG,
+                        //           //   backgroundColor:
+                        //           //   Theme
+                        //           //       .of(context)
+                        //           //       .primaryColor,
+                        //           // );
+                        //
+                        //           // Scaffold.of(context).showSnackBar(
+                        //           //     SnackBar(content:Text('The text copied')));
+                        //         });
+                        //       },
+                        //       child: Padding(
+                        //         padding: const EdgeInsets.symmetric(
+                        //           horizontal: 8.0,
+                        //           vertical: 10,
+                        //         ),
+                        //         child: Linkify(
+                        //           onOpen: (link) async {
+                        //             if (await canLaunch(link.url)) {
+                        //               await launch(link.url);
+                        //             } else {
+                        //               throw 'Could not launch $link';
+                        //             }
+                        //           },
+                        //           linkStyle: TextStyle(
+                        //             color: Colors.blue,
+                        //           ),
+                        //           options: LinkifyOptions(humanize: false),
+                        //           text: post.text,
+                        //           maxLines: _isExbended ? 10000 : 5,
+                        //           overflow: TextOverflow.ellipsis,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //     !_isExbended
+                        //         ? post.text.length > 200
+                        //             ? InkWell(
+                        //                 onTap: () {
+                        //                   setState(() {
+                        //                     _isExbended = !_isExbended;
+                        //                   });
+                        //                 },
+                        //                 child: Padding(
+                        //                   padding: const EdgeInsets.symmetric(
+                        //                     horizontal: 8.0,
+                        //                     vertical: 10,
+                        //                   ),
+                        //                   child: Text(
+                        //                     "عرض المزيد",
+                        //                     style: TextStyle(
+                        //                       color: Theme.of(context)
+                        //                           .primaryColor,
+                        //                       fontSize: 16,
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //               )
+                        //             : Container()
+                        //         : Container(),
+                        //   ],
+                        // ),
 
-                                  // Scaffold.of(context).showSnackBar(
-                                  //     SnackBar(content:Text('The text copied')));
-                                });
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8.0,
-                                  vertical: 10,
-                                ),
-                                child: Linkify(
-                                  onOpen: (link) async {
-                                    if (await canLaunch(link.url)) {
-                                      await launch(link.url);
-                                    } else {
-                                      throw 'Could not launch $link';
-                                    }
-                                  },
-                                  linkStyle: TextStyle(
-                                    color: Colors.blue,
-                                  ),
-                                  options: LinkifyOptions(humanize: false),
-                                  text: post.text,
-                                  maxLines: _isExbended ? 10000 : 5,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ),
-                            !_isExbended
-                                ? post.text.length > 200
-                                    ? InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            _isExbended = !_isExbended;
-                                          });
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0,
-                                            vertical: 10,
-                                          ),
-                                          child: Text(
-                                            "عرض المزيد",
-                                            style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .primaryColor,
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                    : Container()
-                                : Container(),
-                          ],
-                        ),
+                  child: ExpandableText(post.text),
                       )
                     : Container(),
                 SizedBox(

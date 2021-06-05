@@ -31,6 +31,8 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
   String _university;
   String _college;
 
+  bool noUsers = false;
+
   @override
   Widget build(BuildContext context) {
     return Hero(
@@ -166,28 +168,35 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
               ),
             ),
             Expanded(
-              child: ListView.builder(
-                itemCount: searchResults.length,
-                itemBuilder: (context, index) {
-                  if (searchResults[index] == null) {
-                    if (isLoading)
-                      return Center(child: CircularProgressIndicator());
-                    else if (hasMore && searchResults.length > 1)
-                      return FlatButton(
-                          onPressed: () {
-                            getFriendRequests(_searchController.text);
-                          },
-                          child: Text(Languages.translate(
-                            context,
-                            'load_more',
-                          )));
-                    return Container();
-                  }
-                  return UserWidget(
-                      user: User().fromMap(searchResults[index].data())
-                        ..setId(searchResults[index].id));
-                },
-              ),
+              child: !noUsers
+                  ? ListView.builder(
+                      itemCount: searchResults.length,
+                      itemBuilder: (context, index) {
+                        if (searchResults[index] == null) {
+                          if (isLoading)
+                            return Center(child: CircularProgressIndicator());
+                          else if (hasMore && searchResults.length > 1)
+                            return FlatButton(
+                                onPressed: () {
+                                  getFriendRequests(_searchController.text);
+                                },
+                                child: Text(Languages.translate(
+                                  context,
+                                  'load_more',
+                                )));
+                          return Container();
+                        }
+                        return UserWidget(
+                            user: User().fromMap(searchResults[index].data())
+                              ..setId(searchResults[index].id));
+                      },
+                    )
+                  : Padding(
+                    padding: const EdgeInsets.all(80.0),
+                    child: Center(
+                        child: Image.asset('assets/empty1.png'),
+                      ),
+                  ),
             ),
           ],
         ),
@@ -221,8 +230,11 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
         .then((value) {
       print('results');
       print(value.docs.length);
-
       setState(() {
+        if (value.docs.length == 0)
+          noUsers = true;
+        else
+          noUsers = false;
         if (value.docs.length < documentLimit) hasMore = false;
         searchResults.insertAll(searchResults.length - 1, value.docs);
         isLoading = false;

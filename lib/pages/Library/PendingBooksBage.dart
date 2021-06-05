@@ -22,6 +22,8 @@ class _PendingBooksPageState extends State<PendingBooksPage> {
   int documentLimit = 10;
   DocumentSnapshot lastDocument = null;
 
+  bool noBooks = false;
+
   LibraryController _libraryController = LibraryController();
 
   Size size;
@@ -44,31 +46,38 @@ class _PendingBooksPageState extends State<PendingBooksPage> {
       appBar: AppBar(
         title: Text('_pending_books'),
       ),
-      body: ListView.builder(
-        itemCount: books.length,
-        itemBuilder: (context, index) {
-          if (index == 0)
-            return SizedBox(
-              height: 10,
-            );
-          else if (index == books.length - 1) {
-            if (isLoading)
-              return Center(child: CircularProgressIndicator());
-            else if (hasMore)
-              return FlatButton(
-                onPressed: () {
-                  getPendingBooks();
-                },
-                child: Text(Languages.translate(
-                  context,
-                  'load_more',
-                )),
-              );
-            return Container();
-          }
-          return BookWidget(book: Book().fromMap(books[index].data()));
-        },
-      ),
+      body: !noBooks
+          ? ListView.builder(
+              itemCount: books.length,
+              itemBuilder: (context, index) {
+                if (index == 0)
+                  return SizedBox(
+                    height: 10,
+                  );
+                else if (index == books.length - 1) {
+                  if (isLoading)
+                    return Center(child: CircularProgressIndicator());
+                  else if (hasMore)
+                    return FlatButton(
+                      onPressed: () {
+                        getPendingBooks();
+                      },
+                      child: Text(Languages.translate(
+                        context,
+                        'load_more',
+                      )),
+                    );
+                  return Container();
+                }
+                return BookWidget(book: Book().fromMap(books[index].data()));
+              },
+            )
+          : Padding(
+            padding: const EdgeInsets.all(80.0),
+            child: Center(
+                child: Image.asset('assets/empty2.png'),
+              ),
+          ),
     );
   }
 
@@ -92,6 +101,10 @@ class _PendingBooksPageState extends State<PendingBooksPage> {
       print('books');
       print(value.docs.length);
       setState(() {
+        if (value.docs.length == 0)
+          noBooks = true;
+        else
+          noBooks = false;
         books.insertAll(books.length - 1, value.docs);
         isLoading = false;
         if (value.docs.length < documentLimit)

@@ -475,30 +475,7 @@ class ProfilePageState extends State<ProfilePage> {
                                             context,
                                             'bio',
                                           )),
-                                    subtitle: SelectableLinkify(
-                                            onOpen: (link) async {
-                                              if (await canLaunch(link.url)) {
-                                                await launch(link.url);
-                                              } else {
-                                                throw 'Could not launch $link';
-                                              }
-                                            },
-                                            linkStyle: TextStyle(
-                                              color: Colors.blue[200],
-                                            ),
-                                            options:
-                                                LinkifyOptions(humanize: true),
-                                            text: _bioController.text,
-                                            style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText2
-                                                  .color
-                                                  .withOpacity(0.6),
-                                              fontSize: 14,
-                                            ),
-                                            // style: TextStyle(fontSize: 16),
-                                          ),
+                                          subtitle: Text(_bioController.text),
                                         ),
                                   if (widget.user.university != null)
                                     ListTile(
@@ -517,127 +494,127 @@ class ProfilePageState extends State<ProfilePage> {
                                       subtitle: Text(widget.user.college),
                                     ),
                                   MyUser.myUser.university == null &&
-                                      isMyProfile
+                                          isMyProfile
                                       ? ListTile(
-                                    onTap: () {
-                                      _bottomSheetBuild(
-                                        'universities',
-                                        _authController.getUniversities(),
-                                      );
-                                    },
-                                    title: Text(Languages.translate(
-                                      context,
-                                      'university',
-                                    )),
-                                    subtitle: Text(_university == null
-                                        ? Languages.translate(
-                                      context,
-                                      'tap_to_select',
-                                    )
-                                        : _university),
-                                  )
+                                          onTap: () {
+                                            _bottomSheetBuild(
+                                              'universities',
+                                              _authController.getUniversities(),
+                                            );
+                                          },
+                                          title: Text(Languages.translate(
+                                            context,
+                                            'university',
+                                          )),
+                                          subtitle: Text(_university == null
+                                              ? Languages.translate(
+                                                  context,
+                                                  'tap_to_select',
+                                                )
+                                              : _university),
+                                        )
                                       : Container(
-                                    height: 0,
-                                  ),
+                                          height: 0,
+                                        ),
                                   _university != null &&
-                                      MyUser.myUser.college == null &&
-                                      isMyProfile
+                                          MyUser.myUser.college == null &&
+                                          isMyProfile
                                       ? ListTile(
-                                    onTap: () {
-                                      _bottomSheetBuild(
-                                        'colleges',
-                                        _authController.getColleges(),
-                                      );
-                                    },
-                                    title: Text(Languages.translate(
-                                      context,
-                                      'college',
-                                    )),
-                                    subtitle: Text(_college == null
-                                        ? Languages.translate(
-                                      context,
-                                      'tap_to_select',
-                                    )
-                                        : _college),
-                                  )
+                                          onTap: () {
+                                            _bottomSheetBuild(
+                                              'colleges',
+                                              _authController.getColleges(),
+                                            );
+                                          },
+                                          title: Text(Languages.translate(
+                                            context,
+                                            'college',
+                                          )),
+                                          subtitle: Text(_college == null
+                                              ? Languages.translate(
+                                                  context,
+                                                  'tap_to_select',
+                                                )
+                                              : _college),
+                                        )
                                       : Container(
-                                    height: 0,
-                                  ),
+                                          height: 0,
+                                        ),
                                   _university != null && _college != null
                                       ? loading
-                                      ? FlatButton.icon(
-                                    onPressed: () {},
-                                    icon: CircularProgressIndicator(),
-                                    label: Text(
-                                      Languages.translate(
-                                          context, "whaiting"),
-                                    ),
-                                  )
-                                      : FlatButton.icon(
-                                      onPressed: () async {
-                                        setState(() {
-                                          loading = true;
-                                        });
-                                        print(MyUser.myUser);
-                                        // MyUser.myUser.university = _university;
-                                        // MyUser.myUser.college = _college;
+                                          ? FlatButton.icon(
+                                              onPressed: () {},
+                                              icon: CircularProgressIndicator(),
+                                              label: Text(
+                                                Languages.translate(
+                                                    context, "whaiting"),
+                                              ),
+                                            )
+                                          : FlatButton.icon(
+                                              onPressed: () async {
+                                                setState(() {
+                                                  loading = true;
+                                                });
+                                                print(MyUser.myUser);
+                                                // MyUser.myUser.university = _university;
+                                                // MyUser.myUser.college = _college;
 
-                                        User x = MyUser.myUser;
-                                        x.university = _university;
-                                        x.college = _college;
-                                        x.groups = [
-                                          _university + '.' + _college,
-                                          _college,
-                                          Group.TYPE_MOFADALAH,
-                                        ];
+                                                User x = MyUser.myUser;
+                                                x.university = _university;
+                                                x.college = _college;
+                                                x.groups = [
+                                                  _university + '.' + _college,
+                                                  _college,
+                                                  Group.TYPE_MOFADALAH,
+                                                ];
 
-                                        await _authController
-                                            .updateUserUniversity(x);
-                                        setState(() {
-                                          loading = false;
-                                        });
-                                      },
-                                      icon: Icon(Icons.save),
-                                      label: Text(Languages.translate(
-                                          context, "save")))
+                                                await _authController
+                                                    .updateUserUniversity(x);
+                                                setState(() {
+                                                  loading = false;
+                                                });
+                                              },
+                                              icon: Icon(Icons.save),
+                                              label: Text(Languages.translate(
+                                                  context, "save")))
                                       : Container(
-                                    height: 0,
-                                  ),
+                                          height: 0,
+                                        ),
                                   isMyProfile && widget.user.email != null
                                       ? ListTile(
-                                    title: Text(Languages.translate(
-                                      context,
-                                      'email',
-                                    )),
-                                    subtitle: Text(widget.user.email),
-                                  )
+                                          title: Text(Languages.translate(
+                                            context,
+                                            'email',
+                                          )),
+                                          subtitle: Text(widget.user.email),
+                                        )
                                       : Container(),
                                   isMyProfile
                                       ? ListTile(
-                                    trailing: IconButton(
-                                      icon: Icon(
-                                        Icons.edit,
-                                      ),
-                                      onPressed: () {
-                                        Navigator.pushNamed(context,
-                                            '/ChangePasswordPage');
-                                      },
-                                    ),
-                                    title: Text(Languages.translate(
-                                      context,
-                                      'password',
-                                    )),
-                                    subtitle: TextField(
-                                      controller: TextEditingController(
-                                          text: 'rrrrrrrryuiodrcfvgbh'),
-                                      obscureText: true,
-                                      readOnly: true,
-                                      decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.zero,
-                                        border: InputBorder.none,
-                                      ),
-                                    ),
-                                  )
+                                          trailing: IconButton(
+                                            icon: Icon(
+                                              Icons.edit,
+                                            ),
+                                            onPressed: () {
+                                              Navigator.pushNamed(context,
+                                                  '/ChangePasswordPage');
+                                            },
+                                          ),
+                                          title: Text(Languages.translate(
+                                            context,
+                                            'password',
+                                          )),
+                                          subtitle: TextField(
+                                            controller: TextEditingController(
+                                                text: 'rrrrrrrryuiodrcfvgbh'),
+                                            obscureText: true,
+                                            readOnly: true,
+                                            decoration: InputDecoration(
+                                              contentPadding: EdgeInsets.zero,
+                                              border: InputBorder.none,
+                                            ),
+                                          ),
+                                        )
                                       : Container(),
                                 ],
                               ),
@@ -651,13 +628,13 @@ class ProfilePageState extends State<ProfilePage> {
                                 Text(
                                     isMyProfile
                                         ? Languages.translate(
-                                      context,
-                                      'my_friends',
-                                    )
+                                            context,
+                                            'my_friends',
+                                          )
                                         : Languages.translate(
-                                      context,
-                                      'friends',
-                                    ),
+                                            context,
+                                            'friends',
+                                          ),
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -728,21 +705,21 @@ class ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                 ),
-          //TODO un comment
-          // SafeArea(
-          //   child: Directionality.of(context) == TextDirection.ltr
-          //       ? Positioned(
-          //           top: 0,
-          //           left: 0,
-          //           child: BackButton(),
-          //         )
-          //       : Positioned(
-          //           top: 0,
-          //           right: 0,
-          //           child: BackButton(),
-          //         ),
-          // )
-        ])
+                //TODO un comment
+                // SafeArea(
+                //   child: Directionality.of(context) == TextDirection.ltr
+                //       ? Positioned(
+                //           top: 0,
+                //           left: 0,
+                //           child: BackButton(),
+                //         )
+                //       : Positioned(
+                //           top: 0,
+                //           right: 0,
+                //           child: BackButton(),
+                //         ),
+                // )
+              ])
             : Center(child: CircularProgressIndicator()));
   }
 
@@ -830,8 +807,10 @@ class ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  _bottomSheetBuild(String type,
-      Future future,) {
+  _bottomSheetBuild(
+    String type,
+    Future future,
+  ) {
     showModalBottomSheet(
         context: context,
         shape: RoundedRectangleBorder(
@@ -921,8 +900,7 @@ class _FriendWidgetState extends State<FriendWidget> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           try {
-            _user = User().fromMap(snapshot.data)
-              ..setId(snapshot.data.id);
+            _user = User().fromMap(snapshot.data)..setId(snapshot.data.id);
             return _friendBuilder();
           } catch (e) {
             return Container();

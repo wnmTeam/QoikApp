@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:pdf_render/pdf_render_widgets.dart';
 
 class PDFScreen extends StatefulWidget {
@@ -15,6 +16,15 @@ class PDFScreen extends StatefulWidget {
 
 class _PDFScreenState extends State<PDFScreen> {
   final controller = PdfViewerController();
+
+  Future<void> secureScreen() async {
+    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+  }
+
+  @override
+  void initState() {
+    secureScreen();
+  }
 
   @override
   void dispose() {
