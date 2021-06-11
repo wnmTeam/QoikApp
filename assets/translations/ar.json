@@ -138,6 +138,24 @@
   "Active Admin": "مشرف نشيط",
   "Premium Admin": "مشرف مميز",
   "Verified Admin": "مشرف موثوق",
-  "mention_comment": "Mention you in a comment."
-
+  "mention_comment": "Mention you in a comment.",
+  "_pending_books": "_pending_books",
+  "economics_and_politics": "economics_and_politics",
+  "engineering": "engineering",
+  "highschool_and_exams": "highschool_and_exams",
+  "literatures_and_languages": "literatures_and_languages",
+  "medical_sciences": "medical_sciences",
+  "_yes": "Yes",
+  "are_you_sure": "Are you sure?",
+  "_delete_book": "_delete_book",
+  "_open": "_open",
+  "_rate_book": "_rate_book",
+  "subject_name": "subject_name",
+  "_section": "_section",
+  "my_city": "مدينتي",
+  "friend_code": "Friend Code",
+  "add_friend_by_code": "Search about users by Code",
+  "ask_friend_for_the_code": "Ask your friend about his code",
+  "share_my": "Share my Code",
+  "pinned_post": "Pinned Post"
 }

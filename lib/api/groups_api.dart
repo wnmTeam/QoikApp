@@ -93,4 +93,8 @@ class GroupsApi {
         .doc(id_room)
         .set({'img': url}, SetOptions(merge: true));
   }
+
+  getCity({String un}) {
+    return _firestore.collection('cities').where('universites', arrayContains: un).get();
+  }
 }

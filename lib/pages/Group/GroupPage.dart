@@ -65,26 +65,19 @@ class _GroupPageState extends State<GroupPage>
                         .subtitle1,
                   )
                 : widget.group.type == Group.TYPE_COLLEGE
-                    ? Text(
-                        Languages.translate(
-                          context,
-                          'my_college',
-                        ),
-                        style: Theme.of(context)
-                            .textTheme
-                            .copyWith(subtitle1: TextStyle(color: Colors.white))
-                            .subtitle1,
-                      )
-                    : Text(
-                        Languages.translate(
-                          context,
-                          widget.group.id,
-                        ),
-                        style: Theme.of(context)
-                            .textTheme
-                            .copyWith(subtitle1: TextStyle(color: Colors.white))
-                            .subtitle1,
-                      ),
+                    ? Text(Languages.translate(
+                        context,
+                        'my_college',
+                      ))
+                    : widget.group.type == 'city'
+                        ? Text(Languages.translate(
+                            context,
+                            'my_city',
+                          ))
+                        : Text(Languages.translate(
+                            context,
+                            widget.group.id,
+                          )),
             subtitle: widget.group.type == 'G' ||
                     widget.group.type == Group.TYPE_MOFADALAH ||
                     widget.group.type == 'test'

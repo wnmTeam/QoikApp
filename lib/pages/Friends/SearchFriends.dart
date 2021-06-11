@@ -46,17 +46,24 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
                   if (_searchController.text.isNotEmpty) {
                     _search();
                   }
-                })
+                }),
+            IconButton(
+              icon: Icon(Icons.apps),
+              onPressed: () {
+                Navigator.pushNamed(context, '/Code');
+              },
+            ),
           ],
           title: TextField(
             controller: _searchController,
             decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: Languages.translate(
-                  context,
-                  'search',
-                ),
-                hintStyle: TextStyle(color: Colors.white70)),
+              border: InputBorder.none,
+              hintText: Languages.translate(
+                context,
+                'search',
+              ),
+              hintStyle: TextStyle(color: Colors.white70),
+            ),
             onSubmitted: (value) {
               if (value.isNotEmpty) {
                 _search();
@@ -74,6 +81,22 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
               child: Wrap(
                 spacing: 5,
                 children: [
+                  // RaisedButton(
+                  //   // elevation: 0,
+                  //   onPressed: () async {
+                  //
+                  //   },
+                  //   child: Text(
+                  //     Languages.translate(
+                  //       context,
+                  //       'id',
+                  //     ),
+                  //     style: TextStyle(fontSize: 13),
+                  //   ),
+                  //   shape: RoundedRectangleBorder(
+                  //     borderRadius: BorderRadius.circular(25),
+                  //   ),
+                  // ),
                   RaisedButton(
                     // elevation: 0,
                     onPressed: () async {
@@ -192,11 +215,11 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
                       },
                     )
                   : Padding(
-                    padding: const EdgeInsets.all(80.0),
-                    child: Center(
+                      padding: const EdgeInsets.all(80.0),
+                      child: Center(
                         child: Image.asset('assets/empty1.png'),
                       ),
-                  ),
+                    ),
             ),
           ],
         ),

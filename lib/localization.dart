@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 
 class Languages{
   static String translate(BuildContext context,String key){
-    return AppLocalization.of(context).translate(key);
+    return '${AppLocalization.of(context).translate(key)}';
   }
 }
 

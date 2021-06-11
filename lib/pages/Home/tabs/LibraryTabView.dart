@@ -8,6 +8,7 @@ import 'package:badges/badges.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../const_values.dart';
+import '../../../localization.dart';
 
 class LibraryTab extends StatefulWidget {
   final String userId;
@@ -60,7 +61,8 @@ class _LibraryTabState extends State<LibraryTab>
                                       arguments: {},
                                     );
                                   },
-                                  child: Text('_pending_books'),
+                                  child: Text(Languages.translate(
+                                      context, '_pending_books')),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20)),
                                 ),
@@ -97,15 +99,20 @@ class _LibraryTabState extends State<LibraryTab>
                           contentPadding:
                               EdgeInsets.symmetric(vertical: 8, horizontal: 10),
                           title: Container(
-                            padding: EdgeInsets.symmetric(vertical: 18, horizontal: 8),
-                            child: Text(categories[index].id),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 18, horizontal: 8),
+                            child: Text(Languages.translate(
+                              context,
+                              categories[index].id,
+                            )),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(7),
                               border: Border.all(color: Colors.grey),
                             ),
                           ),
                           leading: Container(
-                            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 12, horizontal: 12),
                             child: SvgPicture.asset(
                               'assets/${categories[index].id}.svg',
                               color: ConstValues.firstColor,

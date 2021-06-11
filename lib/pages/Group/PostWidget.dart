@@ -278,7 +278,7 @@ class _PostWidgetState extends State<PostWidget>
                         //   ],
                         // ),
 
-                  child: ExpandableText(post.text),
+                        child: ExpandableText(post.text),
                       )
                     : Container(),
                 SizedBox(
@@ -529,6 +529,7 @@ class _PostWidgetState extends State<PostWidget>
                     ),
                     builder: (context, snapshot) {
                       if (snapshot.hasData && snapshot.data.docs.length > 0) {
+                        print('nnnnnnnnneeeeeeeewwwwwwwwwwwwwwwwwwwwwww ccommmmmmmennttttttttt');
                         newComments = snapshot.data.docs;
                         return Row(
                           children: [
@@ -785,7 +786,10 @@ class _PostWidgetState extends State<PostWidget>
           ),
           if (widget.post.isPin != null)
             Text(
-              'pinned_post',
+              Languages.translate(
+                context,
+                'pinned_post',
+              ),
               style: TextStyle(color: ConstValues.firstColor, fontSize: 12),
             ),
           SizedBox(

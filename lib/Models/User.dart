@@ -17,6 +17,7 @@ class User {
   static const String EMAIL = 'email';
   static const String USER_TAG = 'user_tag';
   static const String BAN = 'ban';
+  static const String IS_CITY = 'isCity';
 
   static const String TAG_NEW_USER = 'New User';
   static const String TAG_NORMAL_USER = 'Normal User';
@@ -50,7 +51,7 @@ class User {
   String email;
   String userTag;
   DateTime ban;
-
+  bool isCity;
   String tag;
 
   String id;
@@ -73,6 +74,7 @@ class User {
     this.email,
     this.userTag,
     this.ban,
+    this.isCity,
   });
 
   Map<String, dynamic> toMap() => {
@@ -94,6 +96,7 @@ class User {
         EMAIL: email,
         USER_TAG: userTag,
         BAN: ban,
+        IS_CITY: isCity,
       };
 
   User fromMap(map) {

@@ -25,37 +25,42 @@ class _GroupsChatsTabState extends State<GroupsChatsTab>
   List _groups = [];
   User user;
 
+  bool loading = false;
+
   @override
   void initState() {
+    getMyCity();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     print(MyUser.myUser.groups);
-    return ListView.builder(
-      itemCount: MyUser.myUser.groups.length,
-      itemBuilder: (context, index) {
-        return FutureBuilder(
-          future: _groupsController.getGroupInfo(
-              id_group: MyUser.myUser.groups[index]),
-          builder: (_, snapshot) {
-            if (snapshot.hasData) {
-              print(snapshot.data.data());
-              print(MyUser.myUser.groups[index]);
-              Group group = Group()
-                  .fromMap(snapshot.data.data())
-                  .setId(MyUser.myUser.groups[index]);
-              return _groupBuilder(
-                context,
-                group,
-              );
-            }
-            return UserPlaceholder();
-          },
-        );
-      },
-    );
+    if (!loading)
+      return ListView.builder(
+        itemCount: MyUser.myUser.groups.length,
+        itemBuilder: (context, index) {
+          return FutureBuilder(
+            future: _groupsController.getGroupInfo(
+                id_group: MyUser.myUser.groups[index]),
+            builder: (_, snapshot) {
+              if (snapshot.hasData) {
+                print(snapshot.data.data());
+                print(MyUser.myUser.groups[index]);
+                Group group = Group()
+                    .fromMap(snapshot.data.data())
+                    .setId(MyUser.myUser.groups[index]);
+                return _groupBuilder(
+                  context,
+                  group,
+                );
+              }
+              return UserPlaceholder();
+            },
+          );
+        },
+      );
+    return Center(child: CircularProgressIndicator());
   }
 
   Widget _groupBuilder(BuildContext context, Group group) {
@@ -70,10 +75,15 @@ class _GroupsChatsTabState extends State<GroupsChatsTab>
                   context,
                   'my_college',
                 ))
-              : Text(Languages.translate(
-                  context,
-                  group.id,
-                )),
+              : group.type == 'city'
+                  ? Text(Languages.translate(
+                      context,
+                      'my_city',
+                    ))
+                  : Text(Languages.translate(
+                      context,
+                      group.id,
+                    )),
       onTap: () {
         Navigator.of(context).pushNamed(
           '/GroupPage',
@@ -101,7 +111,9 @@ class _GroupsChatsTabState extends State<GroupsChatsTab>
           color: Theme.of(context).primaryColor,
         ),
       ),
-      subtitle: group.type == Group.TYPE_MOFADALAH || group.type == 'G'|| group.type == 'test'
+      subtitle: group.type == Group.TYPE_MOFADALAH ||
+              group.type == 'G' ||
+              group.type == 'test'
           ? Text('')
           : Text(group.name),
       contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -110,4 +122,27 @@ class _GroupsChatsTabState extends State<GroupsChatsTab>
 
   @override
   bool get wantKeepAlive => true;
+
+  void getMyCity() async {
+    setState(() {
+      loading = true;
+    });
+    var d = await _groupsController.getMyCity();
+    String city;
+    if (d != null) {
+      print(d);
+      city = d.docs[0].id;
+      if (MyUser.myUser.isCity == null)
+        _groupsController.addMemberToGroup(
+          uid: MyUser.myUser.id,
+          id_group: city,
+          type: 'city',
+          name: city,
+        );
+    }
+    setState(() {
+      if (city != null) MyUser.myUser.groups.insert(2, city);
+      loading = false;
+    });
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stumeapp/Models/Group.dart';
+import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/api/groups_api.dart';
 
 class GroupsController {
@@ -32,5 +33,9 @@ class GroupsController {
   addMemberToGroup({uid, String id_group, String type, String name}) {
     return api.addMemberToGroup(
         uid: uid, id_group: id_group, type: type, name: name);
+  }
+
+  getMyCity() {
+    return api.getCity(un: MyUser.myUser.university);
   }
 }

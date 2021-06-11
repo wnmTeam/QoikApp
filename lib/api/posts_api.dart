@@ -247,6 +247,7 @@ class PostsApi {
         .collection('comments')
         .orderBy(
           Comment.DATE,
+          // descending: true,
         )
         .startAfter([DateTime.now()]).snapshots();
   }

@@ -45,7 +45,7 @@ class _BookInfoPageState extends State<BookInfoPage> {
                   itemBuilder: (context) => [
                     PopupMenuItem(
                       value: 1,
-                      child: Text('_delete'),
+                      child: Text('delete'),
                     ),
                   ],
                   onSelected: (value) {
@@ -71,7 +71,10 @@ class _BookInfoPageState extends State<BookInfoPage> {
           ),
           ListTile(
             leading: Icon(Icons.account_balance),
-            title: Text('_university'),
+            title: Text(Languages.translate(
+              context,
+                'university'
+            )),
             subtitle: Text(widget.book.university),
             onTap: () {},
           ),
@@ -80,7 +83,9 @@ class _BookInfoPageState extends State<BookInfoPage> {
           ),
           ListTile(
             leading: Icon(Icons.account_balance),
-            title: Text('_college'),
+            title: Text(Languages.translate(
+              context,
+                'college'            )),
             subtitle: Text(widget.book.college),
             onTap: () {},
           ),
@@ -89,7 +94,9 @@ class _BookInfoPageState extends State<BookInfoPage> {
           ),
           ListTile(
             leading: Icon(CupertinoIcons.book_fill),
-            title: Text('_section'),
+            title: Text(Languages.translate(
+                context,
+                '_section'            )),
             subtitle: Text(widget.book.section),
             onTap: () {},
           ),
@@ -98,7 +105,9 @@ class _BookInfoPageState extends State<BookInfoPage> {
           ),
           ListTile(
             leading: Icon(CupertinoIcons.bookmark_fill),
-            title: Text('subject_name'),
+            title: Text(Languages.translate(
+                context,
+                'subject_name'            )),
             subtitle: Text(widget.book.subject_name),
             onTap: () {},
           ),
@@ -155,7 +164,9 @@ class _BookInfoPageState extends State<BookInfoPage> {
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            title: Text('_rate_book'),
+                            title: Text(Languages.translate(
+                                context,
+                                '_rate_book'           )),
                             content: RatingBar.builder(
                               initialRating: 1,
                               minRating: 1,
@@ -216,7 +227,11 @@ class _BookInfoPageState extends State<BookInfoPage> {
                   height: 57,
                   child: Center(
                     child: Text(
-                      widget.type != 'pending' ? '_open' : '_accept',
+                      widget.type != 'pending' ? Languages.translate(
+                          context,
+                          '_open'           ) : Languages.translate(
+                          context,
+                          'accept'        ),
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
@@ -253,8 +268,12 @@ class _BookInfoPageState extends State<BookInfoPage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('_delete_book'),
-            content: Text('are_you_sure'),
+            title: Text(Languages.translate(
+                context,
+                '_delete_book'           )),
+            content: Text(Languages.translate(
+                context,
+                'are_you_sure'           )),
             actions: [
               FlatButton(
                 onPressed: () {
@@ -263,7 +282,9 @@ class _BookInfoPageState extends State<BookInfoPage> {
                   );
                 },
                 child: Text(
-                  '_cancel',
+                  Languages.translate(
+                      context,
+                      'cancel'          ),
                 ),
               ),
               FlatButton(
@@ -274,7 +295,9 @@ class _BookInfoPageState extends State<BookInfoPage> {
                   );
                 },
                 child: Text(
-                  '_yes',
+                  Languages.translate(
+                      context,
+                      '_yes'           ),
                 ),
               ),
             ],

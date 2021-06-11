@@ -4,6 +4,7 @@ import 'package:stumeapp/pages/ChatRoom/RoomInfoPage.dart';
 import 'package:stumeapp/pages/ChatRoom/conversationPage.dart';
 import 'package:stumeapp/pages/Friends/FriendsRequestsPage.dart';
 import 'package:stumeapp/pages/Friends/FrindsPage.dart';
+import 'package:stumeapp/pages/Friends/SearchByIdPage.dart';
 import 'package:stumeapp/pages/Friends/SearchFriends.dart';
 import 'package:stumeapp/pages/Group/CreatGroupPage.dart';
 import 'package:stumeapp/pages/Group/EditPostPage.dart';
@@ -135,6 +136,8 @@ class RouteController {
                 ));
       case '/PendingBooksPage':
         return MaterialPageRoute(builder: (_) => PendingBooksPage());
+        case '/Code':
+        return MaterialPageRoute(builder: (_) => Code());
       case '/SearchToTag':
         return MaterialPageRoute(
             builder: (_) => SearchToTag(
