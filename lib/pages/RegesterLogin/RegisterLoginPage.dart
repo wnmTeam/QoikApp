@@ -1,7 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Group.dart';
-import 'package:stumeapp/Models/User.dart';
+import 'package:stumeapp/Models/User.dart' as appUser;
 import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/localization.dart';
@@ -216,7 +217,10 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               .of(context)
               .errorColor,
           child: Text(
-            logInErrorMessage,
+            Languages.translate(
+              context,
+              logInErrorMessage,
+            ),
             style: TextStyle(color: Colors.white),
             textAlign: TextAlign.center,
           ),
@@ -239,11 +243,11 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               try {
                 await _authController.login(
                     _emailController.text, _passwordController.text);
-              } on Exception catch (e) {
+              } on FirebaseAuthException catch (e) {
                 print("errr");
-                print(e);
+                print(e.message);
                 setState(() {
-                  logInErrorMessage = e.toString();
+                  logInErrorMessage = e.message;
                 });
               }
             }
@@ -645,7 +649,10 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                 .of(context)
                 .errorColor,
             child: Text(
-              signUpErrorMessage,
+              Languages.translate(
+                context,
+                signUpErrorMessage,
+              ),
               style: TextStyle(color: Colors.white),
               textAlign: TextAlign.center,
             ),
@@ -685,7 +692,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                   await _authController.createAccount(
                     _emailController.text,
                     _passwordController.text,
-                    User(
+                    appUser.User(
                         firstName: _firstNameController.text,
                         secondName: _secondNameController.text,
                         degree: _degree,
@@ -701,10 +708,10 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                         email: _emailController.text,
                         userTag: 'new_user'),
                   );
-                } catch (e) {
+                } on FirebaseAuthException catch(e) {
                   setState(() {
-                    print(e.toString());
-                    signUpErrorMessage = e.toString();
+                    print(e.message);
+                    signUpErrorMessage = e.message;
                   });
                 }
               }

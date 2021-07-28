@@ -60,7 +60,6 @@ class LibraryApi {
       {'count': FieldValue.increment(1)},
       SetOptions(merge: true),
     );
-
   }
 
   addSubject({String subject, String section}) {
@@ -85,17 +84,20 @@ class LibraryApi {
       SetOptions(merge: true),
     );
 
-    return _firestore
-        .collection('users')
-        .doc(book.publisher)
-        .set({'points': FieldValue.increment(rate.toInt())}, SetOptions(merge: true));
+    return _firestore.collection('users').doc(book.publisher).set(
+        {'points': FieldValue.increment(rate.toInt())},
+        SetOptions(merge: true));
   }
 
   getPendingBooksCount() {
     return _firestore.collection('pendingBooks').doc('count').snapshots();
   }
 
-   deleteBook({Book book}) {
+  deleteBook({Book book}) {
+    _firestore
+        .collection('pendingBooks')
+        .doc('count')
+        .set({'count': FieldValue.increment(-1)}, SetOptions(merge: true));
     return _firestore.collection('books').doc(book.id).delete();
   }
 }

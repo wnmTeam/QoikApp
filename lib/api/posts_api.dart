@@ -179,7 +179,7 @@ class PostsApi {
         id_post: post.id);
 
     if (post.idOwner != MyUser.myUser.id) {
-      await _notificationApi.subscribeToTopic(groupId + post.id);
+      // await _notificationApi.subscribeToTopic(groupId + post.id);
       _notificationApi.sendNotification(
           noti.Notification(
             type: 'commentMyPost',
@@ -575,7 +575,7 @@ class PostsApi {
         .doc(id_group)
         .collection('posts')
         .doc(id_post)
-        .set({'isPin': true}, SetOptions(merge: true));
+        .update({'isPin': true},);
   }
 
   unPinPost({String id_group, String id_post}) {
@@ -584,6 +584,6 @@ class PostsApi {
         .doc(id_group)
         .collection('posts')
         .doc(id_post)
-        .set({'isPin': FieldValue.delete()}, SetOptions(merge: true));
+        .update({'isPin': FieldValue.delete()}, );
   }
 }

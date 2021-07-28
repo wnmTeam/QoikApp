@@ -44,7 +44,10 @@ class _PendingBooksPageState extends State<PendingBooksPage> {
     size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text('_pending_books'),
+        title: Text(Languages.translate(
+          context,
+          '_pending_books',
+        )),
       ),
       body: !noBooks
           ? ListView.builder(
@@ -73,11 +76,11 @@ class _PendingBooksPageState extends State<PendingBooksPage> {
               },
             )
           : Padding(
-            padding: const EdgeInsets.all(80.0),
-            child: Center(
+              padding: const EdgeInsets.all(80.0),
+              child: Center(
                 child: Image.asset('assets/empty2.png'),
               ),
-          ),
+            ),
     );
   }
 
@@ -143,16 +146,18 @@ class _BookWidgetState extends State<BookWidget> {
           'type': 'pending',
         });
       },
-      leading: ClipRRect(
-        borderRadius: BorderRadius.circular(30),
-        child: Container(
-          width: 57,
-          height: 57,
-          color: ConstValues.firstColor,
-        ),
+      leading: Icon(
+        CupertinoIcons.doc_fill,
+        color: ConstValues.firstColor,
+        size: 50,
       ),
-      title: Text(widget.book.name),
-      subtitle: Text(widget.book.section + ' | ' + widget.book.subject_name),
+      title: Text(widget.book.lesson_title),
+      subtitle: Text(Languages.translate(
+            context,
+            widget.book.section,
+          ) +
+          ' | ' +
+          widget.book.subject_name),
     );
   }
 }

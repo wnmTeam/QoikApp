@@ -200,7 +200,7 @@ class Auth {
     return _firestore.collection('appInfo').doc('links').get();
   }
 
-  setAllNotificationSetting(Map<String, bool> map) {
+  setAllNotificationSetting(Map<String, dynamic> map) {
     print(getUser.uid);
     return _firestore
         .collection('NotificationsSettings')
@@ -225,6 +225,8 @@ class Auth {
   }
 
   getTagedUsers({String text, String groupId, int limit}) {
+    if(groupId == 'homeGroup')
+      return _firestore.collection('users').orderBy('fullName').startAt([text]).endAt([text + '\uf8ff']).limit(limit).get();
     return _firestore.collection('users').where('groups', arrayContains: groupId).orderBy('fullName').startAt([text]).endAt([text + '\uf8ff']).limit(limit).get();
   }
 }

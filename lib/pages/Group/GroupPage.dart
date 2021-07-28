@@ -45,7 +45,10 @@ class _GroupPageState extends State<GroupPage>
 
   @override
   Widget build(BuildContext context) {
-    print(Theme.of(context).primaryTextTheme.headline6);
+    print(Theme
+        .of(context)
+        .primaryTextTheme
+        .headline6);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -55,40 +58,54 @@ class _GroupPageState extends State<GroupPage>
             onTap: () {},
             title: widget.group.type == Group.TYPE_UNIVERSITY
                 ? Text(
-                    Languages.translate(
-                      context,
-                      'my_university',
-                    ),
-                    style: Theme.of(context)
-                        .textTheme
-                        .copyWith(subtitle1: TextStyle(color: Colors.white))
-                        .subtitle1,
-                  )
+              Languages.translate(
+                context,
+                'my_university',
+              ),
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .copyWith(subtitle1: TextStyle(color: Colors.white))
+                  .subtitle1,
+            )
                 : widget.group.type == Group.TYPE_COLLEGE
-                    ? Text(Languages.translate(
-                        context,
-                        'my_college',
-                      ))
-                    : widget.group.type == 'city'
-                        ? Text(Languages.translate(
-                            context,
-                            'my_city',
-                          ))
-                        : Text(Languages.translate(
-                            context,
-                            widget.group.id,
-                          )),
+                ? Text(Languages.translate(
+              context,
+              'my_college',
+            ), style: Theme
+                .of(context)
+                .textTheme
+                .copyWith(subtitle1: TextStyle(color: Colors.white))
+                .subtitle1,)
+                : widget.group.type == 'city'
+                ? Text(Languages.translate(
+              context,
+              'my_city',
+            ), style: Theme
+                .of(context)
+                .textTheme
+                .copyWith(subtitle1: TextStyle(color: Colors.white))
+                .subtitle1,)
+                : Text(Languages.translate(
+              context,
+              widget.group.id,
+            ), style: Theme
+                .of(context)
+                .textTheme
+                .copyWith(subtitle1: TextStyle(color: Colors.white))
+                .subtitle1,),
             subtitle: widget.group.type == 'G' ||
-                    widget.group.type == Group.TYPE_MOFADALAH ||
-                    widget.group.type == 'test'
+                widget.group.type == Group.TYPE_MOFADALAH ||
+                widget.group.type == 'test'
                 ? null
                 : Text(
-                    widget.group.name,
-                    style: Theme.of(context)
-                        .textTheme
-                        .copyWith(caption: TextStyle(color: Colors.white))
-                        .caption,
-                  ),
+              widget.group.name,
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .copyWith(caption: TextStyle(color: Colors.white))
+                  .caption,
+            ),
             leading: Container(
               width: 38,
               height: 38,
@@ -97,7 +114,9 @@ class _GroupPageState extends State<GroupPage>
                 children: [
                   SvgPicture.asset(
                     'assets/col.svg',
-                    color: Theme.of(context).primaryColor,
+                    color: Theme
+                        .of(context)
+                        .primaryColor,
                     width: 20,
                     height: 20,
                   ),
@@ -107,6 +126,40 @@ class _GroupPageState extends State<GroupPage>
                 borderRadius: BorderRadius.all(Radius.circular(20)),
                 color: Colors.white70,
               ),
+            ),
+            trailing: IconButton(
+              icon: Icon(Icons.error_outline, color: Colors.white70),
+              onPressed: (){
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        title: Text(' '),
+                        content: Text(
+                          Languages.translate(
+                            context,
+                            'group_info_${widget.group.type}',
+                          ),
+                        ),
+                        actions: [
+                          FlatButton(
+                            onPressed: () {
+                              Navigator.pop(
+                                context,
+                              );
+                            },
+                            child: Text(
+                              Languages.translate(
+                                context,
+                                'ok',
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    });
+              },
             ),
           ),
           bottom: TabBar(

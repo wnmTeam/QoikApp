@@ -55,7 +55,7 @@ class _EditPostPageState extends State<EditPostPage> {
                   );
                 },
                 child: Icon(
-                  loading ? Icons.watch_later_outlined : Icons.save,
+                  loading ? Icons.watch_later_outlined : Icons.save,color: Colors.white70,
                 )),
           ),
         ],

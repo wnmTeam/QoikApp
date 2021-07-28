@@ -368,11 +368,11 @@ class _CommentWidgetState extends State<CommentWidget> {
                                       'give_point',
                                     ) +
                                     ' ',
-                                style: TextStyle(fontSize: 15),
+                                style: TextStyle(fontSize: 15, color: ConstValues.secondColor),
                               ),
                             ),
                             decoration: BoxDecoration(
-                              // color: Colors.grey[100],
+                              color: Colors.grey[100],
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ),
@@ -413,23 +413,35 @@ class _CommentWidgetState extends State<CommentWidget> {
                           MyUser.myUser.isAdmin())
                         PopupMenuItem(
                           value: 1,
-                          child: Text('Edit'),
+                          child: Text( Languages.translate(
+                            context,
+                              'edit'
+                          )),
                         ),
                       if (MyUser.myUser.id == widget.comment.idOwner ||
                           MyUser.myUser.isAdmin())
                         PopupMenuItem(
                           value: 2,
-                          child: Text('Delete'),
+                          child: Text( Languages.translate(
+                            context,
+                            'delete',
+                          )),
                         ),
                       if (MyUser.myUser.id != widget.comment.idOwner)
                         PopupMenuItem(
                           value: 3,
-                          child: Text('Report'),
+                          child: Text( Languages.translate(
+                            context,
+                            'report',
+                          )),
                         ),
                       if (MyUser.myUser.isAdmin())
                         PopupMenuItem(
                           value: 4,
-                          child: Text('Block'),
+                          child: Text( Languages.translate(
+                            context,
+                            'block',
+                          )),
                         ),
                     ],
                     onSelected: (value) {
@@ -556,9 +568,12 @@ class _CommentWidgetState extends State<CommentWidget> {
       ),
       onTap: () async {
         print(mention['user_id']);
-        var d = await _authController.getUserInfo(mention['id_user']);
+        var d = await _authController.getUserInfo(mention['user_id']);
         if (d != null) {
-          User user = User().fromMap(d.data.data()).setId(d.id);
+          print('hiiiiiiiiiiiiiii');
+          print(d.data());
+          print(d.data);
+          User user = User().fromMap(d.data())..setId(d.id);
           Navigator.pushNamed(context, '/ProfilePage',
               arguments: {'user': user});
         }

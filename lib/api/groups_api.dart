@@ -73,6 +73,10 @@ class GroupsApi {
       'type': type,
     });
 
+    batch.set(_firestore.collection('users').doc(uid), {
+      'groups': FieldValue.arrayUnion([id_group]),
+    }, SetOptions(merge: true));
+
     batch.set(
         _firestore
             .collection('groups')

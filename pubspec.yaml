@@ -80,6 +80,7 @@ dependencies:
   shimmer: ^2.0.0-nullsafety.0
   flutter_windowmanager:
   share: ^2.0.4
+  fluttertoast: ^8.0.7
 
 
 dev_dependencies:

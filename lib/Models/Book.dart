@@ -1,6 +1,5 @@
 class Book {
   static const String URL = 'url';
-  static const String NAME = 'name';
   static const String IMG = 'img';
 
   static const String SECTION = 'section';
@@ -8,11 +7,11 @@ class Book {
   static const String COLLEGE = 'college';
   static const String PUBLISHER = 'publisher';
   static const String SUBJECT_NAME = 'subject_name';
+  static const String LESSON_TITLE = 'lesson_title';
   static const String IS_PENDING = 'is_pending';
   static const String ADMIN = 'admin';
 
   String url;
-  String name;
   String img;
 
   String section;
@@ -20,6 +19,7 @@ class Book {
   String college;
   String publisher;
   String subject_name;
+  String lesson_title;
   bool is_pending;
   String admin;
 
@@ -27,19 +27,18 @@ class Book {
 
   Book({
     this.img,
-    this.name,
     this.url,
     this.section,
     this.university,
     this.college,
     this.publisher,
     this.subject_name,
+    this.lesson_title,
     this.is_pending,
     this.admin,
   });
 
   Map<String, dynamic> toMap() => {
-        NAME: name,
         URL: url,
         IMG: img,
         SECTION: section,
@@ -47,27 +46,28 @@ class Book {
         UNIVERSITY: university,
         PUBLISHER: publisher,
         SUBJECT_NAME: subject_name,
+        LESSON_TITLE: lesson_title,
         IS_PENDING: is_pending,
         ADMIN: admin,
       };
 
   Book fromMap(map) {
     this.img = map[IMG];
-    this.name = map[NAME];
     this.url = map[URL];
     this.section = map[SECTION];
     this.university = map[UNIVERSITY];
     this.college = map[COLLEGE];
     this.publisher = map[PUBLISHER];
     this.subject_name = map[SUBJECT_NAME];
+    this.lesson_title = map[LESSON_TITLE];
     this.is_pending = map[IS_PENDING];
     this.admin = map[ADMIN];
     this.id = getId();
     return this;
   }
 
-  setId(String id) {
-    this.id = id;
+  setId() {
+    this.id = publisher + section + university + subject_name + lesson_title;
   }
 
   setUrl(String url) {
@@ -75,6 +75,6 @@ class Book {
   }
 
   getId() {
-    return publisher + section + university + name + subject_name;
+    return publisher + section + university + subject_name + lesson_title;
   }
 }

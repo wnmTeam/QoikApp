@@ -365,12 +365,11 @@ class ProfilePageState extends State<ProfilePage> {
                                               _userTagImage(),
                                               width: 50,
                                               height: 50,
-                                              color: Theme.of(context)
-                                                  .primaryColor,
                                             ),
                                             Text(Languages.translate(
                                               context,
-                                              widget.user.userTag != 'admin'
+                                              widget.user.userTag ==
+                                                      User.USER_TAG_NORMAL_USER
                                                   ? widget.user.tag
                                                   : widget.user.userTag,
                                             )),
@@ -566,7 +565,9 @@ class ProfilePageState extends State<ProfilePage> {
                                                   _university + '.' + _college,
                                                   _college,
                                                   Group.TYPE_MOFADALAH,
+                                                  'Graduates And Masters'
                                                 ];
+                                                x.degree = 'college';
 
                                                 await _authController
                                                     .updateUserUniversity(x);
@@ -791,20 +792,24 @@ class ProfilePageState extends State<ProfilePage> {
   }
 
   String _userTagImage() {
-    switch (widget.user.tag) {
-      case User.TAG_NEW_USER:
-        return 'assets/newUser.png';
-      case User.TAG_NORMAL_USER:
-        return 'assets/normalUser.png';
-      case User.TAG_ACTIVE_USER:
-        return 'assets/activeUser.png';
-      case User.TAG_PREMIUM_USER:
-        return 'assets/exUser.png';
-      case User.TAG_VERIFIED_USER:
-        return 'assets/sureUser.png';
-      default:
-        return 'assets/newUser.png';
-    }
+    print(widget.user.userTag);
+    if (widget.user.userTag == User.USER_TAG_NORMAL_USER)
+      switch (widget.user.tag) {
+        case User.TAG_NEW_USER:
+          return 'assets/newUser.png';
+        case User.TAG_NORMAL_USER:
+          return 'assets/normalUser.png';
+        case User.TAG_ACTIVE_USER:
+          return 'assets/activeUser.png';
+        case User.TAG_PREMIUM_USER:
+          return 'assets/exUser.png';
+        case User.TAG_VERIFIED_USER:
+          return 'assets/sureUser.png';
+        default:
+          return 'assets/newUser.png';
+      }
+    else
+      return 'assets/${widget.user.userTag}.png';
   }
 
   _bottomSheetBuild(

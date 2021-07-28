@@ -37,9 +37,9 @@ class _BookInfoPageState extends State<BookInfoPage> {
     size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.book.name),
+        title: Text(widget.book.lesson_title),
         actions: [
-          MyUser.myUser.isAdmin()
+          _authController.isLibraryAdmin()
               ? PopupMenuButton(
                   icon: Icon(Icons.more_vert),
                   itemBuilder: (context) => [
@@ -71,10 +71,7 @@ class _BookInfoPageState extends State<BookInfoPage> {
           ),
           ListTile(
             leading: Icon(Icons.account_balance),
-            title: Text(Languages.translate(
-              context,
-                'university'
-            )),
+            title: Text(Languages.translate(context, 'university')),
             subtitle: Text(widget.book.university),
             onTap: () {},
           ),
@@ -83,9 +80,7 @@ class _BookInfoPageState extends State<BookInfoPage> {
           ),
           ListTile(
             leading: Icon(Icons.account_balance),
-            title: Text(Languages.translate(
-              context,
-                'college'            )),
+            title: Text(Languages.translate(context, 'college')),
             subtitle: Text(widget.book.college),
             onTap: () {},
           ),
@@ -94,10 +89,8 @@ class _BookInfoPageState extends State<BookInfoPage> {
           ),
           ListTile(
             leading: Icon(CupertinoIcons.book_fill),
-            title: Text(Languages.translate(
-                context,
-                '_section'            )),
-            subtitle: Text(widget.book.section),
+            title: Text(Languages.translate(context, '_section')),
+            subtitle: Text(Languages.translate(context, widget.book.section)),
             onTap: () {},
           ),
           SizedBox(
@@ -105,10 +98,17 @@ class _BookInfoPageState extends State<BookInfoPage> {
           ),
           ListTile(
             leading: Icon(CupertinoIcons.bookmark_fill),
-            title: Text(Languages.translate(
-                context,
-                'subject_name'            )),
+            title: Text(Languages.translate(context, 'subject_name')),
             subtitle: Text(widget.book.subject_name),
+            onTap: () {},
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          ListTile(
+            leading: Icon(CupertinoIcons.bookmark_fill),
+            title: Text(Languages.translate(context, 'lesson_title')),
+            subtitle: Text(widget.book.lesson_title),
             onTap: () {},
           ),
           SizedBox(
@@ -139,9 +139,9 @@ class _BookInfoPageState extends State<BookInfoPage> {
                         user.degree != User.DEGREE_HIGH_SCHOOL
                             ? user.university + ' | ' + user.college
                             : Languages.translate(
-                          context,
-                          'high school',
-                        ),
+                                context,
+                                'high school',
+                              ),
                       ),
                     );
                   } catch (e) {
@@ -164,9 +164,8 @@ class _BookInfoPageState extends State<BookInfoPage> {
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            title: Text(Languages.translate(
-                                context,
-                                '_rate_book'           )),
+                            title: Text(
+                                Languages.translate(context, '_rate_book')),
                             content: RatingBar.builder(
                               initialRating: 1,
                               minRating: 1,
@@ -227,11 +226,9 @@ class _BookInfoPageState extends State<BookInfoPage> {
                   height: 57,
                   child: Center(
                     child: Text(
-                      widget.type != 'pending' ? Languages.translate(
-                          context,
-                          '_open'           ) : Languages.translate(
-                          context,
-                          'accept'        ),
+                      widget.type != 'pending'
+                          ? Languages.translate(context, '_open')
+                          : Languages.translate(context, 'accept'),
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
@@ -258,6 +255,7 @@ class _BookInfoPageState extends State<BookInfoPage> {
                   : Container(),
             ],
           ),
+          SizedBox(height: 25,),
         ],
       ),
     );
@@ -268,12 +266,8 @@ class _BookInfoPageState extends State<BookInfoPage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text(Languages.translate(
-                context,
-                '_delete_book'           )),
-            content: Text(Languages.translate(
-                context,
-                'are_you_sure'           )),
+            title: Text(Languages.translate(context, '_delete_book')),
+            content: Text(Languages.translate(context, 'are_you_sure')),
             actions: [
               FlatButton(
                 onPressed: () {
@@ -282,9 +276,7 @@ class _BookInfoPageState extends State<BookInfoPage> {
                   );
                 },
                 child: Text(
-                  Languages.translate(
-                      context,
-                      'cancel'          ),
+                  Languages.translate(context, 'cancel'),
                 ),
               ),
               FlatButton(
@@ -295,9 +287,7 @@ class _BookInfoPageState extends State<BookInfoPage> {
                   );
                 },
                 child: Text(
-                  Languages.translate(
-                      context,
-                      '_yes'           ),
+                  Languages.translate(context, '_yes'),
                 ),
               ),
             ],

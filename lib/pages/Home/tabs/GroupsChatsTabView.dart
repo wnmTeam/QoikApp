@@ -30,6 +30,7 @@ class _GroupsChatsTabState extends State<GroupsChatsTab>
   @override
   void initState() {
     getMyCity();
+    checkCommunityGroup();
     super.initState();
   }
 
@@ -124,6 +125,10 @@ class _GroupsChatsTabState extends State<GroupsChatsTab>
   bool get wantKeepAlive => true;
 
   void getMyCity() async {
+    if(MyUser.myUser.degree == User.DEGREE_HIGH_SCHOOL)
+      return;
+    if(MyUser.myUser.degree == 'college' && MyUser.myUser.groups.length > 4)
+      return;
     setState(() {
       loading = true;
     });
@@ -141,8 +146,20 @@ class _GroupsChatsTabState extends State<GroupsChatsTab>
         );
     }
     setState(() {
-      if (city != null) MyUser.myUser.groups.insert(2, city);
-      loading = false;
+      if (city != null && !MyUser.myUser.hasCity) {
+        MyUser.myUser.groups.insert(2, city);
+        MyUser.myUser.hasCity = true;
+      }
+        loading = false;
+
     });
+  }
+
+  void checkCommunityGroup() {
+    print('ccccc');
+    if(!MyUser.myUser.hasComunity()){
+      print('cooom');
+      _groupsController.addMemberToGroup(type: 'G', uid: MyUser.myUser.id, id_group: 'Graduates And Masters');
+    }
   }
 }

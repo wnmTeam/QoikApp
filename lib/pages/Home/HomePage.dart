@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:share/share.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/MyUser.dart';
 import 'package:stumeapp/Models/User.dart';
@@ -24,6 +25,7 @@ import 'package:stumeapp/pages/Home/tabs/HomeTabView.dart';
 import 'package:stumeapp/pages/Home/tabs/LibraryTabView.dart';
 import 'package:stumeapp/pages/Home/widgets/FABwithBottomAppBar.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -65,62 +67,6 @@ class _HomePageState extends State<HomePage> {
       LibraryTab(),
     ];
 
-    // fbm.requestPermission();
-    // FirebaseMessaging.
-    // fbm.configure(
-    //   onMessage: (msg) {
-    //     print(msg);
-    //     return;
-    //   },
-    //   onLaunch: (msg) {
-    //     print(msg);
-    //     String type = msg['data']['type'];
-    //     String id_sender = msg['data']['id_sender'];
-    //
-    //     switch (type) {
-    //       case 'chats':
-    //         var d = chatsController.getChat(getChatID(id_sender));
-    //
-    //         Navigator.pushNamed(context, '/ChatRoomPage', arguments: {
-    //           'group': Group().fromMap(d.data())..setId(d.id),
-    //           'user': User().fromMap(d.data()),
-    //         });
-    //         break;
-    //       case 'rooms':
-    //         break;
-    //       default:
-    //         Navigator.pushNamed(
-    //           context,
-    //           '/NotificationsPage',
-    //         );
-    //     }
-    //     return;
-    //   },
-    //   onResume: (msg) {
-    //     print(msg);
-    //     String type = msg['data']['type'];
-    //     String id_sender = msg['data']['id_sender'];
-    //
-    //     switch (type) {
-    //       case 'chats':
-    //         var d = chatsController.getChat(getChatID(id_sender));
-    //
-    //         Navigator.pushNamed(context, '/ChatRoomPage', arguments: {
-    //           'group': Group().fromMap(d.data())..setId(d.id),
-    //           'user': User().fromMap(d.data()),
-    //         });
-    //         break;
-    //       case 'rooms':
-    //         break;
-    //       default:
-    //         Navigator.pushNamed(
-    //           context,
-    //           '/NotificationsPage',
-    //         );
-    //     }
-    //     return;
-    //   },
-    // );
   }
 
   _getUserInfo() async {
@@ -179,7 +125,16 @@ class _HomePageState extends State<HomePage> {
               width: 25,
               height: 25,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Fluttertoast.showToast(
+                  msg: "Coming Soon",
+                  toastLength: Toast.LENGTH_LONG,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: ConstValues.firstColor,
+                  textColor: Colors.white,
+                  fontSize: 16.0);
+            },
           ),
           StreamBuilder(
               stream: !loading
@@ -344,7 +299,7 @@ class _HomePageState extends State<HomePage> {
               context,
               'library',
             ),
-            stream: _libraryController.getPendingBooksCount(),
+            stream: !loading && _authController.isLibraryAdmin() ? _libraryController.getPendingBooksCount(): null,
           ),
         ],
       ),
@@ -518,6 +473,7 @@ class _HomePageState extends State<HomePage> {
                           // decoration: BoxDecoration(
                           //   color: Theme.of(context).canvasColor,
                           // ),
+
                           accountName: Text(
                             MyUser.myUser.firstName +
                                 ' ' +
@@ -526,16 +482,26 @@ class _HomePageState extends State<HomePage> {
                             //   fontSize: width / ConstValues.fontSize_1,
                             // ),
                           ),
-                          accountEmail: Text(
-                            MyUser.myUser.email,
-                            // style: TextStyle(
-                            //   color: Theme.of(context)
-                            //       .textTheme
-                            //       .bodyText1
-                            //       .color
-                            //       .withAlpha(150),
-                            //   fontSize: width / 40,
-                            // ),
+                          accountEmail: InkWell(
+                            onTap: () {
+                              Share.share(
+                                  'This is my Qoiq code:\n${MyUser.myUser.id}');
+                            },
+                            child: Container(
+                              margin: EdgeInsets.symmetric(vertical: 4),
+                              child: Row(children: [
+                                Icon(Icons.share,
+                                    color: Colors.white, size: 15),
+                                SizedBox(width: 8),
+                                Text(
+                                  Languages.translate(
+                                    context,
+                                    'share_my_code',
+                                  ),
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ]),
+                            ),
                           ),
                           currentAccountPicture: ClipRRect(
                             borderRadius: BorderRadius.circular(1000),
@@ -562,34 +528,41 @@ class _HomePageState extends State<HomePage> {
                             );
                           },
                         ),
-                        Positioned(
-                          right: 15,
-                          top: 50,
-                          child: SizedBox(
-                            width: 60,
-                            height: 60,
-                            child: DayNightSwitcherIcon(
-                              isDarkModeEnabled:
-                                  storageController.getTheme() == 'dark',
-                              onStateChanged: (isDarkModeEnabled) {
-                                setState(() async {
-                                  if (isDarkModeEnabled) {
-                                    await storageController.setTheme('dark');
-                                    MyAppState.myAppState.setState(() {
-                                      MyAppState.isDark = true;
-                                    });
-                                  } else {
-                                    await storageController.setTheme('light');
+                       Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 18),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                SizedBox(
+                                  width: 60,
+                                  height: 60,
+                                  child: DayNightSwitcherIcon(
+                                    isDarkModeEnabled:
+                                        storageController.getTheme() == 'dark',
+                                    onStateChanged: (isDarkModeEnabled) {
+                                      setState(() async {
+                                        if (isDarkModeEnabled) {
+                                          await storageController
+                                              .setTheme('dark');
+                                          MyAppState.myAppState.setState(() {
+                                            MyAppState.isDark = true;
+                                          });
+                                        } else {
+                                          await storageController
+                                              .setTheme('light');
 
-                                    MyAppState.myAppState.setState(() {
-                                      MyAppState.isDark = false;
-                                    });
-                                  }
-                                });
-                              },
+                                          MyAppState.myAppState.setState(() {
+                                            MyAppState.isDark = false;
+                                          });
+                                        }
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ),
+
                       ],
                     ),
                     snapshot.hasData

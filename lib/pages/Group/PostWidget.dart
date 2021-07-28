@@ -33,12 +33,14 @@ class PostWidget extends StatefulWidget {
   Group group;
   Function deletePost;
   Function updatePost;
+  bool isHomePost;
 
   PostWidget({
     this.post,
     this.group,
     this.deletePost,
     this.updatePost,
+    this.isHomePost = false,
   });
 
   @override
@@ -81,6 +83,8 @@ class _PostWidgetState extends State<PostWidget>
 
   List _commentMentions = [];
 
+  List menuItems;
+
   @override
   void dispose() {
     // sounds.dispose();
@@ -98,30 +102,13 @@ class _PostWidgetState extends State<PostWidget>
         }
       }
     });
+
     super.initState();
   }
 
   @override
   bool get wantKeepAlive => true;
 
-//  @override
-//  Widget build(BuildContext context) {
-//    size = MediaQuery.of(context).size;
-//    return FutureBuilder(
-//        future: _getUser,
-//        builder: (context, snapshot) {
-//          if (user != null) {
-//            comments.insertAll(0, newComments);
-//            newComments = [];
-//            return _postBuilder(widget.post);
-//          }
-//          if (snapshot.hasData) {
-//            user = User().fromMap(snapshot.data)..setId(snapshot.data.id);
-//            return _postBuilder(widget.post);
-//          }
-//          return Container();
-//        });
-//  }
 
   @override
   Widget build(BuildContext context) {
@@ -200,83 +187,6 @@ class _PostWidgetState extends State<PostWidget>
                 post.text.isNotEmpty
                     ? Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                        // child: Column(
-                        //   mainAxisAlignment: MainAxisAlignment.start,
-                        //   children: [
-                        //     InkWell(
-                        //       onTap: () {
-                        //         setState(() {
-                        //           _isExbended = !_isExbended;
-                        //         });
-                        //       },
-                        //       onLongPress: () {
-                        //         Clipboard.setData(
-                        //                 ClipboardData(text: post.text))
-                        //             .then((value) {
-                        //           // Toast.show(
-                        //           //   Languages.translate(context, 'text_copied'),
-                        //           //   context,
-                        //           //   duration: Toast.LENGTH_LONG,
-                        //           //   backgroundColor:
-                        //           //   Theme
-                        //           //       .of(context)
-                        //           //       .primaryColor,
-                        //           // );
-                        //
-                        //           // Scaffold.of(context).showSnackBar(
-                        //           //     SnackBar(content:Text('The text copied')));
-                        //         });
-                        //       },
-                        //       child: Padding(
-                        //         padding: const EdgeInsets.symmetric(
-                        //           horizontal: 8.0,
-                        //           vertical: 10,
-                        //         ),
-                        //         child: Linkify(
-                        //           onOpen: (link) async {
-                        //             if (await canLaunch(link.url)) {
-                        //               await launch(link.url);
-                        //             } else {
-                        //               throw 'Could not launch $link';
-                        //             }
-                        //           },
-                        //           linkStyle: TextStyle(
-                        //             color: Colors.blue,
-                        //           ),
-                        //           options: LinkifyOptions(humanize: false),
-                        //           text: post.text,
-                        //           maxLines: _isExbended ? 10000 : 5,
-                        //           overflow: TextOverflow.ellipsis,
-                        //         ),
-                        //       ),
-                        //     ),
-                        //     !_isExbended
-                        //         ? post.text.length > 200
-                        //             ? InkWell(
-                        //                 onTap: () {
-                        //                   setState(() {
-                        //                     _isExbended = !_isExbended;
-                        //                   });
-                        //                 },
-                        //                 child: Padding(
-                        //                   padding: const EdgeInsets.symmetric(
-                        //                     horizontal: 8.0,
-                        //                     vertical: 10,
-                        //                   ),
-                        //                   child: Text(
-                        //                     "عرض المزيد",
-                        //                     style: TextStyle(
-                        //                       color: Theme.of(context)
-                        //                           .primaryColor,
-                        //                       fontSize: 16,
-                        //                     ),
-                        //                   ),
-                        //                 ),
-                        //               )
-                        //             : Container()
-                        //         : Container(),
-                        //   ],
-                        // ),
 
                         child: ExpandableText(post.text),
                       )
@@ -529,7 +439,8 @@ class _PostWidgetState extends State<PostWidget>
                     ),
                     builder: (context, snapshot) {
                       if (snapshot.hasData && snapshot.data.docs.length > 0) {
-                        print('nnnnnnnnneeeeeeeewwwwwwwwwwwwwwwwwwwwwww ccommmmmmmennttttttttt');
+                        print(
+                            'nnnnnnnnneeeeeeeewwwwwwwwwwwwwwwwwwwwwww ccommmmmmmennttttttttt');
                         newComments = snapshot.data.docs;
                         return Row(
                           children: [
@@ -640,7 +551,6 @@ class _PostWidgetState extends State<PostWidget>
                               )),
                         ),
                       ),
-                      //TODO -------------------
                       IconButton(
                         icon: Icon(
                           Icons.alternate_email,
@@ -785,69 +695,72 @@ class _PostWidgetState extends State<PostWidget>
             user.firstName + ' ' + user.secondName,
           ),
           if (widget.post.isPin != null)
-            Text(
-              Languages.translate(
-                context,
-                'pinned_post',
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+              decoration: BoxDecoration(
+                color: ConstValues.firstColor[700],
+                borderRadius: BorderRadius.circular(50),
               ),
-              style: TextStyle(color: ConstValues.firstColor, fontSize: 12),
-            ),
-          SizedBox(
-            height: 30,
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
-                isExpanded: false,
-                value: null,
-                icon: Icon(Icons.more_horiz),
-                onChanged: (String newValue) {
-                  switch (newValue) {
-                    case 'Delete':
-                      _deletePost();
-                      break;
-                    case 'Edit':
-                      _editPost();
-                      break;
-                    case 'Report':
-                      _reportPost();
-                      break;
-                    case 'Block':
-                      _blockPost(widget.post.idOwner);
-                      break;
-                    case 'Pin':
-                      _pinPost();
-                      break;
-                    case 'Unpin':
-                      _unPinPost();
-                      break;
-                  }
-                },
-                items: <String>[
-                  if (MyUser.myUser.id == widget.post.idOwner ||
-                      MyUser.myUser.isAdmin())
-                    'Edit',
-                  if (MyUser.myUser.isAdmin())
-                    if (widget.post.isPin == null) 'Pin' else 'Unpin',
-                  if (MyUser.myUser.id == widget.post.idOwner ||
-                      MyUser.myUser.isAdmin())
-                    'Delete',
-                  if (MyUser.myUser.isAdmin()) 'Block',
-                  if (MyUser.myUser.id != widget.post.idOwner) 'Report',
-                ].map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
+              child: Text(
+                Languages.translate(
+                  context,
+                  'pinned_post',
+                ),
+                style: TextStyle(color: Colors.white, fontSize: 12),
               ),
             ),
+          PopupMenuButton(
+            // child: Icon(Icons.more_horiz),
+            padding: EdgeInsets.zero,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            icon:
+                 Icon(Icons.more_horiz, color: Colors.grey),
+
+            itemBuilder: _buildMenu,
+            onSelected: _handleMenuSelection,
           ),
+          // SizedBox(
+          //   height: 30,
+          //   child: DropdownButtonHideUnderline(
+          //     child: DropdownButton<String>(
+          //       isExpanded: false,
+          //       value: null,
+          //       icon: Icon(Icons.more_horiz),
+          //       onChanged: (String newValue) {
+          //         switch (newValue) {
+          //           case 'Delete':
+          //             _deletePost();
+          //             break;
+          //           case 'Edit':
+          //             _editPost();
+          //             break;
+          //           case 'Report':
+          //             _reportPost();
+          //             break;
+          //           case 'Block':
+          //             _blockPost(widget.post.idOwner);
+          //             break;
+          //           case 'Pin':
+          //             _pinPost();
+          //             break;
+          //           case 'Unpin':
+          //             _unPinPost();
+          //             break;
+          //         }
+          //       },
+          //       items: menuItems,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
       subtitle: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            user.userTag == 'admin'
+            user.userTag != User.USER_TAG_NORMAL_USER
                 ? Languages.translate(
                     context,
                     user.userTag,
@@ -962,5 +875,110 @@ class _PostWidgetState extends State<PostWidget>
     return Column(
       children: dd,
     );
+  }
+
+  List<PopupMenuItem> _buildMenu(context) {
+    if (!widget.isHomePost)
+      return [
+        if (MyUser.myUser.id == widget.post.idOwner || MyUser.myUser.isAdmin())
+          PopupMenuItem<String>(
+            value: 'edit',
+            child: Text(Languages.translate(context, 'edit')),
+          ),
+        if (MyUser.myUser.isAdmin())
+          PopupMenuItem<String>(
+            value: widget.post.isPin == null ? 'pin' : 'unpin',
+            child: Text(Languages.translate(
+              context,
+              widget.post.isPin == null ? 'pin' : 'unpin',
+            )),
+          ),
+        if (MyUser.myUser.id == widget.post.idOwner || MyUser.myUser.isAdmin())
+          PopupMenuItem<String>(
+            value: 'delete',
+            child: Text(Languages.translate(
+              context,
+              'delete',
+            )),
+          ),
+        if (MyUser.myUser.isAdmin())
+          PopupMenuItem<String>(
+            value: 'block',
+            child: Text(Languages.translate(
+              context,
+              'block',
+            )),
+          ),
+        if (MyUser.myUser.id != widget.post.idOwner)
+          PopupMenuItem<String>(
+            value: 'report',
+            child: Text(Languages.translate(
+              context,
+              'report',
+            )),
+          ),
+      ];
+    else if (MyUser.myUser.isTheAdmin())
+      return [
+        PopupMenuItem<String>(
+          value: 'edit',
+          child: Text(Languages.translate(
+            context,
+            'edit',
+          )),
+        ),
+        PopupMenuItem<String>(
+          value: widget.post.isPin == null ? 'pin' : 'unpin',
+          child: Text(Languages.translate(
+            context,
+            widget.post.isPin == null ? 'pin' : 'unpin',
+          )),
+        ),
+        PopupMenuItem<String>(
+          value: 'delete',
+          child: Text(Languages.translate(
+            context,
+            'delete',
+          )),
+        ),
+        PopupMenuItem<String>(
+          value: 'block',
+          child: Text(Languages.translate(
+            context,
+            'block',
+          )),
+        ),
+        PopupMenuItem<String>(
+          value: 'report',
+          child: Text(Languages.translate(
+            context,
+            'report',
+          )),
+        ),
+      ];
+
+  }
+
+  void _handleMenuSelection(value) {
+            switch (value) {
+              case 'delete':
+                _deletePost();
+                break;
+              case 'edit':
+                _editPost();
+                break;
+              case 'report':
+                _reportPost();
+                break;
+              case 'block':
+                _blockPost(widget.post.idOwner);
+                break;
+              case 'pin':
+                _pinPost();
+                break;
+              case 'unpin':
+                _unPinPost();
+                break;
+            }
   }
 }

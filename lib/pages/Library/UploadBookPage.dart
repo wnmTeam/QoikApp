@@ -25,10 +25,11 @@ class _UploadBookPageState extends State<UploadBookPage> {
   StorageController _storageController = StorageController();
 
   String _librarySection;
-  TextEditingController _bookNameController = TextEditingController();
+  TextEditingController _lessonTitleController = TextEditingController();
   String _university;
   String _college;
   String _subject_name;
+  String _lesson_title;
 
   bool _uploadDone = false;
 
@@ -45,7 +46,10 @@ class _UploadBookPageState extends State<UploadBookPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('upload_book'),
+        title: Text(Languages.translate(
+          context,
+          'upload_book',
+        )),
       ),
       body: Stepper(
         type: stepperType,
@@ -56,7 +60,10 @@ class _UploadBookPageState extends State<UploadBookPage> {
         onStepCancel: cancel,
         steps: <Step>[
           Step(
-            title: new Text('chose_library_section'),
+            title: new Text(Languages.translate(
+              context,
+              'chose_library_section',
+            )),
             content: ListTile(
               onTap: () {
                 _bottomSheetBuild(
@@ -65,28 +72,40 @@ class _UploadBookPageState extends State<UploadBookPage> {
                 );
               },
               contentPadding: EdgeInsets.zero,
-              title: Text('library_sections'),
+              title: Text(Languages.translate(
+                context,
+                'chose_library_section',
+              )),
               subtitle: Text(_librarySection == null
                   ? Languages.translate(
                       context,
                       'tap_to_select',
                     )
-                  : _librarySection),
+                  : Languages.translate(
+                      context,
+                      _librarySection,
+                    )),
               leading: Icon(CupertinoIcons.book),
             ),
             isActive: _currentStep >= 0,
             state: _currentStep >= 0 ? StepState.complete : StepState.disabled,
           ),
           Step(
-            title: new Text('book_info'),
+            title: new Text(Languages.translate(
+              context,
+              'book_info',
+            )),
             content: Column(
               children: [
                 TextFormField(
-                  controller: _bookNameController,
+                  controller: _lessonTitleController,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'book_name',
-                    icon: Icon(CupertinoIcons.doc),
+                    labelText: Languages.translate(
+                      context,
+                      'lesson_title',
+                    ),
+                    icon: Icon(CupertinoIcons.bookmark),
                   ),
                 ),
                 SizedBox(
@@ -100,7 +119,10 @@ class _UploadBookPageState extends State<UploadBookPage> {
                     );
                   },
                   contentPadding: EdgeInsets.zero,
-                  title: Text('subject_name'),
+                  title: Text(Languages.translate(
+                    context,
+                    'subject_name',
+                  )),
                   subtitle: Text(_subject_name == null
                       ? Languages.translate(
                           context,
@@ -112,6 +134,7 @@ class _UploadBookPageState extends State<UploadBookPage> {
                 SizedBox(
                   height: 20,
                 ),
+
                 _universityCollegeBuilder(),
               ],
             ),
@@ -119,32 +142,40 @@ class _UploadBookPageState extends State<UploadBookPage> {
             state: _currentStep >= 1 ? StepState.complete : StepState.disabled,
           ),
           Step(
-            title: new Text('chose_book'),
+            title: new Text(Languages.translate(
+              context,
+              'chose_book',
+            )),
             content: Padding(
               padding: const EdgeInsets.all(12.0),
               child: Column(
                 children: <Widget>[
-                  file != null?
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-
-                      children: [
-                        Column(
-                          children: [
-                            Container(
-                              width: 100,
-                              height: 125,
-                              color: ConstValues.firstColor[400],
-                            ),
-                            SizedBox(height: 8,),
-                            Text(file.path.split('/').last, style: TextStyle(fontSize: 21),),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ): Container(),
+                  file != null
+                      ? Padding(
+                          padding: const EdgeInsets.only(bottom: 15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
+                                children: [
+                                  Icon(
+                                    CupertinoIcons.doc_fill,
+                                    color: ConstValues.firstColor[700],
+                                    size: 70,
+                                  ),
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+                                  Text(
+                                    file.path.split('/').last,
+                                    style: TextStyle(fontSize: 21),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                      : Container(),
                   ElevatedButton(
                     onPressed: () async {
                       final pickedFile = await _storageController.getDoc();
@@ -157,7 +188,10 @@ class _UploadBookPageState extends State<UploadBookPage> {
                         print("no file selected");
                       }
                     },
-                    child: Text('_chose_book'),
+                    child: Text(Languages.translate(
+                      context,
+                      'chose_book',
+                    )),
                   ),
                 ],
               ),
@@ -166,7 +200,10 @@ class _UploadBookPageState extends State<UploadBookPage> {
             state: _currentStep >= 2 ? StepState.complete : StepState.disabled,
           ),
           Step(
-            title: new Text('upload_book'),
+            title: new Text(Languages.translate(
+              context,
+              'upload_book',
+            )),
             content: Center(
               child: Container(
                 margin: EdgeInsets.all(10),
@@ -208,9 +245,11 @@ class _UploadBookPageState extends State<UploadBookPage> {
           return false;
         }
         _subject_name = null;
+        _lesson_title = null;
         return true;
       case 1:
-        if (_bookNameController.text.trim().isEmpty ||
+        if (
+            _lessonTitleController.text.trim().isEmpty ||
             _subject_name == null ||
             _university == null ||
             _college == null) {
@@ -336,7 +375,12 @@ class _UploadBookPageState extends State<UploadBookPage> {
                           String item = list[index];
                           return null != item
                               ? ListTile(
-                                  title: Text(item),
+                                  title: Text(type != 'librarySections'
+                                      ? item
+                                      : Languages.translate(
+                                          context,
+                                          item,
+                                        )),
                                   onTap: () {
                                     setState(() {
                                       if (type == 'colleges')
@@ -392,7 +436,10 @@ class _UploadBookPageState extends State<UploadBookPage> {
                               Icons.add_circle,
                               color: ConstValues.firstColor,
                             ),
-                            title: Text('_add_subject'),
+                            title: Text(Languages.translate(
+                              context,
+                              '_add_subject',
+                            )),
                             onTap: () {
                               _addSubject();
                             },
@@ -405,18 +452,14 @@ class _UploadBookPageState extends State<UploadBookPage> {
   void _uploadBook() async {
     print('START UPLOADING BOOK');
     Book book = Book(
-        publisher: MyUser.myUser.id,
-        name: _bookNameController.text,
-        section: _librarySection,
-        university: _university,
-        college: _college,
-        is_pending: true,
-        subject_name: _subject_name)
-      ..setId(MyUser.myUser.id +
-          _librarySection +
-          _university +
-          _bookNameController.text +
-          _subject_name);
+      publisher: MyUser.myUser.id,
+      section: _librarySection,
+      university: _university,
+      college: _college,
+      is_pending: true,
+      subject_name: _subject_name,
+      lesson_title: _lessonTitleController.text,
+    )..setId();
     String url = await _storageController.uploadBook(book, file,
         (str.TaskSnapshot event) {
       print(_uploadValue);
@@ -427,6 +470,7 @@ class _UploadBookPageState extends State<UploadBookPage> {
     });
 
     await _libraryController.createBookRecord(book: book);
+    Navigator.pop(context);
   }
 
   void _addSubject() {
@@ -450,15 +494,24 @@ class _UploadBookPageState extends State<UploadBookPage> {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: Text('_cansel')),
+                      child: Text(Languages.translate(
+                        context,
+                        'cancel',
+                      ))),
                   ElevatedButton(
                     onPressed: () async {
+                      if (_subjectController.text.trim().isEmpty) return;
                       await _libraryController.addSubject(
                         subject: _subjectController.text.trim(),
                         section: _librarySection,
                       );
+                      setState(() {
+                        _subject_name = _subjectController.text.trim();
+                      });
+                      Navigator.pop(context);
+                      Navigator.pop(context);
                     },
-                    child: Text('_add'),
+                    child: Text(Languages.translate(context, '_add')),
                   ),
                 ],
               )

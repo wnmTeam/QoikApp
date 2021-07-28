@@ -144,137 +144,96 @@ class _SettingsState extends State<Settings> {
               showDialog(
                 context: context,
                 builder: (context) {
-                  return AlertDialog(
-                    scrollable: true,
-                    title: Text(Languages.translate(context, "notifications")),
-                    actions: [
-                      ElevatedButton(
-                          onPressed: () async {
-                            await authController
-                                .setAllNotificationSetting(<String, bool>{
-                              "chat&roomsNotif": true,
-                              "groupsNotif": true,
-                              "homeNotif": false,
-                            });
-                          },
-                          child: Text("Save"))
-                    ],
-                    content: StatefulBuilder(
-                      builder: (context, setState) {
-                        return FutureBuilder(
-                          future: authController.getAllNotificationSetting(),
-                          builder: (context, snapshot) {
-                            print("snapshot $snapshot");
-                            print(
-                                "snapshot.connectionState ${snapshot.connectionState}");
-                            print("snapshot.hasData ${snapshot.hasData}");
-                            print("snapshot.data ${snapshot.data}");
-                            print(
-                                "snapshot.requireData ${snapshot.requireData}");
-                            print(
-                                "snapshot.runtimeType ${snapshot.runtimeType}");
-                            print("snapshot.hasError ${snapshot.hasError}");
+                  return FutureBuilder(
+                      future: authController.getAllNotificationSetting(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          print(snapshot.data.data());
+                          Map<String, dynamic> myData = {};
+                          myData["chat&roomsNotif"] =
+                          snapshot.data.data()["chat&roomsNotif"];
+                          myData["groupsNotif"] =
+                          snapshot.data.data()["groupsNotif"];
+                          myData["homeNotif"] =
+                          snapshot.data.data()["homeNotif"];
+                          return AlertDialog(
+                              scrollable: true,
+                              title: Text(Languages.translate(
+                                  context, "notifications")),
+                              content: StatefulBuilder(
+                                builder: (context, set) {
 
-                            var data;
-                            try {
-                              data = snapshot.data;
-                              var xx = snapshot.data["chat&roomsNotif"];
-                            } catch (e) {
-                              data = <String, bool>{
-                                "chat&roomsNotif": true,
-                                "groupsNotif": true,
-                                "homeNotif": true,
-                              };
-                            }
+                                  return Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SwitchListTile(
+                                        activeColor:
+                                            Theme.of(context).primaryColor,
+                                        contentPadding: EdgeInsets.zero,
+                                        title: Text(Languages.translate(context,
+                                            "chat_rooms_notifications")),
+                                        value: myData["chat&roomsNotif"],
+                                        onChanged: (newValue) {
+                                          print(myData);
+                                          print(newValue);
+                                          myData['chat&roomsNotif'] =
+                                              newValue;
+                                          set(() {
 
-                            if (snapshot.connectionState ==
-                                    ConnectionState.done &&
-                                snapshot.hasData) {
-                              return Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  SwitchListTile(
-                                    activeColor: Theme.of(context).primaryColor,
-                                    contentPadding: EdgeInsets.zero,
-                                    title: Text(Languages.translate(
-                                        context, "chat_rooms_notifications")),
-                                    value: data["chat&roomsNotif"],
-                                    onChanged: (newValue) async {
-                                      await authController
-                                          .setAllNotificationSetting(<String,
-                                              bool>{
-                                        "chat&roomsNotif": newValue,
-                                        "groupsNotif": data["groupsNotif"],
-                                        "homeNotif": data["homeNotif"],
-                                      });
-                                      setState(() {});
-                                    },
-                                    controlAffinity:
-                                        ListTileControlAffinity.trailing,
-                                  ),
-                                  SwitchListTile(
-                                    activeColor: Theme
-                                        .of(context)
-                                        .primaryColor,
-                                    contentPadding: EdgeInsets.zero,
-                                    title: Text(Languages.translate(
-                                        context, "groups_notifications")),
-                                    value: data["groupsNotif"],
-                                    onChanged: (newValue) async {
-                                      await authController
-                                          .setAllNotificationSetting(
-                                          <String, bool>{
-                                            "chat&roomsNotif": data["chat&roomsNotif"],
-                                            "groupsNotif": newValue,
-                                            "homeNotif": data["homeNotif"],
-                                          }
-                                      );
-                                      setState(() {
-
-                                      }
-                                      );
-                                    },
-                                    controlAffinity:
-                                        ListTileControlAffinity.trailing,
-                                  ),
-                                  SwitchListTile(
-                                    activeColor: Theme
-                                        .of(context)
-                                        .primaryColor,
-                                    contentPadding: EdgeInsets.zero,
-                                    title: Text(Languages.translate(
-                                        context, "home_notifications")),
-                                    value: data["homeNotif"],
-                                    onChanged: (newValue) async {
-                                      await authController
-                                          .setAllNotificationSetting(
-                                          <String, bool>{
-                                            "chat&roomsNotif": data["chat&roomsNotif"],
-                                            "groupsNotif": data["groupsNotif"],
-                                            "homeNotif": newValue,
-                                          }
-                                      );
-                                      setState(() {
-
-                                      }
-
-                                      );
-                                    },
-                                    controlAffinity:
-                                    ListTileControlAffinity.trailing,
-                                  ),
-                                ],
-                              );
-                            } else {
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                          },
+                                            myData['chat&roomsNotif'] =
+                                                newValue;
+                                          });
+                                        },
+                                        controlAffinity:
+                                            ListTileControlAffinity.trailing,
+                                      ),
+                                      SwitchListTile(
+                                        activeColor:
+                                            Theme.of(context).primaryColor,
+                                        contentPadding: EdgeInsets.zero,
+                                        title: Text(Languages.translate(
+                                            context, "groups_notifications")),
+                                        value: myData["groupsNotif"],
+                                        onChanged: (newValue) async {
+                                          set(() {
+                                            myData['groupsNotif'] = newValue;
+                                          });
+                                        },
+                                        controlAffinity:
+                                            ListTileControlAffinity.trailing,
+                                      ),
+                                      SwitchListTile(
+                                        activeColor:
+                                            Theme.of(context).primaryColor,
+                                        contentPadding: EdgeInsets.zero,
+                                        title: Text(Languages.translate(
+                                            context, "home_notifications")),
+                                        value: myData["homeNotif"],
+                                        onChanged: (newValue) async {
+                                          set(() {
+                                              myData['homeNotif'] = newValue;
+                                          });
+                                        },
+                                        controlAffinity:
+                                            ListTileControlAffinity.trailing,
+                                      ),
+                                      ElevatedButton(
+                                          onPressed: () {
+                                            authController
+                                                .setAllNotificationSetting(
+                                                    myData);
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text("Save"))
+                                    ],
+                                  );
+                                },
+                              ));
+                        }
+                        return Center(
+                          child: CircularProgressIndicator(),
                         );
-                      },
-                    ),
-                  );
+                      });
                 },
               );
             },

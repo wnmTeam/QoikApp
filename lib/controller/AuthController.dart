@@ -83,7 +83,7 @@ class AuthController {
     if (user.college != null) {
       await _groupsController.addMemberToGroup(
         uid: getUser.uid,
-        id_group: user.groups[1],
+        id_group: user.groups[0],
         name: user.university,
         type: 'university',
       );
@@ -91,7 +91,7 @@ class AuthController {
       await _groupsController.addMemberToGroup(
         uid: getUser.uid,
         name: user.college,
-        id_group: user.groups[2],
+        id_group: user.groups[1],
         type: 'college',
       );
       print('coll');
@@ -220,7 +220,7 @@ class AuthController {
     return api.getLinks();
   }
 
-  setAllNotificationSetting(Map<String, bool> map) {
+  setAllNotificationSetting(Map<String, dynamic> map) {
     return api.setAllNotificationSetting(map);
   }
 

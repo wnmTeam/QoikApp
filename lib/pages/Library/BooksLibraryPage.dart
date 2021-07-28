@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:stumeapp/Models/Book.dart';
 import 'package:stumeapp/Models/LibrarySection.dart';
 import 'package:stumeapp/Models/User.dart';
+import 'package:stumeapp/const_values.dart';
 import 'package:stumeapp/controller/AuthController.dart';
 import 'package:stumeapp/controller/LibraryController.dart';
 import 'package:stumeapp/localization.dart';
@@ -78,7 +79,10 @@ class _BooksPageState extends State<BooksPage> {
                   style: TextStyle(color: Colors.white),
                   textInputAction: TextInputAction.search,
                 )
-              : Text(widget.section.id),
+              : Text(Languages.translate(
+            context,
+            widget.section.id,
+          )),
           actions: [
             IconButton(
               icon: Icon(CupertinoIcons.search),
@@ -99,9 +103,118 @@ class _BooksPageState extends State<BooksPage> {
           ],
         ),
         body: bookCount == 0
-            ?  Padding(
-              padding: const EdgeInsets.all(80.0),
-              child: Center(child: Image.asset('assets/empty2.png')),
+            ?  Column(
+              children: [
+                isSearch
+                    ? Wrap(
+                  spacing: 5,
+                  children: [
+                    RaisedButton(
+                      // elevation: 0,
+                      onPressed: () async {
+                        String item = await _bottomSheetBuild(
+                          'universities',
+                          _authController.getUniversities(),
+                        );
+                        setState(() {
+                          filterBook.university = item;
+                        });
+                      },
+                      child: Text(
+                        filterBook.university != null
+                            ? filterBook.university
+                            : Languages.translate(
+                          context,
+                          'university',
+                        ),
+                        style: TextStyle(fontSize: 13),
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                    ),
+                    RaisedButton(
+                      // elevation: 0,
+                      onPressed: () async {
+                        String item = await _bottomSheetBuild(
+                          'colleges',
+                          _authController.getColleges(),
+                        );
+                        setState(() {
+                          filterBook.college = item;
+                        });
+                      },
+                      child: Text(
+                        filterBook.college != null
+                            ? filterBook.college
+                            : Languages.translate(
+                          context,
+                          'college',
+                        ),
+                        style: TextStyle(fontSize: 13),
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                    ),
+                    RaisedButton(
+                      // elevation: 0,
+                      onPressed: () async {
+                        String item = await _bottomSheetBuild(
+                          'subjects',
+                          null,
+                        );
+                        setState(() {
+                          filterBook.subject_name = item;
+                        });
+                      },
+                      child: Text(
+                        filterBook.subject_name != null
+                            ? filterBook.subject_name
+                            :  Languages.translate(
+                          context,
+                          'subject',
+                        ),
+                        style: TextStyle(fontSize: 13),
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                    ),
+                    RaisedButton.icon(
+                      icon: Icon(
+                        Icons.clear,
+                        size: 17,
+                        color: Colors.white,
+                      ),
+                      label: Text(
+                          Languages.translate(
+                            context,
+                            'clear',
+                          ),
+                          style: TextStyle(
+                            color: Colors.white,
+                          )),
+                      elevation: 0,
+                      onPressed: () {
+                        setState(() {
+                          filterBook = Book();
+                          _search(_searchController.text.trim());
+                        });
+                      },
+                      color: Theme.of(context).primaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                    ),
+                  ],
+                )
+                    : Container(),
+                Padding(
+                  padding: const EdgeInsets.all(80.0),
+                  child: Center(child: Image.asset('assets/empty2.png')),
+                ),
+              ],
             )
             : Column(
                 children: [
@@ -171,7 +284,10 @@ class _BooksPageState extends State<BooksPage> {
                               child: Text(
                                 filterBook.subject_name != null
                                     ? filterBook.subject_name
-                                    : '_subjectName',
+                                    :  Languages.translate(
+                                  context,
+                                    'subject',
+                                ),
                                 style: TextStyle(fontSize: 13),
                               ),
                               shape: RoundedRectangleBorder(
@@ -218,9 +334,7 @@ class _BooksPageState extends State<BooksPage> {
                               book: Book().fromMap(isSearch
                                   ? searchBooks[index].data()
                                   : books[index].data())
-                                ..setId(isSearch
-                                    ? searchBooks[index].id
-                                    : books[index].id));
+                                ..setId());
                         })),
                   ),
                 ],
@@ -233,7 +347,7 @@ class _BooksPageState extends State<BooksPage> {
     searchBooks.clear();
     for (int i = 0; i < books.length; i++) {
       Book book = Book().fromMap(books[i].data());
-      if (book.name.contains(value) && _applyFilter(book)) {
+      if (book.lesson_title.contains(value) && _applyFilter(book)) {
         searchBooks.add(books[i]);
       }
     }
@@ -403,13 +517,11 @@ class _BookWidgetState extends State<BookWidget> {
             child: Padding(
               padding: const EdgeInsets.all(4.0),
               child: Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor.withOpacity(0.6),
-                ),
+                child: Icon(CupertinoIcons.doc_fill, color: ConstValues.firstColor,size: size.width / 3 - 8,),
               ),
             ),
           ),
-          Text(widget.book.name),
+          Text(widget.book.lesson_title),
         ],
       ),
     );

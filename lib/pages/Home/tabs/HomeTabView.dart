@@ -95,7 +95,7 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+    // super.build(context);
     return RefreshIndicator(
       onRefresh: refresh,
       child: ListView.builder(
@@ -110,68 +110,22 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
           }
           return PostWidget(
             post: Post().fromMap(posts[index].data())..setId(posts[index].id),
-              group: widget.group,
-              deletePost: () {
-                setState(() {
-                  posts.removeAt(index);
-                });
-              },
+            group: widget.group,
+            deletePost: () {
+              setState(() {
+                posts.removeAt(index);
+              });
+            },
             updatePost: (d) {
               setState(() {
                 posts[index] = d;
               });
             },
+            isHomePost: true,
           );
         },
       ),
     );
-    // floatingActionButton:
-    // _isVisible && MyUser.myUser.userTag == 'admin' ?
-    // FloatingActionButton(
-    //         onPressed: () {
-    //           if (!_authController.isBan())
-    //             Navigator.of(context).pushNamed(
-    //               '/WritePostPage',
-    //               arguments: {
-    //                 'group': widget.group,
-    //               },
-    //             );
-    //           else
-    //             showDialog(
-    //                 context: context,
-    //                 builder: (context) {
-    //                   return AlertDialog(
-    //                     title: Text(Languages.translate(
-    //                       context,
-    //                       'blocked',
-    //                     )),
-    //                     actions: [
-    //                       FlatButton(
-    //                         onPressed: () {
-    //                           Navigator.pop(
-    //                             context,
-    //                           );
-    //                         },
-    //                         child: Text(
-    //                           Languages.translate(
-    //                             context,
-    //                             'ok',
-    //                           ),
-    //                         ),
-    //                       ),
-    //                     ],
-    //                   );
-    //                 });
-    //         },
-    //         backgroundColor: ConstValues.firstColor,
-    //         child: Icon(
-    //           Icons.edit,
-    //           color: Colors.white,
-    //         ),
-    //       )
-    //     : null,
-    // floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-
   }
 
   getPosts() async {
