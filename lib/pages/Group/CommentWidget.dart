@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:stumeapp/Models/Comment.dart';
 import 'package:stumeapp/Models/Group.dart';
@@ -112,12 +113,15 @@ class _CommentWidgetState extends State<CommentWidget> {
         onLongPress: () {
           Clipboard.setData(ClipboardData(text: widget.comment.text))
               .then((value) {
-            // Toast.show(
-            //   Languages.translate(context, 'text_copied'),
-            //   context,
-            //   duration: Toast.LENGTH_LONG,
-            //   backgroundColor: Theme.of(context).primaryColor,
-            // );
+            Fluttertoast.showToast(
+              msg: Languages.translate(context, 'text_copied'),
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              backgroundColor: ConstValues.firstColor,
+              textColor: Colors.white,
+              fontSize: 16.0,
+            );
 
             // Scaffold.of(context).showSnackBar(
             //     SnackBar(content:Text('The text copied')));
@@ -368,7 +372,9 @@ class _CommentWidgetState extends State<CommentWidget> {
                                       'give_point',
                                     ) +
                                     ' ',
-                                style: TextStyle(fontSize: 15, color: ConstValues.secondColor),
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: ConstValues.secondColor),
                               ),
                             ),
                             decoration: BoxDecoration(
@@ -413,16 +419,13 @@ class _CommentWidgetState extends State<CommentWidget> {
                           MyUser.myUser.isAdmin())
                         PopupMenuItem(
                           value: 1,
-                          child: Text( Languages.translate(
-                            context,
-                              'edit'
-                          )),
+                          child: Text(Languages.translate(context, 'edit')),
                         ),
                       if (MyUser.myUser.id == widget.comment.idOwner ||
                           MyUser.myUser.isAdmin())
                         PopupMenuItem(
                           value: 2,
-                          child: Text( Languages.translate(
+                          child: Text(Languages.translate(
                             context,
                             'delete',
                           )),
@@ -430,7 +433,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                       if (MyUser.myUser.id != widget.comment.idOwner)
                         PopupMenuItem(
                           value: 3,
-                          child: Text( Languages.translate(
+                          child: Text(Languages.translate(
                             context,
                             'report',
                           )),
@@ -438,7 +441,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                       if (MyUser.myUser.isAdmin())
                         PopupMenuItem(
                           value: 4,
-                          child: Text( Languages.translate(
+                          child: Text(Languages.translate(
                             context,
                             'block',
                           )),

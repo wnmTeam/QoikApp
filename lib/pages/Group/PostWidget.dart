@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:stumeapp/Models/Comment.dart';
 import 'package:stumeapp/Models/Group.dart';
 import 'package:stumeapp/Models/MyUser.dart';
@@ -109,7 +110,6 @@ class _PostWidgetState extends State<PostWidget>
   @override
   bool get wantKeepAlive => true;
 
-
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
@@ -187,8 +187,27 @@ class _PostWidgetState extends State<PostWidget>
                 post.text.isNotEmpty
                     ? Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 5.0),
-
-                        child: ExpandableText(post.text),
+                        child: InkWell(
+                          onLongPress: () {
+                            Clipboard.setData(
+                                    ClipboardData(text: widget.post.text))
+                                .then((value) {
+                              Fluttertoast.showToast(
+                                msg:
+                                    Languages.translate(context, 'text_copied'),
+                                toastLength: Toast.LENGTH_LONG,
+                                gravity: ToastGravity.CENTER,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: ConstValues.firstColor,
+                                textColor: Colors.white,
+                                fontSize: 16.0,
+                              );
+                            });
+                          },
+                          child: ExpandableText(
+                            post.text,
+                          ),
+                        ),
                       )
                     : Container(),
                 SizedBox(
@@ -715,8 +734,7 @@ class _PostWidgetState extends State<PostWidget>
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
-            icon:
-                 Icon(Icons.more_horiz, color: Colors.grey),
+            icon: Icon(Icons.more_horiz, color: Colors.grey),
 
             itemBuilder: _buildMenu,
             onSelected: _handleMenuSelection,
@@ -956,29 +974,28 @@ class _PostWidgetState extends State<PostWidget>
           )),
         ),
       ];
-
   }
 
   void _handleMenuSelection(value) {
-            switch (value) {
-              case 'delete':
-                _deletePost();
-                break;
-              case 'edit':
-                _editPost();
-                break;
-              case 'report':
-                _reportPost();
-                break;
-              case 'block':
-                _blockPost(widget.post.idOwner);
-                break;
-              case 'pin':
-                _pinPost();
-                break;
-              case 'unpin':
-                _unPinPost();
-                break;
-            }
+    switch (value) {
+      case 'delete':
+        _deletePost();
+        break;
+      case 'edit':
+        _editPost();
+        break;
+      case 'report':
+        _reportPost();
+        break;
+      case 'block':
+        _blockPost(widget.post.idOwner);
+        break;
+      case 'pin':
+        _pinPost();
+        break;
+      case 'unpin':
+        _unPinPost();
+        break;
+    }
   }
 }
