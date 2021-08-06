@@ -187,5 +187,6 @@
   "report": "Report",
   "block": "Block",
   "pin": "Pin",
-  "unpin": "Unpin"
+  "unpin": "Unpin",
+  "report_done": "Send Done, Thank you."
 }

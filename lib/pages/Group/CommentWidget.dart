@@ -537,7 +537,18 @@ class _CommentWidgetState extends State<CommentWidget> {
     await _authController.blockUser(id_user: id_user);
   }
 
-  void _reportComment() {}
+  void _reportComment() {
+    Fluttertoast.showToast(
+      msg:
+      Languages.translate(context, 'report_done'),
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 1,
+      backgroundColor: ConstValues.firstColor,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
+  }
 
   _commentContent() {
     List<Widget> content = [];

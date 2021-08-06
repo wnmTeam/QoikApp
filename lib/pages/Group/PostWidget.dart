@@ -809,7 +809,17 @@ class _PostWidgetState extends State<PostWidget>
     widget.deletePost();
   }
 
-  _reportPost() {}
+  _reportPost() {
+    Fluttertoast.showToast(
+      msg: Languages.translate(context, 'report_done'),
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 1,
+      backgroundColor: ConstValues.firstColor,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
+  }
 
   _blockPost(String id_user) async {
     await _authController.blockUser(id_user: id_user);

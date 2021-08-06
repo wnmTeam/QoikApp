@@ -180,5 +180,6 @@
   "report": "Bildiri",
   "block": "Engelle",
   "pin": "Sabitle",
-  "unpin": "Sabitlemeyi Kaldır"
+  "unpin": "Sabitlemeyi Kaldır",
+  "report_done": "Bildiriminiz alındı, ilginiz için teşekkür ederiz"
 }
