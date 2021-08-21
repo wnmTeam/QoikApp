@@ -69,14 +69,17 @@ class _StartingPageState extends State<StartingPage> {
               ? StreamBuilder(
                   stream: _controller.authStream,
                   builder: (context, snapshot) {
-                    if (snapshot.data == null)
-                      return RegisterLoginPage();
-                    else {
-                      if (!snapshot.data.emailVerified)
-                        return VerifyPage(_controller.getUser.email);
-                      print('done ');
-                      return HomePage();
-                    }
+                    // if (snapshot.connectionState == ConnectionState.active) {
+                      if (snapshot.data == null)
+                        return RegisterLoginPage();
+                      else {
+                        if (!snapshot.data.emailVerified)
+                          return VerifyPage(_controller.getUser.email);
+                        print('done ');
+                        return HomePage();
+                      }
+                    // }
+                    // return waitingWidget();
                   })
               : FractionallySizedBox(
                   widthFactor: 1,
@@ -118,9 +121,7 @@ class _StartingPageState extends State<StartingPage> {
                               'update_app',
                             ),
                             style: TextStyle(
-                              color: Theme
-                                  .of(context)
-                                  .primaryColor,
+                              color: Theme.of(context).primaryColor,
                               fontSize: 16,
                             ),
                           ),
@@ -132,8 +133,6 @@ class _StartingPageState extends State<StartingPage> {
           : waitingWidget(),
     );
   }
-
-
 
   waitingWidget() => Stack(
         children: [

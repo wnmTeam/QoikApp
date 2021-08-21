@@ -141,7 +141,9 @@ class PostsApi {
     //   file: comment.file,
     // );
 
-    DocumentReference ref = await reference.add({
+    WriteBatch b = _fireStore.batch();
+
+    b.set(reference.doc(), {
       "id_owner": comment.idOwner,
       "text": comment.text,
       "date": comment.date,
@@ -151,13 +153,32 @@ class PostsApi {
       Comment.MENTIONS: comment.mentions,
     });
 
-    await _fireStore
-        .collection('groups')
-        .doc(groupId)
-        .collection('posts')
-        .doc(post.id)
-        .set({Post.LAST_ACTIVE: FieldValue.serverTimestamp()},
-            SetOptions(merge: true));
+    // DocumentReference ref = await reference.add({
+    //   "id_owner": comment.idOwner,
+    //   "text": comment.text,
+    //   "date": comment.date,
+    //   "likeCount": comment.likeCount,
+    //   'image': imageUrl,
+    //   "file": null,
+    //   Comment.MENTIONS: comment.mentions,
+    // });
+
+    b.set(
+        _fireStore
+            .collection('groups')
+            .doc(groupId)
+            .collection('posts')
+            .doc(post.id),
+        {Post.LAST_ACTIVE: FieldValue.serverTimestamp()},
+        SetOptions(merge: true));
+
+    // await _fireStore
+    //     .collection('groups')
+    //     .doc(groupId)
+    //     .collection('posts')
+    //     .doc(post.id)
+    //     .set({Post.LAST_ACTIVE: FieldValue.serverTimestamp()},
+    //         SetOptions(merge: true));
 
     _notificationApi.sendMentionsNotifications(
       mentions: comment.mentions,
@@ -194,12 +215,22 @@ class PostsApi {
           id_post: post.id);
     }
 
-    return _fireStore
-        .collection('groups')
-        .doc(groupId)
-        .collection('posts')
-        .doc(post.id)
-        .update({'commentCount': FieldValue.increment(1)});
+    b.update(
+        _fireStore
+            .collection('groups')
+            .doc(groupId)
+            .collection('posts')
+            .doc(post.id),
+        {'commentCount': FieldValue.increment(1)});
+
+    // return _fireStore
+    //     .collection('groups')
+    //     .doc(groupId)
+    //     .collection('posts')
+    //     .doc(post.id)
+    //     .update({'commentCount': FieldValue.increment(1)});
+
+    return b.commit();
   }
 
   Future<QuerySnapshot> getComments({
@@ -273,108 +304,210 @@ class PostsApi {
   }
 
   setLike({String userId, String postId, Group group}) async {
-    print('check like');
-    DocumentSnapshot r = await _fireStore
-        .collection('groups')
-        .doc(group.id)
-        .collection('posts')
-        .doc(postId)
-        .collection('likers')
-        .doc(userId)
-        .get();
-    print(r.data());
-    print('there like');
-    if (r.data() != null) {
-      await _fireStore
+    // print('check like');
+    return _fireStore.runTransaction((transaction) async {
+      DocumentSnapshot r = await transaction.get(_fireStore
           .collection('groups')
           .doc(group.id)
           .collection('posts')
           .doc(postId)
           .collection('likers')
-          .doc(userId)
-          .delete();
+          .doc(userId));
 
-      print('start del like');
-      return _fireStore
-          .collection('groups')
-          .doc(group.id)
-          .collection('posts')
-          .doc(postId)
-          .set(
-              {'likeCount': FieldValue.increment(-1)}, SetOptions(merge: true));
-    }
+      if (r.data() != null) {
+        transaction.delete(_fireStore
+            .collection('groups')
+            .doc(group.id)
+            .collection('posts')
+            .doc(postId)
+            .collection('likers')
+            .doc(userId));
 
-    print('no like');
-    await _fireStore
-        .collection('groups')
-        .doc(group.id)
-        .collection('posts')
-        .doc(postId)
-        .collection('likers')
-        .doc(userId)
-        .set({
-      'exists': 1,
+        print('start del like');
+        transaction.set(
+            _fireStore
+                .collection('groups')
+                .doc(group.id)
+                .collection('posts')
+                .doc(postId),
+            {'likeCount': FieldValue.increment(-1)},
+            SetOptions(merge: true));
+      } else {
+        transaction.set(
+            _fireStore
+                .collection('groups')
+                .doc(group.id)
+                .collection('posts')
+                .doc(postId)
+                .collection('likers')
+                .doc(userId),
+            {
+              'exists': 1,
+            });
+        transaction.set(
+            _fireStore
+                .collection('groups')
+                .doc(group.id)
+                .collection('posts')
+                .doc(postId),
+            {'likeCount': FieldValue.increment(1)},
+            SetOptions(merge: true));
+      }
     });
-    print(postId);
-    print('start add like');
+    // DocumentSnapshot r = await _fireStore
+    //     .collection('groups')
+    //     .doc(group.id)
+    //     .collection('posts')
+    //     .doc(postId)
+    //     .collection('likers')
+    //     .doc(userId)
+    //     .get();
+    // print(r.data());
+    // print('there like');
+    // if (r.data() != null) {
+    //   await _fireStore
+    //       .collection('groups')
+    //       .doc(group.id)
+    //       .collection('posts')
+    //       .doc(postId)
+    //       .collection('likers')
+    //       .doc(userId)
+    //       .delete();
+    //
+    //   print('start del like');
+    //   return _fireStore
+    //       .collection('groups')
+    //       .doc(group.id)
+    //       .collection('posts')
+    //       .doc(postId)
+    //       .set(
+    //           {'likeCount': FieldValue.increment(-1)}, SetOptions(merge: true));
+    // }
 
-    return _fireStore
-        .collection('groups')
-        .doc(group.id)
-        .collection('posts')
-        .doc(postId)
-        .set({'likeCount': FieldValue.increment(1)}, SetOptions(merge: true));
+    // print('no like');
+    // await _fireStore
+    //     .collection('groups')
+    //     .doc(group.id)
+    //     .collection('posts')
+    //     .doc(postId)
+    //     .collection('likers')
+    //     .doc(userId)
+    //     .set({
+    //   'exists': 1,
+    // });
+    // print(postId);
+    // print('start add like');
+    //
+    // return _fireStore
+    //     .collection('groups')
+    //     .doc(group.id)
+    //     .collection('posts')
+    //     .doc(postId)
+    //     .set({'likeCount': FieldValue.increment(1)}, SetOptions(merge: true));
   }
 
   followPost({userId, String postId, Group group}) async {
-    DocumentSnapshot r = await _fireStore
-        .collection('groups')
-        .doc(group.id)
-        .collection('posts')
-        .doc(postId)
-        .collection('followers')
-        .doc(userId)
-        .get();
-    if (r.data() != null) {
-      await _fireStore
+    return _fireStore.runTransaction((transaction) async {
+      DocumentSnapshot r = await transaction.get(_fireStore
           .collection('groups')
           .doc(group.id)
           .collection('posts')
           .doc(postId)
           .collection('followers')
-          .doc(userId)
-          .delete();
+          .doc(userId));
 
-      await _notificationApi.unsubscribeFromTopic(group.id + postId);
+      if (r.data() != null) {
+        transaction.delete(_fireStore
+            .collection('groups')
+            .doc(group.id)
+            .collection('posts')
+            .doc(postId)
+            .collection('followers')
+            .doc(userId));
 
-      return _fireStore
-          .collection('groups')
-          .doc(group.id)
-          .collection('posts')
-          .doc(postId)
-          .set({'followCount': FieldValue.increment(-1)},
-              SetOptions(merge: true));
-    }
+        transaction.set(
+            _fireStore
+                .collection('groups')
+                .doc(group.id)
+                .collection('posts')
+                .doc(postId),
+            {'followCount': FieldValue.increment(-1)},
+            SetOptions(merge: true));
+        await _notificationApi.unsubscribeFromTopic(group.id + postId);
+      } else {
+        transaction.set(
+            _fireStore
+                .collection('groups')
+                .doc(group.id)
+                .collection('posts')
+                .doc(postId)
+                .collection('followers')
+                .doc(userId),
+            {
+              'exists': 1,
+            });
 
-    await _fireStore
-        .collection('groups')
-        .doc(group.id)
-        .collection('posts')
-        .doc(postId)
-        .collection('followers')
-        .doc(userId)
-        .set({
-      'exists': 1,
+        transaction.set(
+            _fireStore
+                .collection('groups')
+                .doc(group.id)
+                .collection('posts')
+                .doc(postId),
+            {'followCount': FieldValue.increment(1)},
+            SetOptions(merge: true));
+
+        await _notificationApi.subscribeToTopic(group.id + postId);
+      }
     });
-    print(postId);
-    await _notificationApi.subscribeToTopic(group.id + postId);
 
-    return _fireStore
-        .collection('groups')
-        .doc(group.id)
-        .collection('posts')
-        .doc(postId)
-        .set({'followCount': FieldValue.increment(1)}, SetOptions(merge: true));
+    // DocumentSnapshot r = await _fireStore
+    //     .collection('groups')
+    //     .doc(group.id)
+    //     .collection('posts')
+    //     .doc(postId)
+    //     .collection('followers')
+    //     .doc(userId)
+    //     .get();
+    // if (r.data() != null) {
+    //   await _fireStore
+    //       .collection('groups')
+    //       .doc(group.id)
+    //       .collection('posts')
+    //       .doc(postId)
+    //       .collection('followers')
+    //       .doc(userId)
+    //       .delete();
+    //
+    //   await _notificationApi.unsubscribeFromTopic(group.id + postId);
+    //
+    //   return _fireStore
+    //       .collection('groups')
+    //       .doc(group.id)
+    //       .collection('posts')
+    //       .doc(postId)
+    //       .set({'followCount': FieldValue.increment(-1)},
+    //           SetOptions(merge: true));
+    // }
+
+    // await _fireStore
+    //     .collection('groups')
+    //     .doc(group.id)
+    //     .collection('posts')
+    //     .doc(postId)
+    //     .collection('followers')
+    //     .doc(userId)
+    //     .set({
+    //   'exists': 1,
+    // });
+    // print(postId);
+    // await _notificationApi.subscribeToTopic(group.id + postId);
+    //
+    // return _fireStore
+    //     .collection('groups')
+    //     .doc(group.id)
+    //     .collection('posts')
+    //     .doc(postId)
+    //     .set({'followCount': FieldValue.increment(1)}, SetOptions(merge: true));
   }
 
   isFollowPost({Group group, String postId, userId}) {
@@ -390,18 +523,10 @@ class PostsApi {
 
   setLikeToComment(
       {String postId, userId, String commentId, Group group}) async {
-    DocumentSnapshot r = await _fireStore
-        .collection('groups')
-        .doc(group.id)
-        .collection('posts')
-        .doc(postId)
-        .collection('comments')
-        .doc(commentId)
-        .collection('likers')
-        .doc(userId)
-        .get();
-    if (r.data() != null) {
-      await _fireStore
+    // WriteBatch b = _fireStore.batch();
+
+    return _fireStore.runTransaction((transaction) async {
+      DocumentSnapshot r = await transaction.get(_fireStore
           .collection('groups')
           .doc(group.id)
           .collection('posts')
@@ -409,41 +534,118 @@ class PostsApi {
           .collection('comments')
           .doc(commentId)
           .collection('likers')
-          .doc(userId)
-          .delete();
+          .doc(userId));
 
-      return _fireStore
-          .collection('groups')
-          .doc(group.id)
-          .collection('posts')
-          .doc(postId)
-          .collection('comments')
-          .doc(commentId)
-          .set(
-              {'likeCount': FieldValue.increment(-1)}, SetOptions(merge: true));
-    }
+      if (r.data() != null) {
+        transaction.delete(_fireStore
+            .collection('groups')
+            .doc(group.id)
+            .collection('posts')
+            .doc(postId)
+            .collection('comments')
+            .doc(commentId)
+            .collection('likers')
+            .doc(userId));
 
-    await _fireStore
-        .collection('groups')
-        .doc(group.id)
-        .collection('posts')
-        .doc(postId)
-        .collection('comments')
-        .doc(commentId)
-        .collection('likers')
-        .doc(userId)
-        .set({
-      'exists': 1,
+        transaction.set(
+            _fireStore
+                .collection('groups')
+                .doc(group.id)
+                .collection('posts')
+                .doc(postId)
+                .collection('comments')
+                .doc(commentId),
+            {'likeCount': FieldValue.increment(-1)},
+            SetOptions(merge: true));
+      } else {
+        transaction.set(
+            _fireStore
+                .collection('groups')
+                .doc(group.id)
+                .collection('posts')
+                .doc(postId)
+                .collection('comments')
+                .doc(commentId)
+                .collection('likers')
+                .doc(userId),
+            {
+              'exists': 1,
+            });
+
+        transaction.set(
+            _fireStore
+                .collection('groups')
+                .doc(group.id)
+                .collection('posts')
+                .doc(postId)
+                .collection('comments')
+                .doc(commentId),
+            {'likeCount': FieldValue.increment(1)},
+            SetOptions(merge: true));
+      }
     });
 
-    return _fireStore
-        .collection('groups')
-        .doc(group.id)
-        .collection('posts')
-        .doc(postId)
-        .collection('comments')
-        .doc(commentId)
-        .set({'likeCount': FieldValue.increment(1)}, SetOptions(merge: true));
+    // DocumentSnapshot r = await _fireStore
+    //     .collection('groups')
+    //     .doc(group.id)
+    //     .collection('posts')
+    //     .doc(postId)
+    //     .collection('comments')
+    //     .doc(commentId)
+    //     .collection('likers')
+    //     .doc(userId)
+    //     .get();
+    // if (r.data() != null) {
+    //   b.delete(_fireStore
+    //       .collection('groups')
+    //       .doc(group.id)
+    //       .collection('posts')
+    //       .doc(postId)
+    //       .collection('comments')
+    //       .doc(commentId)
+    //       .collection('likers')
+    //       .doc(userId));
+    //
+    //   b.set(
+    //       _fireStore
+    //           .collection('groups')
+    //           .doc(group.id)
+    //           .collection('posts')
+    //           .doc(postId)
+    //           .collection('comments')
+    //           .doc(commentId),
+    //       {'likeCount': FieldValue.increment(-1)},
+    //       SetOptions(merge: true));
+    //
+    //   return b.commit();
+    // }
+
+    // b.set(
+    //     _fireStore
+    //         .collection('groups')
+    //         .doc(group.id)
+    //         .collection('posts')
+    //         .doc(postId)
+    //         .collection('comments')
+    //         .doc(commentId)
+    //         .collection('likers')
+    //         .doc(userId),
+    //     {
+    //       'exists': 1,
+    //     });
+    //
+    // b.set(
+    //     _fireStore
+    //         .collection('groups')
+    //         .doc(group.id)
+    //         .collection('posts')
+    //         .doc(postId)
+    //         .collection('comments')
+    //         .doc(commentId),
+    //     {'likeCount': FieldValue.increment(1)},
+    //     SetOptions(merge: true));
+
+    // return b.commit();
   }
 
   isLikeComment({Group group, String postId, String userId, String commentId}) {
@@ -575,7 +777,9 @@ class PostsApi {
         .doc(id_group)
         .collection('posts')
         .doc(id_post)
-        .update({'isPin': true},);
+        .update(
+      {'isPin': true},
+    );
   }
 
   unPinPost({String id_group, String id_post}) {
@@ -584,6 +788,8 @@ class PostsApi {
         .doc(id_group)
         .collection('posts')
         .doc(id_post)
-        .update({'isPin': FieldValue.delete()}, );
+        .update(
+      {'isPin': FieldValue.delete()},
+    );
   }
 }

@@ -151,18 +151,17 @@ class _SettingsState extends State<Settings> {
                           print(snapshot.data.data());
                           Map<String, dynamic> myData = {};
                           myData["chat&roomsNotif"] =
-                          snapshot.data.data()["chat&roomsNotif"];
+                              snapshot.data.data()["chat&roomsNotif"];
                           myData["groupsNotif"] =
-                          snapshot.data.data()["groupsNotif"];
+                              snapshot.data.data()["groupsNotif"];
                           myData["homeNotif"] =
-                          snapshot.data.data()["homeNotif"];
+                              snapshot.data.data()["homeNotif"];
                           return AlertDialog(
                               scrollable: true,
                               title: Text(Languages.translate(
                                   context, "notifications")),
                               content: StatefulBuilder(
                                 builder: (context, set) {
-
                                   return Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -176,10 +175,8 @@ class _SettingsState extends State<Settings> {
                                         onChanged: (newValue) {
                                           print(myData);
                                           print(newValue);
-                                          myData['chat&roomsNotif'] =
-                                              newValue;
+                                          myData['chat&roomsNotif'] = newValue;
                                           set(() {
-
                                             myData['chat&roomsNotif'] =
                                                 newValue;
                                           });
@@ -211,7 +208,7 @@ class _SettingsState extends State<Settings> {
                                         value: myData["homeNotif"],
                                         onChanged: (newValue) async {
                                           set(() {
-                                              myData['homeNotif'] = newValue;
+                                            myData['homeNotif'] = newValue;
                                           });
                                         },
                                         controlAffinity:

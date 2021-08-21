@@ -94,10 +94,12 @@ class LibraryApi {
   }
 
   deleteBook({Book book}) {
-    _firestore
-        .collection('pendingBooks')
-        .doc('count')
-        .set({'count': FieldValue.increment(-1)}, SetOptions(merge: true));
-    return _firestore.collection('books').doc(book.id).delete();
+    WriteBatch b = _firestore.batch();
+
+    b.set(_firestore.collection('pendingBooks').doc('count'),
+        {'count': FieldValue.increment(-1)}, SetOptions(merge: true));
+    b.delete(_firestore.collection('books').doc(book.id));
+
+    return b.commit();
   }
 }
